@@ -1,0 +1,35 @@
+# Vanhan kurssin (2023) materiaalikansiot
+2023 tutkinnon perusteiden mukainen kurssi (kurssilataus)/
+2023 tutkinnon perusteiden mukainen kurssi (moodle varmuuskopio)/
+
+# Isot binaaritiedostot
+*.mp4
+*.avi
+*.mov
+*.wmv
+*.mkv
+*.flv
+*.webm
+*.mp3
+*.wav
+*.flac
+*.ogg
+*.zip
+*.rar
+*.7z
+*.tar.gz
+
+# Office-binaarit ja PDF:t (docx, pptx, xlsx, pdf)
+*.docx
+*.pptx
+*.xlsx
+*.pdf
+
+# Muut isot / turhat tiedostot
+*.iso
+*.dmg
+*.exe
+*.msi
+Thumbs.db
+.DS_Store
+desktop.ini
