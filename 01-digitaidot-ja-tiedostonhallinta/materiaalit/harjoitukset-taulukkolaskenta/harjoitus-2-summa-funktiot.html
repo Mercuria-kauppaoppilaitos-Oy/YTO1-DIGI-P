@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harjoitus 2: SUMMA ja muut perusfunktiot</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="exercise-container">
+        <a href="index.html" class="back-link">← Takaisin harjoitusvalikkoon</a>
+        <div class="exercise-header">
+            <h1>Harjoitus 2: SUMMA ja muut perusfunktiot</h1>
+            <p>Laske kuukausittaisten myyntilukujen yhteenveto funktioilla.</p>
+        </div>
+        <div id="exercise" class="exercise-content"></div>
+    </div>
+
+    <script src="spreadsheet-engine.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const kuukaudet = ['Tammikuu', 'Helmikuu', 'Maaliskuu', 'Huhtikuu', 'Toukokuu', 'Kesäkuu'];
+        const myynnit = kuukaudet.map(() => randomInt(1500, 8000));
+
+        const summa = myynnit.reduce((a, b) => a + b, 0);
+        const keskiarvo = Math.round(summa / myynnit.length * 10000) / 10000;
+        const pienin = Math.min(...myynnit);
+        const suurin = Math.max(...myynnit);
+
+        const cells = {
+            'A1': { type: 'header', value: 'Kuukausi' },
+            'B1': { type: 'header', value: 'Myynti (€)' }
+        };
+
+        for (let i = 0; i < kuukaudet.length; i++) {
+            const r = i + 2;
+            cells['A' + r] = { type: 'label', value: kuukaudet[i] };
+            cells['B' + r] = { type: 'data', value: myynnit[i] };
+        }
+
+        const dataEnd = kuukaudet.length + 1; // viimeinen datarivi
+        const gapRow = dataEnd + 1;
+        const sumRow = gapRow + 1;
+        const avgRow = sumRow + 1;
+        const minRow = avgRow + 1;
+        const maxRow = minRow + 1;
+
+        cells['A' + gapRow] = { type: 'label', value: '' };
+        cells['B' + gapRow] = { type: 'label', value: '' };
+
+        cells['A' + sumRow] = { type: 'header', value: 'Yhteensä' };
+        cells['B' + sumRow] = {
+            type: 'editable',
+            expectedValue: summa,
+            requiredFunction: 'SUMMA|SUM',
+            hint: '=SUMMA(B2:B' + dataEnd + ')',
+            placeholder: '=SUMMA(B2:B' + dataEnd + ')'
+        };
+
+        cells['A' + avgRow] = { type: 'header', value: 'Keskiarvo' };
+        cells['B' + avgRow] = {
+            type: 'editable',
+            expectedValue: keskiarvo,
+            requiredFunction: 'KESKIARVO|AVERAGE',
+            hint: '=KESKIARVO(B2:B' + dataEnd + ')',
+            placeholder: '=KESKIARVO(..)'
+        };
+
+        cells['A' + minRow] = { type: 'header', value: 'Pienin' };
+        cells['B' + minRow] = {
+            type: 'editable',
+            expectedValue: pienin,
+            requiredFunction: 'MIN',
+            hint: '=MIN(B2:B' + dataEnd + ')',
+            placeholder: '=MIN(..)'
+        };
+
+        cells['A' + maxRow] = { type: 'header', value: 'Suurin' };
+        cells['B' + maxRow] = {
+            type: 'editable',
+            expectedValue: suurin,
+            requiredFunction: 'MAKS|MAX',
+            hint: '=MAKS(B2:B' + dataEnd + ')',
+            placeholder: '=MAKS(..)'
+        };
+
+        const exercise = new SpreadsheetExercise({
+            containerId: 'exercise',
+            cols: ['A', 'B'],
+            rowCount: maxRow,
+            cells: cells,
+            instructions: `
+                <strong>Tehtävä:</strong> Laske myyntilukujen yhteenveto käyttäen funktioita.<br>
+                Käytä suomenkielisiä funktioita: 
+                <code>SUMMA</code>, <code>KESKIARVO</code>, <code>MIN</code>, <code>MAKS</code>.<br>
+                <strong>Esimerkki:</strong> <code>=SUMMA(B2:B${dataEnd})</code> laskee solualueen summan.
+            `
+        });
+
+        exercise.init();
+    });
+    </script>
+</body>
+</html>

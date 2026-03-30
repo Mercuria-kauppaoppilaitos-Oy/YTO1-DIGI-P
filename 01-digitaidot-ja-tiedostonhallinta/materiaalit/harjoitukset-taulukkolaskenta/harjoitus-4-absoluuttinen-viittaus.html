@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harjoitus 4: Absoluuttinen viittaus ($-lukitus)</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="exercise-container">
+        <a href="index.html" class="back-link">← Takaisin harjoitusvalikkoon</a>
+        <div class="exercise-header">
+            <h1>Harjoitus 4: Absoluuttinen viittaus ($-lukitus)</h1>
+            <p>Käytä $-merkkiä lukitsemaan soluviittaus, jotta se ei muutu kaavaa kopioitaessa.</p>
+        </div>
+        <div id="exercise" class="exercise-content"></div>
+    </div>
+
+    <script src="spreadsheet-engine.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const alvPros = 25.5; // Suomen ALV-% (2024–)
+        const tuotteet = ['Kannettava', 'Hiiri', 'Näppäimistö', 'Kuulokkeet'];
+        const hinnat = tuotteet.map(() => randomInt(15, 400));
+
+        // Lasketaan odotetut arvot
+        const alvEurot = hinnat.map(h => Math.round(h * alvPros / 100 * 10000) / 10000);
+        const bruttoHinnat = hinnat.map((h, i) => Math.round((h + alvEurot[i]) * 10000) / 10000);
+
+        const cells = {
+            // Rivi 1: ALV-%
+            'A1': { type: 'header', value: 'ALV-%:' },
+            'B1': { type: 'data', value: alvPros },
+            'C1': { type: 'label', value: '' },
+            'D1': { type: 'label', value: '' },
+            // Rivi 2: tyhjä
+            'A2': { type: 'label', value: '' },
+            'B2': { type: 'label', value: '' },
+            'C2': { type: 'label', value: '' },
+            'D2': { type: 'label', value: '' },
+            // Rivi 3: otsikot
+            'A3': { type: 'header', value: 'Tuote' },
+            'B3': { type: 'header', value: 'Nettohinta (€)' },
+            'C3': { type: 'header', value: 'ALV (€)' },
+            'D3': { type: 'header', value: 'Bruttohinta (€)' }
+        };
+
+        // Rivi 4: ensimmäinen tuote (opiskelija kirjoittaa kaavan)
+        cells['A4'] = { type: 'label', value: tuotteet[0] };
+        cells['B4'] = { type: 'data', value: hinnat[0] };
+        cells['C4'] = {
+            type: 'editable',
+            expectedValue: alvEurot[0],
+            requiredRefs: ['B4'],
+            formulaPattern: '\\$B\\$1|\\$b\\$1',
+            hint: '=B4*$B$1/100',
+            placeholder: '=B4*$B$1/100'
+        };
+        cells['D4'] = {
+            type: 'editable',
+            expectedValue: bruttoHinnat[0],
+            requiredRefs: ['B4', 'C4'],
+            hint: '=B4+C4',
+            placeholder: '=B4+C4'
+        };
+
+        // Rivit 5–7: fill-kohteet
+        const fillTargetsC = [];
+        const fillTargetsD = [];
+
+        for (let i = 1; i < tuotteet.length; i++) {
+            const r = i + 4;
+            cells['A' + r] = { type: 'label', value: tuotteet[i] };
+            cells['B' + r] = { type: 'data', value: hinnat[i] };
+
+            fillTargetsC.push('C' + r);
+            cells['C' + r] = {
+                type: 'fill-target',
+                source: 'C4',
+                expectedValue: alvEurot[i]
+            };
+
+            fillTargetsD.push('D' + r);
+            cells['D' + r] = {
+                type: 'fill-target',
+                source: 'D4',
+                expectedValue: bruttoHinnat[i]
+            };
+        }
+
+        const lastRow = tuotteet.length + 3;
+
+        const exercise = new SpreadsheetExercise({
+            containerId: 'exercise',
+            cols: ['A', 'B', 'C', 'D'],
+            rowCount: lastRow,
+            cells: cells,
+            fillGroups: [
+                { source: 'C4', targets: fillTargetsC },
+                { source: 'D4', targets: fillTargetsD }
+            ],
+            instructions: `
+                <strong>Tehtävä:</strong> Laske tuotteiden ALV ja bruttohinta käyttäen <strong>absoluuttista viittausta</strong>.<br>
+                <ol>
+                    <li>ALV-prosentti on solussa <strong>B1</strong> (${alvPros} %)</li>
+                    <li>Kirjoita soluun <strong>C4</strong> kaava: <code>=B4*$B$1/100</code><br>
+                        <em>$B$1 = lukittu viittaus ALV-prosenttiin – se ei muutu kopioitaessa!</em></li>
+                    <li>Kirjoita soluun <strong>D4</strong> kaava: <code>=B4+C4</code></li>
+                    <li>Klikkaa <strong>"⬇ Kopioi kaava alas"</strong> ja tarkista tulokset</li>
+                </ol>
+                <strong>Miksi $-merkki?</strong> Ilman lukitusta =B4*B1/100 muuttuisi kopioitaessa
+                muotoon =B5*B2/100 – ja B2 on tyhjä! $B$1 säilyttää viittauksen oikeaan soluun.
+            `
+        });
+
+        exercise.init();
+    });
+    </script>
+</body>
+</html>

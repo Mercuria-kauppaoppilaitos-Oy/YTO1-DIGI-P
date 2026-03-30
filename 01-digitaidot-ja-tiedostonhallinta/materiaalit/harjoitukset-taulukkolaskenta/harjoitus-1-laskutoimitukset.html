@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harjoitus 1: Laskutoimitukset ja soluviittaukset</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="exercise-container">
+        <a href="index.html" class="back-link">← Takaisin harjoitusvalikkoon</a>
+        <div class="exercise-header">
+            <h1>Harjoitus 1: Laskutoimitukset ja soluviittaukset</h1>
+            <p>Laske tuotteiden yhteishinta kertomalla määrä yksikköhinnalla.</p>
+        </div>
+        <div id="exercise" class="exercise-content"></div>
+    </div>
+
+    <script src="spreadsheet-engine.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Satunnaiset arvot jokaiselle suorituskerralle
+        const tuotteet = ['Kynä', 'Vihko', 'Kumi', 'Viivain', 'Teroitin'];
+        const maarat = tuotteet.map(() => randomInt(10, 100));
+        const hinnat = tuotteet.map(() => randomDecimal(0.5, 8.0, 2));
+
+        // Solumäärittelyt
+        const cells = {
+            'A1': { type: 'header', value: 'Tuote' },
+            'B1': { type: 'header', value: 'Määrä (kpl)' },
+            'C1': { type: 'header', value: 'Hinta (€)' },
+            'D1': { type: 'header', value: 'Yhteensä (€)' }
+        };
+
+        for (let i = 0; i < tuotteet.length; i++) {
+            const r = i + 2;
+            const yhteensa = Math.round(maarat[i] * hinnat[i] * 100) / 100;
+            cells['A' + r] = { type: 'label', value: tuotteet[i] };
+            cells['B' + r] = { type: 'data', value: maarat[i] };
+            cells['C' + r] = { type: 'data', value: hinnat[i] };
+            cells['D' + r] = {
+                type: 'editable',
+                expectedValue: yhteensa,
+                requiredRefs: ['B' + r, 'C' + r],
+                hint: '=B' + r + '*C' + r,
+                placeholder: '=B' + r + '*C' + r
+            };
+        }
+
+        const exercise = new SpreadsheetExercise({
+            containerId: 'exercise',
+            cols: ['A', 'B', 'C', 'D'],
+            rowCount: tuotteet.length + 1,
+            cells: cells,
+            instructions: `
+                <strong>Tehtävä:</strong> Kirjoita sarakkeeseen D kaava, joka laskee tuotteen yhteishinnan
+                (<em>määrä × yksikköhinta</em>).<br>
+                <strong>Esimerkki:</strong> Kirjoita soluun D2 kaava <code>=B2*C2</code> ja paina Enter.
+            `
+        });
+
+        exercise.init();
+    });
+    </script>
+</body>
+</html>
