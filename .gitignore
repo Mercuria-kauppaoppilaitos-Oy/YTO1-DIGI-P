@@ -20,10 +20,10 @@
 *.tar.gz
 
 # Office-binaarit ja PDF:t (docx, pptx, xlsx, pdf)
-*.docx
-*.pptx
-*.xlsx
-*.pdf
+#*.docx
+#*.pptx
+#*.xlsx
+#*.pdf
 
 # Muut isot / turhat tiedostot
 *.iso
