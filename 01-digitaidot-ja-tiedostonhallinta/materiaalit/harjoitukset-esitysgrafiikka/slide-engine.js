@@ -216,6 +216,16 @@ class SlideExercise {
             el.querySelectorAll('[data-field]').forEach(field => {
                 field.contentEditable = 'true';
                 field.spellcheck = false;
+
+                // Placeholder-logiikka: focus tyhjentää, blur palauttaa
+                const ph = field.querySelector('.placeholder');
+                const phText = ph ? ph.textContent : '';
+
+                field.addEventListener('focus', () => {
+                    if (field.querySelector('.placeholder')) {
+                        field.innerHTML = '';
+                    }
+                });
                 field.addEventListener('input', () => {
                     const key = field.getAttribute('data-field');
                     slide[key] = field.innerHTML;
@@ -224,7 +234,14 @@ class SlideExercise {
                 });
                 field.addEventListener('blur', () => {
                     const key = field.getAttribute('data-field');
-                    slide[key] = field.innerHTML;
+                    const text = this._stripHtml(field.innerHTML || '');
+                    if (text.trim() === '') {
+                        // Palauta placeholder
+                        field.innerHTML = '<span class="placeholder">' + phText + '</span>';
+                        slide[key] = '';
+                    } else {
+                        slide[key] = field.innerHTML;
+                    }
                 });
             });
         }

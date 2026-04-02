@@ -42,6 +42,3 @@ Opiskelija osaa luoda selkeän ja visuaalisesti toimivan diaesityksen PowerPoint
 
 
 # TODO
-Tarkasta powerpoint harjoitusten toiminta.
- - Onnistuisiko, että pohjatekstin (diojen template teksti?) klikkaaminen dioissa antaisi suoraan ylikirjoittaa sen?
- - Kirjoitetun tekstin väri on harmaa (template teksti?), olisiko sen parempi olla musta?

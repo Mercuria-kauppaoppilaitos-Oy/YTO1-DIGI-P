@@ -290,6 +290,12 @@ body {
     min-width: 60%;
     padding: 0 8%;
 }
+.sl-section-title[contenteditable="true"] {
+    color: #fff;
+}
+.sl-section-slide .placeholder {
+    color: rgba(255,255,255,.5);
+}
 
 /* Tyhjä dia */
 .sl-blank-slide {
@@ -308,10 +314,15 @@ body {
     min-height: 2em;
 }
 
-/* Placeholder-teksti */
+/* Placeholder-teksti (harmaa, kursivoitu) */
 .placeholder {
     color: #bbb;
     font-style: italic;
+}
+
+/* Käyttäjän kirjoittama teksti: musta */
+[data-field][contenteditable="true"] {
+    color: #1a1a1a;
 }
 
 /* ─── Toimintopalkki (lisää/poista dia) ────────────────── */
