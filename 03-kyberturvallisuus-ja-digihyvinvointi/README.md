@@ -12,9 +12,17 @@
 
 Osio käsittelee tietoturvaa, tietosuojaa, kyberturvallisuutta, sosiaalisen median vastuullista käyttöä ja digihyvinvointia. Merkittävin uudistus vanhaan kurssiin verrattuna on **kyberturvallisuuden käytännön toiminnan** lisääminen — pelkkä teoriatieto ei riitä, vaan opiskelija harjoittelee konkreettista toimintaa uhkatilanteissa (case-harjoitukset).
 
+Osio noudattaa kolmivaiheista pedagogista progressiota:
+
+1. **🖥️ Interaktiivinen harjoittelu selaimessa** — uhkien tunnistaminen ja reagointi turvallisessa ympäristössä (SCORM-paketit Moodlessa)
+2. **💬 Keskustelu ja pohdinta** — tapaustutkimukset ja ryhmäkeskustelut
+3. **📝 Arvioitava tehtävä** — osaamisen osoittaminen
+
 ## Kesto
 - Lähiopetus nuoret: ~6h
 - Aikuisten iltakurssi: ~4h
+
+---
 
 ## Rakenne
 
@@ -26,14 +34,40 @@ Osio käsittelee tietoturvaa, tietosuojaa, kyberturvallisuutta, sosiaalisen medi
 | sosiaalinen-media-ja-vastuullisuus.md | Some-vastuullisuus, digijalanjälki, netiketti |
 | digihyvinvointi.md | Ruutuaika, terveys, hyvinvointi, yhteiskunnallinen näkökulma |
 
-### Tehtävät — Lähiopetus (`tehtavat-lahiopetus/`)
-| Tiedosto | Tehtävä | Arviointi |
+### Interaktiiviset selainharjoitukset — tulossa
+
+Osioon suunnitellaan interaktiiviset selainharjoitukset (SCORM) seuraaviin aiheisiin:
+
+| Aihe | Mahdolliset harjoitukset | Status |
 |---|---|---|
-| 3-01-kyberturvaharjoitus.md | **Kyberturvaharjoitus** | **1–5** |
-| 3-02-some-ja-vastuullisuus.md | Some ja vastuullisuus -keskustelu | Hyv/hyl |
-| 3-03-digihyvinvointi-ja-yhteiskunta.md | Digihyvinvointi ja yhteiskunta | Hyv/hyl |
+| Kyberturvallisuus | Phishing-viestien tunnistaminen, salasanan vahvuus, uhkatilanteen toimintaketju | 🔜 Suunnitteilla |
+| Some & vastuullisuus | Digijalanjäljen tunnistaminen, yksityisyysasetusten säätö | 🔜 Suunnitteilla |
+| Digihyvinvointi | Ruutuajan vaikutusten tunnistaminen, ergonomia | 🔜 Suunnitteilla |
+
+### Tehtävät — Lähiopetus (`tehtavat-lahiopetus/`)
+
+#### A) Kyberturvallisuus
+| Vaihe | Tiedosto | Tehtävä | Arviointi |
+|---|---|---|---|
+| 🖥️ Interaktiivinen | *tulossa* | Selainharjoitukset (SCORM) | Automaattinen |
+| 📝 **Arvioitava** | 3-01-kyberturvaharjoitus.md | **Kyberturvaharjoitus** | **1–5** |
+
+#### B) Sosiaalinen media ja vastuullisuus
+| Vaihe | Tiedosto | Tehtävä | Arviointi |
+|---|---|---|---|
+| 🖥️ Interaktiivinen | *tulossa* | Selainharjoitukset (SCORM) | Automaattinen |
+| 💬 Keskustelu | 3-02-some-ja-vastuullisuus.md | Some ja vastuullisuus -keskustelu | Hyv/hyl |
+
+#### C) Digihyvinvointi ja yhteiskunta
+| Vaihe | Tiedosto | Tehtävä | Arviointi |
+|---|---|---|---|
+| 🖥️ Interaktiivinen | *tulossa* | Selainharjoitukset (SCORM) | Automaattinen |
+| 💬 Pohdinta | 3-03-digihyvinvointi-ja-yhteiskunta.md | Digihyvinvointi ja yhteiskunta | Hyv/hyl |
 
 ### Tehtävät — Itsenäinen suorittaminen (`tehtavat-itsenainen/`)
+
+Itsenäisessä suorituksessa opiskelija käy ensin läpi interaktiiviset selainharjoitukset Moodlessa (SCORM, kun valmistuvat) ja tekee sitten arvioitavat tehtävät.
+
 | Tiedosto | Tehtävä | Arviointi |
 |---|---|---|
 | I-3-01-kyberturvaharjoitus.md | Kyberturvaharjoitus (kirjallinen) | 1–5 |
