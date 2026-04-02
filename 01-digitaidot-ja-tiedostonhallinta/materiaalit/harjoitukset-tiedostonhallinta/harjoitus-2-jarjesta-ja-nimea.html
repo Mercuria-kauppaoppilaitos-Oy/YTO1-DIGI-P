@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harjoitus 2 – Järjestä ja nimeä tiedostot</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <a class="back-link" href="index.html">← Takaisin harjoituksiin</a>
+    <div class="exercise-container">
+        <div class="exercise-header">
+            <h1>📁 Harjoitus 2 – Järjestä ja nimeä tiedostot</h1>
+            <p>Lataukset-kansiosi on täynnä huonosti nimettyjä tiedostoja. Luo kansiorakenne, nimeä tiedostot uudelleen ja siirrä ne oikeisiin paikkoihin.</p>
+        </div>
+        <div id="exercise"></div>
+    </div>
+
+    <script src="file-engine.js"></script>
+    <script>
+    const exercise = new FileExplorerExercise({
+        containerId: 'exercise',
+        infoPanel: {
+            title: 'Hyvän nimeämisen periaatteet',
+            content: `
+                <ul>
+                    <li><strong>Päivämäärä tai jakso ensin:</strong> <code>2026-01-15_</code> tai <code>2026-Q1_</code> → tiedostot järjestyvät aikajärjestykseen</li>
+                    <li><strong>Kuvaava nimi:</strong> <code>budjetti_myynti</code>, ei <code>lol</code> tai <code>FINAL_v3</code></li>
+                    <li><strong>Ei välilyöntejä:</strong> käytä alaviivaa <code>_</code> tai tavuviivaa <code>-</code></li>
+                    <li><strong>Ei versiohistoriaa nimessä:</strong> „FINAL_v3_UUSIN (2)" → tallenna yksi selkeä versio</li>
+                </ul>
+            `
+        },
+        requiredFolders: [
+            'Talous',
+            'Talous/Kuitit',
+            'Markkinointi',
+            'Sopimukset',
+            'Myynti',
+            'Henkilöstö'
+        ],
+        files: [
+            {
+                name: 'BUDJETTI lopullinen v3 (2).xlsx',
+                correctName: '2026-Q1_budjetti_myynti.xlsx',
+                correctFolder: 'Talous',
+                renameOptions: [
+                    '2026-Q1_budjetti_myynti.xlsx',
+                    'budjetti_lopullinen.xlsx',
+                    'BUDJETTI.xlsx',
+                    'B_v3(2).xlsx'
+                ]
+            },
+            {
+                name: 'kuitti_02948.jpg',
+                correctName: '2026-01-15_kuitti_toimistotarvikkeet.jpg',
+                correctFolder: 'Talous/Kuitit',
+                renameOptions: [
+                    '2026-01-15_kuitti_toimistotarvikkeet.jpg',
+                    'kuitti tammikuu.jpg',
+                    'KUITTI.jpg',
+                    'img_02948.jpg'
+                ]
+            },
+            {
+                name: 'mainos UUSIN versio (3).pptx',
+                correctName: '2026-02_kampanja_kevat.pptx',
+                correctFolder: 'Markkinointi',
+                renameOptions: [
+                    '2026-02_kampanja_kevat.pptx',
+                    'mainos_final.pptx',
+                    'MAINOS_V3.pptx',
+                    'kampanja uusin.pptx'
+                ]
+            },
+            {
+                name: 'sopimus UUSI (3).docx',
+                correctName: '2026-01-20_sopimus_toimittaja-abc.docx',
+                correctFolder: 'Sopimukset',
+                renameOptions: [
+                    '2026-01-20_sopimus_toimittaja-abc.docx',
+                    'sopimus_uusi.docx',
+                    'SOPIMUS(3).docx',
+                    'sopimus final.docx'
+                ]
+            },
+            {
+                name: 'tarjous_FINAL_v2_UUSIN.pdf',
+                correctName: '2026-02-05_tarjous_asiakas-xyz.pdf',
+                correctFolder: 'Myynti',
+                renameOptions: [
+                    '2026-02-05_tarjous_asiakas-xyz.pdf',
+                    'tarjous_V2.pdf',
+                    'TARJOUS_FINAL.pdf',
+                    'tarjous uusin.pdf'
+                ]
+            },
+            {
+                name: 'VEROKORTTI.pdf',
+                correctName: '2026_verokortti_muutosverokortti.pdf',
+                correctFolder: 'Henkilöstö',
+                renameOptions: [
+                    '2026_verokortti_muutosverokortti.pdf',
+                    'verokortti.pdf',
+                    'VEROKORTTI_2026.pdf',
+                    'vero.pdf'
+                ]
+            }
+        ]
+    });
+
+    exercise.init();
+    </script>
+</body>
+</html>

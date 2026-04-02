@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harjoitus 1 – Etsi tiedosto</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <a class="back-link" href="index.html">← Takaisin harjoituksiin</a>
+    <div class="exercise-container">
+        <div class="exercise-header">
+            <h1>📁 Harjoitus 1 – Etsi tiedosto</h1>
+            <p>Vertaa sekavaa kansiorakennetta järjestettyyn. Kuinka nopeasti löydät oikean tiedoston?</p>
+        </div>
+        <div id="exercise"></div>
+    </div>
+
+    <script src="file-engine.js"></script>
+    <script>
+    // ────────────────────────────────────────────────
+    // KIERROS A: Sekava kansiorakenne
+    // ────────────────────────────────────────────────
+
+    const messyTree = {
+        name: 'Tietokone',
+        type: 'folder',
+        children: [
+            { name: 'asdffgh.pptx' },
+            { name: 'lol.pdf' },
+            { name: 'Uusi kansio', type: 'folder', children: [
+                { name: 'kuva234.jpg' },
+                { name: 'Kopio kopio final UUSIN.docx' },
+                { name: 'hmmm', type: 'folder', children: [
+                    { name: 'IMG_20260115.jpg' },
+                    { name: 'teht (2).xlsx' }
+                ]}
+            ]},
+            { name: 'Jutut', type: 'folder', children: [
+                { name: 'video.mp4' },
+                { name: 'koulu ehkä', type: 'folder', children: [
+                    { name: 'teht.docx' },
+                    { name: 'matikka lol.xlsx' },
+                    { name: 'äikkä', type: 'folder', children: [
+                        { name: 'essee UUSI versio (3).docx' }
+                    ]}
+                ]},
+                { name: 'Uusi kansio (2)', type: 'folder', children: [
+                    { name: 'jotain.txt' },
+                    { name: '2026-01-15_kotitehtava_matikka.docx' }
+                ]}
+            ]},
+            { name: 'Lataukset', type: 'folder', children: [
+                { name: 'setup.exe' },
+                { name: 'kissakuva.png' },
+                { name: 'raportti_v2_FINAL.pdf' }
+            ]}
+        ]
+    };
+
+    // ────────────────────────────────────────────────
+    // KIERROS B: Järjestetty kansiorakenne
+    // ────────────────────────────────────────────────
+
+    const tidyTree = {
+        name: 'Tietokone',
+        type: 'folder',
+        children: [
+            { name: 'Koulu', type: 'folder', children: [
+                { name: 'Matematiikka', type: 'folder', children: [
+                    { name: '2026-01-15_kotitehtava_matikka.docx' },
+                    { name: '2026-02-03_koe_matikka.xlsx' }
+                ]},
+                { name: 'Äidinkieli', type: 'folder', children: [
+                    { name: '2026-01-20_essee_kirja-arvostelu.docx' },
+                    { name: '2026-03-05_runousanalyysi.docx' }
+                ]},
+                { name: 'Historia', type: 'folder', children: [
+                    { name: '2026-02-10_esitys_toinen-maailmansota.pptx' }
+                ]}
+            ]},
+            { name: 'Kuvat', type: 'folder', children: [
+                { name: '2026-01-15_kouluretki.jpg' },
+                { name: '2026-02-20_syntymäpäivä.png' }
+            ]},
+            { name: 'Lataukset', type: 'folder', children: [
+                { name: 'ohjelma-asennus.exe' },
+                { name: '2026-01-25_raportti_projekti.pdf' }
+            ]}
+        ]
+    };
+
+    // ────────────────────────────────────────────────
+    // HARJOITUKSEN HALLINTA
+    // ────────────────────────────────────────────────
+
+    const exerciseDiv = document.getElementById('exercise');
+    let roundAResults = null;
+
+    function startRoundA() {
+        exerciseDiv.innerHTML = `
+            <div class="info-panel">
+                <h3>Kierros 1: Sekava kansiorakenne</h3>
+                <p>Kaverisi on tallentanut tiedostot miten sattuu. Etsi tiedosto mahdollisimman nopeasti!</p>
+            </div>
+            <div id="round-a"></div>
+        `;
+
+        const roundA = new FileTreeExercise({
+            containerId: 'round-a',
+            tree: messyTree,
+            targetFile: '2026-01-15_kotitehtava_matikka.docx',
+            targetPath: 'Tietokone/Jutut/Uusi kansio (2)/2026-01-15_kotitehtava_matikka.docx',
+            instruction: 'Etsi tammikuun matikan kotitehtävä: <strong>2026-01-15_kotitehtava_matikka.docx</strong>',
+            hint: 'Tiedosto voi olla missä tahansa kansiossa — joudut etsimään...',
+            onComplete: function(results) {
+                roundAResults = results;
+                // Näytä "Jatka kierrokseen B" -painike
+                setTimeout(() => {
+                    const nextBtn = document.createElement('button');
+                    nextBtn.className = 'btn btn-next';
+                    nextBtn.textContent = 'Jatka kierrokseen 2 →';
+                    nextBtn.style.marginTop = '16px';
+                    nextBtn.addEventListener('click', startRoundB);
+                    document.getElementById('round-a').appendChild(nextBtn);
+                }, 800);
+            }
+        });
+        roundA.init();
+    }
+
+    function startRoundB() {
+        exerciseDiv.innerHTML = `
+            <div class="info-panel">
+                <h3>Kierros 2: Järjestetty kansiorakenne</h3>
+                <p>Nyt samat tiedostot on järjestetty loogisesti. Etsi sama tiedosto uudelleen!</p>
+            </div>
+            <div id="round-b"></div>
+        `;
+
+        const roundB = new FileTreeExercise({
+            containerId: 'round-b',
+            tree: tidyTree,
+            targetFile: '2026-01-15_kotitehtava_matikka.docx',
+            targetPath: 'Tietokone/Koulu/Matematiikka/2026-01-15_kotitehtava_matikka.docx',
+            instruction: 'Etsi sama tiedosto: <strong>2026-01-15_kotitehtava_matikka.docx</strong>',
+            hint: 'Matikan tehtävä — missä kansiossa se loogisesti olisi?',
+            onComplete: function(results) {
+                setTimeout(() => showComparison(results), 600);
+            }
+        });
+        roundB.init();
+    }
+
+    function showComparison(roundBResults) {
+        const container = document.getElementById('round-b');
+        const panel = document.createElement('div');
+        panel.className = 'comparison-panel';
+        panel.innerHTML = `
+            <h3>📊 Vertailu: Sekava vs. järjestetty</h3>
+            <p>Näin suuri ero hyvällä kansiorakenteella on:</p>
+            <div class="comparison-grid">
+                <div class="comp-col">
+                    <h4>😵 Sekava rakenne</h4>
+                    <div class="comp-val bad">${roundAResults.time} s</div>
+                    <div>${roundAResults.clicks} klikkausta</div>
+                </div>
+                <div class="comp-col">
+                    <h4>😊 Järjestetty rakenne</h4>
+                    <div class="comp-val good">${roundBResults.time} s</div>
+                    <div>${roundBResults.clicks} klikkausta</div>
+                </div>
+            </div>
+        `;
+
+        // Opetusviesti
+        const lesson = document.createElement('div');
+        lesson.className = 'info-panel';
+        lesson.style.marginTop = '14px';
+        lesson.innerHTML = `
+            <h3>💡 Mitä opimme?</h3>
+            <ul>
+                <li><strong>Looginen kansiorakenne</strong> (esim. Koulu → Matematiikka) auttaa löytämään tiedostot nopeasti</li>
+                <li><strong>Kuvaavat tiedostonimet</strong> (esim. <code>2026-01-15_kotitehtava_matikka.docx</code>) kertovat heti mitä tiedosto sisältää</li>
+                <li><strong>"Uusi kansio"</strong> tai <strong>"teht.docx"</strong> ei kerro mitään — nimeä kansiot ja tiedostot aina selkeästi!</li>
+            </ul>
+            <p><a href="harjoitus-2-jarjesta-ja-nimea.html" style="color: #2980b9; font-weight: 600;">→ Kokeile seuraavaksi järjestämisharjoitusta</a></p>
+        `;
+
+        container.appendChild(panel);
+        container.appendChild(lesson);
+    }
+
+    // Käynnistä kierros A
+    startRoundA();
+    </script>
+</body>
+</html>
