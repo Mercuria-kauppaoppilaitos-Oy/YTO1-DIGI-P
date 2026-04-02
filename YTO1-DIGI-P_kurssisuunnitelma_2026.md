@@ -162,6 +162,11 @@ ITSENÄINEN SUORITTAMINEN
 4. ITSEARVIOINTI OPPIMISESTA JA KURSSIN PALAUTTEEN ANTAMINEN
 ```
 
+### Periaatteet:
+
+Ensin treenataan itse, sitten vasta palautettavia tehtäviä. Pidetään tarkastukset opettajalle mahdollisimman kevyenä ja oppiminen tekemisen kautta.
+
+
 ---
 
 ### 3.3. Osio 1: DIGITAIDOT JA TIEDOSTONHALLINTA

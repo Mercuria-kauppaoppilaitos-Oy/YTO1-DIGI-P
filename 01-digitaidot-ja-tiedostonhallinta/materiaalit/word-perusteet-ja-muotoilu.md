@@ -39,3 +39,18 @@ Opiskelija osaa tuottaa muotoiltuja asiakirjoja Wordilla: tekstin ja kappaleiden
 
 ## Tila
 🔲 Päivitettävä vanhan pohjalta
+
+
+# Suunnitelmia
+
+Perusteiden harjoittelua & toistoa varten:
+Word/tekstinkäsittely simulaattori (kuten excelistä), jossa alkuun harjoitellaan perustoimintoja, esim.:
+- Tekstin muotoilu
+- Tyylien käyttö ja otsikot
+   Tähän myös selitys, mikä tyylien merkitys on ja miksi niitä kannattaa käyttää
+- Pikanäppäimet (esim. kopioi, leikkaa, liitä, lihavointi, kursiivi)
+- Sarkain näppäin ja tasaukset (ei välilyöntiä)
+- Erikoismerkit (rivinvaihto, kappaleenvaihto, sivunvaihto, välilyönti&sitova välilyönti, ...)
+   ("animoitu" tekstiruutu, jonka leveys muuttuu. Toisella puolella tekstiä, jossa normaali ja puhdas tekstin rakenne, ja toisella puolella testiä, jossa mm. rivitys tehty vakiomittaiseksi rivivaihdoilla ja käytetty sitovia välilyöntejä, jolloin sanat rivitys ei toimi sanojen mukaan.)
+
+

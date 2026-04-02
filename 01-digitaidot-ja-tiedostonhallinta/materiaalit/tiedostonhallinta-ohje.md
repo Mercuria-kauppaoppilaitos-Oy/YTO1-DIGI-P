@@ -32,3 +32,11 @@ Opiskelija osaa luoda loogisen kansiorakenteen, nimetä tiedostot järkevästi j
 
 ## Tila
 🔲 UUSI — Ei vielä tuotettu
+
+
+# Suunnitelmia
+
+Interaktiivinen harjoitus: Tiedostonhallintasimulaattori, jossa opiskelija oppii hahmottamaan ja ymmärtämään:
+- Paikallisen tallennustilan ja pilvitallennustilan erot
+- Kansiorakenteen ja tiedostojen järjestäminen, tiedostopolku
+- Tiedostojen nimeämiskäytännöt ja niiden merkitys: Harjoitus, jossa opiskelijan pitää etsiä jokin tietty tiedosto, ja hänelle annetaan sekava tiedostorakenne, jossa on huonosti nimettyjä tiedotoja ja kansioita, sekä toisena harjoituksena selkeä ja looginen rakenne, jossa on hyvät nimeämiskäytännöt. Tavoitteena on, että opiskelija ymmärtää, miten tärkeää on järjestää tiedostot ja nimetä ne järkevästi, jotta niitä on helppo löytää myöhemmin.
