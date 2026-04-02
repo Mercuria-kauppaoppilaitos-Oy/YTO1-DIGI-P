@@ -433,9 +433,28 @@ Arvosana 1–5 muodostuu arvioitavien tehtävien perusteella. Geneerisiä arvioi
 - ✅ Tehtävät vastaavat tutkinnonperusteita ja arviointikriteerejä
 - ✅ Perustehtävät + syventävät tehtävät eroteltu
 
----
+### 7.4. Interaktiivisten harjoitusten vienti Moodleen (SCORM 1.2)
 
-## Liite: Vanhan kurssin materiaalien uudelleenkäyttö
+Kurssin interaktiiviset HTML+JS-selainharjoitukset (tekstinkäsittely-, esitysgrafiikka-, tiedostonhallinta- ja kyberturvasimulaattorit) viedään SCORM 1.2 -paketteina Moodleen, jotta suoritustieto (pisteet, suoritusstatus) tallentuu arviointikirjaan automaattisesti.
+
+**Toteutus:**
+- Jokaiseen harjoituskokonaisuuteen lisätään `scorm-wrapper.js`, joka tunnistaa SCORM-ympäristön automaattisesti (paikallisesti selaimella testaus toimii edelleen normaalisti)
+- Harjoitusten onnistumis-callbackit raportoivat pisteet ja suoritusstatuksen SCORM API:n kautta
+- Jokainen harjoituskokonaisuus paketoidaan omaksi SCORM-paketiksi (`imsmanifest.xml` + HTML/JS/CSS → ZIP)
+- Paketit ladataan Moodleen SCORM-aktiviteetteina
+
+**Standardivalinta (päätetty 2.4.2026):** SCORM 1.2 — xAPI/Tin Can hylätty, koska `mod_tincanlaunch`-lisäosa ei virallisesti tue Moodle 4.5+ / 5.x -versioita ja alustan natiivi xAPI-tuki rajoittuu Logstore-tasolle (ei sisällön käynnistämiseen). SCORM 1.2 on tuettu kaikissa Moodle-versioissa suoraan.
+
+**SCORM-paketit per harjoituskokonaisuus:**
+
+| Paketti | Harjoitukset (SCO:t) | Arviointi |
+|---|---|---|
+| Tiedostonhallinta | 4 harjoitusta (etsi, järjestä, pilvi/paikallinen, tiedostomuodot) | Hyv/hyl |
+| Tekstinkäsittely (Word-simulaattori) | 5 harjoitusta | Valmentava |
+| Esitysgrafiikka (PPT-simulaattori) | 2 harjoitusta | Valmentava |
+| Kyberturvallisuus (tulossa) | Harjoitukset TBD | 1–5 |
+
+---
 
 | Vanha materiaali/tehtävä | Suositus | Käyttö uudessa kurssissa |
 |---|---|---|

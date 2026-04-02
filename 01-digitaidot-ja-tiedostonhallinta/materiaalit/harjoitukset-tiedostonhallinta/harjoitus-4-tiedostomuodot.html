@@ -17,8 +17,10 @@
         <div id="quiz-section" style="margin-top: 24px;"></div>
     </div>
 
+    <script src="scorm-wrapper.js"></script>
     <script src="file-engine.js"></script>
     <script>
+    SCORM.init();
     // ────────────────────────────────────────────────
     // OSA A: Raahaa tiedostomuoto oikeaan kategoriaan
     // ────────────────────────────────────────────────
@@ -112,9 +114,19 @@
 
     function renderQuiz() {
         if (qIndex >= quizData.length) {
+            // Laske kokonaispisteet: raahausosa (16 kpl) + tietovisa (6 kpl) = max 22
+            const dragScore = partA.completedCount || 0;
+            const totalRaw = dragScore + quizScore;
+            const totalMax = 16 + quizData.length;
+            const pct = Math.round(totalRaw / totalMax * 100);
+            SCORM.setScore(pct, 100, 0);
+            SCORM.setStatus(pct >= 50 ? 'completed' : 'incomplete');
+            SCORM.finish();
+
             quizDiv.innerHTML = `
                 <div class="success-message">
                     🎉 <strong>Tietovisa suoritettu!</strong> Sait ${quizScore}/${quizData.length} oikein.
+                    <br>Kokonaispisteet: <strong>${pct}%</strong> (raahaus ${dragScore}/16 + visa ${quizScore}/${quizData.length})
                     <br><small>Voit palata <a href="index.html" style="color: #2e7d32;">harjoitusvalikkoon</a>.</small>
                 </div>`;
             return;
