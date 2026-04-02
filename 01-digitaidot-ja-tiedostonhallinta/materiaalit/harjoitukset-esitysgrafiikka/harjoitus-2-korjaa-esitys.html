@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harjoitus 2 – Korjaa huono esitys</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <a class="back-link" href="index.html">← Takaisin harjoituksiin</a>
+    <div class="exercise-container">
+        <div class="exercise-header">
+            <h1>📊 Harjoitus 2 – Korjaa huono esitys</h1>
+            <p>Tässä esityksessä on tyypillisiä virheitä. Tunnista ongelmat ja korjaa ne!</p>
+        </div>
+        <div id="exercise"></div>
+    </div>
+
+    <script src="slide-engine.js"></script>
+    <script>
+    // "Huonot" diat — opiskelijoiden tyypillisiä virheitä
+    const brokenSlides = [
+        // Dia 1 – otsikkodiassa liikaa tekstiä alaotsikossa
+        {
+            id: 'fix-1',
+            layout: 'title',
+            title: 'Lemmikkieläimet',
+            subtitle: 'Tämä on esitys jossa käsitellään lemmikkieläimiä ja niiden hoitoa ja ruokintaa ja ulkoiluttamista ja kaikkea muuta mahdollista mitä lemmikkieläimiin liittyy ja tämä on todella pitkä alaotsikko joka ei mahdu diaan',
+            body: '',
+            bodyLeft: '',
+            bodyRight: '',
+            theme: '',
+            // Ongelman kenttä ja kontrolli
+            problems: ['subtitle-too-long'],
+            controls: [
+                {
+                    type: 'textarea',
+                    field: 'subtitle',
+                    label: 'Lyhennä alaotsikko (max 40 merkkiä):',
+                    current: 'Tämä on esitys jossa käsitellään lemmikkieläimiä ja niiden hoitoa ja ruokintaa ja ulkoiluttamista ja kaikkea muuta mahdollista mitä lemmikkieläimiin liittyy ja tämä on todella pitkä alaotsikko joka ei mahdu diaan',
+                    rows: 2
+                }
+            ]
+        },
+        // Dia 2 – liikaa tekstiä bodyssa (koko essee yhdellä dialla)
+        {
+            id: 'fix-2',
+            layout: 'title-content',
+            title: 'Koirat',
+            body: 'Koirat ovat ihmisen parhaita ystäviä. Ne ovat uskollisia ja rakastavia lemmikkejä. Koiria on satoja eri rotuja, kuten labradorinnoutaja, saksanpaimenkoira, kultainennoutaja, chihuahua ja monia muita. Koirat tarvitsevat päivittäistä liikuntaa, hyvää ruokaa ja säännöllisiä eläinlääkärikäyntejä. Koiran hoito vaatii sitoutumista ja aikaa. Pentu pitää kouluttaa ja sosiaalistaa. Ruokinta on tärkeää: koiran ruokavalion tulee olla monipuolinen. Ulkoilu on välttämätöntä koiran hyvinvoinnille. Koirat ovat sosiaalisia eläimiä ja kaipaavat seuraa.',
+            bodyLeft: '',
+            bodyRight: '',
+            theme: '',
+            fontSize: 10,
+            problems: ['too-much-text', 'font-too-small'],
+            controls: [
+                {
+                    type: 'textarea',
+                    field: 'body',
+                    label: 'Tiivistä teksti lyhyeksi luetteloksi (max 3 kohtaa):',
+                    current: 'Koirat ovat ihmisen parhaita ystäviä. Ne ovat uskollisia ja rakastavia lemmikkejä. Koiria on satoja eri rotuja, kuten labradorinnoutaja, saksanpaimenkoira, kultainennoutaja, chihuahua ja monia muita. Koirat tarvitsevat päivittäistä liikuntaa, hyvää ruokaa ja säännöllisiä eläinlääkärikäyntejä. Koiran hoito vaatii sitoutumista ja aikaa. Pentu pitää kouluttaa ja sosiaalistaa. Ruokinta on tärkeää: koiran ruokavalion tulee olla monipuolinen. Ulkoilu on välttämätöntä koiran hyvinvoinnille. Koirat ovat sosiaalisia eläimiä ja kaipaavat seuraa.',
+                    rows: 4
+                },
+                {
+                    type: 'range',
+                    field: 'fontSize',
+                    label: 'Fonttikoko:',
+                    min: 8,
+                    max: 32,
+                    current: 10,
+                    unit: 'pt'
+                }
+            ]
+        },
+        // Dia 3 – puuttuva otsikko
+        {
+            id: 'fix-3',
+            layout: 'title-content',
+            title: '',
+            body: '• Kissanruoka (märkä ja kuiva)<br>• Hiekkalaatikko<br>• Raapimapuu<br>• Leikkikalut',
+            bodyLeft: '',
+            bodyRight: '',
+            theme: '',
+            problems: ['missing-title'],
+            controls: [
+                {
+                    type: 'textarea',
+                    field: 'title',
+                    label: 'Lisää diaan selkeä otsikko:',
+                    current: '',
+                    rows: 1
+                }
+            ]
+        },
+        // Dia 4 – huono värikontrasti (vaalea teksti vaalealla taustalla)
+        {
+            id: 'fix-4',
+            layout: 'title-content',
+            title: 'Akvaariokalat',
+            body: 'Akvaario vaatii säännöllistä huoltoa. Vaihda vettä viikoittain ja tarkista lämpötila.',
+            bodyLeft: '',
+            bodyRight: '',
+            theme: '',
+            fontColor: '#d4d4d4',
+            bgColor: '#f0f0f0',
+            problems: ['bad-contrast'],
+            controls: [
+                {
+                    type: 'select',
+                    field: 'fontColor',
+                    label: 'Tekstin väri:',
+                    current: '#d4d4d4',
+                    options: [
+                        { value: '#d4d4d4', label: '⚠️ Vaaleanharmaa (huono)' },
+                        { value: '#e8e8e8', label: '⚠️ Lähes valkoinen (huono)' },
+                        { value: '#333333', label: '✅ Tumma (hyvä kontrasti)' },
+                        { value: '#1a1a1a', label: '✅ Musta (paras kontrasti)' }
+                    ]
+                },
+                {
+                    type: 'select',
+                    field: 'bgColor',
+                    label: 'Taustaväri:',
+                    current: '#f0f0f0',
+                    options: [
+                        { value: '#f0f0f0', label: 'Vaaleanharmaa' },
+                        { value: '#ffffff', label: 'Valkoinen' },
+                        { value: '#1a3760', label: 'Tummansininen' },
+                        { value: '#2c3e50', label: 'Tumma liuskekivi' }
+                    ]
+                }
+            ]
+        },
+        // Dia 5 – ei ongelmia (varmistaa etteivät kaikki ole rikki)
+        {
+            id: 'fix-5',
+            layout: 'title-content',
+            title: 'Yhteenveto',
+            body: '• Lemmikki on pitkäaikainen sitoumus<br>• Tutustu rotuun ennen hankintaa<br>• Varaa budjetti hoitokuluihin',
+            bodyLeft: '',
+            bodyRight: '',
+            theme: '',
+            problems: [],
+            controls: []
+        }
+    ];
+
+    // Apufunktio: laske kontrasti kahden hex-värin välillä (yksinkertaistettu)
+    function relativeLuminance(hex) {
+        const r = parseInt(hex.slice(1,3), 16) / 255;
+        const g = parseInt(hex.slice(3,5), 16) / 255;
+        const b = parseInt(hex.slice(5,7), 16) / 255;
+        const toLinear = c => c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+        return 0.2126 * toLinear(r) + 0.7152 * toLinear(g) + 0.0722 * toLinear(b);
+    }
+    function contrastRatio(hex1, hex2) {
+        const l1 = relativeLuminance(hex1);
+        const l2 = relativeLuminance(hex2);
+        const lighter = Math.max(l1, l2);
+        const darker = Math.min(l1, l2);
+        return (lighter + 0.05) / (darker + 0.05);
+    }
+
+    const exercise = new FixSlideExercise({
+        containerId: 'exercise',
+        slides: brokenSlides,
+        infoPanel: {
+            title: 'Hyvän esityksen periaatteet',
+            content: `
+                <p>Tyypillisiä esitysten virheitä ovat:</p>
+                <ul>
+                    <li><strong>Liikaa tekstiä</strong> – diassa pitäisi olla vain avainsanoja tai lyhyitä luetteloita</li>
+                    <li><strong>Puuttuva otsikko</strong> – joka diassa tarvitaan selkeä otsikko</li>
+                    <li><strong>Liian pieni fontti</strong> – yleisön pitää nähdä teksti kaukaakin (vähintään 18pt)</li>
+                    <li><strong>Huono kontrasti</strong> – vaalea teksti vaalealla pohjalla on mahdoton lukea</li>
+                </ul>
+            `
+        },
+        tasks: [
+            // 1. Lyhennä alaotsikko (dia 1)
+            {
+                instruction: '<strong>Dia 1:</strong> Alaotsikko on aivan liian pitkä. Lyhennä se enintään 40 merkkiin.',
+                hint: 'Hyvä alaotsikko on lyhyt, esim. "Ohjeita lemmikkien hoitoon".',
+                slideIndex: 0,
+                validate: function(ex) {
+                    const text = ex.getSlideText(0, 'subtitle');
+                    return text.trim().length > 0 && text.trim().length <= 40;
+                }
+            },
+            // 2. Tiivistä teksti (dia 2)
+            {
+                instruction: '<strong>Dia 2:</strong> Diassa on liikaa tekstiä. Tiivistä sisältö enintään <strong>120 merkkiin</strong>.',
+                hint: 'Kirjoita 2–3 lyhyttä luettelokohtaa, esim. "• Päivittäinen ulkoilu • Hyvä ruoka • Eläinlääkärikäynnit".',
+                slideIndex: 1,
+                validate: function(ex) {
+                    const text = ex.getSlideText(1, 'body');
+                    return text.trim().length > 0 && text.trim().length <= 120;
+                }
+            },
+            // 3. Suurenna fontti (dia 2)
+            {
+                instruction: '<strong>Dia 2:</strong> Fonttikoko on liian pieni (10pt). Suurenna se <strong>vähintään 18pt</strong> kokoon.',
+                hint: 'Vedä fonttikoko-liukusäädintä oikealle.',
+                slideIndex: 1,
+                validate: function(ex) {
+                    const s = ex.getSlide(1);
+                    return s && s.fontSize >= 18;
+                }
+            },
+            // 4. Lisää puuttuva otsikko (dia 3)
+            {
+                instruction: '<strong>Dia 3:</strong> Diasta puuttuu otsikko kokonaan. Kirjoita sopiva otsikko.',
+                hint: 'Sisältö käsittelee kissatarvikkeita, joten otsikko voisi olla esim. "Kissan tarvikkeet".',
+                slideIndex: 2,
+                validate: function(ex) {
+                    const text = ex.getSlideText(2, 'title');
+                    return text.trim().length >= 3;
+                }
+            },
+            // 5. Korjaa huono kontrasti (dia 4)
+            {
+                instruction: '<strong>Dia 4:</strong> Teksti on lähes näkymätön — värikontrasti on huono. Valitse <strong>tumma tekstiväri</strong> tai vaihda taustaväri tummemmaksi.',
+                hint: 'Vaihda tekstin väri tummaksi (esim. "#333333" tai "#1a1a1a") tai tausta tummaksi ja teksti vaaleaksi.',
+                slideIndex: 3,
+                validate: function(ex) {
+                    const s = ex.getSlide(3);
+                    if (!s) return false;
+                    const fg = s.fontColor || '#333333';
+                    const bg = s.bgColor || '#ffffff';
+                    return contrastRatio(fg, bg) >= 4.5;
+                }
+            }
+        ]
+    });
+
+    exercise.init();
+
+    // Alkutilanteen tyylien asetus (dia 4 huono kontrasti)
+    setTimeout(() => {
+        const cards = document.querySelectorAll('.fix-card');
+        if (cards[3]) {
+            const canvas = cards[3].querySelector('.slide-canvas');
+            if (canvas) {
+                canvas.style.backgroundColor = '#f0f0f0';
+                const body = canvas.querySelector('.sl-body');
+                if (body) body.style.color = '#d4d4d4';
+            }
+        }
+        // Dia 2: pieni fontti
+        if (cards[1]) {
+            const canvas = cards[1].querySelector('.slide-canvas');
+            if (canvas) {
+                const body = canvas.querySelector('.sl-body');
+                if (body) body.style.fontSize = '10pt';
+            }
+        }
+    }, 100);
+    </script>
+</body>
+</html>

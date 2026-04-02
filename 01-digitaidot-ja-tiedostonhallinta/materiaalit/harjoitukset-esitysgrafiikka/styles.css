@@ -1,0 +1,586 @@
+/* ============================================================
+   Esitysgrafiikkaharjoitusten tyylit
+   Slide Exercise Styles v1.0
+   ============================================================ */
+
+* { box-sizing: border-box; }
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 16px;
+    background: #f0f0f0;
+    color: #333;
+}
+
+.exercise-container {
+    max-width: 960px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 12px rgba(0,0,0,.1);
+    padding: 24px;
+}
+
+.exercise-header h1 {
+    font-size: 1.4em;
+    margin: 0 0 4px;
+    color: #c0392b;
+}
+.exercise-header p {
+    color: #555;
+    margin: 0 0 16px;
+    font-size: .95em;
+}
+
+/* ─── Info-paneeli ─────────────────────────────────────── */
+
+.info-panel {
+    background: #fdf2e9;
+    border-left: 4px solid #e67e22;
+    padding: 14px 18px;
+    border-radius: 4px;
+    margin-bottom: 14px;
+    font-size: .9em;
+    line-height: 1.55;
+}
+.info-panel h3 { margin: 0 0 6px; color: #b34a00; }
+.info-panel ul { margin: 6px 0; padding-left: 22px; }
+.info-panel code {
+    background: #fce4c0;
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-size: .92em;
+}
+
+/* ─── Tehtäväpalkki ───────────────────────────────────── */
+
+.task-panel {
+    background: #fffde7;
+    border: 1px solid #f0c040;
+    border-left: 4px solid #f0a030;
+    border-radius: 4px;
+    padding: 10px 14px;
+    margin-bottom: 10px;
+    font-size: .92em;
+    transition: background .3s;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+.task-label {
+    font-weight: 700;
+    color: #795600;
+    white-space: nowrap;
+}
+.task-text { flex: 1; }
+.task-counter { font-size: .82em; color: #999; white-space: nowrap; }
+.task-panel.task-done {
+    background: #e8f5e9;
+    border-color: #43a047;
+}
+
+/* ─── Hintbox ──────────────────────────────────────────── */
+
+.hint-box {
+    background: #e3f2fd;
+    border: 1px solid #90caf9;
+    border-radius: 4px;
+    padding: 8px 14px;
+    font-size: .88em;
+    color: #1565c0;
+    margin-bottom: 10px;
+    animation: fadeIn .3s ease;
+}
+
+/* ─── Edistymispalkki ──────────────────────────────────── */
+
+.progress-container { margin: 0 0 12px; }
+.progress-bar-track {
+    background: #e0e0e0;
+    border-radius: 8px;
+    height: 10px;
+    overflow: hidden;
+}
+.progress-bar-fill {
+    background: linear-gradient(90deg, #e67e22, #f39c12);
+    height: 100%;
+    border-radius: 8px;
+    transition: width .4s ease;
+}
+.progress-text {
+    text-align: center;
+    font-size: .82em;
+    color: #777;
+    margin-top: 3px;
+}
+
+/* ─── Dia-työtila (vasemmat thumbnailit + oikea dianäkymä) */
+
+.slide-workspace {
+    display: grid;
+    grid-template-columns: 130px 1fr;
+    gap: 14px;
+    margin-bottom: 12px;
+    min-height: 360px;
+}
+
+.thumb-strip {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    overflow-y: auto;
+    max-height: 500px;
+    padding: 4px;
+}
+
+.slide-thumb {
+    position: relative;
+    border: 2px solid #d0d0d0;
+    border-radius: 4px;
+    cursor: pointer;
+    background: #fff;
+    padding: 4px;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    font-size: .35em;
+    transition: border-color .2s, box-shadow .2s;
+}
+.slide-thumb.selected {
+    border-color: #c0392b;
+    box-shadow: 0 0 0 2px rgba(192,57,43,.3);
+}
+.slide-thumb:hover { border-color: #e67e22; }
+
+.thumb-num {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    background: rgba(0,0,0,.55);
+    color: #fff;
+    font-size: 2.2em;
+    font-weight: 700;
+    padding: 0 4px;
+    border-radius: 2px;
+    z-index: 2;
+}
+
+/* ─── Dianäkymä (isompi) ──────────────────────────────── */
+
+.slide-main-view {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #e8e8e8;
+    border-radius: 6px;
+    padding: 16px;
+}
+
+.slide-canvas {
+    width: 100%;
+    max-width: 640px;
+    aspect-ratio: 16 / 9;
+    background: #fff;
+    box-shadow: 0 2px 12px rgba(0,0,0,.15);
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+    font-family: 'Calibri', 'Segoe UI', sans-serif;
+}
+
+.slide-canvas.mini {
+    max-width: none;
+    box-shadow: none;
+    border-radius: 0;
+}
+
+/* ─── Dia layoutit ─────────────────────────────────────── */
+
+/* Otsikkodia */
+.sl-title-slide {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding: 10% 8%;
+    text-align: center;
+}
+.sl-title {
+    font-size: 2em;
+    font-weight: 700;
+    color: #1a3760;
+    margin-bottom: .3em;
+    outline: none;
+    min-width: 60%;
+}
+.sl-subtitle {
+    font-size: 1.1em;
+    color: #666;
+    outline: none;
+    min-width: 60%;
+}
+
+/* Otsikko + sisältö */
+.sl-content-slide {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 6% 8%;
+}
+.sl-heading {
+    font-size: 1.5em;
+    font-weight: 700;
+    color: #c0392b;
+    margin-bottom: .4em;
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: .2em;
+    outline: none;
+    min-height: 1.2em;
+}
+.sl-body {
+    font-size: 1em;
+    color: #333;
+    flex: 1;
+    outline: none;
+    line-height: 1.55;
+    min-height: 2em;
+    overflow: auto;
+}
+
+/* Kaksi saraketta */
+.sl-two-col-slide {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 6% 8%;
+}
+.sl-columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    flex: 1;
+}
+.sl-col {
+    outline: none;
+    font-size: .95em;
+    color: #333;
+    line-height: 1.5;
+    border: 1px dashed #ddd;
+    border-radius: 4px;
+    padding: 6px;
+    min-height: 2em;
+}
+
+/* Osion otsikko */
+.sl-section-slide {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    background: linear-gradient(135deg, #c0392b 0%, #e74c3c 100%);
+}
+.sl-section-title {
+    font-size: 2em;
+    font-weight: 700;
+    color: #fff;
+    text-align: center;
+    outline: none;
+    min-width: 60%;
+    padding: 0 8%;
+}
+
+/* Tyhjä dia */
+.sl-blank-slide {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding: 8%;
+}
+.sl-free {
+    outline: none;
+    text-align: center;
+    color: #555;
+    font-size: 1em;
+    width: 100%;
+    min-height: 2em;
+}
+
+/* Placeholder-teksti */
+.placeholder {
+    color: #bbb;
+    font-style: italic;
+}
+
+/* ─── Toimintopalkki (lisää/poista dia) ────────────────── */
+
+.slide-action-bar {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+}
+.btn-slide-action {
+    padding: 6px 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background: #f8f8f8;
+    font-size: .88em;
+    cursor: pointer;
+    transition: background .15s;
+}
+.btn-slide-action:hover { background: #eee; }
+.btn-slide-action.btn-danger { color: #c0392b; border-color: #e0a0a0; }
+.btn-slide-action.btn-danger:hover { background: #fce4ec; }
+
+/* ─── Layout-valitsin (popup) ──────────────────────────── */
+
+.layout-picker {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0,0,0,.12);
+    padding: 14px;
+    margin-bottom: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    animation: fadeIn .2s ease;
+}
+.picker-title {
+    width: 100%;
+    font-weight: 600;
+    font-size: .9em;
+    color: #555;
+    margin-bottom: 4px;
+}
+.layout-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    border: 2px solid #e0e0e0;
+    border-radius: 6px;
+    padding: 12px 16px;
+    cursor: pointer;
+    background: #fafafa;
+    transition: border-color .2s, background .2s;
+    min-width: 100px;
+}
+.layout-option:hover {
+    border-color: #e67e22;
+    background: #fdf2e9;
+}
+.lo-icon { font-size: 1.6em; }
+.lo-label { font-size: .8em; color: #555; }
+
+/* ─── Painikkeet ───────────────────────────────────────── */
+
+.controls {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+.btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    font-size: .9em;
+    cursor: pointer;
+    transition: background .2s, transform .1s;
+}
+.btn:hover { transform: translateY(-1px); }
+.btn:active { transform: translateY(0); }
+.btn-hint { background: #e3f2fd; color: #1565c0; }
+.btn-hint:hover { background: #bbdefb; }
+.btn-reset { background: #fafafa; color: #555; border: 1px solid #ccc; }
+.btn-reset:hover { background: #eee; }
+
+/* ─── Onnistumisviesti ─────────────────────────────────── */
+
+.success-message {
+    background: #e8f5e9;
+    color: #2e7d32;
+    border: 2px solid #43a047;
+    border-radius: 8px;
+    padding: 16px;
+    text-align: center;
+    font-size: 1.05em;
+    margin-top: 16px;
+    animation: fadeIn .4s ease;
+}
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── "Korjaa esitys" -kortit ──────────────────────────── */
+
+.fix-slide-area {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+    margin-bottom: 14px;
+}
+
+.fix-card {
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #fafafa;
+    transition: border-color .3s, box-shadow .3s;
+}
+.fix-card.has-problem {
+    border-color: #e53935;
+    border-style: dashed;
+}
+.fix-card.highlight {
+    border-color: #e67e22;
+    box-shadow: 0 0 0 3px rgba(230,126,34,.25);
+}
+.fix-card.ok { border-color: #ccc; }
+.fix-card.fixed {
+    border-color: #43a047;
+    border-style: solid;
+}
+.fix-card.fixed .fix-card-label {
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+
+.fix-card-label {
+    padding: 6px 12px;
+    font-weight: 600;
+    font-size: .85em;
+    background: #f5f5f5;
+    border-bottom: 1px solid #e0e0e0;
+    color: #555;
+}
+.fix-card.has-problem .fix-card-label {
+    background: #fce4ec;
+    color: #c62828;
+}
+
+.fix-card .slide-canvas.mini {
+    aspect-ratio: 16 / 9;
+    font-size: .55em;
+}
+
+.fix-controls {
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    border-top: 1px solid #eee;
+    background: #fff;
+}
+.fix-ctrl-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: .85em;
+    color: #444;
+    flex-wrap: wrap;
+}
+.fix-select {
+    padding: 3px 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: .95em;
+}
+.fix-range { flex: 1; min-width: 100px; }
+.range-val { font-weight: 600; font-size: .9em; min-width: 40px; }
+.fix-textarea {
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 6px 8px;
+    font-family: 'Calibri', 'Segoe UI', sans-serif;
+    font-size: .92em;
+    resize: vertical;
+    margin-top: 4px;
+}
+.fix-checkbox {
+    cursor: pointer;
+}
+
+/* ─── Tyhjä dia -viesti ────────────────────────────────── */
+
+.empty-slide-msg {
+    text-align: center;
+    color: #999;
+    font-size: 1.1em;
+    padding: 40px;
+}
+
+/* ─── Aloitussivu (index) ──────────────────────────────── */
+
+.exercise-list {
+    list-style: none;
+    padding: 0;
+}
+.exercise-list li { margin-bottom: 12px; }
+.exercise-list a {
+    display: block;
+    padding: 16px 20px;
+    background: #f8f9fa;
+    border: 1px solid #ddd;
+    border-left: 4px solid #c0392b;
+    border-radius: 6px;
+    text-decoration: none;
+    color: #922b21;
+    font-weight: 600;
+    transition: background .2s, box-shadow .2s;
+}
+.exercise-list a:hover {
+    background: #fdf2e9;
+    box-shadow: 0 2px 8px rgba(0,0,0,.08);
+}
+.exercise-list .exercise-desc {
+    font-weight: 400;
+    color: #666;
+    font-size: .85em;
+    margin-top: 4px;
+}
+
+.exercise-instructions {
+    background: #fdf2e9;
+    border-left: 4px solid #e67e22;
+    padding: 12px 16px;
+    border-radius: 4px;
+    margin-bottom: 16px;
+    font-size: .9em;
+    line-height: 1.5;
+}
+.exercise-instructions strong { color: #b34a00; }
+
+.back-link {
+    display: inline-block;
+    margin-bottom: 12px;
+    color: #e67e22;
+    text-decoration: none;
+    font-size: .9em;
+}
+.back-link:hover { text-decoration: underline; }
+
+/* ─── Responsiivisuus ──────────────────────────────────── */
+
+@media (max-width: 700px) {
+    body { padding: 8px; }
+    .exercise-container { padding: 14px; }
+    .slide-workspace {
+        grid-template-columns: 1fr;
+        min-height: auto;
+    }
+    .thumb-strip {
+        flex-direction: row;
+        max-height: none;
+        overflow-x: auto;
+    }
+    .slide-thumb { min-width: 100px; aspect-ratio: 16/9; }
+    .fix-slide-area { grid-template-columns: 1fr; }
+    .controls { flex-direction: column; }
+    .btn { width: 100%; text-align: center; }
+}

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harjoitus 1 – Diarakenteen luominen</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <a class="back-link" href="index.html">← Takaisin harjoituksiin</a>
+    <div class="exercise-container">
+        <div class="exercise-header">
+            <h1>📊 Harjoitus 1 – Diarakenteen luominen</h1>
+            <p>Rakenna esitys oikeilla asetteluilla ja sisällöillä. Aiheena on "Turvallinen netin käyttö".</p>
+        </div>
+        <div id="exercise"></div>
+    </div>
+
+    <script src="slide-engine.js"></script>
+    <script>
+    // Aloitusdiat: tyhjä otsikkodia valmiina
+    const startSlides = [
+        {
+            id: 'start-1',
+            layout: 'title',
+            title: '',
+            subtitle: '',
+            body: '',
+            bodyLeft: '',
+            bodyRight: '',
+            theme: ''
+        }
+    ];
+
+    const exercise = new SlideExercise({
+        containerId: 'exercise',
+        slides: startSlides,
+        infoPanel: {
+            title: 'Hyvän esityksen rakenne',
+            content: `
+                <p>Ammattimainen esitys koostuu yleensä seuraavista osista:</p>
+                <ul>
+                    <li><strong>Otsikkodia</strong> – esityksen nimi ja tekijä</li>
+                    <li><strong>Sisältödiat</strong> – yksi asia per dia, selkeä otsikko</li>
+                    <li><strong>Osion otsikot</strong> – jakavat esityksen osiin</li>
+                    <li><strong>Yhteenvetodia</strong> – kokoaa pääkohdat</li>
+                </ul>
+                <p>Muista: <strong>vähemmän on enemmän</strong>. Hyvässä diassa on lyhyet lauseet tai luettelo, ei pitkiä tekstikappaleita.</p>
+            `
+        },
+        tasks: [
+            // 1. Kirjoita otsikkodiaan otsikko
+            {
+                instruction: 'Kirjoita ensimmäiseen otsikkodiaan esityksen nimi: <strong>Turvallinen netin käyttö</strong>',
+                hint: 'Klikkaa isoa otsikkokenttää diassa ja kirjoita teksti.',
+                validate: function(ex) {
+                    return ex.slideHasLayout(0, 'title') &&
+                           ex.slideContainsText(0, 'turvallinen netin käyttö');
+                }
+            },
+            // 2. Kirjoita alaotsikko
+            {
+                instruction: 'Kirjoita otsikkodiaan alaotsikoksi oma nimesi tai "Opiskelija".',
+                hint: 'Klikkaa alaotsikkokenttää ja kirjoita nimesi.',
+                validate: function(ex) {
+                    const s = ex.getSlide(0);
+                    if (!s) return false;
+                    const sub = ex._stripHtml(s.subtitle || '');
+                    return sub.trim().length >= 2;
+                }
+            },
+            // 3. Lisää sisältödia
+            {
+                instruction: 'Lisää uusi dia <strong>"Otsikko + sisältö"</strong> -asettelulla. Se tulee otsikkodian jälkeen.',
+                hint: 'Paina "+ Lisää dia" ja valitse "Otsikko + sisältö".',
+                validate: function(ex) {
+                    return ex.getSlideCount() >= 2 &&
+                           ex.slideHasLayout(1, 'title-content');
+                }
+            },
+            // 4. Kirjoita diaan 2 otsikko
+            {
+                instruction: 'Kirjoita diaan 2 otsikoksi: <strong>Salasanat</strong>',
+                hint: 'Valitse dia 2 nauhoista ja klikkaa otsikkokenttää.',
+                validate: function(ex) {
+                    return ex.slideContainsText(1, 'salasanat');
+                }
+            },
+            // 5. Kirjoita sisältöä diaan 2
+            {
+                instruction: 'Kirjoita diaan 2 vähintään yksi neuvo salasanoista (esim. "Käytä pitkiä salasanoja").',
+                hint: 'Klikkaa sisältökenttää ja kirjoita vähintään yksi lause.',
+                validate: function(ex) {
+                    const s = ex.getSlide(1);
+                    if (!s) return false;
+                    const body = ex._stripHtml(s.body || '');
+                    return body.trim().length >= 10;
+                }
+            },
+            // 6. Lisää osion otsikkodia
+            {
+                instruction: 'Lisää <strong>"Osion otsikko"</strong> -dia. Kirjoita siihen: <strong>Yksityisyys verkossa</strong>',
+                hint: 'Paina "+ Lisää dia", valitse "Osion otsikko" ja kirjoita teksti.',
+                validate: function(ex) {
+                    for (let i = 0; i < ex.getSlideCount(); i++) {
+                        if (ex.slideHasLayout(i, 'section') &&
+                            ex.slideContainsText(i, 'yksityisyys')) return true;
+                    }
+                    return false;
+                }
+            },
+            // 7. Lisää kaksi saraketta -dia
+            {
+                instruction: 'Lisää <strong>"Kaksi saraketta"</strong> -dia. Kirjoita otsikoksi: <strong>Mitä jakaa ja mitä ei?</strong>',
+                hint: 'Paina "+ Lisää dia", valitse "Kaksi saraketta".',
+                validate: function(ex) {
+                    for (let i = 0; i < ex.getSlideCount(); i++) {
+                        if (ex.slideHasLayout(i, 'two-column') &&
+                            ex.slideHasTitle(i)) return true;
+                    }
+                    return false;
+                }
+            },
+            // 8. Täytä sarakkeet
+            {
+                instruction: 'Kirjoita vasempaan sarakkeeseen asioita joita <strong>voi jakaa</strong>, oikeaan asioita joita <strong>ei kannata jakaa</strong>.',
+                hint: 'Klikkaa sarakkeita ja kirjoita molempiin jotain.',
+                validate: function(ex) {
+                    for (let i = 0; i < ex.getSlideCount(); i++) {
+                        const s = ex.getSlide(i);
+                        if (s && s.layout === 'two-column') {
+                            const left = ex._stripHtml(s.bodyLeft || '').trim();
+                            const right = ex._stripHtml(s.bodyRight || '').trim();
+                            if (left.length >= 3 && right.length >= 3) return true;
+                        }
+                    }
+                    return false;
+                }
+            },
+            // 9. Lisää yhteenvetodia loppuun
+            {
+                instruction: 'Lisää loppuun <strong>"Otsikko + sisältö"</strong> -dia. Kirjoita otsikoksi: <strong>Yhteenveto</strong>',
+                hint: 'Siirry viimeiseen diaan ja lisää uusi dia.',
+                validate: function(ex) {
+                    const last = ex.getSlideCount() - 1;
+                    return last >= 4 &&
+                           ex.slideHasLayout(last, 'title-content') &&
+                           ex.slideContainsText(last, 'yhteenveto');
+                }
+            },
+            // 10. Esityksessä on vähintään 5 diaa
+            {
+                instruction: 'Tarkista, että esityksessä on <strong>vähintään 5 diaa</strong>. Lisää tarvittaessa lisää.',
+                hint: 'Katso diasorttauspalkista diojen lukumäärä.',
+                validate: function(ex) {
+                    return ex.getSlideCount() >= 5;
+                }
+            }
+        ]
+    });
+
+    exercise.init();
+    </script>
+</body>
+</html>

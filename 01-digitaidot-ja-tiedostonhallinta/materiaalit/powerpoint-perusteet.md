@@ -23,7 +23,7 @@ Opiskelija osaa luoda selkeän ja visuaalisesti toimivan diaesityksen PowerPoint
    - Excelin kaavion tuominen PowerPointiin
    - Taulukon lisääminen diaan
 4. **Animaatiot ja siirtymät**
-   - Perusanimaatiot (tekstin ja kuvien siirtymät)
+   - Perusanimaatiot (tekstin ja kuvien siirtymät) (Ei lähdetä opettamaan animointipolkujen rakentamista, vaan keskitytään perusasiat, kuten "sisään" ja "ulos" -animaatiot, muodon muutos. Pidetään hyvin kevyenä tämä osio)
    - Yli-animoinnin välttäminen
 5. **Esityksen näyttäminen**
    - Diaesitystila
@@ -39,3 +39,9 @@ Opiskelija osaa luoda selkeän ja visuaalisesti toimivan diaesityksen PowerPoint
 
 ## Tila
 🔲 Päivitettävä vanhan pohjalta
+
+
+# TODO
+Tarkasta powerpoint harjoitusten toiminta.
+ - Onnistuisiko, että pohjatekstin (diojen template teksti?) klikkaaminen dioissa antaisi suoraan ylikirjoittaa sen?
+ - Kirjoitetun tekstin väri on harmaa (template teksti?), olisiko sen parempi olla musta?
