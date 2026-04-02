@@ -140,7 +140,6 @@ body {
 }
 .word-toolbar.toolbar-disabled {
     opacity: .45;
-    pointer-events: none;
     position: relative;
 }
 .word-toolbar.toolbar-disabled::after {

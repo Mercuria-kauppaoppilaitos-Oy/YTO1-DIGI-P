@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harjoitus 3: Pikanäppäimet</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="exercise-container">
+        <a href="index.html" class="back-link">← Takaisin harjoitusvalikkoon</a>
+        <div class="exercise-header">
+            <h1>Harjoitus 3: Pikanäppäimet</h1>
+            <p>Harjoittele tekstinkäsittelyn tärkeimpiä pikanäppäimiä. Työkalupalkki on pois käytöstä — käytä vain näppäimistöä!</p>
+        </div>
+        <div id="exercise"></div>
+    </div>
+
+    <script src="word-engine.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+        const exercise = new WordExercise({
+            containerId: 'exercise',
+            keyboardOnly: true,
+            toolbarButtons: [
+                'bold', 'italic', 'underline', 'sep',
+                'marks'
+            ],
+            infoPanel: {
+                title: '⌨️ Tärkeimmät pikanäppäimet',
+                content: `
+                    <p>Pikanäppäimet nopeuttavat työskentelyä huomattavasti. Opettele nämä ulkoa!</p>
+                    <table style="width:100%; font-size:.92em; border-collapse:collapse;">
+                        <tr style="background:#d5e8f5;"><th style="text-align:left;padding:4px 8px;">Näppäin</th><th style="text-align:left;padding:4px 8px;">Toiminto</th></tr>
+                        <tr><td style="padding:3px 8px;"><code>Ctrl + B</code></td><td style="padding:3px 8px;">Lihavointi</td></tr>
+                        <tr style="background:#f5f8fa;"><td style="padding:3px 8px;"><code>Ctrl + I</code></td><td style="padding:3px 8px;">Kursiivi</td></tr>
+                        <tr><td style="padding:3px 8px;"><code>Ctrl + U</code></td><td style="padding:3px 8px;">Alleviivaus</td></tr>
+                        <tr style="background:#f5f8fa;"><td style="padding:3px 8px;"><code>Ctrl + C</code></td><td style="padding:3px 8px;">Kopioi</td></tr>
+                        <tr><td style="padding:3px 8px;"><code>Ctrl + X</code></td><td style="padding:3px 8px;">Leikkaa</td></tr>
+                        <tr style="background:#f5f8fa;"><td style="padding:3px 8px;"><code>Ctrl + V</code></td><td style="padding:3px 8px;">Liitä</td></tr>
+                        <tr><td style="padding:3px 8px;"><code>Ctrl + Z</code></td><td style="padding:3px 8px;">Kumoa</td></tr>
+                        <tr style="background:#f5f8fa;"><td style="padding:3px 8px;"><code>Ctrl + A</code></td><td style="padding:3px 8px;">Valitse kaikki</td></tr>
+                    </table>
+                `
+            },
+            initialHTML:
+                '<p>Harjoitteluteksti pikanäppäimille</p>' +
+                '<p>Tämä on tärkeä lause, joka pitää muotoilla oikein. Merkurian opiskelijat oppivat nopeasti käyttämään pikanäppäimiä. Harjoitus tekee mestarin!</p>' +
+                '<p>Kopioi tämä rivi alemmaksi.</p>' +
+                '<p></p>',
+
+            tasks: [
+                {
+                    instruction: 'Maalaa sana <strong>"tärkeä"</strong> ja lihavoi se painamalla <code>Ctrl+B</code>.',
+                    hint: 'Kaksoisklikkaa sanaa "tärkeä" maalataksesi sen ja paina sitten Ctrl+B.',
+                    validate: (editor, ex) =>
+                        ex.hasShortcutSinceTask('ctrl+b') && ex.isTextFormatted('tärkeä', 'bold')
+                },
+                {
+                    instruction: 'Maalaa sana <strong>"oikein"</strong> ja kursivoi se painamalla <code>Ctrl+I</code>.',
+                    hint: 'Kaksoisklikkaa sanaa "oikein" ja paina Ctrl+I.',
+                    validate: (editor, ex) =>
+                        ex.hasShortcutSinceTask('ctrl+i') && ex.isTextFormatted('oikein', 'italic')
+                },
+                {
+                    instruction: 'Maalaa sana <strong>"pikanäppäimiä"</strong> ja alleviivaa se painamalla <code>Ctrl+U</code>.',
+                    hint: 'Kaksoisklikkaa sanaa "pikanäppäimiä" ja paina Ctrl+U.',
+                    validate: (editor, ex) =>
+                        ex.hasShortcutSinceTask('ctrl+u') && ex.isTextFormatted('pikanäppäimiä', 'underline')
+                },
+                {
+                    instruction: 'Maalaa sana <strong>"mestarin"</strong> ja lihavoi se painamalla <code>Ctrl+B</code> — harjoittele lisää!',
+                    hint: 'Kaksoisklikkaa sanaa "mestarin" ja paina Ctrl+B.',
+                    validate: (editor, ex) =>
+                        ex.hasShortcutSinceTask('ctrl+b') && ex.isTextFormatted('mestarin', 'bold')
+                },
+                {
+                    instruction: 'Paina <code>Ctrl+A</code> valitaksesi kaiken tekstin. (Huom: valinta poistuu kun klikkaat, mutta tehtävä hyväksytään heti.)',
+                    hint: 'Klikkaa ensin editoriin ja paina sitten Ctrl+A.',
+                    validate: (editor, ex) => ex.hasShortcutSinceTask('ctrl+a')
+                },
+                {
+                    instruction: 'Maalaa rivi <strong>"Kopioi tämä rivi alemmaksi."</strong> ja kopioi se painamalla <code>Ctrl+C</code>.',
+                    hint: 'Maalaa koko rivi hiirellä ja paina Ctrl+C.',
+                    validate: (editor, ex) => ex.hasShortcutSinceTask('ctrl+c')
+                },
+                {
+                    instruction: 'Klikkaa tekstin loppuun (tyhjälle riville) ja liitä kopioitu teksti painamalla <code>Ctrl+V</code>.',
+                    hint: 'Klikkaa tyhjälle riville dokumentin lopussa ja paina Ctrl+V.',
+                    validate: (editor, ex) => ex.hasShortcutSinceTask('ctrl+v')
+                }
+            ]
+        });
+
+        exercise.init();
+    });
+    </script>
+</body>
+</html>

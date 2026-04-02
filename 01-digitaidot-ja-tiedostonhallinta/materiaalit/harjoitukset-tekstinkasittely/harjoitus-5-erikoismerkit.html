@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harjoitus 5: Erikoismerkit</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="exercise-container">
+        <a href="index.html" class="back-link">← Takaisin harjoitusvalikkoon</a>
+        <div class="exercise-header">
+            <h1>Harjoitus 5: Erikoismerkit</h1>
+            <p>Opi tunnistamaan ja käyttämään kappaleenvaihtoa, rivinvaihtoa, sivunvaihtoa ja sitovaa välilyöntiä.</p>
+        </div>
+        <div id="exercise"></div>
+    </div>
+
+    <script src="word-engine.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+        const exercise = new WordExercise({
+            containerId: 'exercise',
+            toolbarButtons: ['marks'],
+            infoPanel: {
+                title: '📘 Erikoismerkit tekstinkäsittelyssä',
+                content: `
+                    <p>Wordissa on useita näkymättömiä merkkejä, joilla on eri merkitys. Ne näkyvät kun painat <strong>¶-painiketta</strong> (muotoilumerkit).</p>
+
+                    <div class="mark-legend">
+                        <span><span class="mark-sym">¶</span> Kappaleenvaihto (Enter)</span>
+                        <span><span class="mark-sym">↵</span> Rivinvaihto (Shift+Enter)</span>
+                        <span><span class="mark-sym">---</span> Sivunvaihto (Ctrl+Enter)</span>
+                        <span><span class="mark-sym">°</span> Sitova välilyönti (Ctrl+Shift+Space)</span>
+                    </div>
+
+                    <p><strong>Kappaleenvaihto (Enter)</strong> — aloittaa uuden kappaleen. Jokainen kappale voi olla eri tyylinen (otsikko, leipäteksti, luettelo).</p>
+                    <p><strong>Rivinvaihto (Shift+Enter)</strong> — siirtyy uudelle riville <em>saman kappaleen sisällä</em>. Kätevä esim. osoitteissa tai runoissa.</p>
+                    <p><strong>Sivunvaihto (Ctrl+Enter)</strong> — pakottaa uuden sivun alkamaan. Käytä esim. ennen uutta lukua.</p>
+                    <p><strong>Sitova välilyönti (Ctrl+Shift+Space)</strong> — estää rivinvaihdon sanojen välissä. Käytä lukujen ja yksikköjen välissä (esim. 10&nbsp;km, 5&nbsp;€), jotta ne pysyvät samalla rivillä.</p>
+                `
+            },
+            initialHTML:
+                '<p>Harjoittele erikoismerkkejä alla.</p>' +
+                '<p>Kirjoita tähän lisää tekstiä ja kokeile eri vaihtoja.</p>',
+
+            tasks: [
+                {
+                    instruction: 'Paina ensin ¶-painiketta (muotoilumerkit) nähdäksesi kappalemerkit. Merkki näkyy jokaisen kappaleen lopussa.',
+                    hint: 'Paina työkalupalkin ¶-painiketta. Kappaleiden perään ilmestyy ¶-merkki.',
+                    validate: (editor, ex) => ex.showMarks === true
+                },
+                {
+                    instruction: 'Klikkaa toisen kappaleen loppuun ja paina <code>Enter</code> lisätäksesi <strong>kappaleenvaihdon</strong>. Syntyy uusi kappale (¶-merkki).',
+                    hint: 'Klikkaa toisen rivin loppuun ja paina Enter. Uusi ¶-merkki ilmestyy.',
+                    validate: (editor, ex) => {
+                        // Tarkista onko kappaleita enemmän kuin alussa (2 → 3+)
+                        return ex.countParagraphs() >= 3 && ex.hasShortcutSinceTask('enter');
+                    }
+                },
+                {
+                    instruction: 'Kirjoita uuteen kappaleeseen teksti ja paina <code>Shift+Enter</code> lisätäksesi <strong>rivinvaihdon</strong> (ei uutta kappaletta!).',
+                    hint: 'Kirjoita jotain ja paina sitten Shift+Enter. Huomaa: ¶-merkkiä EI tule — vain rivinvaihto saman kappaleen sisällä.',
+                    validate: (editor, ex) => {
+                        return ex.hasShortcutSinceTask('shift+enter');
+                    }
+                },
+                {
+                    instruction: 'Paina <code>Ctrl+Enter</code> lisätäksesi <strong>sivunvaihdon</strong>. Näet katkoviivan "sivunvaihto"-tekstillä.',
+                    hint: 'Klikkaa haluamaasi kohtaan ja paina Ctrl+Enter. Katkoviiva ilmestyy.',
+                    validate: (editor, ex) => ex.hasPageBreak()
+                },
+                {
+                    instruction: 'Kirjoita "10" ja paina <code>Ctrl+Shift+Space</code> ja kirjoita "km". Sitova välilyönti pitää luvun ja yksikön samalla rivillä.',
+                    hint: 'Kirjoita "10", paina Ctrl+Shift+Välilyönti, kirjoita "km". Sitova välilyönti näkyy pienenä ympyränä muotoilumerkeissä.',
+                    validate: (editor, ex) => {
+                        // Tarkista onko sitova välilyönti (nbsp) käytössä
+                        return ex.hasNbsp() && ex.hasShortcutSinceTask('ctrl+shift+space');
+                    }
+                }
+            ]
+        });
+
+        exercise.init();
+    });
+    </script>
+</body>
+</html>

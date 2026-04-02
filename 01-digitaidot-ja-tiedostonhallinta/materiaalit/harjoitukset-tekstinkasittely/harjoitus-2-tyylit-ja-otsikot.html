@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harjoitus 2: Tyylit ja otsikot</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="exercise-container">
+        <a href="index.html" class="back-link">← Takaisin harjoitusvalikkoon</a>
+        <div class="exercise-header">
+            <h1>Harjoitus 2: Tyylit ja otsikot</h1>
+            <p>Opettele käyttämään otsikkotyylejä (Otsikko 1, 2, 3) dokumentin rakenteen muodostamiseen.</p>
+        </div>
+        <div id="exercise"></div>
+    </div>
+
+    <script src="word-engine.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+        const exercise = new WordExercise({
+            containerId: 'exercise',
+            toolbarButtons: [
+                'heading1', 'heading2', 'heading3', 'normal', 'sep',
+                'bold', 'italic', 'underline', 'sep',
+                'marks'
+            ],
+            infoPanel: {
+                title: '📘 Miksi tyylit ovat tärkeitä?',
+                content: `
+                    <p>Wordissa <strong>tyylit</strong> (Otsikko 1, Otsikko 2…) eivät ole pelkkää muotoilua — ne kertovat
+                    dokumentin <em>rakenteen</em>. Tyylejä kannattaa aina käyttää, koska:</p>
+                    <ul>
+                        <li><strong>Automaattinen sisällysluettelo</strong> — Word luo sisällysluettelon suoraan otsikoista</li>
+                        <li><strong>Saavutettavuus</strong> — ruudunlukijat käyttävät otsikoita navigointiin (tärkeää esteettömyydelle!)</li>
+                        <li><strong>Yhdenmukainen ulkoasu</strong> — kaikki otsikot näyttävät samalta automaattisesti</li>
+                        <li><strong>Helppo muokata</strong> — tyyli muutetaan yhdestä paikasta, ja kaikki otsikot päivittyvät</li>
+                        <li><strong>Vienti PDF/verkkosivuksi</strong> — rakenne säilyy muunnoksissa</li>
+                    </ul>
+                    <p>👉 <strong>Älä lihavooi tekstiä käsin otsikoksi</strong> — käytä aina otsikkotyyliä!</p>
+                `
+            },
+            initialHTML:
+                '<p>Digitaalinen viestintä</p>' +
+                '<p>Digitaalinen viestintä tarkoittaa kaikkea sähköistä kommunikointia, kuten sähköpostia, pikaviestejä ja sosiaalista mediaa. Tässä luvussa tutustumme yleisimpiin viestintävälineisiin.</p>' +
+                '<p>Sähköposti</p>' +
+                '<p>Sähköposti on virallinen viestintäkanava, jota käytetään erityisesti työelämässä. Viesti koostuu vastaanottajasta, aiheesta ja sisällöstä.</p>' +
+                '<p>Sähköpostin liitteet</p>' +
+                '<p>Liitetiedostojen koko kannattaa pitää kohtuullisena. Suuret tiedostot voi jakaa OneDriven kautta.</p>' +
+                '<p>Pikaviestintä</p>' +
+                '<p>Teams, WhatsApp ja muut pikaviestimet sopivat nopeaan, epävirallisempaan viestintään. Muista silti hyvät käytöstavat!</p>' +
+                '<p>Viestinnän nettietiketti</p>' +
+                '<p>Verkon viestinnässä pätevät samat käytössäännöt kuin kasvokkain. Kirjoita selkeästi, vältä CAPS LOCKIA ja kunnioita muita.</p>',
+
+            tasks: [
+                {
+                    instruction: 'Aseta <strong>"Digitaalinen viestintä"</strong> Otsikko 1 -tyyliksi — klikkaa riville ja paina <code>H1</code>.',
+                    hint: 'Klikkaa kursorilla "Digitaalinen viestintä" -riville ja paina H1-painiketta työkalupalkista.',
+                    validate: (editor, ex) => ex.isTextInTag('Digitaalinen viestintä', 'H1')
+                },
+                {
+                    instruction: 'Aseta <strong>"Sähköposti"</strong> Otsikko 2 -tyyliksi — klikkaa riville ja paina <code>H2</code>.',
+                    hint: 'Klikkaa "Sähköposti"-riville ja paina H2-painiketta.',
+                    validate: (editor, ex) => ex.isTextInTag('Sähköposti', 'H2') && !ex.isTextInTag('Sähköpostin liitteet', 'H2')
+                },
+                {
+                    instruction: 'Aseta <strong>"Sähköpostin liitteet"</strong> Otsikko 3 -tyyliksi (<code>H3</code>). Se on alaotsikko Sähköposti-luvulle.',
+                    hint: 'Klikkaa "Sähköpostin liitteet" -riville ja paina H3-painiketta.',
+                    validate: (editor, ex) => ex.isTextInTag('Sähköpostin liitteet', 'H3')
+                },
+                {
+                    instruction: 'Aseta <strong>"Pikaviestintä"</strong> Otsikko 2 -tyyliksi (<code>H2</code>).',
+                    hint: 'Klikkaa "Pikaviestintä"-riville ja paina H2-painiketta.',
+                    validate: (editor, ex) => ex.isTextInTag('Pikaviestintä', 'H2')
+                },
+                {
+                    instruction: 'Aseta <strong>"Viestinnän nettietiketti"</strong> Otsikko 2 -tyyliksi (<code>H2</code>).',
+                    hint: 'Klikkaa "Viestinnän nettietiketti" -riville ja paina H2-painiketta.',
+                    validate: (editor, ex) => ex.isTextInTag('Viestinnän nettietiketti', 'H2')
+                }
+            ]
+        });
+
+        exercise.init();
+    });
+    </script>
+</body>
+</html>

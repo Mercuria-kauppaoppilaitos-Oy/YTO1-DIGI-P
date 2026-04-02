@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harjoitus 4: Sarkain ja tasaukset</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="exercise-container">
+        <a href="index.html" class="back-link">← Takaisin harjoitusvalikkoon</a>
+        <div class="exercise-header">
+            <h1>Harjoitus 4: Sarkain ja tasaukset</h1>
+            <p>Opi miksi Tab-näppäintä (sarkain) käytetään tasaukseen eikä välilyöntiä.</p>
+        </div>
+
+        <div class="info-panel">
+            <h3>📘 Miksi välilyönti ei sovi tasaukseen?</h3>
+            <p>Välilyönnillä text näyttää rivissä vain, jos fontti on tasalevyinen (monospace). Tavallisella fontilla
+               (kuten Calibri, Arial) kirjaimet ovat <strong>eri levyisiä</strong> — esimerkiksi "i" on kapeampi kuin "m".</p>
+            <p><strong>Sarkain (Tab)</strong> siirtää tekstin aina seuraavaan <em>sarkainkohtaan</em> (tab stop),
+               joten sarakkeet pysyvät täydellisesti rivissä fontista riippumatta!</p>
+            <p>👉 <strong>Muista:</strong> Älä koskaan tasaa tekstiä painamalla välilyöntiä monta kertaa — käytä aina Tab-näppäintä.</p>
+        </div>
+
+        <!-- Tehtävä-palkki -->
+        <div class="task-panel" id="taskPanel">
+            <span class="task-label">Tehtävä: </span>
+            <span class="task-text" id="taskText"></span>
+            <span class="task-counter" id="taskCounter"></span>
+        </div>
+
+        <!-- Edistymispalkki -->
+        <div class="progress-container">
+            <div class="progress-bar-track">
+                <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+            </div>
+            <div class="progress-text" id="progressText">0 / 3 tehtävää suoritettu</div>
+        </div>
+
+        <!-- Fonttivalitsin -->
+        <div class="font-toggle">
+            <strong>Fontti:</strong>
+            <label><input type="radio" name="font" value="proportional" checked> Calibri (suhteellinen)</label>
+            <label><input type="radio" name="font" value="mono"> Consolas (tasalevyinen)</label>
+        </div>
+
+        <!-- Vertailu -->
+        <div class="comparison-wrap">
+            <div class="compare-box bad">
+                <div class="box-title">❌ Välilyönnillä tasattu (väärin)</div>
+                <div class="compare-area" id="badExample">
+<span style="color:#999">Nimi              Osasto           Puhelin</span>
+Matti Meikäläinen Myynti           040 123 4567
+Liisa Virtanen    Talous           050 987 6543
+Anna-Maija Korhonen Markkinointi   045 111 2233</div>
+            </div>
+            <div class="compare-box good">
+                <div class="box-title">✅ Sarkaimella tasattu (oikein)</div>
+                <div class="compare-area" id="goodExample">
+<span style="color:#999">Nimi&#9;Osasto&#9;Puhelin</span>
+Matti Meikäläinen&#9;Myynti&#9;040 123 4567
+Liisa Virtanen&#9;Talous&#9;050 987 6543
+Anna-Maija Korhonen&#9;Markkinointi&#9;045 111 2233</div>
+            </div>
+        </div>
+
+        <p style="font-size:.9em; color:#555; margin-bottom:12px;">
+            👆 Vaihda fonttia ylhäältä ja katso miten välilyöntiversion sarakkeet menevät sekaisin, mutta sarkainversio pysyy rivissä!
+        </p>
+
+        <!-- Harjoitusalue -->
+        <div style="border:1px solid #ccc; border-radius:6px; overflow:hidden; margin-bottom:12px;">
+            <div style="padding:8px 12px; background:#e8f5e9; font-weight:600; font-size:.88em; color:#2e7d32;">
+                ✏️ Kirjoita alla oleva taulukko käyttäen Tab-näppäintä sarakkeiden välissä
+            </div>
+            <div id="practiceArea" contenteditable="true" class="compare-area"
+                 style="min-height:100px; outline:none; padding:14px; background:#fffff8; tab-size:8; -moz-tab-size:8; white-space:pre-wrap;"
+                 spellcheck="false"></div>
+        </div>
+
+        <div class="exercise-instructions" id="targetInfo">
+            <strong>Kirjoita tämä:</strong><br>
+            <code style="font-size:.95em; line-height:1.8">
+                Tuote&nbsp;&nbsp;&nbsp;→&nbsp;&nbsp;&nbsp;Hinta&nbsp;&nbsp;&nbsp;→&nbsp;&nbsp;&nbsp;Määrä<br>
+                Kynä&nbsp;&nbsp;&nbsp;→&nbsp;&nbsp;&nbsp;1,50&nbsp;&nbsp;&nbsp;→&nbsp;&nbsp;&nbsp;10<br>
+                Vihko&nbsp;&nbsp;&nbsp;→&nbsp;&nbsp;&nbsp;3,20&nbsp;&nbsp;&nbsp;→&nbsp;&nbsp;&nbsp;5<br>
+                Kumi&nbsp;&nbsp;&nbsp;→&nbsp;&nbsp;&nbsp;0,80&nbsp;&nbsp;&nbsp;→&nbsp;&nbsp;&nbsp;20
+            </code>
+            <br><small>(→ = paina Tab-näppäintä, Enter = uusi rivi)</small>
+        </div>
+
+        <div class="controls">
+            <button class="btn btn-hint" id="hintBtn">💡 Vihje</button>
+            <button class="btn btn-reset" id="resetBtn">↺ Aloita alusta</button>
+        </div>
+
+        <div id="successMsg"></div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const badEl    = document.getElementById('badExample');
+        const goodEl   = document.getElementById('goodExample');
+        const practice = document.getElementById('practiceArea');
+        const taskText = document.getElementById('taskText');
+        const taskCounter = document.getElementById('taskCounter');
+        const progressFill = document.getElementById('progressFill');
+        const progressText = document.getElementById('progressText');
+        const successMsg = document.getElementById('successMsg');
+        const taskPanel = document.getElementById('taskPanel');
+
+        // Fonttivaihtaja
+        document.querySelectorAll('input[name="font"]').forEach(r => {
+            r.addEventListener('change', () => {
+                const mono = r.value === 'mono';
+                const cls = mono ? 'mono' : '';
+                badEl.className = 'compare-area' + (mono ? ' mono' : '');
+                goodEl.className = 'compare-area' + (mono ? ' mono' : '');
+                practice.style.fontFamily = mono
+                    ? "'Consolas', 'Courier New', monospace"
+                    : "'Calibri', 'Segoe UI', sans-serif";
+            });
+        });
+
+        // Tehtävät
+        const tasks = [
+            {
+                instruction: 'Vaihda fontti "Consolas (tasalevyinen)" -asetukseen ja katso miten molemmat versiot näyttävät.',
+                hint: 'Valitse ylhäältä "Consolas (tasalevyinen)" -radiopainike.',
+                validate: () => document.querySelector('input[name="font"][value="mono"]').checked
+            },
+            {
+                instruction: 'Vaihda fontti takaisin "Calibri (suhteellinen)" -asetukseen. Huomaa miten vasemman laatikon rivit menevät sekaisin!',
+                hint: 'Valitse "Calibri (suhteellinen)" -radiopainike ja katso eroa.',
+                validate: () => document.querySelector('input[name="font"][value="proportional"]').checked && seenMono
+            },
+            {
+                instruction: 'Kirjoita alla olevaan kenttään taulukko käyttäen <strong>Tab-näppäintä</strong> sarakkeiden välissä (katso malli ylhäällä).',
+                hint: 'Kirjoita "Tuote", paina Tab, kirjoita "Hinta", paina Tab, kirjoita "Määrä", paina Enter ja jatka seuraavalle riville.',
+                validate: () => {
+                    const text = practice.textContent || practice.innerText;
+                    const hasTab = text.includes('\t');
+                    const lines = text.trim().split('\n').filter(l => l.trim());
+                    return hasTab && lines.length >= 3;
+                }
+            }
+        ];
+
+        let current = 0;
+        let completed = 0;
+        let seenMono = false;
+
+        // Seuraa mono-valintaa
+        document.querySelectorAll('input[name="font"]').forEach(r => {
+            r.addEventListener('change', () => {
+                if (r.value === 'mono' && r.checked) seenMono = true;
+                checkTask();
+            });
+        });
+
+        function showTask() {
+            if (current >= tasks.length) {
+                taskText.innerHTML = '';
+                taskCounter.textContent = '';
+                successMsg.innerHTML = '<div class="success-message">🎉 <strong>Hienoa!</strong> Kaikki tehtävät suoritettu! Nyt ymmärrät miksi sarkain on parempi kuin välilyönti.</div>';
+                return;
+            }
+            taskText.innerHTML = tasks[current].instruction;
+            taskCounter.textContent = `(${current + 1}/${tasks.length})`;
+        }
+
+        function updateProgress() {
+            const pct = tasks.length > 0 ? (completed / tasks.length * 100) : 0;
+            progressFill.style.width = pct + '%';
+            progressText.textContent = `${completed} / ${tasks.length} tehtävää suoritettu`;
+        }
+
+        function checkTask() {
+            if (current >= tasks.length) return;
+            if (tasks[current].validate()) {
+                completed++;
+                current++;
+                taskPanel.classList.add('task-done');
+                setTimeout(() => taskPanel.classList.remove('task-done'), 700);
+                updateProgress();
+                showTask();
+            }
+        }
+
+        // Tab-näppäimen käsittely harjoitusalueella
+        practice.addEventListener('keydown', (e) => {
+            if (e.key === 'Tab') {
+                e.preventDefault();
+                document.execCommand('insertHTML', false, '\t');
+                setTimeout(checkTask, 100);
+            }
+        });
+        practice.addEventListener('input', () => setTimeout(checkTask, 200));
+
+        // Vihje
+        document.getElementById('hintBtn').addEventListener('click', () => {
+            if (current >= tasks.length) return;
+            const existing = document.querySelector('.hint-box');
+            if (existing) existing.remove();
+
+            const box = document.createElement('div');
+            box.className = 'hint-box';
+            box.innerHTML = '💡 ' + tasks[current].hint;
+            taskPanel.parentNode.insertBefore(box, taskPanel.nextSibling);
+            setTimeout(() => { if (box.parentNode) box.remove(); }, 6000);
+        });
+
+        // Reset
+        document.getElementById('resetBtn').addEventListener('click', () => {
+            current = 0;
+            completed = 0;
+            seenMono = false;
+            practice.textContent = '';
+            successMsg.innerHTML = '';
+            document.querySelector('input[name="font"][value="proportional"]').checked = true;
+            badEl.className = 'compare-area';
+            goodEl.className = 'compare-area';
+            practice.style.fontFamily = "'Calibri', 'Segoe UI', sans-serif";
+            const hint = document.querySelector('.hint-box');
+            if (hint) hint.remove();
+            updateProgress();
+            showTask();
+        });
+
+        showTask();
+        updateProgress();
+    });
+    </script>
+</body>
+</html>

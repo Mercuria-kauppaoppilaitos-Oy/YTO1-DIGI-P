@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harjoitus 1: Tekstin muotoilu</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="exercise-container">
+        <a href="index.html" class="back-link">← Takaisin harjoitusvalikkoon</a>
+        <div class="exercise-header">
+            <h1>Harjoitus 1: Tekstin muotoilu</h1>
+            <p>Harjoittele tekstin muotoilua: lihavointi, kursiivi, alleviivaus, tasaus ja luettelot.</p>
+        </div>
+        <div id="exercise"></div>
+    </div>
+
+    <script src="word-engine.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+        const exercise = new WordExercise({
+            containerId: 'exercise',
+            toolbarButtons: [
+                'bold', 'italic', 'underline', 'sep',
+                'alignLeft', 'alignCenter', 'alignRight', 'sep',
+                'bulletList', 'numberList', 'sep',
+                'marks'
+            ],
+            initialHTML:
+                '<p><b></b>Koulujen syysjuhla</p>' +
+                '<p>Mercurian kauppaoppilaitoksen syysjuhla järjestetään perjantaina 18.10. klo 12–14 juhlasalissa. Kaikki opiskelijat ja henkilökunta ovat tervetulleita!</p>' +
+                '<p>Ohjelma sisältää seuraavat kohdat:</p>' +
+                '<p>Musiikkiesityksiä</p>' +
+                '<p>Puheita ja palkitsemisia</p>' +
+                '<p>Kahvitarjoilu</p>' +
+                '<p>Lisätietoja saat opintotoimistosta.</p>',
+
+            tasks: [
+                {
+                    instruction: 'Lihavoi otsikko <strong>"Koulujen syysjuhla"</strong> — maalaa teksti ja paina painikkeesta <b>B</b>.',
+                    hint: 'Maalaa sana hiirellä ja paina työkalupalkin <b>B</b>-painiketta (tai Ctrl+B).',
+                    validate: (editor, ex) => ex.isTextFormatted('Koulujen syysjuhla', 'bold')
+                },
+                {
+                    instruction: 'Kursivoi päivämäärä <em>"perjantaina 18.10."</em> — maalaa teksti ja paina <i>I</i>.',
+                    hint: 'Maalaa "perjantaina 18.10." hiirellä ja paina <i>I</i>-painiketta (tai Ctrl+I).',
+                    validate: (editor, ex) => ex.isTextFormatted('perjantaina 18.10.', 'italic')
+                },
+                {
+                    instruction: 'Alleviivaa sana <u>"juhlasalissa"</u> — maalaa teksti ja paina <u>U</u>.',
+                    hint: 'Maalaa sana "juhlasalissa" ja paina <u>U</u>-painiketta (tai Ctrl+U).',
+                    validate: (editor, ex) => ex.isTextFormatted('juhlasalissa', 'underline')
+                },
+                {
+                    instruction: 'Keskitä otsikko "Koulujen syysjuhla" — klikkaa otsikkoriville ja paina keskityspainiketta.',
+                    hint: 'Klikkaa kursorilla otsikkoriville ja valitse työkalupalkista keskityspainike.',
+                    validate: (editor, ex) => ex.getTextAlignment('Koulujen syysjuhla') === 'center'
+                },
+                {
+                    instruction: 'Tee riveistä "Musiikkiesityksiä", "Puheita ja palkitsemisia" ja "Kahvitarjoilu" <strong>luettelomerkillinen lista</strong> — maalaa kaikki kolme riviä ja paina •≡-painiketta.',
+                    hint: 'Maalaa kaikki kolme riviä kerralla (Musiikkiesityksiä … Kahvitarjoilu) ja paina •≡ (luettelomerkki) -painiketta.',
+                    validate: (editor, ex) =>
+                        ex.isTextInList('Musiikkiesityksiä', 'bullet') &&
+                        ex.isTextInList('Kahvitarjoilu', 'bullet')
+                },
+                {
+                    instruction: 'Tasaa viimeinen kappale "Lisätietoja saat opintotoimistosta." <strong>oikealle</strong>.',
+                    hint: 'Klikkaa viimeiselle riville ja valitse oikealle tasaus -painike (kolmas tasauspainike).',
+                    validate: (editor, ex) => ex.getTextAlignment('Lisätietoja saat opintotoimistosta') === 'right'
+                }
+            ]
+        });
+
+        exercise.init();
+    });
+    </script>
+</body>
+</html>
