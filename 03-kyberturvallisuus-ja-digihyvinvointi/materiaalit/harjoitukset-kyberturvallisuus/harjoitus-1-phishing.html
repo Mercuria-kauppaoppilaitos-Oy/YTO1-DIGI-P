@@ -1,0 +1,173 @@
+﻿<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harjoitus 1 - Phishing-tunnistus</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .email-card {
+            background: #f9f9f9;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 12px 0;
+            transition: all 0.3s;
+        }
+        .email-card.email-correct {
+            border-color: #27ae60;
+            background: #e8f5e9;
+        }
+        .email-card.email-incorrect {
+            border-color: #e74c3c;
+            background: #fadbd8;
+        }
+        .email-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+        .email-from, .email-subject {
+            margin: 4px 0;
+            font-size: 0.95em;
+        }
+        .email-number {
+            font-size: 0.85em;
+            color: #777;
+            white-space: nowrap;
+        }
+        .email-preview {
+            background: white;
+            padding: 12px;
+            border-radius: 4px;
+            margin: 12px 0;
+            font-size: 0.95em;
+            line-height: 1.5;
+            border-left: 3px solid #3498db;
+        }
+        .email-question {
+            margin: 12px 0;
+            font-size: 0.95em;
+        }
+        .email-buttons {
+            display: flex;
+            gap: 8px;
+            margin: 12px 0;
+        }
+        .email-buttons button {
+            flex: 1;
+        }
+        .email-flags {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 12px;
+            border-radius: 4px;
+            margin-top: 12px;
+        }
+        .email-flags h4 {
+            margin: 0 0 8px;
+            color: #b34a00;
+        }
+        .flag-item {
+            padding: 6px 0;
+            font-size: 0.9em;
+            line-height: 1.4;
+        }
+        .flag-text {
+            color: #333;
+        }
+        .summary-panel {
+            background: #e8f5e9;
+            border: 2px solid #27ae60;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 24px;
+            text-align: center;
+        }
+        .summary-panel h3 {
+            margin: 0 0 12px;
+            color: #27ae60;
+        }
+        .summary-panel p {
+            margin: 8px 0;
+            font-size: 1.1em;
+        }
+    </style>
+</head>
+<body>
+    <a class="back-link" href="index.html">← Takaisin harjoituksiin</a>
+    <div class="exercise-container">
+        <div class="exercise-header">
+            <h1>🎣 Harjoitus 1 - Phishing-tunnistus</h1>
+            <p>Tunnista phishing-yritykset ja valitse oikeat varoitusmerkit!</p>
+        </div>
+        <div id="exercise"></div>
+    </div>
+
+    <script src="scorm-wrapper.js"><\/script>
+    <script src="phishing-engine.js"><\/script>
+    <script>
+    SCORM.init();
+
+    const exercise = new PhishingExercise({
+        containerId: 'exercise',
+        infoPanel: {
+            title: '🎣 Phishing-sähköpostit',
+            content: '<p><strong>Phishing</strong> = kalastelu. Hyökkääjä yrittää saada sinut paljastamaan henkilökohtaisia tietoja.</p><h4>Tyypilliset varoitusmerkit:</h4><ul><li>❌ Tuntematon lähettäjä tai väärennetty osoite</li><li>❌ Kiireisyys ("Välitön toimi vaaditaan!")</li><li>❌ Epäilyyttävät linkit – URL ei vastaa sivuston osoitetta</li><li>❌ Pyyntö salasanasta tai kortista</li><li>❌ Heikko kielioppi tai kirjoitusvirheet</li></ul>'
+        },
+        emails: [
+            {
+                id: 'email-1',
+                subject: 'Tärkeä: Vahvista pankkitilisi',
+                from: 'security@yourbank.com',
+                preview: 'Havaitsimme epätavallista toimintaa tilillässä. Klikkaa alla olevaa linkkiä vahvistaaksesi henkilökohtaiset tiedot...',
+                isPhishing: true,
+                redFlags: [
+                    '⚠️ Lähettäjä: security@yourbank.com (oikea olisi @[pankkinimi].fi)',
+                    '⚠️ Kiireellisyys: epätavallista toimintaa',
+                    '⚠️ Pyynnöt klikkaamaan linkkiä',
+                    '⚠️ Pyynnöt henkilökohtaisista tiedoista'
+                ]
+            },
+            {
+                id: 'email-2',
+                subject: 'Kuponki: 50% alennus kaikesta!',
+                from: 'deals@onlineshop-official.net',
+                preview: 'Tervehdys arvoisa asiakas! Sinulla on ainutlaatuinen 50% alennus. Klikkaa tästä aktivoidaksesi...',
+                isPhishing: true,
+                redFlags: [
+                    '⚠️ Lähettäjä: .net-domainissa (oikea käyttäisi .fi)',
+                    '⚠️ Ei henkilökohtaista tervehdystä',
+                    '⚠️ Liian hyvä ollakseen totta'
+                ]
+            },
+            {
+                id: 'email-3',
+                subject: 'Kurssin materiaali on saatavilla',
+                from: 'teacher@school.fi',
+                preview: 'Hei opiskelijat, kurssin materiaali on ladattavissa oheisella linkillä. Terveisin opettaja...',
+                isPhishing: false,
+                redFlags: []
+            },
+            {
+                id: 'email-4',
+                subject: 'URGENT: Tililläsi on luvattomia kirjautumisia!',
+                from: 'noreply@securityalert.net',
+                preview: 'VARO! Tililläsi on havaittu kirjautumisia ulkomailta. Vahvista tilisi NYTÄ klikkaamalla...',
+                isPhishing: true,
+                redFlags: [
+                    '⚠️ ISOLLA KIRJAIMELLA ja !!! huudot',
+                    '⚠️ Epätavallinen turvallisuuspalvelun domain',
+                    '⚠️ Pyynnöt vahvistaa linkillä'
+                ]
+            }
+        ]
+    });
+
+    exercise.init();
+    <\/script>
+</body>
+</html>
