@@ -1,0 +1,201 @@
+﻿<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kyberturvallisuus ja digihyvinvointi – harjoitukset</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="exercise-container">
+        <div class="exercise-header">
+            <h1>🔐 Kyberturvallisuus ja digihyvinvointi – harjoitukset</h1>
+            <p>7 interaktiivista harjoitusta tietoturvaa, tietosuojaa ja digihyvinvointia varten.</p>
+        </div>
+
+        <div class="info-panel">
+            <h3>📚 Harjoituksista</h3>
+            <p>Jokainen harjoitus käsittelee eri aiheen käytännön kautta. Vastaukset tallentuvat ja saat palautetta.</p>
+        </div>
+
+        <div class="exercises-grid">
+            <div class="exercise-tile">
+                <a href="harjoitus-1-phishing.html">
+                    <div class="tile-icon">🎣</div>
+                    <div class="tile-title">1. Phishing-tunnistus</div>
+                    <div class="tile-desc">Tunnista phishing-yritykset ja varoitusmerkit</div>
+                </a>
+            </div>
+
+            <div class="exercise-tile">
+                <a href="harjoitus-2-salasanat.html">
+                    <div class="tile-icon">🔐</div>
+                    <div class="tile-title">2. Salasanan vahvuus</div>
+                    <div class="tile-desc">Arvioi ja luokittele salasanoja</div>
+                </a>
+            </div>
+
+            <div class="exercise-tile">
+                <a href="harjoitus-3-ergonomia.html">
+                    <div class="tile-icon">💺</div>
+                    <div class="tile-title">3. Ergonomia</div>
+                    <div class="tile-desc">Simuloi työpöytää ja opi ergonomiasta</div>
+                </a>
+            </div>
+
+            <div class="exercise-tile">
+                <a href="harjoitus-4-digihyvinvointi.html">
+                    <div class="tile-icon">🧠</div>
+                    <div class="tile-title">4. Digihyvinvointi-kysymykset</div>
+                    <div class="tile-desc">Vastaa monimuotoisiin kysymyksiin</div>
+                </a>
+            </div>
+
+            <div class="exercise-tile">
+                <a href="harjoitus-5-yksityisyysasetukset.html">
+                    <div class="tile-icon">🔒</div>
+                    <div class="tile-title">5. Yksityisyysasetukset</div>
+                    <div class="tile-desc">Säädä some-asetuksia turvallisiksi</div>
+                </a>
+            </div>
+
+            <div class="exercise-tile">
+                <a href="harjoitus-6-datatalous.html">
+                    <div class="tile-icon">💰</div>
+                    <div class="tile-title">6. Datatalous</div>
+                    <div class="tile-desc">Seuraa tietojasi datatalouden ketjussa</div>
+                </a>
+            </div>
+
+            <div class="exercise-tile">
+                <a href="harjoitus-7-digijalanjaki.html">
+                    <div class="tile-icon">👣</div>
+                    <div class="tile-title">7. Digijalanjälki</div>
+                    <div class="tile-desc">Analysoi sosiaalisen median vaikutuksia</div>
+                </a>
+            </div>
+        </div>
+
+        <a class="back-link" href="../index.html">← Takaisin materiaaleihin</a>
+    </div>
+
+    <style>
+        .exercises-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin: 24px 0;
+        }
+
+        .exercise-tile {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .exercise-tile:nth-child(2) {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .exercise-tile:nth-child(3) {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .exercise-tile:nth-child(4) {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+
+        .exercise-tile:nth-child(5) {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        }
+
+        .exercise-tile:nth-child(6) {
+            background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);
+        }
+
+        .exercise-tile:nth-child(7) {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+        }
+
+        .exercise-tile:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+
+        .exercise-tile a {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            color: white;
+            text-decoration: none;
+            min-height: 200px;
+            text-align: center;
+        }
+
+        .tile-icon {
+            font-size: 3em;
+            margin-bottom: 12px;
+        }
+
+        .tile-title {
+            font-weight: 600;
+            font-size: 1.1em;
+            margin-bottom: 8px;
+        }
+
+        .tile-desc {
+            font-size: 0.9em;
+            opacity: 0.95;
+        }
+
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 16px;
+            background: #f0f2f5;
+            color: #333;
+        }
+
+        .exercise-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+            padding: 24px;
+        }
+
+        .exercise-header h1 {
+            font-size: 1.4em;
+            margin: 0 0 4px;
+            color: #c0392b;
+        }
+
+        .exercise-header p {
+            color: #555;
+            margin: 0 0 16px;
+            font-size: 0.95em;
+        }
+
+        .info-panel {
+            background: #fdf2e9;
+            border-left: 4px solid #e67e22;
+            padding: 14px 18px;
+            border-radius: 4px;
+            margin-bottom: 14px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 16px;
+            color: #2980b9;
+            text-decoration: none;
+            font-weight: 600;
+        }
+    </style>
+</body>
+</html>

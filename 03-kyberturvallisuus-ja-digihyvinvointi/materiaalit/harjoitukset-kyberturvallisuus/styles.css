@@ -1,0 +1,156 @@
+﻿/* ============================================================
+   Kyberturvallisuus ja digihyvinvointi – harjoitukset
+   ============================================================ */
+
+* { box-sizing: border-box; }
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 16px;
+    background: #f0f2f5;
+    color: #333;
+}
+
+.exercise-container {
+    max-width: 900px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+    padding: 24px;
+}
+
+.exercise-header h1 {
+    font-size: 1.4em;
+    margin: 0 0 4px;
+    color: #c0392b;
+}
+
+.exercise-header p {
+    color: #555;
+    margin: 0 0 16px;
+    font-size: 0.95em;
+}
+
+.info-panel {
+    background: #fdf2e9;
+    border-left: 4px solid #e67e22;
+    padding: 14px 18px;
+    border-radius: 4px;
+    margin-bottom: 14px;
+    font-size: 0.9em;
+    line-height: 1.55;
+}
+
+.info-panel h3 {
+    margin: 0 0 6px;
+    color: #b34a00;
+}
+
+.info-panel h4 {
+    margin: 10px 0 6px;
+    color: #b34a00;
+}
+
+.info-panel ul {
+    margin: 6px 0;
+    padding-left: 22px;
+}
+
+.progress-container {
+    margin: 0 0 12px;
+}
+
+.progress-bar-track {
+    background: #e0e0e0;
+    border-radius: 8px;
+    height: 10px;
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    background: linear-gradient(90deg, #e67e22, #f39c12);
+    height: 100%;
+    border-radius: 8px;
+    transition: width 0.4s ease;
+}
+
+.progress-text {
+    text-align: center;
+    font-size: 0.82em;
+    color: #777;
+    margin-top: 3px;
+}
+
+.btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.9em;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.btn-primary {
+    background: #2980b9;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #1a5276;
+}
+
+.btn-success {
+    background: #27ae60;
+    color: white;
+}
+
+.btn-success:hover {
+    background: #229954;
+}
+
+.btn-danger {
+    background: #e74c3c;
+    color: white;
+}
+
+.btn-danger:hover {
+    background: #c0392b;
+}
+
+.summary-panel {
+    background: #e8f5e9;
+    border: 2px solid #27ae60;
+    border-radius: 8px;
+    padding: 16px;
+    margin-top: 16px;
+    text-align: center;
+}
+
+.back-link {
+    display: inline-block;
+    margin-top: 16px;
+    color: #2980b9;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.back-link:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .exercise-container {
+        padding: 16px;
+    }
+    
+    .exercise-header h1 {
+        font-size: 1.2em;
+    }
+}
