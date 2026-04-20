@@ -5,103 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Harjoitus 1 - Phishing-tunnistus</title>
     <link rel="stylesheet" href="styles.css">
-    <style>
-        .exercise-container { max-width: 900px; margin: 0 auto; padding: 20px; }
-        .email-card {
-            background: #f9f9f9;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            padding: 16px;
-            margin: 12px 0;
-            transition: all 0.3s;
-        }
-        .email-card.correct { border-color: #27ae60; background: #e8f5e9; }
-        .email-card.incorrect { border-color: #e74c3c; background: #fadbd8; }
-        .email-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid #ddd;
-        }
-        .email-from, .email-subject { margin: 4px 0; font-size: 0.95em; }
-        .email-number { font-size: 0.85em; color: #777; }
-        .email-preview {
-            background: white;
-            padding: 12px;
-            border-radius: 4px;
-            margin: 12px 0;
-            font-size: 0.95em;
-            line-height: 1.5;
-            border-left: 3px solid #3498db;
-        }
-        .email-question { margin: 12px 0; font-size: 0.95em; }
-        .email-buttons {
-            display: flex;
-            gap: 8px;
-            margin: 12px 0;
-        }
-        .email-buttons button {
-            flex: 1;
-            padding: 10px;
-            border: none;
-            border-radius: 4px;
-            font-size: 0.95em;
-            cursor: pointer;
-            font-weight: bold;
-        }
-        .btn-yes { background: #e74c3c; color: white; }
-        .btn-yes:disabled { opacity: 0.6; cursor: not-allowed; }
-        .btn-no { background: #27ae60; color: white; }
-        .btn-no:disabled { opacity: 0.6; cursor: not-allowed; }
-        .email-flags {
-            background: #fff3cd;
-            border-left: 4px solid #ffc107;
-            padding: 12px;
-            border-radius: 4px;
-            margin-top: 12px;
-            display: none;
-        }
-        .email-flags h4 { margin: 0 0 8px; color: #b34a00; }
-        .flag-item { padding: 6px 0; font-size: 0.9em; }
-        .summary-panel {
-            background: #e8f5e9;
-            border: 2px solid #27ae60;
-            border-radius: 8px;
-            padding: 20px;
-            margin-top: 24px;
-            text-align: center;
-        }
-        .summary-panel h3 { margin: 0 0 12px; color: #27ae60; }
-        .summary-panel p { margin: 8px 0; font-size: 1.1em; }
-        .info-panel {
-            background: #e3f2fd;
-            border-left: 4px solid #2196F3;
-            padding: 16px;
-            border-radius: 4px;
-            margin: 16px 0;
-        }
-        .progress-container {
-            background: #f0f0f0;
-            padding: 12px;
-            border-radius: 4px;
-            margin: 12px 0;
-        }
-        .progress-bar-track {
-            background: #ddd;
-            height: 8px;
-            border-radius: 4px;
-            overflow: hidden;
-            margin-bottom: 8px;
-        }
-        .progress-bar-fill {
-            height: 100%;
-            background: #27ae60;
-            transition: width 0.3s;
-        }
-        .progress-text { font-size: 0.9em; text-align: center; }
-    </style>
 </head>
 <body>
     <a class="back-link" href="index.html">← Takaisin harjoituksiin</a>
@@ -139,31 +42,51 @@
     const emails = [
         {
             subject: 'Tärkeä: Vahvista pankkitilisi',
-            from: 'security@yourbank.com',
-            preview: 'Havaitsimme epätavallista toimintaa tilillässä. Klikkaa alla olevaa linkkiä vahvistaaksesi henkilökohtaiset tiedot...',
+            from: 'no-reply@s-pankki.fi',
+            senderName: 'S-pankki',
+            preview: 'Havaitsimme epätavallista toimintaa S-pankin tilillässä. Vahvista tunnuksesi klikkaamalla alla olevaa linkkiä: [turvatarkistus.s-pankki-temp.net]',
             isPhishing: true,
-            flags: ['⚠️ Lähettäjä: security@yourbank.com (oikea olisi @[pankkinimi].fi)', '⚠️ Kiireellisyys: epätavallista toimintaa', '⚠️ Pyynnöt klikkaamaan linkkiä', '⚠️ Pyynnöt henkilökohtaisista tiedoista']
+            flags: [
+                '⚠️ Sähköposti näyttää tulevan S-pankilta, mutta linkin domain on eri (s-pankki-temp.net)',
+                '⚠️ Kiireellisyys: "epätavallista toimintaa"',
+                '⚠️ Pyynnöt vahvistaa tunnuksia klikkaamalla linkkiä'
+            ]
         },
         {
-            subject: 'Kuponki: 50% alennus kaikesta!',
-            from: 'deals@onlineshop-official.net',
-            preview: 'Tervehdys arvoisa asiakas! Sinulla on ainutlaatuinen 50% alennus. Klikkaa tästä aktivoidaksesi...',
+            subject: '🎁 Sinulla on 70% alennus - VAIN TÄNÄÄN!',
+            from: 'best-deals@onlineshop-official.net',
+            senderName: 'Mercuria Shop',
+            preview: 'Tervehdys arvoisa asiakas! Olet valittu erityiseksi asiakkaaksi ja saat eksklusiivisen 70% alennuksen kaikesta! Klikkaa nyt aktivoidaksesi: [confirm-discount-now.com]',
             isPhishing: true,
-            flags: ['⚠️ Lähettäjä: .net-domainissa (oikea käyttäisi .fi)', '⚠️ Ei henkilökohtaista tervehdystä', '⚠️ Liian hyvä ollakseen totta']
+            flags: [
+                '⚠️ Lähettäjänimi "Mercuria Shop" ei vastaa sähköpostidomain-osoitetta (.net domainissa)',
+                '⚠️ Liian hyvä ollakseen totta - 70% alennus kaikesta',
+                '⚠️ Pyynnöt klikkaa linkkiä nopeasti ("Klikkaa nyt")'
+            ]
         },
         {
-            subject: 'Kurssin materiaali on saatavilla',
-            from: 'teacher@school.fi',
-            preview: 'Hei opiskelijat, kurssin materiaali on ladattavissa oheisella linkillä. Terveisin opettaja...',
+            subject: 'Kurssin materiaali on saatavilla eKampuksessa',
+            from: 'mitri.mercurialainen@mercuria.fi',
+            senderName: 'Mitri Mercurialainen',
+            preview: 'Hei opiskelija! Kurssin materiaali löytyy nyt eKampuksen osiosta 1. Pääset katsomaan ja lataamaan materiaalit sieltä. Kysy opettajalta, jos sinulla on ongelmia pääsyn kanssa. Ystävällisin terveisin, Mitri Mercurialainen',
             isPhishing: false,
-            flags: []
+            flags: [
+                '✅ Ei pyydetä klikkaamaan epäilyttäviä linkkejä - ohjataan suoraan tuttuun eKampus-järjestelmään',
+                '✅ Lähettäjä on organisaation virallinen sähköpostiosoite (@mercuria.fi)',
+                '✅ Henkilökohtainen tervehdys ja allekirjoitus - opettaja ottaa vastuuta'
+            ]
         },
         {
-            subject: 'URGENT: Tililläsi on luvattomia kirjautumisia!',
-            from: 'noreply@securityalert.net',
-            preview: 'VARO! Tililläsi on havaittu kirjautumisia ulkomailta. Vahvista tilisi NYTÄ klikkaamalla...',
+            subject: 'URGENT: Tietoturvaväliintulo vaaditaan',
+            from: 'noreply@mercuria-it.fi',
+            senderName: 'Mercuria IT-admin',
+            preview: 'VÄLITÖN TOIMI VAADITAAN! Järjestelmässämme on havaittu epäillyttävää toimintaa tilistäsi. Vahvista tunnuksesi nyt: [mercury-security-check.net/verify]. HUOM: Tämä on automaattinen viesti, älä vastaa sähköpostiin.',
             isPhishing: true,
-            flags: ['⚠️ ISOLLA KIRJAIMELLA ja !!! huudot', '⚠️ Epätavallinen turvallisuuspalvelun domain', '⚠️ Pyynnöt vahvistaa linkillä']
+            flags: [
+                '⚠️ ISOLLA KIRJAIMELLA ja !!! huudot - klassinen phishing-taktikka',
+                '⚠️ Epäillyttävä domain (mercury vs mercuria) - "mercury-security-check.net"',
+                '⚠️ Kiireellisyys ja uhka: "VÄLITÖN TOIMI", "epäillyttävää toimintaa"'
+            ]
         }
     ];
 
@@ -185,7 +108,12 @@
 
         const header = document.createElement('div');
         header.className = 'email-header';
-        header.innerHTML = \<div><div class="email-from"><strong>Lähettäjä:</strong> \</div><div class="email-subject"><strong>Aihe:</strong> \</div></div><div class="email-number">Sähköposti \/\</div>\;
+        header.innerHTML = `
+            <div>
+                <div class="email-sender"><strong>Lähettäjä:</strong> ${email.senderName} &lt;${email.from}&gt;</div>
+                <div class="email-subject"><strong>Aihe:</strong> ${email.subject}</div>
+            </div>
+        `;
         card.appendChild(header);
 
         const preview = document.createElement('div');
@@ -217,6 +145,8 @@
 
         const flags = document.createElement('div');
         flags.className = 'email-flags';
+        flags.style.display = 'none';
+
         if (email.isPhishing) {
             flags.innerHTML = '<h4>🚩 Varoitusmerkit:</h4>';
             email.flags.forEach(flag => {
@@ -226,7 +156,13 @@
                 flags.appendChild(flagDiv);
             });
         } else {
-            flags.innerHTML = '<h4>✅ Turvallinen viesti</h4><p>Tämä viestin on peräisin luotettavasta lähteestä.</p>';
+            flags.innerHTML = '<h4>✅ Turvallinen viesti - peräisin luotettavasta lähteestä</h4>';
+            email.flags.forEach(flag => {
+                const flagDiv = document.createElement('div');
+                flagDiv.className = 'flag-item safe-flag';
+                flagDiv.textContent = flag;
+                flags.appendChild(flagDiv);
+            });
         }
         card.appendChild(flags);
 
@@ -266,11 +202,15 @@
     function showSummary() {
         const pct = Math.round(score / emails.length * 100);
         const summary = document.getElementById('summaryContainer');
-        summary.innerHTML = \<div class="summary-panel">
+        const msg = pct >= 75 ? '🎉 Erinomainen suoritus!' : pct >= 50 ? '👍 Hyvä yritys!' : '📚 Harjoittele lisää!';
+        summary.innerHTML = `<div class="summary-panel">
             <h3>📊 Yhteenveto</h3>
-            <p><strong>Pisteet: \/\</strong> (\%)</p>
-            <p>\</p>
-        </div>\;
+            <p><strong>Pisteet: ${score}/${emails.length}</strong> (${pct}%)</p>
+            <p>${msg}</p>
+            <button class="btn btn-primary" onclick="location.reload()" style="margin-top: 16px; padding: 10px 20px;">
+                🔄 Uusi yritys
+            </button>
+        </div>`;
     }
 
     initExercise();
