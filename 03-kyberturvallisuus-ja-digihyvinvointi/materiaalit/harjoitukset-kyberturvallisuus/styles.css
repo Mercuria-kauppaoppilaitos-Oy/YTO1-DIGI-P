@@ -154,3 +154,527 @@ body {
         font-size: 1.2em;
     }
 }
+
+/* ============================================================
+   Harjoitusten lisämuotoilu
+   ============================================================ */
+
+.exercise-header {
+    margin-bottom: 24px;
+}
+
+.exercise-header h1 {
+    font-size: 1.4em;
+    margin: 0 0 8px;
+    color: #c0392b;
+}
+
+.exercise-header p {
+    color: #555;
+    margin: 0;
+    font-size: 0.95em;
+}
+
+.info-panel {
+    background: #e3f2fd;
+    border-left: 4px solid #2196F3;
+    padding: 16px;
+    border-radius: 4px;
+    margin: 16px 0;
+}
+
+.info-panel h3 {
+    margin: 0 0 12px;
+    color: #2196F3;
+}
+
+.info-panel h4 {
+    margin: 12px 0 8px;
+}
+
+.info-panel ul {
+    margin: 8px 0;
+    padding-left: 20px;
+}
+
+.info-panel li {
+    margin: 6px 0;
+    line-height: 1.6;
+}
+
+.back-link {
+    display: inline-block;
+    margin-top: 16px;
+    color: #2980b9;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.back-link:hover {
+    text-decoration: underline;
+}
+
+/* Email Card Styles */
+.email-card {
+    background: #f9f9f9;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    padding: 16px;
+    margin: 12px 0;
+    transition: all 0.3s;
+}
+
+.email-card.correct {
+    border-color: #27ae60;
+    background: #e8f5e9;
+}
+
+.email-card.incorrect {
+    border-color: #e74c3c;
+    background: #fadbd8;
+}
+
+.email-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #ddd;
+}
+
+.email-from, .email-subject {
+    margin: 4px 0;
+    font-size: 0.95em;
+}
+
+.email-number {
+    font-size: 0.85em;
+    color: #777;
+}
+
+.email-preview {
+    background: white;
+    padding: 12px;
+    border-radius: 4px;
+    margin: 12px 0;
+    font-size: 0.95em;
+    line-height: 1.5;
+    border-left: 3px solid #3498db;
+}
+
+.email-question {
+    margin: 12px 0;
+    font-size: 0.95em;
+}
+
+.email-buttons {
+    display: flex;
+    gap: 8px;
+    margin: 12px 0;
+}
+
+.email-buttons button {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.95em;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s;
+}
+
+.btn-yes {
+    background: #e74c3c;
+    color: white;
+}
+
+.btn-yes:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.btn-no {
+    background: #27ae60;
+    color: white;
+}
+
+.btn-no:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.email-flags {
+    background: #fff3cd;
+    border-left: 4px solid #ffc107;
+    padding: 12px;
+    border-radius: 4px;
+    margin-top: 12px;
+    display: none;
+    font-size: 0.95em;
+}
+
+.email-flags.show {
+    display: block;
+}
+
+.email-flags h4 {
+    margin: 0 0 8px;
+    color: #b34a00;
+}
+
+.flag-item {
+    padding: 6px 0;
+    font-size: 0.9em;
+}
+
+/* Question Card Styles */
+.question-card {
+    background: #f9f9f9;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    padding: 16px;
+    margin: 12px 0;
+    transition: all 0.3s;
+}
+
+.question-card.answered {
+    border-color: #27ae60;
+    background: #e8f5e9;
+}
+
+.question-card.answered.incorrect {
+    border-color: #e74c3c;
+    background: #fadbd8;
+}
+
+.question-text {
+    font-size: 1.1em;
+    font-weight: bold;
+    margin-bottom: 12px;
+}
+
+.options-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+}
+
+.option-btn {
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 4px;
+    background: white;
+    cursor: pointer;
+    font-size: 0.95em;
+    text-align: left;
+    transition: all 0.3s;
+}
+
+.option-btn:hover {
+    border-color: #3498db;
+    background: #ecf0f1;
+}
+
+.option-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.option-btn.correct {
+    background: #27ae60;
+    color: white;
+    border-color: #27ae60;
+}
+
+.option-btn.incorrect {
+    background: #e74c3c;
+    color: white;
+    border-color: #e74c3c;
+}
+
+.explanation {
+    background: #fff3cd;
+    border-left: 4px solid #ffc107;
+    padding: 12px;
+    border-radius: 4px;
+    margin-top: 12px;
+    display: none;
+    font-size: 0.95em;
+    line-height: 1.5;
+}
+
+.explanation.show {
+    display: block;
+}
+
+/* Progress Styles */
+.progress-container {
+    background: #f0f0f0;
+    padding: 12px;
+    border-radius: 4px;
+    margin: 12px 0;
+}
+
+.progress-bar-track {
+    background: #ddd;
+    height: 8px;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 8px;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background: #27ae60;
+    transition: width 0.3s;
+}
+
+.progress-text {
+    font-size: 0.9em;
+    text-align: center;
+}
+
+/* Summary Styles */
+.summary-panel {
+    background: #e8f5e9;
+    border: 2px solid #27ae60;
+    border-radius: 8px;
+    padding: 20px;
+    margin-top: 24px;
+    text-align: center;
+}
+
+.summary-panel h3 {
+    margin: 0 0 12px;
+    color: #27ae60;
+}
+
+.summary-panel p {
+    margin: 8px 0;
+    font-size: 1.1em;
+}
+
+/* Password Strength Styles */
+.strength-meter {
+    background: #f0f0f0;
+    border-radius: 4px;
+    height: 10px;
+    margin: 12px 0;
+    overflow: hidden;
+}
+
+.strength-bar {
+    height: 100%;
+    width: 0%;
+    transition: width 0.3s, background-color 0.3s;
+    background-color: #e74c3c;
+}
+
+.strength-bar.weak {
+    background-color: #e74c3c;
+}
+
+.strength-bar.medium {
+    background-color: #f39c12;
+}
+
+.strength-bar.strong {
+    background-color: #27ae60;
+}
+
+.strength-text {
+    font-size: 0.9em;
+    margin: 8px 0;
+    font-weight: bold;
+}
+
+.strength-text.weak {
+    color: #e74c3c;
+}
+
+.strength-text.medium {
+    color: #f39c12;
+}
+
+.strength-text.strong {
+    color: #27ae60;
+}
+
+.criteria-list {
+    list-style: none;
+    padding: 0;
+    margin: 12px 0;
+}
+
+.criteria-list li {
+    padding: 6px 0;
+    display: flex;
+    align-items: center;
+    font-size: 0.9em;
+}
+
+.criteria-list li:before {
+    content: '❌ ';
+    margin-right: 8px;
+}
+
+.criteria-list li.met:before {
+    content: '✅ ';
+}
+
+/* Toggle Switch Styles */
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 30px;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.4s;
+    border-radius: 30px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 22px;
+    width: 22px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: #27ae60;
+}
+
+input:checked + .slider:before {
+    transform: translateX(30px);
+}
+
+/* Checklist Styles */
+.checklist {
+    background: #f0f0f0;
+    border-left: 4px solid #3498db;
+    padding: 12px;
+    border-radius: 4px;
+    margin: 12px 0;
+}
+
+.checklist-item {
+    padding: 6px 0;
+    display: flex;
+    align-items: center;
+}
+
+.checklist-item input {
+    margin-right: 8px;
+    cursor: pointer;
+}
+
+.checklist-item label {
+    cursor: pointer;
+    flex: 1;
+    margin: 0;
+}
+
+/* Activity Card Styles */
+.activity-card {
+    background: #f9f9f9;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    padding: 16px;
+    margin: 12px 0;
+    transition: all 0.3s;
+}
+
+.activity-card.high-impact {
+    border-color: #e74c3c;
+    background: #fadbd8;
+}
+
+.activity-card.medium-impact {
+    border-color: #f39c12;
+    background: #fef5e7;
+}
+
+.activity-card.low-impact {
+    border-color: #3498db;
+    background: #d6eaf8;
+}
+
+.activity-title {
+    font-weight: bold;
+    font-size: 1em;
+    margin-bottom: 8px;
+}
+
+.activity-desc {
+    font-size: 0.95em;
+    color: #555;
+    margin-bottom: 8px;
+}
+
+.impact-meter {
+    background: #f0f0f0;
+    border-radius: 4px;
+    height: 6px;
+    overflow: hidden;
+    margin-top: 8px;
+}
+
+.impact-bar {
+    height: 100%;
+    transition: width 0.3s;
+}
+
+.impact-bar.high {
+    background: #e74c3c;
+    width: 100%;
+}
+
+.impact-bar.medium {
+    background: #f39c12;
+    width: 60%;
+}
+
+.impact-bar.low {
+    background: #3498db;
+    width: 30%;
+}
+
+.impact-label {
+    font-size: 0.85em;
+    margin-top: 4px;
+    font-weight: bold;
+}
+
+.impact-label.high {
+    color: #e74c3c;
+}
+
+.impact-label.medium {
+    color: #f39c12;
+}
+
+.impact-label.low {
+    color: #3498db;
+}
