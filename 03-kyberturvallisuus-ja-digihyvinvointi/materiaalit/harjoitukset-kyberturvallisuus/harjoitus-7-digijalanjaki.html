@@ -73,7 +73,7 @@
         <div class="activity-card low-impact">
             <div class="impact-icon">❤️</div>
             <div class="activity-title">Tykkäykset ja jakamiset</div>
-            <div class="activity-desc">Neytät mitä pidät, mitkä ovat kiinnostuksesi. Vaikutus on pienempi, mutta silti osa digijalanjälkeäsi.</div>
+            <div class="activity-desc">Näytät mitä pidät, mitkä ovat kiinnostuksesi. Vaikutus on pienempi, mutta silti osa digijalanjälkeäsi.</div>
             <div class="impact-meter">
                 <div class="impact-bar low"></div>
             </div>
@@ -94,7 +94,7 @@
             </div>
             <div class="checker-item">
                 <input type="checkbox" id="check3" onchange="calculateFootprint()">
-                <label for="check3">Osallistun online-konflikteihin tai kiistelyn</label>
+                <label for="check3">Osallistun online-konflikteihin tai kiistelyyn</label>
             </div>
             <div class="checker-item">
                 <input type="checkbox" id="check4" onchange="calculateFootprint()">
@@ -102,7 +102,7 @@
             </div>
             <div class="checker-item">
                 <input type="checkbox" id="check5" onchange="calculateFootprint()">
-                <label for="check5">Profiilinani on julkinen kaikille</label>
+                <label for="check5">Profiilini on julkinen kaikille</label>
             </div>
             <div class="checker-item">
                 <input type="checkbox" id="check6" onchange="calculateFootprint()">
@@ -118,7 +118,7 @@
                 <li>🔒 Aseta profiilit yksityisiksi ja rajoita seuraajia</li>
                 <li>🧹 Poista vanhoja postauksia ja kommentteja säännöllisesti</li>
                 <li>🤐 Älä jaa henkilökohtaisia tietoja</li>
-                <li>💭 Ajattele ennen jakamista: "Haluan näkyä näin ammattilaisuudelle?"</li>
+                <li>💭 Ajattele ennen jakamista: "Haluan näkyä näin ammattilaiselle?"</li>
                 <li>🚫 Estä negatiivisia ihmisiä ja kiusaajia</li>
                 <li>📝 Tarkista tietosuojaselosteet</li>
             </ul>
@@ -144,7 +144,7 @@
 
         let assessment = '';
         if (size >= 80) {
-            assessment = '🚨 ERITTÄIN SUURI! Digijalanjälkesi on iso ja riskilllinen.';
+            assessment = '🚨 ERITTÄIN SUURI! Digijalanjälkesi on iso ja riskillinen.';
         } else if (size >= 60) {
             assessment = '⚠️ SUURI. Sinulla on merkittävä digijalanjälki.';
         } else if (size >= 40) {
@@ -267,7 +267,7 @@
             <h3>📊 Yhteenveto</h3>
             <p><strong>Pisteet: ${score}/${questions.length}</strong> (${pct}%)</p>
             <p>${msg7}</p>
-        </div>\;
+        </div>`;
     }
 
     calculateFootprint();
