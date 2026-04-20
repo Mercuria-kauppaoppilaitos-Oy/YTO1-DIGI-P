@@ -1,270 +1,177 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Harjoitus 3 - Ergonomia</title>
     <link rel="stylesheet" href="styles.css">
-    <style>
-        .exercise-container { max-width: 900px; margin: 0 auto; padding: 20px; }
-        .info-panel {
-            background: #e3f2fd;
-            border-left: 4px solid #2196F3;
-            padding: 16px;
-            border-radius: 4px;
-            margin: 16px 0;
-        }
-        .question-card {
-            background: #f9f9f9;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            padding: 16px;
-            margin: 12px 0;
-            transition: all 0.3s;
-        }
-        .question-card.answered {
-            border-color: #27ae60;
-            background: #e8f5e9;
-        }
-        .question-card.answered.incorrect {
-            border-color: #e74c3c;
-            background: #fadbd8;
-        }
-        .question-text {
-            font-size: 1.1em;
-            font-weight: bold;
-            margin-bottom: 12px;
-        }
-        .options-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-        }
-        .option-btn {
-            padding: 10px;
-            border: 2px solid #ddd;
-            border-radius: 4px;
-            background: white;
-            cursor: pointer;
-            font-size: 0.95em;
-            transition: all 0.3s;
-        }
-        .option-btn:hover {
-            border-color: #3498db;
-            background: #ecf0f1;
-        }
-        .option-btn:disabled {
-            cursor: not-allowed;
-            opacity: 0.6;
-        }
-        .option-btn.correct {
-            background: #27ae60;
-            color: white;
-            border-color: #27ae60;
-        }
-        .option-btn.incorrect {
-            background: #e74c3c;
-            color: white;
-            border-color: #e74c3c;
-        }
-        .explanation {
-            background: #fff3cd;
-            border-left: 4px solid #ffc107;
-            padding: 12px;
-            border-radius: 4px;
-            margin-top: 12px;
-            display: none;
-            font-size: 0.95em;
-            line-height: 1.5;
-        }
-        .explanation.show {
-            display: block;
-        }
-        .summary-panel {
-            background: #e8f5e9;
-            border: 2px solid #27ae60;
-            border-radius: 8px;
-            padding: 20px;
-            margin-top: 24px;
-            text-align: center;
-        }
-        .summary-panel h3 { margin: 0 0 12px; color: #27ae60; }
-        .summary-panel p { margin: 8px 0; font-size: 1.1em; }
-        .progress-container {
-            background: #f0f0f0;
-            padding: 12px;
-            border-radius: 4px;
-            margin: 12px 0;
-        }
-        .progress-bar-track {
-            background: #ddd;
-            height: 8px;
-            border-radius: 4px;
-            overflow: hidden;
-            margin-bottom: 8px;
-        }
-        .progress-bar-fill {
-            height: 100%;
-            background: #27ae60;
-            transition: width 0.3s;
-        }
-    </style>
 </head>
 <body>
     <a class="back-link" href="index.html">← Takaisin harjoituksiin</a>
     <div class="exercise-container">
         <div class="exercise-header">
             <h1>💺 Harjoitus 3 - Ergonomia</h1>
-            <p>Opi oikea työasento ja tietokoneen käyttö!</p>
+            <p>Seuraa ohjeita vaiheittain ja paranna työskentelyasentoasi!</p>
         </div>
 
         <div class="info-panel">
-            <h3>💺 Mitä on ergonomia?</h3>
-            <p>Ergonomia on tiede, joka tutkii ihmisen ja hänen työympäristönsä välistä vuorovaikutusta. Hyvä ergonomia ehkäisee vaivoja ja parantaa hyvinvointia.</p>
-            <h4>Hyvinä käytäntöinä:</h4>
-            <ul>
-                <li>✅ Näyttö silmien tasolla, 50-70 cm päässä</li>
-                <li>✅ Kylät 90 astetta</li>
-                <li>✅ Jalat maassa tai jalkalavollla</li>
-                <li>✅ Hartiat rentoutuneina</li>
-                <li>✅ Säännölliset tauot (5-10 min per tunti)</li>
-                <li>✅ Liikunta ja venyttely</li>
-            </ul>
+            <h3>💺 Miksi ergonomia on tärkeää?</h3>
+            <p>Hyvä ergonomia ehkäisee selkä- ja niskavaivoja, vähentää silmien rasitusta ja parantaa jaksamista. Tee tämä harjoitus säännöllisesti!</p>
         </div>
 
-        <div class="progress-container">
-            <div class="progress-bar-track">
-                <div class="progress-bar-fill" id="progressFill" style="width: 0%;"></div>
-            </div>
-            <div class="progress-text"><span id="progressCount">0</span> / 5 kysymystä</div>
+        <div id="startScreen" class="start-screen">
+            <div class="start-icon">💺</div>
+            <h2 class="start-title">Valmis aloittamaan?</h2>
+            <p class="start-desc">Harjoitus käy läpi <strong>5 vaihetta</strong> vaiheittain.</p>
+            <p class="start-hint">Jokainen vaihe kestää muutaman sekunnin – seuraa ohjeita rauhassa.</p>
+            <button class="start-btn" onclick="startExercise()">
+                ▶ Käynnistä ergonomiaharjoitus
+            </button>
         </div>
 
-        <div id="questionsContainer"></div>
-        <div id="summaryContainer"></div>
+        <div id="stepProgress" class="step-progress-bar"></div>
+        <div id="stepContent"></div>
     </div>
 
     <script>
-    const questions = [
+    const steps = [
         {
-            question: 'Kuinka kaukana näytön tulee olla silmistään?',
-            options: ['20-30 cm', '50-70 cm', '100-150 cm', '10-20 cm'],
-            correct: 1,
-            explanation: 'Oikea etäisyys on 50-70 cm. Liian lähellä oleva näyttö väsyttää silmiä, liian kaukana oleva pakottaa sinua kumarrukseen.'
+            emoji: '🧘',
+            instruction: 'Suorista ryhtisi!',
+            detail: 'Istu suoraan, selkä suorana, hartiat rentoutuneina.',
+            duration: 15,
+            color: '#e3f2fd',
+            borderColor: '#2196F3'
         },
         {
-            question: 'Millä kulmalla kädet ja kyynärpäät tulisi olla?',
-            options: ['60 astetta', '120 astetta', '90 astetta', '45 astetta'],
-            correct: 2,
-            explanation: 'Käsivarsien tulisi olla 90 asteen kulmassa. Näin vähennetään ranteen rasitusta ja parannetaan asento.'
+            emoji: '📏',
+            instruction: 'Varmista etäisyys näytöstä',
+            detail: 'Näytön pitäisi olla 50–70 cm:n päässä silmistäsi.',
+            duration: 15,
+            color: '#f3e5f5',
+            borderColor: '#9c27b0'
         },
         {
-            question: 'Kuinka usein tulisi pitää taukoja tietokoneen käytöstä?',
-            options: ['30 minuutin välein', '5-10 minuutin välein joka tunti', 'Vain päivän lopussa', 'Taukoja ei tarvita'],
-            correct: 1,
-            explanation: 'Säännölliset tauot (5-10 min per tunti) parantavat jaksamista ja vähentävät väsymystä. Kannusta liikkumaan!'
+            emoji: '🦵',
+            instruction: 'Laita jalat 90° kulmaan lattialle',
+            detail: 'Molemmat jalat tasaisesti lattialla, polvet 90 asteen kulmassa.',
+            duration: 15,
+            color: '#e8f5e9',
+            borderColor: '#4caf50'
         },
         {
-            question: 'Missä asennossa jalkojen tulisi olla istuttaessa?',
-            options: ['Ristissä', 'Maassa tai jalkalavollla 90 asteen kulmassa', 'Jaloilla tuolissa', 'Pään alapuolella'],
-            correct: 1,
-            explanation: 'Jalkojen tulisi olla maassa tai jalkalavollla, niin että ne muodostavat 90 asteen kulman. Näin tuetaan selkää.'
+            emoji: '👀',
+            instruction: 'Katso 15 sekuntia kaukaisuuteen',
+            detail: 'Poista katse ruudusta ja katso vähintään 6 metrin päähän. 20-20-20 sääntö!',
+            duration: 15,
+            color: '#fff3e0',
+            borderColor: '#ff9800'
         },
         {
-            question: 'Mitä harjoitusta suositellaan eniten ergonomisten ongelmien ehkäisemiseksi?',
-            options: ['Juokseminen', 'Venyttely ja liikunta', 'Lepääminen', 'Uni'],
-            correct: 1,
-            explanation: 'Säännöllinen venyttely ja liikunta ovat paras keino ergonomisten ongelmien ehkäisemiseksi. Ne vahvistavat lihaksia ja parantavat liikkuvuutta.'
+            emoji: '😌',
+            instruction: 'Pidä silmät rentoutuneina',
+            detail: 'Räpäytä silmiä hitaasti muutama kerta. Rentouta kasvot.',
+            duration: 5,
+            color: '#fce4ec',
+            borderColor: '#e91e63'
         }
     ];
 
-    let score = 0;
-    let answered = 0;
+    let currentStep = 0;
+    let timer = null;
+    let remaining = 0;
+    let autoAdvance = false;
 
-    function initExercise() {
-        const container = document.getElementById('questionsContainer');
-        container.innerHTML = '';
-        
-        questions.forEach((q, index) => {
-            container.appendChild(createQuestionCard(q, index));
-        });
+    function renderProgress() {
+        const bar = document.getElementById('stepProgress');
+        bar.innerHTML = steps.map((_, i) => {
+            let cls = 'step-dot';
+            if (i < currentStep) cls += ' done';
+            else if (i === currentStep) cls += ' active';
+            return `<div class="${cls}"></div>`;
+        }).join('');
     }
 
-    function createQuestionCard(question, index) {
-        const card = document.createElement('div');
-        card.className = 'question-card';
-
-        const questionText = document.createElement('div');
-        questionText.className = 'question-text';
-        questionText.textContent = (index + 1) + '. ' + question.question;
-        card.appendChild(questionText);
-
-        const optionsDiv = document.createElement('div');
-        optionsDiv.className = 'options-container';
-
-        question.options.forEach((option, optionIndex) => {
-            const btn = document.createElement('button');
-            btn.className = 'option-btn';
-            btn.textContent = option;
-            btn.onclick = () => answerQuestion(question, optionIndex, card, question.options.map((_, i) => card.querySelectorAll('.option-btn')[i]));
-            optionsDiv.appendChild(btn);
-        });
-
-        card.appendChild(optionsDiv);
-
-        const explanation = document.createElement('div');
-        explanation.className = 'explanation';
-        explanation.textContent = question.explanation;
-        card.appendChild(explanation);
-
-        card.explanationDiv = explanation;
-        return card;
+    function renderStep(idx) {
+        const step = steps[idx];
+        remaining = step.duration;
+        const content = document.getElementById('stepContent');
+        content.innerHTML = `
+            <div class="step-card" id="activeStep" style="background: linear-gradient(135deg, ${step.color}, white); border-color: ${step.borderColor};">
+                <div class="step-counter">Vaihe ${idx + 1} / ${steps.length}</div>
+                <span class="step-emoji">${step.emoji}</span>
+                <div class="step-instruction" style="color: ${step.borderColor};">${step.instruction}</div>
+                <p style="color:#555; margin:0 0 16px;">${step.detail}</p>
+                <div class="countdown-display" id="countdown" style="color: ${step.borderColor};">${remaining}</div>
+                <p style="font-size:0.85em; color:#888;">sekuntia</p>
+            </div>
+        `;
+        renderProgress();
+        startCountdown(step);
     }
 
-    function answerQuestion(question, selectedIndex, card, buttons) {
-        const correct = selectedIndex === question.correct;
-        
-        buttons.forEach((btn, i) => {
-            btn.disabled = true;
-            if (i === question.correct) {
-                btn.classList.add('correct');
-            } else if (i === selectedIndex && !correct) {
-                btn.classList.add('incorrect');
+    function startCountdown(step) {
+        clearInterval(timer);
+        timer = setInterval(() => {
+            remaining--;
+            const cd = document.getElementById('countdown');
+            if (!cd) { clearInterval(timer); return; }
+            cd.textContent = remaining;
+            if (remaining <= 3) cd.classList.add('urgent');
+            if (remaining <= 0) {
+                clearInterval(timer);
+                advanceStep();
             }
-        });
+        }, 1000);
+    }
 
-        if (correct) {
-            card.classList.add('answered');
-            score++;
+    function advanceStep() {
+        currentStep++;
+        if (currentStep >= steps.length) {
+            showComplete();
         } else {
-            card.classList.add('answered', 'incorrect');
-        }
-
-        card.explanationDiv.classList.add('show');
-        answered++;
-        updateProgress();
-
-        if (answered === questions.length) {
-            setTimeout(showSummary, 800);
+            renderStep(currentStep);
         }
     }
 
-    function updateProgress() {
-        const pct = Math.round(answered / questions.length * 100);
-        document.getElementById('progressFill').style.width = pct + '%';
-        document.getElementById('progressCount').textContent = answered;
+    function showComplete() {
+        renderProgress();
+        const content = document.getElementById('stepContent');
+        content.innerHTML = `
+            <div class="ergo-complete">
+                <span style="font-size:4em;">🎉</span>
+                <h2>Harjoitus valmis!</h2>
+                <p style="font-size:1.1em; color:#555; margin:12px 0;">Hienoa työtä! Olet käynyt läpi kaikki ergonomia-vaiheet.</p>
+                <p style="color:#27ae60; font-weight:bold; margin-bottom:20px;">Muista toistaa tämä harjoitus tunnin välein!</p>
+                <div style="background:white; border-radius:8px; padding:16px; margin:16px 0; text-align:left;">
+                    <h4 style="margin:0 0 10px; color:#2c3e50;">✅ Käydyt vaiheet:</h4>
+                    ${steps.map((s, i) => `<div style="padding:6px 0; border-bottom:1px solid #eee;">
+                        <strong>${s.emoji} Vaihe ${i+1}:</strong> ${s.instruction}
+                    </div>`).join('')}
+                </div>
+                <button class="btn btn-primary" onclick="restartExercise()" style="margin-top:16px; padding:12px 32px; font-size:1em;">
+                    🔄 Uusi harjoitus
+                </button>
+            </div>
+        `;
     }
 
-    function showSummary() {
-        const pct = Math.round(score / questions.length * 100);
-        const summary = document.getElementById('summaryContainer');
-        summary.innerHTML = \<div class="summary-panel">
-            <h3>📊 Yhteenveto</h3>
-            <p><strong>Pisteet: \/\</strong> (\%)</p>
-            <p>\</p>
-        </div>\;
+    function startExercise() {
+        document.getElementById('startScreen').style.display = 'none';
+        document.getElementById('stepProgress').style.display = 'flex';
+        document.getElementById('stepContent').style.display = 'block';
+        renderStep(0);
     }
 
-    initExercise();
+    function restartExercise() {
+        currentStep = 0;
+        clearInterval(timer);
+        renderStep(0);
+    }
+
+    // Show start screen initially
+    document.getElementById('stepProgress').style.display = 'none';
+    document.getElementById('stepContent').style.display = 'none';
     </script>
 </body>
 </html>
