@@ -19,6 +19,16 @@
             <p>Hyvä ergonomia ehkäisee selkä- ja niskavaivoja, vähentää silmien rasitusta ja parantaa jaksamista. Tee tämä harjoitus säännöllisesti!</p>
         </div>
 
+        <div id="startScreen" class="start-screen">
+            <div class="start-icon">💺</div>
+            <h2 class="start-title">Valmis aloittamaan?</h2>
+            <p class="start-desc">Harjoitus käy läpi <strong>5 vaihetta</strong> vaiheittain.</p>
+            <p class="start-hint">Jokainen vaihe kestää muutaman sekunnin – seuraa ohjeita rauhassa.</p>
+            <button class="start-btn" onclick="startExercise()">
+                ▶ Käynnistä ergonomiaharjoitus
+            </button>
+        </div>
+
         <div id="stepProgress" class="step-progress-bar"></div>
         <div id="stepContent"></div>
     </div>
@@ -146,14 +156,22 @@
         `;
     }
 
+    function startExercise() {
+        document.getElementById('startScreen').style.display = 'none';
+        document.getElementById('stepProgress').style.display = 'flex';
+        document.getElementById('stepContent').style.display = 'block';
+        renderStep(0);
+    }
+
     function restartExercise() {
         currentStep = 0;
         clearInterval(timer);
         renderStep(0);
     }
 
-    // Start the exercise
-    renderStep(0);
+    // Show start screen initially
+    document.getElementById('stepProgress').style.display = 'none';
+    document.getElementById('stepContent').style.display = 'none';
     </script>
 </body>
 </html>

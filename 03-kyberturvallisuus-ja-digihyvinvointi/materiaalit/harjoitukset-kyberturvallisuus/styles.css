@@ -263,6 +263,18 @@ body {
     border-left: 3px solid #3498db;
 }
 
+.email-body {
+    background: white;
+    padding: 14px 16px;
+    border-radius: 4px;
+    margin: 12px 0;
+    font-size: 0.95em;
+    line-height: 1.7;
+    border-left: 3px solid #3498db;
+    white-space: pre-line;
+    min-height: 80px;
+}
+
 .email-question {
     margin: 12px 0;
     font-size: 0.95em;
@@ -682,6 +694,50 @@ input:checked + .slider:before {
 /* ============================================================
    Exercise 3 – Ergonomia step-by-step
    ============================================================ */
+
+.start-screen {
+    text-align: center;
+    padding: 32px 16px;
+}
+
+.start-icon {
+    font-size: 4em;
+    margin-bottom: 16px;
+}
+
+.start-title {
+    color: #2c3e50;
+    margin-bottom: 12px;
+}
+
+.start-desc {
+    color: #555;
+    font-size: 1.05em;
+    margin-bottom: 8px;
+}
+
+.start-hint {
+    color: #777;
+    font-size: 0.95em;
+    margin-bottom: 28px;
+}
+
+.start-btn {
+    background: #2196F3;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 16px 40px;
+    font-size: 1.25em;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
+    transition: background 0.2s;
+}
+
+.start-btn:hover {
+    background: #1976D2;
+}
 
 .step-card {
     background: linear-gradient(135deg, #e3f2fd, #bbdefb);

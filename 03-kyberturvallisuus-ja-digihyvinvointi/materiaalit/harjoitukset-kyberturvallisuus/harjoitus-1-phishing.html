@@ -41,32 +41,36 @@
     <script>
     const emails = [
         {
+            name: 'S-pankki',
+            from: 'no-reply@s-pankki.fi',
             subject: 'Tärkeä: Vahvista pankkitilisi',
-            from: 'security@yourbank.com',
-            preview: 'Havaitsimme epätavallista toimintaa tilillässä. Klikkaa alla olevaa linkkiä vahvistaaksesi henkilökohtaiset tiedot...',
+            body: 'Havaitsimme epätavallista toimintaa S-pankin tilillässä. Vahvista tunnuksesi klikkaamalla alla olevaa linkkiä:\n\n🔗 turvatarkistus.s-pankki-temp.net\n\nJos et tee tätä 24 tunnin kuluessa, tilisi suljetaan.',
             isPhishing: true,
-            flags: ['⚠️ Lähettäjä: security@yourbank.com (oikea olisi @[pankkinimi].fi)', '⚠️ Kiireellisyys: epätavallista toimintaa', '⚠️ Pyynnöt klikkaamaan linkkiä', '⚠️ Pyynnöt henkilökohtaisista tiedoista']
+            flags: ['⚠️ Lähettäjä näyttää aidolta (@s-pankki.fi), mutta linkki osoittaa domainiin s-pankki-temp.net', '⚠️ Kiireellisyys: "tili suljetaan 24 tunnin kuluessa"', '⚠️ Pyyntö vahvistaa tunnukset klikkaamalla linkkiä']
         },
         {
-            subject: 'Kuponki: 50% alennus kaikesta!',
-            from: 'deals@onlineshop-official.net',
-            preview: 'Tervehdys arvoisa asiakas! Sinulla on ainutlaatuinen 50% alennus. Klikkaa tästä aktivoidaksesi...',
+            name: 'Mercuria Shop',
+            from: 'best-deals@onlineshop-official.net',
+            subject: '🎁 Sinulla on 70% alennus - VAIN TÄNÄÄN!',
+            body: 'Tervehdys arvoisa asiakas!\n\nOlet valittu erityiseksi asiakkaaksi ja saat eksklusiivisen 70% alennuksen kaikesta!\n\nKlikkaa nyt aktivoidaksesi:\n🔗 confirm-discount-now.com\n\nTarjous vanhenee tänään puolenyön jälkeen!',
             isPhishing: true,
-            flags: ['⚠️ Lähettäjä: .net-domainissa (oikea käyttäisi .fi)', '⚠️ Ei henkilökohtaista tervehdystä', '⚠️ Liian hyvä ollakseen totta']
+            flags: ['⚠️ Lähettäjänimi "Mercuria Shop" ei vastaa sähköpostiosoitteen domainia (onlineshop-official.net)', '⚠️ Liian hyvä ollakseen totta: 70% alennus kaikesta', '⚠️ Kiireellisyys: "VAIN TÄNÄÄN" ja "tänään puolenyön jälkeen"']
         },
         {
-            subject: 'Kurssin materiaali on saatavilla',
-            from: 'teacher@school.fi',
-            preview: 'Hei opiskelijat, kurssin materiaali on ladattavissa oheisella linkillä. Terveisin opettaja...',
+            name: 'Mitri Mercurialainen',
+            from: 'mitri.mercurialainen@mercuria.fi',
+            subject: 'Kurssin materiaali saatavilla eKampuksessa',
+            body: 'Hei opiskelija!\n\nKurssin materiaali löytyy nyt eKampuksen osiosta 1. Pääset katsomaan ja lataamaan materiaalit sieltä.\n\nKysy opettajalta, jos sinulla on ongelmia pääsyn kanssa.\n\nYstävällisin terveisin,\nMitri Mercurialainen',
             isPhishing: false,
             flags: []
         },
         {
-            subject: 'URGENT: Tililläsi on luvattomia kirjautumisia!',
-            from: 'noreply@securityalert.net',
-            preview: 'VARO! Tililläsi on havaittu kirjautumisia ulkomailta. Vahvista tilisi NYTÄ klikkaamalla...',
+            name: 'Mercuria IT-admin',
+            from: 'noreply@mercuria-it.fi',
+            subject: 'URGENT: Tietoturvaväliintulo vaaditaan',
+            body: 'VÄLITÖN TOIMI VAADITAAN!\n\nJärjestelmässämme on havaittu epäillyttävää toimintaa tilistäsi. Vahvista tunnuksesi nyt:\n\n🔗 mercury-security-check.net/verify\n\nHUOM: Tämä on automaattinen viesti, älä vastaa sähköpostiin.',
             isPhishing: true,
-            flags: ['⚠️ ISOLLA KIRJAIMELLA ja !!! huudot', '⚠️ Epätavallinen turvallisuuspalvelun domain', '⚠️ Pyynnöt vahvistaa linkillä']
+            flags: ['⚠️ ISOLLA KIRJAIMELLA ja huutomerkit herättävät epäilyksen', '⚠️ Epäillyttävä domain: mercury-security-check.net (oikea olisi mercuria.fi)', '⚠️ Kiireellisyys ja uhka: "VÄLITÖN TOIMI VAADITAAN"', '⚠️ Pyyntö vahvistaa tunnukset ulkoisella sivustolla']
         }
     ];
 
@@ -88,12 +92,12 @@
 
         const header = document.createElement('div');
         header.className = 'email-header';
-        header.innerHTML = `<div><div class="email-from"><strong>Lähettäjä:</strong> ${email.from}</div><div class="email-subject"><strong>Aihe:</strong> ${email.subject}</div></div><div class="email-number">Sähköposti ${index + 1}/${emails.length}</div>`;
+        header.innerHTML = `<div><div class="email-from"><strong>Lähettäjä:</strong> ${email.name} &lt;${email.from}&gt;</div><div class="email-subject"><strong>Aihe:</strong> ${email.subject}</div></div><div class="email-number">Sähköposti ${index + 1}/${emails.length}</div>`;
         card.appendChild(header);
 
         const preview = document.createElement('div');
-        preview.className = 'email-preview';
-        preview.textContent = email.preview;
+        preview.className = 'email-body';
+        preview.textContent = email.body;
         card.appendChild(preview);
 
         const question = document.createElement('div');
@@ -129,7 +133,7 @@
                 flags.appendChild(flagDiv);
             });
         } else {
-            flags.innerHTML = '<h4>✅ Turvallinen viesti</h4><p>Tämä viestin on peräisin luotettavasta lähteestä.</p>';
+            flags.innerHTML = '<h4>✅ Turvallinen viesti - peräisin luotettavasta lähteestä</h4>';
         }
         card.appendChild(flags);
 
