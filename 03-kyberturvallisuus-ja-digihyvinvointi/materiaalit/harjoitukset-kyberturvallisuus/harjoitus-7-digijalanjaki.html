@@ -5,24 +5,459 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Harjoitus 7 - Digijalanjälki</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        .exercise-container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        .info-panel {
+            background: #e3f2fd;
+            border-left: 4px solid #2196F3;
+            padding: 16px;
+            border-radius: 4px;
+            margin: 16px 0;
+        }
+        .footprint-visual {
+            text-align: center;
+            font-size: 4em;
+            margin: 20px 0;
+            animation: fadeIn 0.5s;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .activity-card {
+            background: #f9f9f9;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 12px 0;
+            transition: all 0.3s;
+        }
+        .activity-card.high-impact { border-color: #e74c3c; background: #fadbd8; }
+        .activity-card.medium-impact { border-color: #f39c12; background: #fef5e7; }
+        .activity-card.low-impact { border-color: #3498db; background: #d6eaf8; }
+        .activity-title {
+            font-weight: bold;
+            font-size: 1em;
+            margin-bottom: 8px;
+        }
+        .activity-desc {
+            font-size: 0.95em;
+            color: #555;
+            margin-bottom: 8px;
+        }
+        .impact-meter {
+            background: #f0f0f0;
+            border-radius: 4px;
+            height: 6px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+        .impact-bar {
+            height: 100%;
+            transition: width 0.3s;
+        }
+        .impact-bar.high { background: #e74c3c; width: 100%; }
+        .impact-bar.medium { background: #f39c12; width: 60%; }
+        .impact-bar.low { background: #3498db; width: 30%; }
+        .impact-label {
+            font-size: 0.85em;
+            margin-top: 4px;
+            font-weight: bold;
+        }
+        .impact-label.high { color: #e74c3c; }
+        .impact-label.medium { color: #f39c12; }
+        .impact-label.low { color: #3498db; }
+        .calculator-section {
+            background: #f9f9f9;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+        .checker-item {
+            background: white;
+            border: 1px solid #eee;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .checker-item input {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+        .checker-item label {
+            flex: 1;
+            cursor: pointer;
+            margin: 0;
+        }
+        .impact-icon {
+            font-size: 1.5em;
+            text-align: center;
+            width: 40px;
+        }
+        .tips-panel {
+            background: #e8f5e9;
+            border-left: 4px solid #27ae60;
+            padding: 16px;
+            border-radius: 4px;
+            margin: 16px 0;
+        }
+        .tips-panel h3 { margin: 0 0 12px; color: #27ae60; }
+        .tips-panel ul { margin: 0; padding-left: 20px; }
+        .tips-panel li { margin: 6px 0; }
+        .summary-panel {
+            background: #e8f5e9;
+            border: 2px solid #27ae60;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 24px;
+            text-align: center;
+        }
+        .summary-panel h3 { margin: 0 0 12px; color: #27ae60; }
+        .summary-panel p { margin: 8px 0; font-size: 1em; }
+        .footprint-score {
+            font-size: 2em;
+            font-weight: bold;
+            color: #e74c3c;
+            margin: 12px 0;
+        }
+        .quiz-card {
+            background: #f9f9f9;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 12px 0;
+            transition: all 0.3s;
+        }
+        .quiz-card.answered {
+            border-color: #27ae60;
+            background: #e8f5e9;
+        }
+        .quiz-card.answered.incorrect {
+            border-color: #e74c3c;
+            background: #fadbd8;
+        }
+        .question-text {
+            font-size: 1em;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+        .options-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 8px;
+        }
+        .option-btn {
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            background: white;
+            cursor: pointer;
+            font-size: 0.95em;
+            text-align: left;
+            transition: all 0.3s;
+        }
+        .option-btn:hover {
+            border-color: #3498db;
+            background: #ecf0f1;
+        }
+        .option-btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+        .option-btn.correct {
+            background: #27ae60;
+            color: white;
+            border-color: #27ae60;
+        }
+        .option-btn.incorrect {
+            background: #e74c3c;
+            color: white;
+            border-color: #e74c3c;
+        }
+        .explanation {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 12px;
+            border-radius: 4px;
+            margin-top: 12px;
+            display: none;
+            font-size: 0.95em;
+        }
+        .explanation.show {
+            display: block;
+        }
+    </style>
 </head>
 <body>
     <a class="back-link" href="index.html">← Takaisin harjoituksiin</a>
     <div class="exercise-container">
         <div class="exercise-header">
             <h1>👣 Harjoitus 7 - Digijalanjälki</h1>
-            <p>Analysoi sosiaalisen median vaikutuksia</p>
+            <p>Analysoi sosiaalisen median vaikutusta ja jäljen kokoa!</p>
         </div>
+
         <div class="info-panel">
-            <h3>🚧 Harjoitus kehitteillä</h3>
-            <p>Tämä harjoitus on parhaillaan kehitteillä. Palaa myöhemmin!</p>
+            <h3>👣 Mitä on digijalanjälki?</h3>
+            <p><strong>Digijalanjälki</strong> on jälki jonka jätät digitaalisissa palveluissa. Se sisältää kaikki toiminnot: viestit, kuvat, kommentit, tykkäykset, seuraajat ja paljon muuta.</p>
+            <h4>Digijalanjälkesi vaikuttaa:</h4>
+            <ul>
+                <li>✅ Kehen ihmiset sinusta ajattelevat</li>
+                <li>✅ Kuinka mainostajat sinuun kohdentavat</li>
+                <li>✅ Työnantajien arvioihin sinusta</li>
+                <li>✅ Henkilökohtaiseen turvallisuuteen</li>
+            </ul>
         </div>
+
+        <div class="footprint-visual" id="footprintVisual">👣</div>
+
+        <h2>📱 Sosiaalisen median vaikutus</h2>
+
+        <div class="activity-card high-impact">
+            <div class="impact-icon">⚠️</div>
+            <div class="activity-title">Henkilökohtaiset tiedot ja kuvat</div>
+            <div class="activity-desc">Osoite, puhelinnumero, syntymäpäivä, perhe kuvat. Nämä voivat johtaa identiteettivarkauksiin tai fyysiseen turvallisuusriskiin.</div>
+            <div class="impact-meter">
+                <div class="impact-bar high"></div>
+            </div>
+            <div class="impact-label high">KORKEA VAIKUTUS</div>
+        </div>
+
+        <div class="activity-card high-impact">
+            <div class="impact-icon">😠</div>
+            <div class="activity-title">Konfliktit ja loukkaavat kommentit</div>
+            <div class="activity-desc">Vihapuhetta, kiusaamista tai loukkaavia kommentteja jää ikuisesti verkkoon. Rekruutoijat ja koulut näkevät tämän.</div>
+            <div class="impact-meter">
+                <div class="impact-bar high"></div>
+            </div>
+            <div class="impact-label high">KORKEA VAIKUTUS</div>
+        </div>
+
+        <div class="activity-card medium-impact">
+            <div class="impact-icon">🎭</div>
+            <div class="activity-title">Henkilökohtaiset mielipiteet ja politiikka</div>
+            <div class="activity-desc">Poliittiset näkemykset tai herkkiä aiheita käsittelevät kommentit voivat johtaa sosiaalisen paineen tai erotuksen riskiin.</div>
+            <div class="impact-meter">
+                <div class="impact-bar medium"></div>
+            </div>
+            <div class="impact-label medium">KESKISUURI VAIKUTUS</div>
+        </div>
+
+        <div class="activity-card medium-impact">
+            <div class="impact-icon">🥳</div>
+            <div class="activity-title">Hauskat ja vapaa-ajan kuvat</div>
+            <div class="activity-desc">Juhlat, loma-kuvia tai hauskanpitokuvat voivat vaikuttaa ammattilliseen imagoosi, erityisesti jos olet nuori ja hakemassa töitä.</div>
+            <div class="impact-meter">
+                <div class="impact-bar medium"></div>
+            </div>
+            <div class="impact-label medium">KESKISUURI VAIKUTUS</div>
+        </div>
+
+        <div class="activity-card low-impact">
+            <div class="impact-icon">❤️</div>
+            <div class="activity-title">Tykkäykset ja jakamiset</div>
+            <div class="activity-desc">Neytät mitä pidät, mitkä ovat kiinnostuksesi. Vaikutus on pienempi, mutta silti osa digijalanjälkeäsi.</div>
+            <div class="impact-meter">
+                <div class="impact-bar low"></div>
+            </div>
+            <div class="impact-label low">PIENI VAIKUTUS</div>
+        </div>
+
+        <h2>🧮 Digijalanjälki-laskin</h2>
+
+        <div class="calculator-section">
+            <h3>Arvioi omasi:</h3>
+            <div class="checker-item">
+                <input type="checkbox" id="check1" onchange="calculateFootprint()">
+                <label for="check1">Jaan henkilökohtaisia tietoja (osoite, puhelin, syntymäpäivä)</label>
+            </div>
+            <div class="checker-item">
+                <input type="checkbox" id="check2" onchange="calculateFootprint()">
+                <label for="check2">Jaan säännöllisesti yksityisiä kuvia</label>
+            </div>
+            <div class="checker-item">
+                <input type="checkbox" id="check3" onchange="calculateFootprint()">
+                <label for="check3">Osallistun online-konflikteihin tai kiistelyn</label>
+            </div>
+            <div class="checker-item">
+                <input type="checkbox" id="check4" onchange="calculateFootprint()">
+                <label for="check4">Jaan poliittisia tai herkkiä mielipiteitä</label>
+            </div>
+            <div class="checker-item">
+                <input type="checkbox" id="check5" onchange="calculateFootprint()">
+                <label for="check5">Profiilinani on julkinen kaikille</label>
+            </div>
+            <div class="checker-item">
+                <input type="checkbox" id="check6" onchange="calculateFootprint()">
+                <label for="check6">En tutkiskele asetuksia tai poista vanhoja postauksia</label>
+            </div>
+
+            <div id="footprintResult"></div>
+        </div>
+
+        <div class="tips-panel">
+            <h3>✅ Kuinka pienentää digijalanjälkesi</h3>
+            <ul>
+                <li>🔒 Aseta profiilit yksityisiksi ja rajoita seuraajia</li>
+                <li>🧹 Poista vanhoja postauksia ja kommentteja säännöllisesti</li>
+                <li>🤐 Älä jaa henkilökohtaisia tietoja</li>
+                <li>💭 Ajattele ennen jakamista: "Haluan näkyä näin ammattilaisuudelle?"</li>
+                <li>🚫 Estä negatiivisia ihmisiä ja kiusaajia</li>
+                <li>📝 Tarkista tietosuojaselosteet</li>
+            </ul>
+        </div>
+
+        <h2>❓ Tietokysymykset</h2>
+
+        <div id="questionsContainer"></div>
+        <div id="summaryContainer"></div>
     </div>
 
-    <script src="scorm-wrapper.js"><\/script>
     <script>
-    SCORM.init();
-    // Harjoitus-spesifinen koodi tulee tähän
-    <\/script>
+    function calculateFootprint() {
+        const checks = document.querySelectorAll('.checker-item input');
+        let risky = 0;
+        
+        checks.forEach(check => {
+            if (check.checked) risky++;
+        });
+
+        const size = Math.round(risky / checks.length * 100);
+        const result = document.getElementById('footprintResult');
+
+        let assessment = '';
+        if (size >= 80) {
+            assessment = '🚨 ERITTÄIN SUURI! Digijalanjälkesi on iso ja riskilllinen.';
+        } else if (size >= 60) {
+            assessment = '⚠️ SUURI. Sinulla on merkittävä digijalanjälki.';
+        } else if (size >= 40) {
+            assessment = '😐 KESKISUURI. Vielä asioita parantavaksi.';
+        } else if (size >= 20) {
+            assessment = '✅ PIENI. Hyvä työ digijalanjälkesi hallinnassa!';
+        } else {
+            assessment = '🎉 MINIMAALINEN! Olet mestarimestari digijalanjälkesi hallinnassa!';
+        }
+
+        result.innerHTML = \<div class="summary-panel">
+            <h3>Digijalanjälki-arvio</h3>
+            <div class="footprint-score">\%</div>
+            <p>\</p>
+        </div>\;
+    }
+
+    const questions = [
+        {
+            question: 'Mikä on pysyvin osa digijalanjälkeäsi?',
+            options: ['Tykkäykset ja kommentit', 'Jaetut kuvat ja teksti', 'Henkilökohtaiset tiedot kuten osoite', 'Selaimen historia'],
+            correct: 1,
+            explanation: 'Jaetut kuvat ja teksti jäävät verkkoon pitkäksi aikaa, vaikka poistaisit ne. Screenshot ja arkistot säilyttävät sisältöä. Henkilökohtaiset tiedot ovat erityisen riskillisiä.'
+        },
+        {
+            question: 'Kuinka kauan vanha postaus voi vahingoittaa työnhakuasi?',
+            options: ['Vain muutama viikko', 'Muutama kuukausi', 'Vuosia tai jopa ikuisesti', 'Ei vaikutusta'],
+            correct: 2,
+            explanation: 'Vanha postaus voi vahingoittaa sinua vuosien ajan. Rekruutoijat tutkivat sosiaalisen median. Negatiivinen sisältö jätetään muistiin pitkäksi ajaksi.'
+        },
+        {
+            question: 'Mitä voit tehdä suojaksi omaa digijalanjälkeäsi?',
+            options: ['Mitään, kaiken on annettava mennä', 'Säännöllinen edistys ja arkistointi', 'Poistaa vanhoja postauksia, asettaa profiilin yksityiseksi, rajoittaa sovelluksia', 'Lopettaa internetin käytön'],
+            correct: 2,
+            explanation: 'Voit kontrolloida digijalanjälkeäsi: poista vanhoja postauksia, aseta profiilit yksityisiksi, rajoita seuraajia ja tarkista sovelluksien pääsyä. Aktiivisesti hallittu jalanjälki on turvallisempi.'
+        },
+        {
+            question: 'Mitä "pysyvä" tarkoittaa digitaalisen median kontekstissa?',
+            options: ['Väliaikainen ja poistuu heti', 'Pysyy verkon muistiissa ikuisesti', 'Näkyvissä vain tunti', 'Näkyvissä vain sinulle'],
+            correct: 1,
+            explanation: '"Pysyvä" tarkoittaa että sisältö jää verkkoon ikuisesti. Screenshots, arkistot ja kopiot säilyttävät sisältöä. Mitä jaat, se voi jäädä pysyvästi.'
+        }
+    ];
+
+    let answered = 0;
+    let score = 0;
+
+    function initQuestions() {
+        const container = document.getElementById('questionsContainer');
+        container.innerHTML = '';
+        
+        questions.forEach((q, index) => {
+            container.appendChild(createQuestionCard(q, index));
+        });
+    }
+
+    function createQuestionCard(question, index) {
+        const card = document.createElement('div');
+        card.className = 'quiz-card';
+
+        const questionText = document.createElement('div');
+        questionText.className = 'question-text';
+        questionText.textContent = (index + 1) + '. ' + question.question;
+        card.appendChild(questionText);
+
+        const optionsDiv = document.createElement('div');
+        optionsDiv.className = 'options-container';
+
+        question.options.forEach((option, optionIndex) => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.textContent = option;
+            btn.onclick = () => answerQuestion(question, optionIndex, card, question.options.map((_, i) => card.querySelectorAll('.option-btn')[i]));
+            optionsDiv.appendChild(btn);
+        });
+
+        card.appendChild(optionsDiv);
+
+        const explanation = document.createElement('div');
+        explanation.className = 'explanation';
+        explanation.textContent = question.explanation;
+        card.appendChild(explanation);
+
+        card.explanationDiv = explanation;
+        return card;
+    }
+
+    function answerQuestion(question, selectedIndex, card, buttons) {
+        const correct = selectedIndex === question.correct;
+        
+        buttons.forEach((btn, i) => {
+            btn.disabled = true;
+            if (i === question.correct) {
+                btn.classList.add('correct');
+            } else if (i === selectedIndex && !correct) {
+                btn.classList.add('incorrect');
+            }
+        });
+
+        if (correct) {
+            card.classList.add('answered');
+            score++;
+        } else {
+            card.classList.add('answered', 'incorrect');
+        }
+
+        card.explanationDiv.classList.add('show');
+        answered++;
+
+        if (answered === questions.length) {
+            setTimeout(showSummary, 800);
+        }
+    }
+
+    function showSummary() {
+        const pct = Math.round(score / questions.length * 100);
+        const summary = document.getElementById('summaryContainer');
+        summary.innerHTML = \<div class="summary-panel" style="margin-top: 48px;">
+            <h3>📊 Yhteenveto</h3>
+            <p><strong>Pisteet: \/\</strong> (\%)</p>
+            <p>\</p>
+        </div>\;
+    }
+
+    calculateFootprint();
+    initQuestions();
+    </script>
 </body>
 </html>

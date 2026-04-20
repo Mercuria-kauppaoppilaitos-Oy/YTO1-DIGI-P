@@ -3,26 +3,274 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Harjoitus 4 - Digihyvinvointi-kysymykset</title>
+    <title>Harjoitus 4 - Digihyvinvointi</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        .exercise-container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        .info-panel {
+            background: #e3f2fd;
+            border-left: 4px solid #2196F3;
+            padding: 16px;
+            border-radius: 4px;
+            margin: 16px 0;
+        }
+        .question-card {
+            background: #f9f9f9;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 12px 0;
+            transition: all 0.3s;
+        }
+        .question-card.answered {
+            border-color: #27ae60;
+            background: #e8f5e9;
+        }
+        .question-card.answered.incorrect {
+            border-color: #e74c3c;
+            background: #fadbd8;
+        }
+        .question-text {
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+        .options-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 8px;
+        }
+        .option-btn {
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            background: white;
+            cursor: pointer;
+            font-size: 0.95em;
+            text-align: left;
+            transition: all 0.3s;
+        }
+        .option-btn:hover {
+            border-color: #3498db;
+            background: #ecf0f1;
+        }
+        .option-btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+        .option-btn.correct {
+            background: #27ae60;
+            color: white;
+            border-color: #27ae60;
+        }
+        .option-btn.incorrect {
+            background: #e74c3c;
+            color: white;
+            border-color: #e74c3c;
+        }
+        .explanation {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 12px;
+            border-radius: 4px;
+            margin-top: 12px;
+            display: none;
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+        .explanation.show {
+            display: block;
+        }
+        .summary-panel {
+            background: #e8f5e9;
+            border: 2px solid #27ae60;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 24px;
+            text-align: center;
+        }
+        .summary-panel h3 { margin: 0 0 12px; color: #27ae60; }
+        .summary-panel p { margin: 8px 0; font-size: 1.1em; }
+        .progress-container {
+            background: #f0f0f0;
+            padding: 12px;
+            border-radius: 4px;
+            margin: 12px 0;
+        }
+        .progress-bar-track {
+            background: #ddd;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            background: #27ae60;
+            transition: width 0.3s;
+        }
+    </style>
 </head>
 <body>
     <a class="back-link" href="index.html">← Takaisin harjoituksiin</a>
     <div class="exercise-container">
         <div class="exercise-header">
             <h1>🧠 Harjoitus 4 - Digihyvinvointi-kysymykset</h1>
-            <p>Vastaa monimuotoisiin kysymyksiin</p>
+            <p>Testaa tietosi digitaalisen hyvinvoinnin tärkeydestä!</p>
         </div>
+
         <div class="info-panel">
-            <h3>🚧 Harjoitus kehitteillä</h3>
-            <p>Tämä harjoitus on parhaillaan kehitteillä. Palaa myöhemmin!</p>
+            <h3>🧠 Mitä on digihyvinvointi?</h3>
+            <p>Digihyvinvointi tarkoittaa positiivista hyvinvoinnin tilaa, joka syntyy teknologian turvallisesta, vastuullisesta ja terveellisestä käytöstä.</p>
+            <h4>Digihyvinvoinnin osa-alueet:</h4>
+            <ul>
+                <li>✅ Fyysinen hyvinvointi (ergonomia, uni, liikunta)</li>
+                <li>✅ Psyykkinen hyvinvointi (stressin hallinta, tiedon validointi)</li>
+                <li>✅ Sosiaalinen hyvinvointi (terve verkkoympäristö)</li>
+                <li>✅ Turvallisuus (yksityisyys, tietosuoja)</li>
+                <li>✅ Digitaaliset taidot (kriittinen ajattelu)</li>
+            </ul>
         </div>
+
+        <div class="progress-container">
+            <div class="progress-bar-track">
+                <div class="progress-bar-fill" id="progressFill" style="width: 0%;"></div>
+            </div>
+            <div class="progress-text"><span id="progressCount">0</span> / 6 kysymystä</div>
+        </div>
+
+        <div id="questionsContainer"></div>
+        <div id="summaryContainer"></div>
     </div>
 
-    <script src="scorm-wrapper.js"><\/script>
     <script>
-    SCORM.init();
-    // Harjoitus-spesifinen koodi tulee tähän
-    <\/script>
+    const questions = [
+        {
+            question: 'Kuinka paljon ruutuaikaa suositellaan päivittäin aikuiselle?',
+            options: ['Alle 1 tunti', '1-2 tuntia', 'Yli 8 tuntia ilman taukoja', 'Säännölliset tauot jaksoissa (20-30 min kerrallaan)'],
+            correct: 3,
+            explanation: 'Säännöllisten taukojen ottaminen (20-30 minuuttia kerrallaan) on tärkeää näkemisen ja ergonomian kannalta. Taukojen aikana kannattaa katselee kauemmaksi ja venytellä.'
+        },
+        {
+            question: 'Mikä on 20-20-20 sääntö?',
+            options: ['20 kerta päivässä, 20 minuuttia, 20 senttimetriä', 'Jokainen 20 minuuttia työskentelyn jälkeen katsoa 20 sekunnin ajan 20 jalan (6m) päähän', 'Maksimissaan 20 tuntia viikossa', 'Ei ole olemassa sääntöä'],
+            correct: 1,
+            explanation: 'Jokainen 20 minuuttia tietokoneen käytön jälkeen katso 20 sekuntia vähintään 20 jalan (noin 6 metrin) päähän. Tämä vähentää silmien väsymystä.'
+        },
+        {
+            question: 'Mitä termiä käytetään digitaalisen maailman stressistä?',
+            options: ['Digiväsymys', 'Netistress', 'Screenburn', 'Digitaalinen väsymys (Digital Fatigue)'],
+            correct: 3,
+            explanation: 'Digitaalinen väsymys (Digital Fatigue) on oikea termi. Se sisältää fyysisiä, psyykkisiä ja sosiaalisia oireita, joita syntyy pitkäaikaisesta teknologian käytöstä.'
+        },
+        {
+            question: 'Mitkä tekijät vaikuttavat parhaiten unen laatuun digitaalisessa ajassa?',
+            options: ['Puhelimen käyttö juuri ennen nukkumista on hyväksi', 'Sinisen valon altistus illalla', 'Puhelimen poistaminen makuuhuoneesta ja säännölliset nukkumaajat', 'Sosiaalisen median selailu ennen nukkumista'],
+            correct: 2,
+            explanation: 'Puhelimen poistaminen makuuhuoneesta ja säännölliset nukkumaajat parantavat unen laatua. Sininen valo heikentää melatoniinin tuotantoa ja häiritsee uni-valverytmiä.'
+        },
+        {
+            question: 'Kuinka voit suojata psyykkistä hyvinvointiasi sosiaalisessa mediassa?',
+            options: ['Vertaa itseäsi muihin päivittäin', 'Rajaa seuraajia ja estä negatiivisia ihmisiä', 'Jaa kaiken mitä tapahtuu', 'Käytä peitenimiä'],
+            correct: 1,
+            explanation: 'Seuraajien rajaitseminen ja negatiivisten vaikutteiden poistaminen auttaa suojelemaan psyykkistä hyvinvointiasi. Vertailu muihin voi johtaa huonoon itsetuntoon.'
+        },
+        {
+            question: 'Mikä on tärkeä tekijä siihen, että pysyt kriittisen ajattelun tasolla verkossa?',
+            options: ['Uskomus kaikkeen mitä näet', 'Lähteen tarkistaminen ja tiedon validointi', 'Kavereiden mielipiteiden kritiikitön hyväksyminen', 'Ei ole tärkeää'],
+            correct: 1,
+            explanation: 'Lähteen tarkistaminen ja tiedon validointi ovat kriittisiä taitoja. Älä uskonut kaikkea verkossa - validoi tiedot useilta luotettavilta lähteiltä.'
+        }
+    ];
+
+    let score = 0;
+    let answered = 0;
+
+    function initExercise() {
+        const container = document.getElementById('questionsContainer');
+        container.innerHTML = '';
+        
+        questions.forEach((q, index) => {
+            container.appendChild(createQuestionCard(q, index));
+        });
+    }
+
+    function createQuestionCard(question, index) {
+        const card = document.createElement('div');
+        card.className = 'question-card';
+
+        const questionText = document.createElement('div');
+        questionText.className = 'question-text';
+        questionText.textContent = (index + 1) + '. ' + question.question;
+        card.appendChild(questionText);
+
+        const optionsDiv = document.createElement('div');
+        optionsDiv.className = 'options-container';
+
+        question.options.forEach((option, optionIndex) => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.textContent = option;
+            btn.onclick = () => answerQuestion(question, optionIndex, card, question.options.map((_, i) => card.querySelectorAll('.option-btn')[i]));
+            optionsDiv.appendChild(btn);
+        });
+
+        card.appendChild(optionsDiv);
+
+        const explanation = document.createElement('div');
+        explanation.className = 'explanation';
+        explanation.textContent = question.explanation;
+        card.appendChild(explanation);
+
+        card.explanationDiv = explanation;
+        return card;
+    }
+
+    function answerQuestion(question, selectedIndex, card, buttons) {
+        const correct = selectedIndex === question.correct;
+        
+        buttons.forEach((btn, i) => {
+            btn.disabled = true;
+            if (i === question.correct) {
+                btn.classList.add('correct');
+            } else if (i === selectedIndex && !correct) {
+                btn.classList.add('incorrect');
+            }
+        });
+
+        if (correct) {
+            card.classList.add('answered');
+            score++;
+        } else {
+            card.classList.add('answered', 'incorrect');
+        }
+
+        card.explanationDiv.classList.add('show');
+        answered++;
+        updateProgress();
+
+        if (answered === questions.length) {
+            setTimeout(showSummary, 800);
+        }
+    }
+
+    function updateProgress() {
+        const pct = Math.round(answered / questions.length * 100);
+        document.getElementById('progressFill').style.width = pct + '%';
+        document.getElementById('progressCount').textContent = answered;
+    }
+
+    function showSummary() {
+        const pct = Math.round(score / questions.length * 100);
+        const summary = document.getElementById('summaryContainer');
+        summary.innerHTML = \<div class="summary-panel">
+            <h3>📊 Yhteenveto</h3>
+            <p><strong>Pisteet: \/\</strong> (\%)</p>
+            <p>\</p>
+        </div>\;
+    }
+
+    initExercise();
+    </script>
 </body>
 </html>

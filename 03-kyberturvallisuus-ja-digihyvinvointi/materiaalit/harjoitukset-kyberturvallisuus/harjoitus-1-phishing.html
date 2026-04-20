@@ -6,6 +6,7 @@
     <title>Harjoitus 1 - Phishing-tunnistus</title>
     <link rel="stylesheet" href="styles.css">
     <style>
+        .exercise-container { max-width: 900px; margin: 0 auto; padding: 20px; }
         .email-card {
             background: #f9f9f9;
             border: 2px solid #ddd;
@@ -14,14 +15,8 @@
             margin: 12px 0;
             transition: all 0.3s;
         }
-        .email-card.email-correct {
-            border-color: #27ae60;
-            background: #e8f5e9;
-        }
-        .email-card.email-incorrect {
-            border-color: #e74c3c;
-            background: #fadbd8;
-        }
+        .email-card.correct { border-color: #27ae60; background: #e8f5e9; }
+        .email-card.incorrect { border-color: #e74c3c; background: #fadbd8; }
         .email-header {
             display: flex;
             justify-content: space-between;
@@ -30,15 +25,8 @@
             padding-bottom: 12px;
             border-bottom: 1px solid #ddd;
         }
-        .email-from, .email-subject {
-            margin: 4px 0;
-            font-size: 0.95em;
-        }
-        .email-number {
-            font-size: 0.85em;
-            color: #777;
-            white-space: nowrap;
-        }
+        .email-from, .email-subject { margin: 4px 0; font-size: 0.95em; }
+        .email-number { font-size: 0.85em; color: #777; }
         .email-preview {
             background: white;
             padding: 12px;
@@ -48,10 +36,7 @@
             line-height: 1.5;
             border-left: 3px solid #3498db;
         }
-        .email-question {
-            margin: 12px 0;
-            font-size: 0.95em;
-        }
+        .email-question { margin: 12px 0; font-size: 0.95em; }
         .email-buttons {
             display: flex;
             gap: 8px;
@@ -59,26 +44,27 @@
         }
         .email-buttons button {
             flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.95em;
+            cursor: pointer;
+            font-weight: bold;
         }
+        .btn-yes { background: #e74c3c; color: white; }
+        .btn-yes:disabled { opacity: 0.6; cursor: not-allowed; }
+        .btn-no { background: #27ae60; color: white; }
+        .btn-no:disabled { opacity: 0.6; cursor: not-allowed; }
         .email-flags {
             background: #fff3cd;
             border-left: 4px solid #ffc107;
             padding: 12px;
             border-radius: 4px;
             margin-top: 12px;
+            display: none;
         }
-        .email-flags h4 {
-            margin: 0 0 8px;
-            color: #b34a00;
-        }
-        .flag-item {
-            padding: 6px 0;
-            font-size: 0.9em;
-            line-height: 1.4;
-        }
-        .flag-text {
-            color: #333;
-        }
+        .email-flags h4 { margin: 0 0 8px; color: #b34a00; }
+        .flag-item { padding: 6px 0; font-size: 0.9em; }
         .summary-panel {
             background: #e8f5e9;
             border: 2px solid #27ae60;
@@ -87,14 +73,34 @@
             margin-top: 24px;
             text-align: center;
         }
-        .summary-panel h3 {
-            margin: 0 0 12px;
-            color: #27ae60;
+        .summary-panel h3 { margin: 0 0 12px; color: #27ae60; }
+        .summary-panel p { margin: 8px 0; font-size: 1.1em; }
+        .info-panel {
+            background: #e3f2fd;
+            border-left: 4px solid #2196F3;
+            padding: 16px;
+            border-radius: 4px;
+            margin: 16px 0;
         }
-        .summary-panel p {
-            margin: 8px 0;
-            font-size: 1.1em;
+        .progress-container {
+            background: #f0f0f0;
+            padding: 12px;
+            border-radius: 4px;
+            margin: 12px 0;
         }
+        .progress-bar-track {
+            background: #ddd;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            background: #27ae60;
+            transition: width 0.3s;
+        }
+        .progress-text { font-size: 0.9em; text-align: center; }
     </style>
 </head>
 <body>
@@ -104,70 +110,170 @@
             <h1>🎣 Harjoitus 1 - Phishing-tunnistus</h1>
             <p>Tunnista phishing-yritykset ja valitse oikeat varoitusmerkit!</p>
         </div>
-        <div id="exercise"></div>
+
+        <div class="info-panel">
+            <h3>🎣 Phishing-sähköpostit</h3>
+            <p><strong>Phishing</strong> = kalastelu. Hyökkääjä yrittää saada sinut paljastamaan henkilökohtaisia tietoja.</p>
+            <h4>Tyypilliset varoitusmerkit:</h4>
+            <ul>
+                <li>❌ Tuntematon lähettäjä tai väärennetty osoite</li>
+                <li>❌ Kiireisyys ("Välitön toimi vaaditaan!")</li>
+                <li>❌ Epäilyyttävät linkit – URL ei vastaa sivuston osoitetta</li>
+                <li>❌ Pyyntö salasanasta tai kortista</li>
+                <li>❌ Heikko kielioppi tai kirjoitusvirheet</li>
+            </ul>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress-bar-track">
+                <div class="progress-bar-fill" id="progressFill" style="width: 0%;"></div>
+            </div>
+            <div class="progress-text"><span id="progressCount">0</span> / 4 sähköpostia</div>
+        </div>
+
+        <div id="emailsContainer"></div>
+        <div id="summaryContainer"></div>
     </div>
 
-    <script src="scorm-wrapper.js"><\/script>
-    <script src="phishing-engine.js"><\/script>
     <script>
-    SCORM.init();
-
-    const exercise = new PhishingExercise({
-        containerId: 'exercise',
-        infoPanel: {
-            title: '🎣 Phishing-sähköpostit',
-            content: '<p><strong>Phishing</strong> = kalastelu. Hyökkääjä yrittää saada sinut paljastamaan henkilökohtaisia tietoja.</p><h4>Tyypilliset varoitusmerkit:</h4><ul><li>❌ Tuntematon lähettäjä tai väärennetty osoite</li><li>❌ Kiireisyys ("Välitön toimi vaaditaan!")</li><li>❌ Epäilyyttävät linkit – URL ei vastaa sivuston osoitetta</li><li>❌ Pyyntö salasanasta tai kortista</li><li>❌ Heikko kielioppi tai kirjoitusvirheet</li></ul>'
+    const emails = [
+        {
+            subject: 'Tärkeä: Vahvista pankkitilisi',
+            from: 'security@yourbank.com',
+            preview: 'Havaitsimme epätavallista toimintaa tilillässä. Klikkaa alla olevaa linkkiä vahvistaaksesi henkilökohtaiset tiedot...',
+            isPhishing: true,
+            flags: ['⚠️ Lähettäjä: security@yourbank.com (oikea olisi @[pankkinimi].fi)', '⚠️ Kiireellisyys: epätavallista toimintaa', '⚠️ Pyynnöt klikkaamaan linkkiä', '⚠️ Pyynnöt henkilökohtaisista tiedoista']
         },
-        emails: [
-            {
-                id: 'email-1',
-                subject: 'Tärkeä: Vahvista pankkitilisi',
-                from: 'security@yourbank.com',
-                preview: 'Havaitsimme epätavallista toimintaa tilillässä. Klikkaa alla olevaa linkkiä vahvistaaksesi henkilökohtaiset tiedot...',
-                isPhishing: true,
-                redFlags: [
-                    '⚠️ Lähettäjä: security@yourbank.com (oikea olisi @[pankkinimi].fi)',
-                    '⚠️ Kiireellisyys: epätavallista toimintaa',
-                    '⚠️ Pyynnöt klikkaamaan linkkiä',
-                    '⚠️ Pyynnöt henkilökohtaisista tiedoista'
-                ]
-            },
-            {
-                id: 'email-2',
-                subject: 'Kuponki: 50% alennus kaikesta!',
-                from: 'deals@onlineshop-official.net',
-                preview: 'Tervehdys arvoisa asiakas! Sinulla on ainutlaatuinen 50% alennus. Klikkaa tästä aktivoidaksesi...',
-                isPhishing: true,
-                redFlags: [
-                    '⚠️ Lähettäjä: .net-domainissa (oikea käyttäisi .fi)',
-                    '⚠️ Ei henkilökohtaista tervehdystä',
-                    '⚠️ Liian hyvä ollakseen totta'
-                ]
-            },
-            {
-                id: 'email-3',
-                subject: 'Kurssin materiaali on saatavilla',
-                from: 'teacher@school.fi',
-                preview: 'Hei opiskelijat, kurssin materiaali on ladattavissa oheisella linkillä. Terveisin opettaja...',
-                isPhishing: false,
-                redFlags: []
-            },
-            {
-                id: 'email-4',
-                subject: 'URGENT: Tililläsi on luvattomia kirjautumisia!',
-                from: 'noreply@securityalert.net',
-                preview: 'VARO! Tililläsi on havaittu kirjautumisia ulkomailta. Vahvista tilisi NYTÄ klikkaamalla...',
-                isPhishing: true,
-                redFlags: [
-                    '⚠️ ISOLLA KIRJAIMELLA ja !!! huudot',
-                    '⚠️ Epätavallinen turvallisuuspalvelun domain',
-                    '⚠️ Pyynnöt vahvistaa linkillä'
-                ]
-            }
-        ]
-    });
+        {
+            subject: 'Kuponki: 50% alennus kaikesta!',
+            from: 'deals@onlineshop-official.net',
+            preview: 'Tervehdys arvoisa asiakas! Sinulla on ainutlaatuinen 50% alennus. Klikkaa tästä aktivoidaksesi...',
+            isPhishing: true,
+            flags: ['⚠️ Lähettäjä: .net-domainissa (oikea käyttäisi .fi)', '⚠️ Ei henkilökohtaista tervehdystä', '⚠️ Liian hyvä ollakseen totta']
+        },
+        {
+            subject: 'Kurssin materiaali on saatavilla',
+            from: 'teacher@school.fi',
+            preview: 'Hei opiskelijat, kurssin materiaali on ladattavissa oheisella linkillä. Terveisin opettaja...',
+            isPhishing: false,
+            flags: []
+        },
+        {
+            subject: 'URGENT: Tililläsi on luvattomia kirjautumisia!',
+            from: 'noreply@securityalert.net',
+            preview: 'VARO! Tililläsi on havaittu kirjautumisia ulkomailta. Vahvista tilisi NYTÄ klikkaamalla...',
+            isPhishing: true,
+            flags: ['⚠️ ISOLLA KIRJAIMELLA ja !!! huudot', '⚠️ Epätavallinen turvallisuuspalvelun domain', '⚠️ Pyynnöt vahvistaa linkillä']
+        }
+    ];
 
-    exercise.init();
-    <\/script>
+    let score = 0;
+    let completed = 0;
+
+    function initExercise() {
+        const container = document.getElementById('emailsContainer');
+        container.innerHTML = '';
+        
+        emails.forEach((email, index) => {
+            container.appendChild(createEmailCard(email, index));
+        });
+    }
+
+    function createEmailCard(email, index) {
+        const card = document.createElement('div');
+        card.className = 'email-card';
+
+        const header = document.createElement('div');
+        header.className = 'email-header';
+        header.innerHTML = \<div><div class="email-from"><strong>Lähettäjä:</strong> \</div><div class="email-subject"><strong>Aihe:</strong> \</div></div><div class="email-number">Sähköposti \/\</div>\;
+        card.appendChild(header);
+
+        const preview = document.createElement('div');
+        preview.className = 'email-preview';
+        preview.textContent = email.preview;
+        card.appendChild(preview);
+
+        const question = document.createElement('div');
+        question.className = 'email-question';
+        question.innerHTML = '<strong>❓ Onko tämä phishing-yritys?</strong>';
+        card.appendChild(question);
+
+        const buttons = document.createElement('div');
+        buttons.className = 'email-buttons';
+
+        const yesBtn = document.createElement('button');
+        yesBtn.className = 'btn-yes';
+        yesBtn.textContent = '⚠️ Kyllä, phishing!';
+        yesBtn.onclick = () => answerQuestion(email, true, card, yesBtn, noBtn);
+
+        const noBtn = document.createElement('button');
+        noBtn.className = 'btn-no';
+        noBtn.textContent = '✅ Ei, turvallinen';
+        noBtn.onclick = () => answerQuestion(email, false, card, yesBtn, noBtn);
+
+        buttons.appendChild(yesBtn);
+        buttons.appendChild(noBtn);
+        card.appendChild(buttons);
+
+        const flags = document.createElement('div');
+        flags.className = 'email-flags';
+        if (email.isPhishing) {
+            flags.innerHTML = '<h4>🚩 Varoitusmerkit:</h4>';
+            email.flags.forEach(flag => {
+                const flagDiv = document.createElement('div');
+                flagDiv.className = 'flag-item';
+                flagDiv.textContent = flag;
+                flags.appendChild(flagDiv);
+            });
+        } else {
+            flags.innerHTML = '<h4>✅ Turvallinen viesti</h4><p>Tämä viestin on peräisin luotettavasta lähteestä.</p>';
+        }
+        card.appendChild(flags);
+
+        card.yesBtn = yesBtn;
+        card.noBtn = noBtn;
+        card.flagsDiv = flags;
+        return card;
+    }
+
+    function answerQuestion(email, isPhishing, card, yesBtn, noBtn) {
+        const correct = isPhishing === email.isPhishing;
+        yesBtn.disabled = true;
+        noBtn.disabled = true;
+
+        if (correct) {
+            card.classList.add('correct');
+            score++;
+        } else {
+            card.classList.add('incorrect');
+        }
+
+        card.flagsDiv.style.display = 'block';
+        completed++;
+        updateProgress();
+
+        if (completed === emails.length) {
+            setTimeout(showSummary, 800);
+        }
+    }
+
+    function updateProgress() {
+        const pct = Math.round(completed / emails.length * 100);
+        document.getElementById('progressFill').style.width = pct + '%';
+        document.getElementById('progressCount').textContent = completed;
+    }
+
+    function showSummary() {
+        const pct = Math.round(score / emails.length * 100);
+        const summary = document.getElementById('summaryContainer');
+        summary.innerHTML = \<div class="summary-panel">
+            <h3>📊 Yhteenveto</h3>
+            <p><strong>Pisteet: \/\</strong> (\%)</p>
+            <p>\</p>
+        </div>\;
+    }
+
+    initExercise();
+    </script>
 </body>
 </html>

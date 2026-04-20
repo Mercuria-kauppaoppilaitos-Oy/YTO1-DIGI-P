@@ -5,24 +5,208 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Harjoitus 2 - Salasanan vahvuus</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        .exercise-container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        .password-input-container { margin: 20px 0; }
+        .password-input-group {
+            display: flex;
+            gap: 8px;
+            margin: 12px 0;
+        }
+        .password-input-group input {
+            flex: 1;
+            padding: 10px;
+            font-size: 1em;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+        }
+        .password-input-group button {
+            padding: 10px 16px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+        .strength-meter {
+            background: #f0f0f0;
+            border-radius: 4px;
+            height: 10px;
+            margin: 12px 0;
+            overflow: hidden;
+        }
+        .strength-bar {
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s, background-color 0.3s;
+            background-color: #e74c3c;
+        }
+        .strength-bar.weak { background-color: #e74c3c; }
+        .strength-bar.medium { background-color: #f39c12; }
+        .strength-bar.strong { background-color: #27ae60; }
+        .strength-text {
+            font-size: 0.9em;
+            margin: 8px 0;
+            font-weight: bold;
+        }
+        .strength-text.weak { color: #e74c3c; }
+        .strength-text.medium { color: #f39c12; }
+        .strength-text.strong { color: #27ae60; }
+        .criteria-list {
+            list-style: none;
+            padding: 0;
+            margin: 12px 0;
+        }
+        .criteria-list li {
+            padding: 6px 0;
+            display: flex;
+            align-items: center;
+            font-size: 0.9em;
+        }
+        .criteria-list li:before {
+            content: '❌ ';
+            margin-right: 8px;
+        }
+        .criteria-list li.met:before {
+            content: '✅ ';
+        }
+        .example-passwords {
+            background: #f9f9f9;
+            border-left: 4px solid #3498db;
+            padding: 12px;
+            border-radius: 4px;
+            margin: 12px 0;
+        }
+        .example-item {
+            padding: 8px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+        }
+        .example-item:last-child {
+            border-bottom: none;
+        }
+        .strength-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            font-weight: bold;
+        }
+        .badge-weak { background: #fadbd8; color: #c0392b; }
+        .badge-medium { background: #fdebd0; color: #d68910; }
+        .badge-strong { background: #d5f4e6; color: #27ae60; }
+        .info-panel {
+            background: #e3f2fd;
+            border-left: 4px solid #2196F3;
+            padding: 16px;
+            border-radius: 4px;
+            margin: 16px 0;
+        }
+    </style>
 </head>
 <body>
     <a class="back-link" href="index.html">← Takaisin harjoituksiin</a>
     <div class="exercise-container">
         <div class="exercise-header">
             <h1>🔐 Harjoitus 2 - Salasanan vahvuus</h1>
-            <p>Arvioi ja luokittele salasanoja</p>
+            <p>Testaa salasanoja ja opi mikä tekee salasanasta turvallisen!</p>
         </div>
+
         <div class="info-panel">
-            <h3>🚧 Harjoitus kehitteillä</h3>
-            <p>Tämä harjoitus on parhaillaan kehitteillä. Palaa myöhemmin!</p>
+            <h3>🔒 Turvallisen salasanan kriteerit</h3>
+            <ul>
+                <li><strong>Pituus:</strong> Vähintään 12 merkkiä</li>
+                <li><strong>Isot kirjaimet:</strong> Vähintään yksi (A-Z)</li>
+                <li><strong>Pienet kirjaimet:</strong> Vähintään yksi (a-z)</li>
+                <li><strong>Numerot:</strong> Vähintään yksi (0-9)</li>
+                <li><strong>Erikoismerkit:</strong> Vähintään yksi (!@#\$%^&*)</li>
+            </ul>
+        </div>
+
+        <div class="password-input-container">
+            <h3>Testaa salasanaa:</h3>
+            <div class="password-input-group">
+                <input type="password" id="password" placeholder="Kirjoita salasana tähän..." />
+                <button onclick="togglePasswordVisibility()">👁️</button>
+            </div>
+            
+            <div class="strength-meter">
+                <div class="strength-bar" id="strengthBar"></div>
+            </div>
+            <div class="strength-text" id="strengthText">-</div>
+
+            <h4>Täyttyvät kriteerit:</h4>
+            <ul class="criteria-list" id="criteriaList">
+                <li id="length">Vähintään 12 merkkiä</li>
+                <li id="uppercase">Isot kirjaimet (A-Z)</li>
+                <li id="lowercase">Pienet kirjaimet (a-z)</li>
+                <li id="numbers">Numerot (0-9)</li>
+                <li id="special">Erikoismerkit (!@#\$%^&*)</li>
+            </ul>
+        </div>
+
+        <div class="example-passwords">
+            <h3>📝 Esimerkkejä:</h3>
+            <div class="example-item">
+                <span>password123</span>
+                <span class="strength-badge badge-weak">Heikko</span>
+            </div>
+            <div class="example-item">
+                <span>MyDog2024!</span>
+                <span class="strength-badge badge-medium">Keskivahva</span>
+            </div>
+            <div class="example-item">
+                <span>K9@mPlex\C:\Users\rytkonen_tomi\YTO1-DIGI-P#2024</span>
+                <span class="strength-badge badge-strong">Vahva</span>
+            </div>
         </div>
     </div>
 
-    <script src="scorm-wrapper.js"><\/script>
     <script>
-    SCORM.init();
-    // Harjoitus-spesifinen koodi tulee tähän
-    <\/script>
+    function checkPasswordStrength() {
+        const password = document.getElementById('password').value;
+        
+        const criteria = {
+            length: password.length >= 12,
+            uppercase: /[A-Z]/.test(password),
+            lowercase: /[a-z]/.test(password),
+            numbers: /[0-9]/.test(password),
+            special: /[!@#\$%^&*]/.test(password)
+        };
+
+        let score = 0;
+        Object.values(criteria).forEach(met => { if (met) score++; });
+
+        updateUI(criteria, score);
+    }
+
+    function updateUI(criteria, score) {
+        const bar = document.getElementById('strengthBar');
+        const text = document.getElementById('strengthText');
+        const strength = score <= 2 ? 'weak' : score <= 3 ? 'medium' : 'strong';
+        
+        bar.className = 'strength-bar ' + strength;
+        bar.style.width = (score * 20) + '%';
+        
+        const labels = { weak: 'Heikko 😟', medium: 'Keskivahva 😐', strong: 'Vahva 💪' };
+        text.className = 'strength-text ' + strength;
+        text.textContent = labels[strength];
+
+        document.getElementById('length').classList.toggle('met', criteria.length);
+        document.getElementById('uppercase').classList.toggle('met', criteria.uppercase);
+        document.getElementById('lowercase').classList.toggle('met', criteria.lowercase);
+        document.getElementById('numbers').classList.toggle('met', criteria.numbers);
+        document.getElementById('special').classList.toggle('met', criteria.special);
+    }
+
+    function togglePasswordVisibility() {
+        const input = document.getElementById('password');
+        input.type = input.type === 'password' ? 'text' : 'password';
+    }
+
+    document.getElementById('password').addEventListener('input', checkPasswordStrength);
+    </script>
 </body>
 </html>
