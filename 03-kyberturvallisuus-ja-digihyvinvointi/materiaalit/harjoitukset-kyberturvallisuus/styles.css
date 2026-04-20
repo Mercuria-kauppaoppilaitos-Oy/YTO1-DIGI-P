@@ -678,3 +678,329 @@ input:checked + .slider:before {
 .impact-label.low {
     color: #3498db;
 }
+
+/* ============================================================
+   Exercise 3 – Ergonomia step-by-step
+   ============================================================ */
+
+.step-card {
+    background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+    border: 3px solid #2196F3;
+    border-radius: 16px;
+    padding: 40px 24px;
+    margin: 16px 0;
+    text-align: center;
+    transition: all 0.4s;
+}
+
+.step-emoji {
+    font-size: 5em;
+    margin-bottom: 16px;
+    display: block;
+}
+
+.step-instruction {
+    font-size: 1.6em;
+    font-weight: bold;
+    color: #1565c0;
+    margin-bottom: 16px;
+    line-height: 1.4;
+}
+
+.step-counter {
+    font-size: 0.9em;
+    color: #666;
+    margin-bottom: 8px;
+}
+
+.countdown-display {
+    font-size: 3em;
+    font-weight: bold;
+    color: #2196F3;
+    margin: 16px 0;
+}
+
+.countdown-display.urgent {
+    color: #e74c3c;
+    animation: pulse 0.5s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+.step-progress-bar {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    margin: 16px 0;
+}
+
+.step-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #ddd;
+    transition: background 0.3s;
+}
+
+.step-dot.done {
+    background: #27ae60;
+}
+
+.step-dot.active {
+    background: #2196F3;
+}
+
+.ergo-complete {
+    background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+    border: 3px solid #27ae60;
+    border-radius: 16px;
+    padding: 40px 24px;
+    margin: 16px 0;
+    text-align: center;
+}
+
+.ergo-complete h2 {
+    color: #27ae60;
+    font-size: 1.8em;
+    margin-bottom: 12px;
+}
+
+/* ============================================================
+   Exercise 5 – Yksityisyysasetukset
+   ============================================================ */
+
+.platform-section {
+    background: #f9f9f9;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    padding: 16px;
+    margin: 12px 0;
+    transition: all 0.3s;
+}
+
+.platform-title {
+    font-size: 1.1em;
+    font-weight: bold;
+    margin-bottom: 12px;
+    color: #2c3e50;
+}
+
+.setting-item {
+    background: white;
+    border: 1px solid #eee;
+    padding: 12px;
+    margin: 8px 0;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.setting-label {
+    flex: 1;
+}
+
+.setting-label strong {
+    display: block;
+    margin-bottom: 4px;
+}
+
+.setting-label span {
+    font-size: 0.9em;
+    color: #777;
+}
+
+.tips-box {
+    background: #fff3cd;
+    border-left: 4px solid #ffc107;
+    padding: 12px;
+    border-radius: 4px;
+    margin-top: 12px;
+    font-size: 0.95em;
+}
+
+.score-display {
+    font-size: 2em;
+    font-weight: bold;
+    color: #27ae60;
+}
+
+.safety-bar-track {
+    background: #e0e0e0;
+    border-radius: 8px;
+    height: 16px;
+    overflow: hidden;
+    margin: 12px 0;
+}
+
+.safety-bar-fill {
+    height: 100%;
+    border-radius: 8px;
+    transition: width 0.4s, background 0.4s;
+}
+
+/* Toggle slider default = risky (red), checked = safe (green) */
+.slider {
+    background-color: #e74c3c !important;
+}
+
+input:checked + .slider {
+    background-color: #27ae60 !important;
+}
+
+/* ============================================================
+   Exercise 6 – Datatalous
+   ============================================================ */
+
+.flow-diagram {
+    background: #f9f9f9;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 16px 0;
+}
+
+.flow-step {
+    background: white;
+    border: 2px solid #3498db;
+    border-radius: 8px;
+    padding: 16px;
+    margin: 12px 0;
+}
+
+.flow-step.user { border-color: #2ecc71; background: #e8f5e9; }
+.flow-step.company { border-color: #e74c3c; background: #fadbd8; }
+.flow-step.buyer { border-color: #f39c12; background: #fef5e7; }
+
+.flow-step h3 {
+    margin: 0 0 8px;
+    color: #2c3e50;
+}
+
+.flow-step p {
+    margin: 0;
+    font-size: 0.95em;
+    line-height: 1.5;
+}
+
+.arrow {
+    text-align: center;
+    font-size: 2em;
+    color: #3498db;
+    margin: 8px 0;
+}
+
+.legend {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.legend-color {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    border: 2px solid;
+    flex-shrink: 0;
+}
+
+.quiz-card {
+    background: #f9f9f9;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    padding: 16px;
+    margin: 12px 0;
+    transition: all 0.3s;
+}
+
+.quiz-card.answered {
+    border-color: #27ae60;
+    background: #e8f5e9;
+}
+
+.quiz-card.answered.incorrect {
+    border-color: #e74c3c;
+    background: #fadbd8;
+}
+
+/* ============================================================
+   Exercise 7 – Digijalanjälki
+   ============================================================ */
+
+.footprint-visual {
+    text-align: center;
+    font-size: 4em;
+    margin: 20px 0;
+}
+
+.calculator-section {
+    background: #f9f9f9;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    padding: 16px;
+    margin: 16px 0;
+}
+
+.checker-item {
+    background: white;
+    border: 1px solid #eee;
+    padding: 12px;
+    margin: 8px 0;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.checker-item input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.checker-item label {
+    flex: 1;
+    cursor: pointer;
+    margin: 0;
+}
+
+.tips-panel {
+    background: #e8f5e9;
+    border-left: 4px solid #27ae60;
+    padding: 16px;
+    border-radius: 4px;
+    margin: 16px 0;
+}
+
+.tips-panel h3 {
+    margin: 0 0 12px;
+    color: #27ae60;
+}
+
+.tips-panel ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.tips-panel li {
+    margin: 6px 0;
+}
+
+.footprint-score {
+    font-size: 2em;
+    font-weight: bold;
+    color: #e74c3c;
+    margin: 12px 0;
+}
