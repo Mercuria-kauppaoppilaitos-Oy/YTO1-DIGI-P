@@ -147,23 +147,23 @@
         flags.className = 'email-flags';
         flags.style.display = 'none';
 
-        if (email.isPhishing) {
-            flags.innerHTML = '<h4>🚩 Varoitusmerkit:</h4>';
-            email.flags.forEach(flag => {
-                const flagDiv = document.createElement('div');
-                flagDiv.className = 'flag-item';
-                flagDiv.textContent = flag;
-                flags.appendChild(flagDiv);
-            });
-        } else {
-            flags.innerHTML = '<h4>✅ Turvallinen viesti - peräisin luotettavasta lähteestä</h4>';
-            email.flags.forEach(flag => {
-                const flagDiv = document.createElement('div');
-                flagDiv.className = 'flag-item safe-flag';
-                flagDiv.textContent = flag;
-                flags.appendChild(flagDiv);
-            });
-        }
+if (email.isPhishing) {
+    flags.innerHTML = '<h4>🚩 Varoitusmerkit:</h4>';
+    email.flags.forEach(flag => {
+        const flagDiv = document.createElement('div');
+        flagDiv.className = 'flag-item';
+        flagDiv.textContent = flag;
+        flags.appendChild(flagDiv);
+    });
+} else {
+    flags.innerHTML = '<h4>✅ Turvallinen viesti - peräisin luotettavasta lähteestä</h4>';
+    email.flags.forEach(flag => {
+        const flagDiv = document.createElement('div');
+        flagDiv.className = 'flag-item safe-flag';
+        flagDiv.textContent = flag;
+        flags.appendChild(flagDiv);
+    });
+}
         card.appendChild(flags);
 
         card.yesBtn = yesBtn;
