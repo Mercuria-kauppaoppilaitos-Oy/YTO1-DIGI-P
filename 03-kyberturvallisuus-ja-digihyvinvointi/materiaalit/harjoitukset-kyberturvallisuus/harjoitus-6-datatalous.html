@@ -11,18 +11,193 @@
     <div class="exercise-container">
         <div class="exercise-header">
             <h1>💰 Harjoitus 6 - Datatalous</h1>
-            <p>Seuraa tietojasi datatalouden ketjussa</p>
+            <p>Ymmärrä kuinka tietojasi käytetään ja kerätään!</p>
         </div>
+
         <div class="info-panel">
-            <h3>🚧 Harjoitus kehitteillä</h3>
-            <p>Tämä harjoitus on parhaillaan kehitteillä. Palaa myöhemmin!</p>
+            <h3>💰 Mitä on datatalous?</h3>
+            <p><strong>Datatalous</strong> on talouden sektori, jossa data on pääomaa. Yritykset keräävät, analysoivat ja myyvät tietojasi – usein tietämättäsi!</p>
+            <h4>Miksi data on arvokas?</h4>
+            <ul>
+                <li>✅ Mainonta – kohdistetumpi myynti</li>
+                <li>✅ Analytiikka – kuluttajakäyttäytymisen ennustaminen</li>
+                <li>✅ Koneoppiminen – tekoälyn kouluttaminen</li>
+                <li>✅ Johtamispäätökset – trendit ja kuviot</li>
+            </ul>
         </div>
+
+        <h2>📊 Datankulun prosessi</h2>
+
+        <div class="flow-diagram">
+            <div class="flow-step user">
+                <h3>1️⃣ Sinä (Käyttäjä)</h3>
+                <p>Kirjoitat, klikkaat, ostat, katsot videota. Joka toiminto tuottaa dataa.</p>
+            </div>
+            <div class="arrow">↓</div>
+
+            <div class="flow-step company">
+                <h3>2️⃣ Yritys (Platform)</h3>
+                <p>Facebook, Google, TikTok keräävät dataa palvelimillaan. Analysoivat käyttäytymistäsi.</p>
+            </div>
+            <div class="arrow">↓</div>
+
+            <div class="flow-step buyer">
+                <h3>3️⃣ Data-ostajat (Mainostajat)</h3>
+                <p>Yritykset ostavat segmentit "miehiä 18-25, kiinnostuneet peleihin, asuvat Helsingissä".</p>
+            </div>
+            <div class="arrow">↓</div>
+
+            <div class="flow-step company">
+                <h3>4️⃣ Kohdistettu Mainonta</h3>
+                <p>Näet mainoksia jotka on erityisesti suunnattu sinulle. Algoritmi tuntee sinut hyvin!</p>
+            </div>
+
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #e8f5e9; border-color: #2ecc71;"></div>
+                    <span><strong>Käyttäjä</strong> (Sinä)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #fadbd8; border-color: #e74c3c;"></div>
+                    <span><strong>Yritys</strong> (Platform)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #fef5e7; border-color: #f39c12;"></div>
+                    <span><strong>Ostaja</strong> (Mainostaja)</span>
+                </div>
+            </div>
+        </div>
+
+        <h2>❓ Tietokysymykset</h2>
+
+        <div class="progress-container">
+            <div class="progress-bar-track">
+                <div class="progress-bar-fill" id="progressFill" style="width: 0%;"></div>
+            </div>
+            <div class="progress-text"><span id="progressCount">0</span> / 4 kysymystä</div>
+        </div>
+
+        <div id="questionsContainer"></div>
+        <div id="summaryContainer"></div>
     </div>
 
-    <script src="scorm-wrapper.js"><\/script>
     <script>
-    SCORM.init();
-    // Harjoitus-spesifinen koodi tulee tähän
-    <\/script>
+    const questions = [
+        {
+            question: 'Mitä tietoja Google kerää sinusta?',
+            options: ['Vain etsintähistoriani', 'YouTube-katseluhistoria, etsinnät, sijainti, laitteet', 'Mitään henkilökohtaista', 'Vain sähköpostiosoitteen'],
+            correct: 1,
+            explanation: 'Google kerää laajasti: etsintähistoria, YouTube-videot, sijainti, laitteet, kalenterit, joita käytät. Tämän datan avulla luodaan yksityiskohtainen profiili sinusta.'
+        },
+        {
+            question: 'Kuinka yritykset ansaitsevat rahaa ilmaisista palveluista kuten Facebookista?',
+            options: ['Niiden ei tarvitse ansaita rahaa', 'Myymällä tietojasi mainostajille', 'Hallituksen tuella', 'Käyttäjien tilauspalveluilla'],
+            correct: 1,
+            explanation: '"Ilmainen" tarkoittaa että sinä olet tuote! Yritys myy tietojasi mainostajille, joille se on arvokasta. Mainoksista maksetaan perustuen kohdistettuuteen.'
+        },
+        {
+            question: 'Mikä on "väärinkäyttöskandaali" kuten Cambridge Analytica?',
+            options: ['Vain parempi mainonta', 'Datan käyttö manipuloinnissa ja vaikutuksessa ilman lupaa', 'Tavallinen liiketoiminta', 'Jotain mitä ei todella tapahtunut'],
+            correct: 1,
+            explanation: 'Cambridge Analytica käytti Facebook-dataa politiikan manipulointiin. Osoitti kuinka dataa voidaan käyttää haitallisin tavoin: vaikuttaa opinioihin ja äänestäjiin.'
+        },
+        {
+            question: 'Kuinka voit suojata tietojasi datalousalusta?',
+            options: ['Et voi tehdä mitään', 'Lukea tietosuojaselosteet, rajoittaa seuraajia, poistaa sovelluksia, käyttää VPN:ää', 'Lopeta internetin käyttö', 'Rehellinen data-antautuminen'],
+            correct: 1,
+            explanation: 'Voit suojautua: tutkia asetuksia, rajoittaa sovelluksien pääsyä, käyttää vahvaa salasanaa, tarkistaa tietosuojaselosteet ja käyttää VPN:ää.'
+        }
+    ];
+
+    let score = 0;
+    let answered = 0;
+
+    function initExercise() {
+        const container = document.getElementById('questionsContainer');
+        container.innerHTML = '';
+        
+        questions.forEach((q, index) => {
+            container.appendChild(createQuestionCard(q, index));
+        });
+    }
+
+    function createQuestionCard(question, index) {
+        const card = document.createElement('div');
+        card.className = 'quiz-card';
+
+        const questionText = document.createElement('div');
+        questionText.className = 'question-text';
+        questionText.textContent = (index + 1) + '. ' + question.question;
+        card.appendChild(questionText);
+
+        const optionsDiv = document.createElement('div');
+        optionsDiv.className = 'options-container';
+
+        question.options.forEach((option, optionIndex) => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.textContent = option;
+            btn.onclick = () => answerQuestion(question, optionIndex, card, question.options.map((_, i) => card.querySelectorAll('.option-btn')[i]));
+            optionsDiv.appendChild(btn);
+        });
+
+        card.appendChild(optionsDiv);
+
+        const explanation = document.createElement('div');
+        explanation.className = 'explanation';
+        explanation.textContent = question.explanation;
+        card.appendChild(explanation);
+
+        card.explanationDiv = explanation;
+        return card;
+    }
+
+    function answerQuestion(question, selectedIndex, card, buttons) {
+        const correct = selectedIndex === question.correct;
+        
+        buttons.forEach((btn, i) => {
+            btn.disabled = true;
+            if (i === question.correct) {
+                btn.classList.add('correct');
+            } else if (i === selectedIndex && !correct) {
+                btn.classList.add('incorrect');
+            }
+        });
+
+        if (correct) {
+            card.classList.add('answered');
+            score++;
+        } else {
+            card.classList.add('answered', 'incorrect');
+        }
+
+        card.explanationDiv.classList.add('show');
+        answered++;
+        updateProgress();
+
+        if (answered === questions.length) {
+            setTimeout(showSummary, 800);
+        }
+    }
+
+    function updateProgress() {
+        const pct = Math.round(answered / questions.length * 100);
+        document.getElementById('progressFill').style.width = pct + '%';
+        document.getElementById('progressCount').textContent = answered;
+    }
+
+    function showSummary() {
+        const pct = Math.round(score / questions.length * 100);
+        const summary = document.getElementById('summaryContainer');
+        const msg = pct >= 75 ? '🎉 Erinomainen!' : pct >= 50 ? '👍 Hyvä yritys!' : '📚 Harjoittele lisää!';
+        summary.innerHTML = `<div class="summary-panel">
+            <h3>📊 Yhteenveto</h3>
+            <p><strong>Pisteet: ${score}/${questions.length}</strong> (${pct}%)</p>
+            <p>${msg}</p>
+        </div>`;
+    }
+
+    initExercise();
+    </script>
 </body>
 </html>
