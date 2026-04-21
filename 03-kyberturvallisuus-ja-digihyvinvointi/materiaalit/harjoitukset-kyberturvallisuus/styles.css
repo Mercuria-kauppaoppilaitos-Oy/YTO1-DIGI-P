@@ -243,9 +243,14 @@ body {
     border-bottom: 1px solid #ddd;
 }
 
-.email-from, .email-subject {
+.email-from, .email-subject, .email-date {
     margin: 4px 0;
     font-size: 0.95em;
+}
+
+.email-date {
+    color: #777;
+    font-size: 0.88em;
 }
 
 .email-number {
