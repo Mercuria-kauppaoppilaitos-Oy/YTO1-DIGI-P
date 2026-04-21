@@ -167,6 +167,14 @@ Kuvien alkuperän voit tarkistaa **käänteisellä kuvahaulla**: vie kuva Google
 
 Generatiivinen tekoäly tekee disinformaation tuottamisesta entistä helpompaa ja nopeampaa. Siksi lähdekritiikki on entistä tärkeämpää — ei riitä, että teksti on sujuvaa tai kuva näyttää aidolta.
 
+> 📚 **Lisätietoja — Tiedonhaku ja medialukutaito**
+>
+> - [Faktabaari](https://faktabaari.fi/) — Suomalainen faktantarkistuspalvelu (Yle)
+> - [Tilastokeskus](https://www.stat.fi/) — Suomen viralliset tilastot
+> - [Finlex](https://www.finlex.fi/) — Suomen lainsäädäntö ja oikeuskäytäntö
+> - [YTJ — Yritys- ja yhteisötietojärjestelmä](https://www.ytj.fi/) — Yritysten viralliset tiedot
+> - [TinEye — käänteinen kuvahaku](https://tineye.com/) — Tarkista kuvan alkuperä verkossa
+
 ---
 
 ## Luku 2 — Generatiivinen tekoäly
@@ -326,6 +334,13 @@ Jos käytät tekoälyä lähteenä tai sen avulla tuotettua sisältöä, mainits
 
 Monissa yrityksissä on laadittu ohjeet tekoälyn käytölle. Tutustu oman työnantajasi ohjeisiin ennen tekoälyn käyttöä työssä — erityisesti asiakastietoihin tai luottamuksellisiin materiaaleihin liittyen.
 
+> 📚 **Lisätietoja — Generatiivinen tekoäly**
+>
+> - [Microsoft Copilot](https://copilot.microsoft.com/) — Microsoftin tekoälyassistentti (käytettävissä Microsoft 365 -tunnuksilla)
+> - [ChatGPT](https://chatgpt.com/) — OpenAI:n tekoälyassistentti
+> - [Traficom — Tekoäly arjessa](https://www.traficom.fi/fi/viestinta/tekoaly) — Suomalaisen viranomaisen näkemys tekoälyn käytöstä ja riskeistä
+> - [EU:n tekoälyasetus (AI Act)](https://digital-strategy.ec.europa.eu/fi/policies/regulatory-framework-ai) — EU:n tekoälysäätelyn perusteet lyhyesti
+
 ---
 
 ## Luku 3 — Tekijänoikeudet
@@ -476,6 +491,12 @@ Plagiointi tarkoittaa, että esität toisen työn omana tuotoksenasi — joko ko
 - Oppilaitoksessa rangaistava
 
 Tekoälyn tuottama teksti on myös plagiointia, jos sitä esitetään omana tuotoksena.
+
+> 📚 **Lisätietoja — Tekijänoikeudet**
+>
+> - [tekijanoikeus.fi](https://www.tekijanoikeus.fi/) — Opetus- ja kulttuuriministeriön virallinen tekijänoikeustietosivusto
+> - [Creative Commons Suomi](https://creativecommons.fi/) — CC-lisenssit suomeksi selitettynä käytännön esimerkein
+> - [Kopiosto — oppilaitoskäyttö](https://www.kopiosto.fi/kopiosto/oppilaitos/) — Oppilaitoksia koskevat tekijänoikeussopimukset
 
 ---
 

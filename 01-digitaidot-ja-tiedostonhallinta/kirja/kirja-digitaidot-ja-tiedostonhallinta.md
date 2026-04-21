@@ -273,6 +273,11 @@ Versiohistoria säästää tilanteessa, jossa "joku vahingossa poisti tärkeän 
 - Käyttäkää kommentointiominaisuutta, kun haluatte kommentoida toisen tekemisiä muokkaamatta suoraan tekstiä
 - Sulkekaa tiedosto, kun ette enää muokkaa sitä — näin muut näkevät tilanteen oikein
 
+> 📚 **Lisätietoja — OneDrive ja Microsoft 365**
+>
+> - [OneDrive-ohjeet](https://support.microsoft.com/fi-fi/onedrive) — Microsoftin virallinen OneDrive-tukisivusto (suomeksi)
+> - [Microsoft 365 -koulutus](https://support.microsoft.com/fi-fi/training) — Ilmaiset videokoulutukset kaikille Microsoft 365 -sovelluksille
+
 ---
 
 ## Luku 3 — Excel — taulukkolaskenta
@@ -284,6 +289,8 @@ Versiohistoria säästää tilanteessa, jossa "joku vahingossa poisti tärkeän 
 ### 3.1 Excel-perusteet
 
 Excel on Microsoftin taulukkolaskentaohjelma. Se on yksi eniten käytetyistä ohjelmista liiketoiminnassa — budjeteista ja myyntiraporteista henkilöstöhallintaan ja asiakaslistoihin.
+
+> 💡 **Vinkki — ohje suoraan ohjelmasta:** Paina **F1** missä tahansa kohdassa Exceliä (tai muuta Office-ohjelmaa) avataksesi Microsoftin virallisen ohjesivuston. Ohje on aina ajantasainen ohjelman version mukaan ja saatavilla myös suomeksi.
 
 **Excelin rakenne**
 
@@ -396,6 +403,12 @@ Excelin kaavion saa siirrettyä PowerPointiin:
 - Kopioi kaavio Excelistä → Liitä PowerPointiin
 - Valitse liittämisvaihtoehdoksi **"Säilytä lähteen muotoilu ja linkitä tiedot"**, jos haluat, että kaavio päivittyy automaattisesti Excel-tiedoston muuttuessa
 
+> 📚 **Lisätietoja — Excel**
+>
+> - [Excelin ohjeet ja oppaat](https://support.microsoft.com/fi-fi/excel) — Microsoftin virallinen Excel-tukisivusto (suomeksi)
+> - [Excel-videokoulutus](https://support.microsoft.com/fi-fi/office/excel-video-training-9bc05390-e94c-46af-a5b3-d7c22f6990bb) — Ilmaiset opetusvideot aloittelijoista edistyneille
+> - [Excel-funktioiden hakemisto](https://support.microsoft.com/fi-fi/office/excel-functions-alphabetical-b3944572-255d-4efb-bb96-c6d90033e188) — Kaikkien funktioiden selitykset aakkosjärjestyksessä
+
 ---
 
 ## Luku 4 — Word — tekstinkäsittely
@@ -407,6 +420,8 @@ Excelin kaavion saa siirrettyä PowerPointiin:
 ### 4.1 Word-perusteet
 
 Word on Microsoftin tekstinkäsittelyohjelma. Sitä käytetään liiketoiminnassa esimerkiksi raporttien, muistioiden, sopimusten, tarjousten ja kirjeiden kirjoittamiseen.
+
+> 💡 **Vinkki — ohje suoraan ohjelmasta:** Paina **F1** avataksesi Wordin virallisen ohjesivuston. Ohje päivittyy automaattisesti ohjelman version mukaan ja on saatavilla suomeksi.
 
 **Tekstin perustoiminnot**
 
@@ -423,6 +438,7 @@ Word on Microsoftin tekstinkäsittelyohjelma. Sitä käytetään liiketoiminnass
 | Lihavointi | Ctrl+B |
 | Kursiivi | Ctrl+I |
 | Alleviivaus | Ctrl+U |
+| **Ohje** | **F1** |
 
 Pikanäppäinten oppiminen on sen arvoista — ne nopeuttavat työskentelyä merkittävästi, kun niistä tulee automaattinen tapa.
 
@@ -510,6 +526,11 @@ Taulukko järjestää tietoja riveihin ja sarakkeisiin selkeästi.
 
 Muista: kaikki verkosta löytyvät kuvat eivät ole vapaasti käytettävissä. Käytä tekijänoikeusvapaita kuvia (Unsplash, Pixabay, Pexels) tai ilmoita kuvan lähde.
 
+> 📚 **Lisätietoja — Word**
+>
+> - [Wordin ohjeet ja oppaat](https://support.microsoft.com/fi-fi/word) — Microsoftin virallinen Word-tukisivusto (suomeksi)
+> - [Word-videokoulutus](https://support.microsoft.com/fi-fi/office/word-for-windows-training-7bcd85e6-2c3d-4c3c-a2a5-5ed8847eae73) — Ilmaiset opetusvideot aloittelijoista edistyneille
+
 ---
 
 ## Luku 5 — PowerPoint — esitysgrafiikka
@@ -521,6 +542,8 @@ Muista: kaikki verkosta löytyvät kuvat eivät ole vapaasti käytettävissä. K
 ### 5.1 PowerPoint-perusteet
 
 PowerPoint on Microsoftin esitysgrafiikkaohjelma. Sitä käytetään tiedon esittämiseen visuaalisesti — kokouksissa, koulutuksissa, myyntitilanteissa ja konferensseissa.
+
+> 💡 **Vinkki — ohje suoraan ohjelmasta:** Paina **F1** avataksesi PowerPointin virallisen ohjesivuston. Ohje päivittyy automaattisesti ohjelman version mukaan ja on saatavilla suomeksi.
 
 **PowerPointin perusnäkymä**
 
@@ -619,6 +642,11 @@ Jos esitys täytyy palauttaa nauhoitettuna (esim. etäopiskelu):
 - Käytä dioja muistilistana — älä lue niitä sanasta sanaan
 - Pidä sopiva tahti: älä kiiruhda, mutta älä myöskään pitkittele
 - Valmistaudu kysymyksiin — hyvä esittäjä osaa vastata spontaanistikin
+
+> 📚 **Lisätietoja — PowerPoint**
+>
+> - [PowerPointin ohjeet ja oppaat](https://support.microsoft.com/fi-fi/powerpoint) — Microsoftin virallinen PowerPoint-tukisivusto (suomeksi)
+> - [PowerPoint-videokoulutus](https://support.microsoft.com/fi-fi/office/powerpoint-for-windows-training-40e8c930-cb0b-40d8-82c4-bd53d3398787) — Ilmaiset opetusvideot aloittelijoista edistyneille
 
 ---
 
