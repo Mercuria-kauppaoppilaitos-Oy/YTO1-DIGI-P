@@ -5,6 +5,63 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Harjoitus 5 - Yksityisyysasetukset</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        .task-instruction {
+            background: #e8f4fd;
+            border-left: 4px solid #2980b9;
+            border-radius: 6px;
+            padding: 16px 20px;
+            margin: 16px 0 20px 0;
+            font-size: 0.97em;
+            color: #1a3a50;
+        }
+        .task-instruction strong {
+            display: block;
+            font-size: 1.05em;
+            margin-bottom: 6px;
+            color: #2980b9;
+        }
+        .toggle-with-opts {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+        .opt-label {
+            font-size: 0.8em;
+            font-weight: 600;
+            transition: opacity 0.2s, color 0.2s;
+            white-space: nowrap;
+        }
+        .opt-label[data-when="off"] {
+            color: #e74c3c;
+            opacity: 1;
+        }
+        .opt-label[data-when="on"] {
+            color: #27ae60;
+            opacity: 0.3;
+        }
+        .toggle-with-opts.is-checked .opt-label[data-when="off"] {
+            opacity: 0.3;
+        }
+        .toggle-with-opts.is-checked .opt-label[data-when="on"] {
+            opacity: 1;
+        }
+        .save-hint {
+            text-align: center;
+            font-size: 0.82em;
+            color: #888;
+            margin-top: 6px;
+        }
+        .feedback-box {
+            margin-top: 12px;
+            padding: 12px 16px;
+            background: rgba(255,255,255,0.65);
+            border-radius: 8px;
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+    </style>
 </head>
 <body>
     <a class="back-link" href="index.html">← Takaisin harjoituksiin</a>
@@ -26,43 +83,60 @@
             </ul>
         </div>
 
+        <div class="task-instruction">
+            <strong>📋 Tehtävänanto</strong>
+            Valitse, millaiset yksityisyysasetukset koet omasta mielestäsi itsellesi sopivaksi. Jokainen kytkin kuvaa oikeaa sosiaalisen median asetusta – laita päälle ne, jotka haluaisit itse käyttää. Tehtävä kertoo lopuksi, kuinka hyvin tekemäsi valinnat suojaavat yksityisyyttäsi sosiaalisen median palveluissa.
+        </div>
+
         <h2>📱 Somekanavien asetukset</h2>
 
-        <!-- Facebook -->
+        <!-- Snapchat -->
         <div class="platform-section">
-            <div class="platform-title">👥 Facebook</div>
+            <div class="platform-title">👻 Snapchat</div>
             <div class="setting-item">
                 <div class="setting-label">
-                    <strong>Profiilin näkyvyys</strong>
-                    <span>Kuka voi nähdä profiilisi ja tietojasi?</span>
+                    <strong>Kuka voi nähdä tarinani</strong>
+                    <span>Rajoita, ketkä voivat katsoa Snap-tarinasi</span>
                 </div>
-                <label class="toggle-switch">
-                    <input type="checkbox" onchange="updateScore()">
-                    <span class="slider"></span>
-                </label>
+                <div class="toggle-with-opts">
+                    <span class="opt-label" data-when="off">Kaikki</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" onchange="updateScore()">
+                        <span class="slider"></span>
+                    </label>
+                    <span class="opt-label" data-when="on">Vain kaverit</span>
+                </div>
             </div>
             <div class="setting-item">
                 <div class="setting-label">
-                    <strong>Kuka voi lähettää ystävyyspyyntöjä?</strong>
-                    <span>Rajoita kuka voi ottaa sinuun yhteyttä</span>
+                    <strong>Ghost Mode (sijainti piilotettu)</strong>
+                    <span>Estä muita näkemästä sijaintiasi Snap Mapissa</span>
                 </div>
-                <label class="toggle-switch">
-                    <input type="checkbox" onchange="updateScore()">
-                    <span class="slider"></span>
-                </label>
+                <div class="toggle-with-opts">
+                    <span class="opt-label" data-when="off">Pois päältä</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" onchange="updateScore()">
+                        <span class="slider"></span>
+                    </label>
+                    <span class="opt-label" data-when="on">Päällä</span>
+                </div>
             </div>
             <div class="setting-item">
                 <div class="setting-label">
-                    <strong>Kuka voi nähdä viestejäsi?</strong>
-                    <span>Vain ystävät vai kaikki?</span>
+                    <strong>Kuka voi lähettää minulle snäppejä</strong>
+                    <span>Rajoita viestintä vain tuttuihin henkilöihin</span>
                 </div>
-                <label class="toggle-switch">
-                    <input type="checkbox" onchange="updateScore()">
-                    <span class="slider"></span>
-                </label>
+                <div class="toggle-with-opts">
+                    <span class="opt-label" data-when="off">Kaikki</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" onchange="updateScore()">
+                        <span class="slider"></span>
+                    </label>
+                    <span class="opt-label" data-when="on">Vain kaverit</span>
+                </div>
             </div>
             <div class="tips-box">
-                💡 <strong>Vihje:</strong> Aseta "Vain ystävät" -asetukseksi saadaksesi maksimaalisen yksityisyyden!
+                💡 <strong>Vihje:</strong> Ota Ghost Mode käyttöön ja aseta tarinat vain kavereille näkyviksi!
             </div>
         </div>
 
@@ -71,33 +145,45 @@
             <div class="platform-title">📸 Instagram</div>
             <div class="setting-item">
                 <div class="setting-label">
-                    <strong>Yksityinen profiili</strong>
+                    <strong>Profiilin näkyvyys</strong>
                     <span>Vain hyväksytyt seuraajat näkevät sisältöä</span>
                 </div>
-                <label class="toggle-switch">
-                    <input type="checkbox" onchange="updateScore()">
-                    <span class="slider"></span>
-                </label>
+                <div class="toggle-with-opts">
+                    <span class="opt-label" data-when="off">Julkinen</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" onchange="updateScore()">
+                        <span class="slider"></span>
+                    </label>
+                    <span class="opt-label" data-when="on">Yksityinen</span>
+                </div>
             </div>
             <div class="setting-item">
                 <div class="setting-label">
                     <strong>Kuka voi lähettää viestejä?</strong>
                     <span>Estä suorat viestit tuntemattomilta</span>
                 </div>
-                <label class="toggle-switch">
-                    <input type="checkbox" onchange="updateScore()">
-                    <span class="slider"></span>
-                </label>
+                <div class="toggle-with-opts">
+                    <span class="opt-label" data-when="off">Kaikki</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" onchange="updateScore()">
+                        <span class="slider"></span>
+                    </label>
+                    <span class="opt-label" data-when="on">Vain kaverit</span>
+                </div>
             </div>
             <div class="setting-item">
                 <div class="setting-label">
                     <strong>Näytä aktiivisuustieto</strong>
                     <span>Näytetään milloin olet ollut aktiivinen</span>
                 </div>
-                <label class="toggle-switch">
-                    <input type="checkbox" onchange="updateScore()">
-                    <span class="slider"></span>
-                </label>
+                <div class="toggle-with-opts">
+                    <span class="opt-label" data-when="off">Näkyvissä</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" onchange="updateScore()">
+                        <span class="slider"></span>
+                    </label>
+                    <span class="opt-label" data-when="on">Piilotettu</span>
+                </div>
             </div>
             <div class="tips-box">
                 💡 <strong>Vihje:</strong> Ota yksityinen profiili käyttöön ja estä suorat viestit!
@@ -109,51 +195,59 @@
             <div class="platform-title">🎵 TikTok</div>
             <div class="setting-item">
                 <div class="setting-label">
-                    <strong>Yksityinen tili</strong>
+                    <strong>Tilin näkyvyys</strong>
                     <span>Vain hyväksytyt seuraajat näkevät videosi</span>
                 </div>
-                <label class="toggle-switch">
-                    <input type="checkbox" onchange="updateScore()">
-                    <span class="slider"></span>
-                </label>
+                <div class="toggle-with-opts">
+                    <span class="opt-label" data-when="off">Julkinen</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" onchange="updateScore()">
+                        <span class="slider"></span>
+                    </label>
+                    <span class="opt-label" data-when="on">Yksityinen</span>
+                </div>
             </div>
             <div class="setting-item">
                 <div class="setting-label">
                     <strong>Kuka voi kommentoida?</strong>
                     <span>Estä kommentit tuntemattomilta</span>
                 </div>
-                <label class="toggle-switch">
-                    <input type="checkbox" onchange="updateScore()">
-                    <span class="slider"></span>
-                </label>
+                <div class="toggle-with-opts">
+                    <span class="opt-label" data-when="off">Kaikki</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" onchange="updateScore()">
+                        <span class="slider"></span>
+                    </label>
+                    <span class="opt-label" data-when="on">Vain kaverit</span>
+                </div>
             </div>
             <div class="setting-item">
                 <div class="setting-label">
-                    <strong>Näytä mitä kuulit</strong>
-                    <span>Ehdotetaan musiikkia perustuen kuunteluusi</span>
+                    <strong>Mainostenkohdistus</strong>
+                    <span>Kuinka laajasti tietojasi käytetään mainosten kohdistamiseen</span>
                 </div>
-                <label class="toggle-switch">
-                    <input type="checkbox" onchange="updateScore()">
-                    <span class="slider"></span>
-                </label>
+                <div class="toggle-with-opts">
+                    <span class="opt-label" data-when="off">Laaja</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" onchange="updateScore()">
+                        <span class="slider"></span>
+                    </label>
+                    <span class="opt-label" data-when="on">Rajoitettu</span>
+                </div>
             </div>
             <div class="tips-box">
                 💡 <strong>Vihje:</strong> Aseta yksityinen tili ja rajoita kommentit!
             </div>
         </div>
 
-        <div id="summaryContainer"></div>
-        <div style="text-align:center; margin-top: 20px;">
-            <button class="btn btn-success" onclick="saveSettings()" style="padding: 12px 32px; font-size: 1em;">💾 Tallenna asetukset</button>
-        </div>
-
-
+        <!-- Suojautumisohjeet -->
         <div class="info-panel" style="margin-top: 24px; background: #d5f4e6; border-left-color: #27ae60;">
             <h3>✅ Suojautumisohjeet</h3>
+            <p style="font-size:0.92em; color:#555; margin-bottom: 10px;">Merkitse myös seuraavat yleiset suojakeinot, jotka koet käyttäväsi tai haluavasi ottaa käyttöön:</p>
             <div class="checklist">
                 <div class="checklist-item">
                     <input type="checkbox" id="check1" onchange="updateSummary()">
-                    <label for="check1">Käytä vahvaa salasanaa joissa on erikoismerkkejä</label>
+                    <label for="check1">Käytä vahvaa salasanaa, jossa on erikoismerkkejä</label>
                 </div>
                 <div class="checklist-item">
                     <input type="checkbox" id="check2" onchange="updateSummary()">
@@ -161,7 +255,7 @@
                 </div>
                 <div class="checklist-item">
                     <input type="checkbox" id="check3" onchange="updateSummary()">
-                    <label for="check3">Tutkiskele säännöllisesti asetuksia</label>
+                    <label for="check3">Tutustu säännöllisesti sovellusten asetuksiin</label>
                 </div>
                 <div class="checklist-item">
                     <input type="checkbox" id="check4" onchange="updateSummary()">
@@ -169,60 +263,102 @@
                 </div>
                 <div class="checklist-item">
                     <input type="checkbox" id="check5" onchange="updateSummary()">
-                    <label for="check5">Estä tuntemattomien profiilit säännöllisesti</label>
+                    <label for="check5">Estä tuntemattomat käyttäjät tarvittaessa</label>
                 </div>
             </div>
         </div>
+
+        <div style="text-align:center; margin-top: 24px;">
+            <button class="btn btn-success" onclick="saveSettings()" style="padding: 12px 32px; font-size: 1em;">💾 Tallenna asetukset</button>
+            <p class="save-hint">Paina yllä olevaa Tallenna asetukset -painiketta palauttaaksesi tehtävän.</p>
+        </div>
+
+        <div id="summaryContainer" style="margin-top: 20px;"></div>
     </div>
 
     <script>
     function updateScore() {
-        const toggles = document.querySelectorAll('.toggle-switch input');
-        let enabled = 0;
-        
-        toggles.forEach(toggle => {
-            if (toggle.checked) enabled++;
+        document.querySelectorAll('.toggle-with-opts').forEach(function(wrapper) {
+            var cb = wrapper.querySelector('input[type="checkbox"]');
+            if (cb.checked) {
+                wrapper.classList.add('is-checked');
+            } else {
+                wrapper.classList.remove('is-checked');
+            }
         });
-
         updateSummary();
     }
 
+    function generateFeedback(pct, toggles, checks) {
+        var uncheckedSettings = [];
+        toggles.forEach(function(toggle) {
+            if (!toggle.checked) {
+                var label = toggle.closest('.setting-item');
+                if (label) {
+                    var strong = label.querySelector('strong');
+                    if (strong) uncheckedSettings.push(strong.textContent.trim());
+                }
+            }
+        });
+
+        if (pct >= 80) {
+            return 'Loistava työ! Olet ottanut digiturvan vakavasti ja valinnut asetukset, jotka suojaavat yksityisyyttäsi hyvin sosiaalisen median palveluissa. Muista tarkistaa asetukset säännöllisesti – sovellukset päivittävät käytäntöjään usein.';
+        } else if (pct >= 60) {
+            var feedback = 'Hyvä alku! Olet valinnut useita tärkeitä suoja-asetuksia. ';
+            if (uncheckedSettings.length > 0) {
+                feedback += 'Harkitse vielä näiden ottamista käyttöön: <em>' + uncheckedSettings.slice(0, 2).join('</em> ja <em>') + '</em>. Pienikin muutos parantaa yksityisyyttäsi merkittävästi.';
+            }
+            return feedback;
+        } else if (pct >= 40) {
+            var feedback = 'Asetuksesi jättävät yksityisyyttäsi alttiiksi. ';
+            if (uncheckedSettings.length > 0) {
+                feedback += 'Suosittelemme erityisesti ottamaan käyttöön: <em>' + uncheckedSettings.slice(0, 3).join('</em>, <em>') + '</em>. ';
+            }
+            feedback += 'Yksityinen profiili ja viestirajoitukset ovat tärkeimmät ensiaskeleet!';
+            return feedback;
+        } else {
+            return 'Nykyiset asetuksesi jättävät profiilisi ja tietosi laajalti näkyville. Aloita asettamalla kaikki profiilit yksityisiksi ja rajoittamalla, kuka voi lähettää sinulle viestejä. Ota myös kaksivaiheinen tunnistautuminen käyttöön kaikissa palveluissa. Kysy tarvittaessa apua opettajalta!';
+        }
+    }
+
     function updateSummary() {
-        const toggles = document.querySelectorAll('.toggle-switch input');
-        const checks = document.querySelectorAll('.checklist-item input');
-        
-        let toggleEnabled = 0;
-        toggles.forEach(toggle => {
-            if (toggle.checked) toggleEnabled++;
-        });
+        var toggles = document.querySelectorAll('.toggle-switch input');
+        var checks = document.querySelectorAll('.checklist-item input');
 
-        let checksEnabled = 0;
-        checks.forEach(check => {
-            if (check.checked) checksEnabled++;
-        });
+        var toggleEnabled = 0;
+        toggles.forEach(function(toggle) { if (toggle.checked) toggleEnabled++; });
 
-        const totalScore = toggleEnabled + checksEnabled;
-        const maxScore = toggles.length + checks.length;
-        const pct = Math.round(totalScore / maxScore * 100);
+        var checksEnabled = 0;
+        checks.forEach(function(check) { if (check.checked) checksEnabled++; });
 
-        let summary = document.getElementById('summaryContainer');
-        const msg = pct >= 75 ? '🎉 Erinomainen turvallisuustaso!' : pct >= 50 ? '👍 Hyvä alku!' : '⚠️ Paranna asetuksia!';
-        summary.innerHTML = `<div class="summary-panel">
-            <h3>🛡️ Yksityisyyssuoja-pisteet</h3>
-            <div class="score-display">${pct}%</div>
-            <p><strong>${totalScore}/${maxScore} suojaa otettu käyttöön</strong></p>
-            <p>${msg}</p>
-        </div>`;
+        var totalScore = toggleEnabled + checksEnabled;
+        var maxScore = toggles.length + checks.length;
+        var pct = Math.round(totalScore / maxScore * 100);
+
+        var msg = pct >= 75 ? '🎉 Erinomainen turvallisuustaso!' : pct >= 50 ? '👍 Hyvä alku!' : '⚠️ Paranna asetuksia!';
+        var feedback = generateFeedback(pct, toggles, checks);
+
+        var summary = document.getElementById('summaryContainer');
+        summary.innerHTML = '<div class="summary-panel">'
+            + '<h3>🛡️ Yksityisyyssuoja-pisteet</h3>'
+            + '<div class="score-display">' + pct + '%</div>'
+            + '<p><strong>' + totalScore + '/' + maxScore + ' suojaa otettu käyttöön</strong></p>'
+            + '<p>' + msg + '</p>'
+            + '<div class="feedback-box">' + feedback + '</div>'
+            + '</div>';
     }
 
     updateSummary();
 
     function saveSettings() {
         updateSummary();
-        const toggles = document.querySelectorAll('.toggle-switch input');
-        let enabled = 0;
-        toggles.forEach(t => { if (t.checked) enabled++; });
-        const pct = Math.round(enabled / toggles.length * 100);
+        var toggles = document.querySelectorAll('.toggle-switch input');
+        var checks = document.querySelectorAll('.checklist-item input');
+        var enabled = 0;
+        toggles.forEach(function(t) { if (t.checked) enabled++; });
+        checks.forEach(function(c) { if (c.checked) enabled++; });
+        var total = toggles.length + checks.length;
+        var pct = Math.round(enabled / total * 100);
         alert('✅ Asetukset tallennettu! Turvallisuustaso: ' + pct + '%');
     }
     </script>
