@@ -1,0 +1,8 @@
+# TEHTY:
+
+
+# TODO:
+
+
+# ONGELMAT JA IDEAT:
+
