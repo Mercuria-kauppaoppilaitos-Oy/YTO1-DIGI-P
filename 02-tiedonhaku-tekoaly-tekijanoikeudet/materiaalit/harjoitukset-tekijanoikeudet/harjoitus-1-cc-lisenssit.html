@@ -3,60 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Harjoitus 1 – CC-lisenssit</title>
+    <title>Harjoitus 1 – CC-lisenssipeli</title>
     <link rel="stylesheet" href="styles.css">
     <style>
-        .cc-reference {
+        .match-layout {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 10px;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
             margin: 14px 0;
         }
-        .cc-card {
+        .match-col-label {
+            font-weight: 800;
+            font-size: 0.88em;
+            color: #0e7490;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        /* Use case cards */
+        .usecase-card {
             background: white;
-            border: 2px solid #0891b2;
-            border-radius: 8px;
-            padding: 12px;
-            font-size: 0.87em;
+            border: 2px solid #d1d5db;
+            border-radius: 10px;
+            padding: 12px 14px;
+            margin: 7px 0;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9em;
+            line-height: 1.5;
+            position: relative;
         }
-        .cc-badge {
-            font-size: 1.3em;
-            font-weight: 900;
-            letter-spacing: 1px;
-            color: white;
-            background: #0891b2;
-            display: inline-block;
-            padding: 3px 10px;
-            border-radius: 6px;
-            margin-bottom: 6px;
+        .usecase-card:hover:not(.matched):not(.locked) { border-color: #0891b2; background: #e0f7fa; transform: translateX(2px); }
+        .usecase-card.selected { border-color: #0891b2; background: #bfdbfe; box-shadow: 0 0 0 3px rgba(8,145,178,0.3); }
+        .usecase-card.matched { opacity: 0.55; background: #f0fdf4; border-color: #86efac; cursor: default; }
+        .usecase-card.matched .matched-stamp { display: block; }
+        .matched-stamp {
+            display: none;
+            position: absolute; top: 6px; right: 8px;
+            font-size: 0.75em; font-weight: 700;
+            background: #22c55e; color: white;
+            padding: 1px 7px; border-radius: 10px;
         }
-        .cc-name { font-weight: 700; margin-bottom: 4px; color: #0e7490; }
-        .cc-desc { color: #555; line-height: 1.4; }
-        .scenario-card {
-            background: #f9f9f9;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            padding: 16px;
-            margin: 14px 0;
-        }
-        .scenario-card.answered-correct  { border-color: #27ae60; background: #e8f5e9; }
-        .scenario-card.answered-incorrect { border-color: #e74c3c; background: #fadbd8; }
-        .scenario-number { font-size: 0.8em; color: #f59e0b; font-weight: 700; margin-bottom: 6px; }
-        .scenario-context {
+        .usecase-icon { font-size: 1.4em; float: left; margin-right: 8px; }
+        /* License cards */
+        .license-card {
             background: white;
-            border-left: 3px solid #f59e0b;
-            padding: 9px 13px;
-            border-radius: 4px;
-            font-size: 0.93em;
-            line-height: 1.6;
-            margin-bottom: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 13px 14px;
+            margin: 7px 0;
+            cursor: pointer;
+            transition: all 0.25s;
+            position: relative;
         }
-        .scenario-context .license-highlight {
-            background: #fef3c7;
-            padding: 1px 5px;
-            border-radius: 3px;
-            font-weight: 700;
-            color: #92400e;
+        .license-card:hover:not(.matched-lic):not(.locked) { border-color: #0891b2; transform: scale(1.02); }
+        .license-card.matched-lic { border-color: #22c55e; background: #f0fdf4; cursor: default; }
+        .license-card.wrong-flash { animation: wrongFlash 0.4s; }
+        @keyframes wrongFlash { 0%,100%{background:white} 25%,75%{background:#fee2e2} 50%{background:#fca5a5} }
+        .lic-name {
+            font-weight: 800; font-size: 0.92em; color: #1e293b; margin-bottom: 4px;
+            display: flex; align-items: center; gap: 6px;
+        }
+        .lic-icon { font-size: 1.5em; }
+        .lic-attrs { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 6px; }
+        .lic-attr {
+            font-size: 0.72em; font-weight: 700; padding: 2px 7px;
+            border-radius: 10px; white-space: nowrap;
+        }
+        .attr-ok  { background: #dcfce7; color: #14532d; }
+        .attr-no  { background: #fee2e2; color: #7f1d1d; }
+        .lic-desc { font-size: 0.82em; color: #64748b; line-height: 1.45; }
+        .hover-detail {
+            display: none;
+            background: #1e293b; color: white;
+            border-radius: 8px; padding: 10px 14px;
+            font-size: 0.82em; line-height: 1.5;
+            position: absolute; bottom: 110%; left: 0; right: 0;
+            z-index: 20; box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+        }
+        .license-card:hover .hover-detail { display: block; }
+        .license-card.matched-lic .hover-detail { display: none !important; }
+        /* Feedback toast */
+        .toast {
+            position: fixed; bottom: 20px; left: 50%;
+            transform: translateX(-50%) translateY(60px);
+            background: #1e293b; color: white; border-radius: 10px;
+            padding: 12px 22px; font-size: 0.92em; font-weight: 600;
+            transition: transform 0.3s ease; z-index: 9999;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3); pointer-events: none;
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); }
+        .score-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: #e0f7fa; border-radius: 8px; padding: 8px 14px;
+            font-weight: 700; color: #0e7490; margin-bottom: 14px; font-size: 0.92em;
+        }
+        @media (max-width: 600px) {
+            .match-layout { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -64,150 +110,164 @@
     <a class="back-link" href="index.html">← Takaisin harjoituksiin</a>
     <div class="exercise-container">
         <div class="exercise-header">
-            <h1>🏷️ Harjoitus 1 – CC-lisenssit käytännössä</h1>
-            <p>Lue tilanne ja valitse, saako teoksen käyttää kuvatulla tavalla – perustuen Creative Commons -lisenssiin.</p>
+            <h1>©️ Harjoitus 1 – CC-lisenssipeli</h1>
+            <p>Klikkaa ensin käyttötapaus, sitten sille sopiva CC-lisenssi. Vie hiiri lisenssin päälle saadaksesi lisätietoja!</p>
         </div>
 
         <div class="info-panel">
-            <h3>📌 Creative Commons -lisenssien pikaopas</h3>
-            <div class="cc-reference">
-                <div class="cc-card">
-                    <div class="cc-badge">CC BY</div>
-                    <div class="cc-name">Nimeä</div>
-                    <div class="cc-desc">Voit käyttää, muokata ja jakaa – kunhan mainitset tekijän.</div>
-                </div>
-                <div class="cc-card">
-                    <div class="cc-badge">CC BY-SA</div>
-                    <div class="cc-name">Nimeä-Jaa samoin</div>
-                    <div class="cc-desc">Kuten BY, mutta muokattu teos pitää jakaa samalla lisenssillä.</div>
-                </div>
-                <div class="cc-card">
-                    <div class="cc-badge">CC BY-NC</div>
-                    <div class="cc-name">Nimeä-EiKaupallinen</div>
-                    <div class="cc-desc">Ei kaupalliseen käyttöön. Muokkaus sallittu, tekijä mainittava.</div>
-                </div>
-                <div class="cc-card">
-                    <div class="cc-badge">CC BY-ND</div>
-                    <div class="cc-name">Nimeä-EiMuutoksia</div>
-                    <div class="cc-desc">Saa jakaa, mutta ei muokata. Tekijä mainittava.</div>
-                </div>
-                <div class="cc-card">
-                    <div class="cc-badge">CC BY-NC-ND</div>
-                    <div class="cc-name">Rajoittavin</div>
-                    <div class="cc-desc">Ei kaupalliseen käyttöön, ei muokata. Vain levitys tekijää mainiten.</div>
-                </div>
-                <div class="cc-card">
-                    <div class="cc-badge">CC0</div>
-                    <div class="cc-name">Public Domain</div>
-                    <div class="cc-desc">Vapautettu kaikista oikeuksista – käytä miten haluat.</div>
-                </div>
-            </div>
+            <h3>📜 Creative Commons -lisenssien perusteet</h3>
+            <p>CC-lisenssit kertovat etukäteen, miten teosta saa käyttää. BY = viittaus vaaditaan · SA = sama lisenssi · NC = ei kaupallinen · ND = ei muokkauksia. CC0 = kaikki oikeudet luovutettu.</p>
         </div>
 
         <div class="progress-container">
             <div class="progress-bar-track">
                 <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
             </div>
-            <div class="progress-text"><span id="progressCount">0</span> / 5 tilannetta arvioitu</div>
+            <div class="progress-text"><span id="progressCount">0</span> / 6 yhdistelmää löydetty</div>
         </div>
 
-        <div id="scenariosContainer"></div>
+        <div class="score-badge">
+            🎯 Oikeat yhdistelmät: <span id="scoreNum">0</span> / 6
+        </div>
+
+        <div class="task-box" style="background:#fff9c4;border-left:4px solid #f39c12;padding:10px 14px;border-radius:4px;font-size:0.93em;font-weight:600;color:#7c5c00;margin:10px 0">
+            1️⃣ Klikkaa käyttötapauskortti (vasen puoli) &nbsp; 2️⃣ Klikkaa sopiva CC-lisenssi (oikea puoli)
+        </div>
+
+        <div class="match-layout">
+            <div>
+                <div class="match-col-label">🎭 Käyttötapaukset</div>
+                <div id="usecasesCol"></div>
+            </div>
+            <div>
+                <div class="match-col-label">🏷️ CC-lisenssit <small style="opacity:0.7">(vie hiiri → lisätiedot)</small></div>
+                <div id="licensesCol"></div>
+            </div>
+        </div>
+
         <div id="summaryContainer"></div>
     </div>
 
+    <div class="toast" id="toast"></div>
+
     <script>
-    const scenarios = [
-        {
-            context: 'Löydät Unsplashista kuvan, jonka lisenssi on <span class="license-highlight">CC0</span>. Haluat käyttää kuvaa koulun myymälässä myytävässä tuotteessa (kaupallinen käyttö) muokkaamatta kuvaa.',
-            question: 'Saatko käyttää kuvaa?',
-            correct: 'yes',
-            feedback: '✅ Kyllä! CC0 tarkoittaa, että tekijä on luopunut kaikista oikeuksistaan. Voit käyttää teosta mihin tahansa tarkoitukseen – kaupalliseen tai ei-kaupalliseen – muokaten tai muokkaamatta, mainiten tekijän tai mainitsematta. Parasta on kuitenkin mainita lähde hyvän tavan mukaisesti.'
-        },
-        {
-            context: 'Olet tekemässä kouluesitystä ja löydät Wikimedia Commonsista valokuvan, jonka lisenssi on <span class="license-highlight">CC BY</span>. Haluat käyttää kuvaa esityksessäsi oppitunnilla. Et mainitse kuvaajaa.',
-            question: 'Saatko käyttää kuvaa näin?',
-            correct: 'no',
-            feedback: '❌ Et – ainakaan ilman tekijän mainitsemista. CC BY -lisenssi vaatii aina, että mainitset alkuperäisen tekijän. Voit muuten käyttää kuvaa vapaasti, myös muokata sitä. Lisää kuvaajan nimi ja lähde esityksen kuvaan tai lähdeluetteloon.'
-        },
-        {
-            context: 'Löydät blogista artikkelin, joka on lisensoitu <span class="license-highlight">CC BY-NC</span>. Haluat muokata artikkelia ja julkaista sen omassa ilmaisessa oppimisjulkaisussasi (ei kaupallinen). Mainitset alkuperäisen kirjoittajan.',
-            question: 'Saatko muokata ja julkaista artikkelin?',
-            correct: 'yes',
-            feedback: '✅ Kyllä! CC BY-NC sallii muokkauksen ja uudelleenjakamisen, kun käyttö on ei-kaupallista ja tekijä on mainittu. Sinun ilmaisjulkaisusi täyttää molemmat ehdot.'
-        },
-        {
-            context: 'Olet suunnittelemassa koulutusmateriaalia. Löydät kuvan, jonka lisenssi on <span class="license-highlight">CC BY-ND</span>. Haluat rajata kuvan tiiviimmäksi (crop) ja lisätä siihen tekstin esitystäsi varten.',
-            question: 'Saatko muokata kuvaa näin?',
-            correct: 'no',
-            feedback: '❌ Et. CC BY-ND (ND = NoDerivatives / Ei muutoksia) kieltää kaikki muutokset teokseen – myös rajaamisen ja tekstin lisäämisen. Voit jakaa kuvan alkuperäisessä muodossaan tekijä mainiten, mutta et muokata sitä.'
-        },
-        {
-            context: 'Löydät oppimateriaalin, jonka lisenssi on <span class="license-highlight">CC BY-SA</span>. Muokkaat sitä omaan versioon. Julkaiset muokatun materiaalin <em>CC BY</em>-lisenssillä (ei SA).',
-            question: 'Onko julkaiseminen sallittua?',
-            correct: 'no',
-            feedback: '❌ Ei. CC BY-SA (SA = ShareAlike / Jaa samoin) vaatii, että muokattu versio julkaistaan <strong>samalla lisenssillä</strong> kuin alkuperäinen. Sinun pitää siis käyttää CC BY-SA -lisenssiä, ei pelkkää CC BY:tä. Tämä varmistaa, että avoimuus säilyy ketjussa.'
-        }
+    const usecases = [
+        { id: 'u0', icon: '📸', text: 'Haluan käyttää valokuvaa blogiini ilmaiseksi — voin mainita kuvaajan, mutten voi maksaa', correctLic: 'by' },
+        { id: 'u1', icon: '🎵', text: 'Haluan käyttää musiikkia kaupallisessa videossa — valmiina maksamaan lisenssimaksun', correctLic: 'by' },
+        { id: 'u2', icon: '📚', text: 'Haluan jakaa oppimateriaalia opiskelijoille ilmaiseksi, mutta estää kaupallisen käytön', correctLic: 'by-nc' },
+        { id: 'u3', icon: '🎨', text: 'Haluan muokata kuvaa ja julkaista sen — jakajan pitää käyttää samaa lisenssiä', correctLic: 'by-sa' },
+        { id: 'u4', icon: '📰', text: 'Haluan käyttää artikkelia sellaisenaan (ei muokkauksia) mutta jakaa vapaasti', correctLic: 'by-nd' },
+        { id: 'u5', icon: '🌍', text: 'Haluan käyttää kuvaa mihin tahansa — ei viittausvaatimuksia, täysin vapaa käyttö', correctLic: 'cc0' }
     ];
 
-    let completed = 0, score = 0;
-    const total = scenarios.length;
+    const licenses = [
+        { id: 'by',    icon: '©',  name: 'CC BY',       attrs: ['✅ Vapaa käyttö','✅ Kaupallinen','✅ Muokkaus','⚠️ Viittaus vaaditaan'],     desc: 'Vapain CC-lisenssi. Voit käyttää, muokata ja levittää — kunhan mainitset tekijän.',     detail: 'Esim: Flickr-kuva merkinnällä "CC BY". Vaaditaan: tekijä, lähde, linkki lisenssiin.' },
+        { id: 'by-nc', icon: '🚫', name: 'CC BY-NC',    attrs: ['✅ Vapaa käyttö','❌ Ei kaupallinen','✅ Muokkaus','⚠️ Viittaus vaaditaan'],  desc: 'Vapaa ei-kaupalliseen käyttöön. Sopii oppimateriaaleihin ja harrasteprojekteihin.',  detail: 'NC = Non-Commercial. Et saa myydä tai käyttää mainoksissa. Koulun oppitunneilla OK!' },
+        { id: 'by-sa', icon: '🔄', name: 'CC BY-SA',    attrs: ['✅ Vapaa käyttö','✅ Kaupallinen','✅ Muokkaus','⚠️ Sama lisenssi'],          desc: 'Ns. "copyleft" — muokattu teos pitää jakaa samalla lisenssillä.',                    detail: 'SA = Share-Alike. Käytetty esim. Wikipediassa. Hyvä avoimeen yhteistyöhön.' },
+        { id: 'by-nd', icon: '🔒', name: 'CC BY-ND',    attrs: ['✅ Vapaa käyttö','✅ Kaupallinen','❌ Ei muokkauksia','⚠️ Viittaus vaaditaan'], desc: 'Voit jakaa sellaisenaan, mutta et muokata. Alkuperäinen teos pysyy muuttumattomana.', detail: 'ND = No Derivatives. Esim. journalistinen kuva tai merkki, jota ei saa muuntaa.' },
+        { id: 'by-nc-sa', icon: '📖', name: 'CC BY-NC-SA', attrs: ['✅ Vapaa käyttö','❌ Ei kaupallinen','✅ Muokkaus','⚠️ Sama lisenssi'],    desc: 'Ei-kaupallinen + muokattu versio pitää jakaa samalla lisenssillä.',                  detail: 'Suosittu oppimateriaalijako. Voit muokata ja jakaa, mutta ei myyntiä.' },
+        { id: 'cc0',   icon: '0',  name: 'CC0',          attrs: ['✅ Täysin vapaa','✅ Kaupallinen','✅ Muokkaus','✅ Ei viittausta'],           desc: 'Tekijä luopuu kaikista oikeuksistaan. Julkinen omaisuus (public domain).',          detail: 'Esim. Unsplash-kuvat. Saat käyttää kaikkeen, myymiseen, muokkaukseen — täysin vapaasti.' }
+    ];
 
-    function initExercise() {
-        const container = document.getElementById('scenariosContainer');
-        scenarios.forEach((s, i) => container.appendChild(createCard(s, i)));
+    let selectedUsecase = null;
+    let matchedCount = 0;
+    let correctCount = 0;
+
+    function init() {
+        const uc = document.getElementById('usecasesCol');
+        const lc = document.getElementById('licensesCol');
+        usecases.forEach(u => {
+            const card = document.createElement('div');
+            card.className = 'usecase-card';
+            card.id = 'uc-' + u.id;
+            card.innerHTML = `<span class="usecase-icon">${u.icon}</span><span class="matched-stamp">✓ Yhdistetty</span>${u.text}`;
+            card.onclick = () => selectUsecase(u.id);
+            uc.appendChild(card);
+        });
+        // Shuffle licenses display
+        const shuffled = [...licenses].sort(() => Math.random() - 0.5);
+        shuffled.forEach(l => {
+            const card = document.createElement('div');
+            card.className = 'license-card';
+            card.id = 'lic-' + l.id;
+            const attrsHTML = l.attrs.map(a => `<span class="lic-attr ${a.startsWith('✅') ? 'attr-ok' : 'attr-no'}">${a}</span>`).join('');
+            card.innerHTML = `
+                <div class="lic-name"><span class="lic-icon">${l.icon}</span>${l.name}</div>
+                <div class="lic-attrs">${attrsHTML}</div>
+                <div class="lic-desc">${l.desc}</div>
+                <div class="hover-detail">💡 ${l.detail}</div>`;
+            card.onclick = () => selectLicense(l.id);
+            lc.appendChild(card);
+        });
     }
 
-    function createCard(s, idx) {
-        const card = document.createElement('div');
-        card.className = 'scenario-card';
-        card.id = 'cccard-' + idx;
-        card.innerHTML = `
-            <div class="scenario-number">Tilanne ${idx + 1}/${total}</div>
-            <div class="scenario-context">${s.context}</div>
-            <div class="scenario-question" style="font-weight:bold;margin-bottom:12px;">${s.question}</div>
-            <div style="display:flex;gap:10px;" id="ccbtns-${idx}">
-                <button style="flex:1;padding:10px;background:#27ae60;color:white;border:none;border-radius:6px;font-size:0.93em;font-weight:600;cursor:pointer;"
-                    onclick="answerCC(${idx},'yes')">✅ Kyllä, saan</button>
-                <button style="flex:1;padding:10px;background:#e74c3c;color:white;border:none;border-radius:6px;font-size:0.93em;font-weight:600;cursor:pointer;"
-                    onclick="answerCC(${idx},'no')">❌ En saa</button>
-            </div>
-            <div class="explanation" id="ccexp-${idx}"></div>
-        `;
-        return card;
-    }
-
-    function answerCC(idx, choice) {
-        const s = scenarios[idx];
-        const card = document.getElementById('cccard-' + idx);
-        document.getElementById('ccbtns-' + idx).querySelectorAll('button').forEach(b => b.disabled = true);
-        const correct = choice === s.correct;
-        if (correct) score++;
-        card.classList.add(correct ? 'answered-correct' : 'answered-incorrect');
-        const exp = document.getElementById('ccexp-' + idx);
-        exp.className = 'explanation show';
-        exp.innerHTML = s.feedback;
-        completed++;
-        updateProgress();
-        if (completed === total) setTimeout(showSummary, 600);
+    function selectUsecase(uid) {
+        const ucEl = document.getElementById('uc-' + uid);
+        if (ucEl.classList.contains('matched')) return;
+        document.querySelectorAll('.usecase-card').forEach(c => c.classList.remove('selected'));
+        selectedUsecase = uid;
+        ucEl.classList.add('selected');
+        showToast('Nyt klikkaa sopiva CC-lisenssi oikealta!', '🎯');
     }
 
     function updateProgress() {
-        document.getElementById('progressFill').style.width = Math.round(completed / total * 100) + '%';
-        document.getElementById('progressCount').textContent = completed;
+        document.getElementById('progressFill').style.width = Math.round(correctCount / 6 * 100) + '%';
+        document.getElementById('progressCount').textContent = correctCount;
+    }
+
+    let toastTimer;
+    function showToast(msg, icon) {
+        const t = document.getElementById('toast');
+        t.innerHTML = (icon ? icon + ' ' : '') + msg;
+        t.classList.add('show');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
     }
 
     function showSummary() {
-        const pct = Math.round(score / total * 100);
-        const msg = pct >= 80 ? '🎉 Erinomainen! CC-lisenssit ovat hallussa.' : pct >= 60 ? '👍 Hyvä suoritus! Jotkut lisenssiehdot vaativat vielä kertausta.' : '📚 Kertaa CC-lisenssityypit pikaoppaasta ja yritä uudelleen.';
         document.getElementById('summaryContainer').innerHTML = `<div class="summary-panel">
-            <h3>📊 Yhteenveto</h3>
-            <p><strong>Pisteet: ${score}/${total}</strong> (${pct}%)</p>
-            <p>${msg}</p>
-            <button class="btn btn-primary" onclick="location.reload()" style="margin-top:14px;padding:10px 22px;">🔄 Kokeile uudelleen</button>
+            <h3>🎉 Kaikki yhdistelmät löydetty!</h3>
+            <p><strong>Pisteet: ${correctCount}/6</strong></p>
+            <p>Opit, miten Creative Commons -lisenssit toimivat käytännössä. Seuraavan kerran kun löydät kuvan tai musiikin netistä, tarkista aina lisenssi!</p>
+            <div style="background:white;border-radius:8px;padding:14px;margin:12px 0;text-align:left;font-size:0.9em">
+                <strong>💡 Pikaohjeet muistiin:</strong>
+                <p>🔍 Etsi ilmaisia kuvia: Unsplash (CC0), Flickr (eri lisenssejä), Wikimedia Commons</p>
+                <p>🎵 Musiikkia: ccMixter, Free Music Archive (tarkista lisenssi!)</p>
+                <p>📄 Aina tarkista: BY-vaatimus = mainitse tekijä, NC = ei kaupallinen, SA = sama lisenssi, ND = ei muokkauksia</p>
+            </div>
+            <button class="btn btn-primary" onclick="location.reload()" style="margin-top:8px;padding:10px 22px;">🔄 Kokeile uudelleen</button>
         </div>`;
     }
 
-    initExercise();
+    window.selectLicense = function(licId) {
+        if (!selectedUsecase) { showToast('Valitse ensin käyttötapaus vasemmalta!', '👈'); return; }
+        const licEl = document.getElementById('lic-' + licId);
+        if (!licEl || licEl.classList.contains('matched-lic')) return;
+        const uc = usecases.find(u => u.id === selectedUsecase);
+        if (!uc) return;
+        const isCorrect = licId === uc.correctLic;
+        const ucEl = document.getElementById('uc-' + selectedUsecase);
+        if (isCorrect) {
+            correctCount++;
+            ucEl.classList.remove('selected');
+            ucEl.classList.add('matched', 'locked');
+            licEl.classList.add('matched-lic', 'locked');
+            const matchedLic = licenses.find(l => l.id === licId);
+            showToast(`✅ Täsmää! ${uc.icon} → ${matchedLic.name}`, '🎉');
+            document.getElementById('scoreNum').textContent = correctCount;
+            updateProgress();
+            if (correctCount >= usecases.length) setTimeout(showSummary, 800);
+        } else {
+            licEl.classList.add('wrong-flash');
+            setTimeout(() => licEl.classList.remove('wrong-flash'), 450);
+            const correctLic = licenses.find(l => l.id === uc.correctLic);
+            showToast(`❌ Ei sovi — vinkki: sopii ${correctLic ? correctLic.name : '?'}`, '💡');
+        }
+        selectedUsecase = null;
+        document.querySelectorAll('.usecase-card').forEach(c => c.classList.remove('selected'));
+    };
+
+    init();
     </script>
 </body>
 </html>

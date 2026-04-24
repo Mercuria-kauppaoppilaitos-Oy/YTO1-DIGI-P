@@ -3,244 +3,424 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Harjoitus 3 – Lähdeviittaukset</title>
+    <title>Harjoitus 3 – Viittauksenrakentaja</title>
     <link rel="stylesheet" href="styles.css">
     <style>
-        .citation-card {
-            background: #f9f9f9;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            padding: 16px;
-            margin: 14px 0;
-        }
-        .citation-card.answered-correct  { border-color: #27ae60; background: #e8f5e9; }
-        .citation-card.answered-incorrect { border-color: #e74c3c; background: #fadbd8; }
-        .citation-number { font-size: 0.8em; color: #3b82f6; font-weight: 700; margin-bottom: 6px; }
-        .citation-type-tag {
-            display: inline-block;
-            background: #dbeafe;
-            color: #1e40af;
-            font-size: 0.78em;
-            font-weight: 700;
-            padding: 2px 8px;
+        /* Reference template */
+        .ref-template {
+            background: #f8fafc;
+            border: 2px solid #0891b2;
             border-radius: 12px;
-            margin-bottom: 8px;
+            padding: 18px 20px;
+            margin: 14px 0;
+            font-family: Georgia, 'Times New Roman', serif;
+            font-size: 0.95em;
+            line-height: 2.2;
         }
-        .citation-example {
-            background: white;
-            border: 1px solid #d1d5db;
-            border-radius: 4px;
-            padding: 12px 16px;
-            font-family: 'Georgia', serif;
-            font-size: 0.92em;
-            line-height: 1.7;
-            margin-bottom: 12px;
-            color: #374151;
-        }
-        .citation-question { font-weight: bold; margin-bottom: 12px; color: #1e3a5f; }
-        .answer-options { display: grid; grid-template-columns: 1fr; gap: 8px; }
-        .answer-option {
-            border: 2px solid #ddd;
-            border-radius: 6px;
-            padding: 10px 14px;
-            background: white;
+        .ref-slot {
+            display: inline-block;
+            min-width: 90px;
+            border-bottom: 2px dashed #0891b2;
+            background: #e0f7fa;
+            border-radius: 4px 4px 0 0;
+            padding: 2px 10px;
+            margin: 0 2px;
             cursor: pointer;
-            font-size: 0.91em;
-            text-align: left;
-            transition: all 0.25s;
-            line-height: 1.4;
+            transition: all 0.2s;
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 0.88em;
+            color: #0891b2;
+            font-style: normal;
+            vertical-align: middle;
+            position: relative;
         }
-        .answer-option:hover:not(:disabled) { border-color: #3b82f6; background: #eff6ff; }
-        .answer-option:disabled { cursor: not-allowed; }
-        .answer-option.correct   { background: #27ae60; color: white; border-color: #27ae60; }
-        .answer-option.incorrect { background: #e74c3c; color: white; border-color: #e74c3c; }
-        .correct-citation {
-            background: #e8f5e9;
-            border-left: 4px solid #27ae60;
-            padding: 10px 14px;
-            border-radius: 4px;
-            font-family: 'Georgia', serif;
-            font-size: 0.91em;
-            line-height: 1.7;
-            margin: 10px 0 4px;
+        .ref-slot:hover:not(.filled):not(.locked) { background: #bfdbfe; border-color: #1d4ed8; }
+        .ref-slot.selected-target { background: #fef9c3; border-color: #eab308; box-shadow: 0 0 0 3px rgba(234,179,8,0.4); }
+        .ref-slot.filled { background: #dcfce7; border-color: #22c55e; color: #14532d; font-weight: 700; cursor: default; border-style: solid; }
+        .ref-slot.wrong-fill { background: #fee2e2; border-color: #ef4444; animation: shake 0.3s; }
+        @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-4px)} 75%{transform:translateX(4px)} }
+        .ref-slot.locked { cursor: default; pointer-events: none; }
+        .slot-label { display: block; font-size: 0.72em; color: #94a3b8; font-family: sans-serif; margin-bottom: -6px; font-weight: 600; }
+        /* Element tiles */
+        .tiles-area {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 14px 0;
+            padding: 14px;
+            background: #f1f5f9;
+            border-radius: 10px;
+            min-height: 56px;
         }
+        .elem-tile {
+            background: white;
+            border: 2px solid #0891b2;
+            border-radius: 8px;
+            padding: 6px 14px;
+            font-size: 0.88em;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+            user-select: none;
+        }
+        .elem-tile:hover:not(.used) { background: #e0f7fa; transform: translateY(-2px); box-shadow: 0 3px 8px rgba(8,145,178,0.3); }
+        .elem-tile.selected-tile { background: #0891b2; color: white; border-color: #0e7490; transform: translateY(-2px); }
+        .elem-tile.used { opacity: 0.3; pointer-events: none; border-style: dashed; }
+        .elem-tile.distractor { border-color: #94a3b8; color: #64748b; }
+        /* Ref type nav */
+        .ref-type-nav { display: flex; gap: 6px; flex-wrap: wrap; margin: 10px 0; }
+        .ref-type-btn {
+            padding: 7px 14px; border-radius: 20px; border: 2px solid #d1d5db;
+            background: white; font-size: 0.85em; cursor: pointer; font-weight: 600;
+            transition: all 0.2s; color: #555;
+        }
+        .ref-type-btn.active { background: #0891b2; color: white; border-color: #0891b2; }
+        .ref-type-btn.done { background: #22c55e; color: white; border-color: #22c55e; }
+        /* Copy button */
+        .copy-ref-btn {
+            background: #22c55e; color: white; border: none;
+            border-radius: 8px; padding: 9px 20px; font-size: 0.88em;
+            font-weight: 700; cursor: pointer; transition: all 0.2s;
+            display: none; margin: 8px 0;
+        }
+        .copy-ref-btn.show { display: inline-block; animation: popIn 0.4s; }
+        @keyframes popIn { 0%{transform:scale(0.8);opacity:0} 80%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+        .check-ref-btn {
+            background: #0891b2; color: white; border: none;
+            border-radius: 8px; padding: 9px 20px; font-size: 0.88em;
+            font-weight: 700; cursor: pointer; transition: all 0.2s;
+        }
+        .check-ref-btn:hover { background: #0e7490; }
+        .instructions-box {
+            background: #fff9c4; border-left: 4px solid #f39c12;
+            padding: 10px 14px; border-radius: 4px;
+            font-size: 0.9em; font-weight: 600; color: #7c5c00; margin: 10px 0;
+        }
+        .ref-complete-bar {
+            background: #dcfce7; border: 2px solid #22c55e;
+            border-radius: 8px; padding: 10px 14px; font-size: 0.9em;
+            color: #14532d; font-weight: 700; display: none; margin: 8px 0;
+        }
+        .ref-complete-bar.show { display: block; animation: popIn 0.4s; }
     </style>
 </head>
 <body>
     <a class="back-link" href="index.html">← Takaisin harjoituksiin</a>
     <div class="exercise-container">
         <div class="exercise-header">
-            <h1>📎 Harjoitus 3 – Lähdeviittaukset</h1>
-            <p>Jokaisessa viittauksessa on jokin ongelma. Tunnista, mikä tieto puuttuu tai on virheellinen.</p>
+            <h1>📚 Harjoitus 3 – Viittauksenrakentaja</h1>
+            <p>Klikkaa ensin elementtipalikka, sitten oikea kohta viittauspohjassa. Rakenna oikea lähdeviittaus!</p>
         </div>
 
         <div class="info-panel">
-            <h3>📌 Hyvä lähdeviittaus sisältää</h3>
-            <ul>
-                <li><strong>Verkkosivusto:</strong> Tekijä tai organisaatio. Julkaisuvuosi. Artikkelin nimi. Sivuston nimi. URL. [Haettu pvm.]</li>
-                <li><strong>Kuva:</strong> Kuvaaja. Julkaisuvuosi. Kuvan nimi tai kuvaus. Lähde/kuvapankki. URL tai sijainti. Lisenssi (esim. CC BY).</li>
-                <li><strong>Video:</strong> Tekijä tai kanava. Julkaisupvm. Videon otsikko. Alusta (esim. YouTube). URL.</li>
-                <li><strong>Tekoäly:</strong> Tekoälytyökalun nimi ja versio. Käyttöpäivämäärä. Prompt tai kuvaus käyttötarkoituksesta. Palveluntarjoaja.</li>
-            </ul>
+            <h3>📖 Lähdeviittauksen osat</h3>
+            <p><strong>Tekijä</strong> (Sukunimi, E.) &nbsp;·&nbsp; <strong>Vuosi</strong> &nbsp;·&nbsp; <strong>Otsikko</strong> &nbsp;·&nbsp; <strong>Julkaisija/URL</strong> &nbsp;·&nbsp; <strong>Haettu</strong> &nbsp;·&nbsp; <strong>Lisenssi</strong></p>
         </div>
 
         <div class="progress-container">
             <div class="progress-bar-track">
                 <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
             </div>
-            <div class="progress-text"><span id="progressCount">0</span> / 5 viittausta tarkistettu</div>
+            <div class="progress-text"><span id="progressCount">0</span> / 4 viittaustyyppiä rakennettu</div>
         </div>
 
-        <div id="citationsContainer"></div>
+        <div class="ref-type-nav" id="refTypeNav"></div>
+
+        <div id="refContent"></div>
         <div id="summaryContainer"></div>
     </div>
 
     <script>
-    const citations = [
+    const refTypes = [
         {
-            type: 'Verkkosivusto',
-            example: 'Vero.fi. Opiskelijan verotus. https://vero.fi/henkiloasiakkaat/opiskelija',
-            question: 'Mikä tärkeä tieto puuttuu tästä verkkosivuviittauksesta?',
-            options: [
-                'Puuttuu: tekijän nimi tai organisaatio',
-                'Puuttuu: haettu/viitattu päivämäärä (esim. [Haettu 23.4.2026])',
-                'Puuttuu: artikkelin pituus sivuina',
-                'Ei puutu mitään – viittaus on täydellinen'
+            id: 'web',
+            label: '�� Verkkosivu',
+            template: '[AUTHOR], [YEAR]. [TITLE]. [PUBLISHER]. Saatavilla: [URL]. [FETCHED]. [LICENSE]',
+            slots: [
+                { id: 'AUTHOR',    label: 'Tekijä',        placeholder: 'Tekijä?' },
+                { id: 'YEAR',      label: 'Vuosi',         placeholder: 'Vuosi?' },
+                { id: 'TITLE',     label: 'Otsikko',       placeholder: 'Otsikko?' },
+                { id: 'PUBLISHER', label: 'Julkaisija',    placeholder: 'Julkaisija?' },
+                { id: 'URL',       label: 'URL-osoite',    placeholder: 'URL?' },
+                { id: 'FETCHED',   label: 'Haettu',        placeholder: 'Haettu?' },
+                { id: 'LICENSE',   label: 'Lisenssi',      placeholder: 'Lisenssi?' }
             ],
-            correct: 1,
-            correctCitation: 'Verohallinto. 2026. Opiskelijan verotus. Vero.fi. https://vero.fi/henkiloasiakkaat/opiskelija [Haettu 23.4.2026].',
-            explanation: '✅ Verkkosivuviittauksesta puuttuu hakupäivämäärä. Verkkosivujen sisältö voi muuttua, joten on tärkeää ilmoittaa, milloin olet hakenut tiedon. Lisäksi organisaatio (Verohallinto) ja julkaisuvuosi kannattaa mainita.'
+            tiles: [
+                { id: 't0', text: 'Opetushallitus',      slot: 'PUBLISHER' },
+                { id: 't1', text: '2026',                slot: 'YEAR' },
+                { id: 't2', text: 'Digitaidot opiskelussa', slot: 'TITLE' },
+                { id: 't3', text: 'opetushallitus.fi/digitaidot', slot: 'URL' },
+                { id: 't4', text: 'Haettu 20.4.2026',   slot: 'FETCHED' },
+                { id: 't5', text: 'CC BY 4.0',          slot: 'LICENSE' },
+                { id: 't6', text: 'Mäkinen, A.',        slot: 'AUTHOR' },
+                { id: 't7', text: '©️ Kaikki oikeudet pidätetään', slot: null, distractor: true },
+                { id: 't8', text: 'Ladattu 2025',       slot: null, distractor: true }
+            ]
         },
         {
-            type: 'Kuva',
-            example: 'Kuva: laptop.jpg (haettu Unsplashista)',
-            question: 'Mikä on suurin ongelma tässä kuvaviittauksessa?',
-            options: [
-                'Tiedostonimen mainitseminen on turhaa',
-                'Puuttuu: kuvaaja, julkaisuvuosi, lisenssi ja tarkka URL',
-                'Kuvia ei tarvitse viitata, koska Unsplash on ilmainen',
-                'Puuttuu: kuvan resoluutio'
+            id: 'image',
+            label: '🖼️ Kuva',
+            template: '[AUTHOR], [YEAR]. [TITLE] [image]. Saatavilla: [URL]. [FETCHED]. [LICENSE]',
+            slots: [
+                { id: 'AUTHOR',    label: 'Kuvaaja',       placeholder: 'Kuvaaja?' },
+                { id: 'YEAR',      label: 'Vuosi',         placeholder: 'Vuosi?' },
+                { id: 'TITLE',     label: 'Kuvan nimi',    placeholder: 'Nimi?' },
+                { id: 'URL',       label: 'URL-osoite',    placeholder: 'URL?' },
+                { id: 'FETCHED',   label: 'Haettu',        placeholder: 'Haettu?' },
+                { id: 'LICENSE',   label: 'Lisenssi',      placeholder: 'Lisenssi?' }
             ],
-            correct: 1,
-            correctCitation: 'Doe, J. 2024. Young woman working on laptop. Unsplash. https://unsplash.com/photos/abc123 CC0.',
-            explanation: '✅ Kuvasta puuttuu oleelliset tiedot: kuvaajan nimi, julkaisuvuosi, tarkka URL ja lisenssi. Vaikka Unsplash-kuvat ovat vapaaseen käyttöön, hyvä tapa on silti mainita kuvaaja ja lähde. Lisenssin mainitseminen osoittaa, että olet tarkistanut käyttöoikeudet.'
+            tiles: [
+                { id: 'i0', text: 'Virtanen, P.',       slot: 'AUTHOR' },
+                { id: 'i1', text: '2025',               slot: 'YEAR' },
+                { id: 'i2', text: 'Opiskelija luokassa', slot: 'TITLE' },
+                { id: 'i3', text: 'flickr.com/photos/virtanen/123', slot: 'URL' },
+                { id: 'i4', text: 'Haettu 15.4.2026',  slot: 'FETCHED' },
+                { id: 'i5', text: 'CC BY-NC 2.0',      slot: 'LICENSE' },
+                { id: 'i6', text: 'Valokuva 2024',     slot: null, distractor: true },
+                { id: 'i7', text: 'Google Images',     slot: null, distractor: true }
+            ]
         },
         {
-            type: 'YouTube-video',
-            example: 'Tekoäly-video, YouTube 2025.',
-            question: 'Mikä tieto on selvästi puutteellinen tässä videoviittauksessa?',
-            options: [
-                'Videon kesto puuttuu',
-                'Videon otsikko, kanavan nimi, tarkka julkaisupäivä ja URL puuttuvat',
-                'Viittauksen pitäisi olla englanninkielinen',
-                'Puuttuu: katsojakommentit'
+            id: 'video',
+            label: '🎬 Video',
+            template: '[AUTHOR], [YEAR]. [TITLE] [video]. [PUBLISHER]. Saatavilla: [URL]. [FETCHED].',
+            slots: [
+                { id: 'AUTHOR',    label: 'Tekijä/Kanava', placeholder: 'Tekijä?' },
+                { id: 'YEAR',      label: 'Vuosi',          placeholder: 'Vuosi?' },
+                { id: 'TITLE',     label: 'Videon nimi',    placeholder: 'Otsikko?' },
+                { id: 'PUBLISHER', label: 'Alusta',         placeholder: 'Alusta?' },
+                { id: 'URL',       label: 'URL-osoite',     placeholder: 'URL?' },
+                { id: 'FETCHED',   label: 'Haettu',         placeholder: 'Haettu?' }
             ],
-            correct: 1,
-            correctCitation: 'Yle Kioski. 3.2.2025. Tekoäly – Mikä se oikeasti on? YouTube. https://www.youtube.com/watch?v=abc123',
-            explanation: '✅ Videoviittaus on hyvin puutteellinen. Siitä puuttuu: kanavan tai tekijän nimi, videon tarkka otsikko, tarkka julkaisupäivä ja URL. Ilman näitä tietoja viittauksesta ei voi löytää alkuperäistä lähdettä.'
+            tiles: [
+                { id: 'v0', text: 'Korhonen, J.',       slot: 'AUTHOR' },
+                { id: 'v1', text: '2026',               slot: 'YEAR' },
+                { id: 'v2', text: 'Tekoäly oppimisen apuna', slot: 'TITLE' },
+                { id: 'v3', text: 'YouTube',            slot: 'PUBLISHER' },
+                { id: 'v4', text: 'youtu.be/abc123xyz', slot: 'URL' },
+                { id: 'v5', text: 'Haettu 18.4.2026',  slot: 'FETCHED' },
+                { id: 'v6', text: 'Katsottu 2026',     slot: null, distractor: true },
+                { id: 'v7', text: 'Instagram',         slot: null, distractor: true }
+            ]
         },
         {
-            type: 'Tekoäly',
-            example: 'Tietoa haettiin tekoälyllä.',
-            question: 'Mikä on ongelma tässä tekoälyviittauksessa?',
-            options: [
-                'Tekoälyn käyttöä ei tarvitse viitata lainkaan',
-                'Maininta on liian epämääräinen – puuttuu: työkalu, versio, päivämäärä ja mitä käytettiin',
-                'Pitäisi mainita tekoälyn koulutusdata',
-                'Tekoälyä ei saa käyttää lähdemateriaalina missään tilanteessa'
+            id: 'ai',
+            label: '🤖 Tekoäly',
+            template: 'OpenAI, [YEAR]. [TITLE] [AI-generated content]. Saatavilla: [URL]. Prompt: [PROMPT]. [FETCHED]. [NOTE].',
+            slots: [
+                { id: 'YEAR',   label: 'Vuosi',        placeholder: 'Vuosi?' },
+                { id: 'TITLE',  label: 'Palvelun nimi', placeholder: 'Nimi?' },
+                { id: 'URL',    label: 'URL-osoite',   placeholder: 'URL?' },
+                { id: 'PROMPT', label: 'Käytetty pyyntö', placeholder: 'Prompt?' },
+                { id: 'FETCHED',label: 'Haettu',       placeholder: 'Haettu?' },
+                { id: 'NOTE',   label: 'Huomio',       placeholder: 'Huomio?' }
             ],
-            correct: 1,
-            correctCitation: 'OpenAI. ChatGPT-4o. Käytetty 23.4.2026. Prompt: "Tiivistä Creative Commons -lisenssityypit lyhyesti." https://chat.openai.com',
-            explanation: '✅ Tekoälyviittauksen pitää olla täsmällinen: mainitse työkalu ja versio (esim. ChatGPT-4o), milloin käytit (päivämäärä), mihin tarkoitukseen ja minkä palveluntarjoajan kautta. Näin lukija tietää, miten tietoa on haettu ja voi arvioida sen luotettavuuden.'
-        },
-        {
-            type: 'Verkkosivusto',
-            example: 'Mäkinen, Anna. 2026. Tekoäly kouluissa kasvaa. Yle Uutiset.',
-            question: 'Mikä tärkeä tieto puuttuu tästä uutisviittauksesta?',
-            options: [
-                'Tekijän sukupuoli pitäisi mainita',
-                'Puuttuu: artikkelin URL ja haettu päivämäärä',
-                'Puuttuu: artikkelin kommenttien määrä',
-                'Viittaus on täydellinen'
-            ],
-            correct: 1,
-            correctCitation: 'Mäkinen, A. 5.1.2026. Tekoäly kouluissa kasvaa – opettajat kertovat muutoksesta. Yle Uutiset. https://yle.fi/uutiset/3-14823671 [Haettu 23.4.2026].',
-            explanation: '✅ Viittauksesta puuttuu artikkelin tarkka URL ja haettu päivämäärä. Lisäksi artikkelin koko nimi on hyvä mainita. URL mahdollistaa alkuperäisen artikkelin löytämisen, ja hakupäivämäärä kertoo, milloin tieto on ollut saatavilla.'
+            tiles: [
+                { id: 'a0', text: '2026',                   slot: 'YEAR' },
+                { id: 'a1', text: 'ChatGPT (GPT-4o)',       slot: 'TITLE' },
+                { id: 'a2', text: 'chat.openai.com',        slot: 'URL' },
+                { id: 'a3', text: '"Selitä tekoälyn toiminta lyhyesti"', slot: 'PROMPT' },
+                { id: 'a4', text: 'Haettu 22.4.2026',      slot: 'FETCHED' },
+                { id: 'a5', text: 'Tekoäly voi sisältää virheitä', slot: 'NOTE' },
+                { id: 'a6', text: 'Microsoft Bing',         slot: null, distractor: true },
+                { id: 'a7', text: 'Haku suoritettu',        slot: null, distractor: true }
+            ]
         }
     ];
 
-    let completed = 0, score = 0;
-    const total = citations.length;
+    let currentRef = 0;
+    let completedRefs = 0;
+    let selectedTile = null;
 
-    function initExercise() {
-        const container = document.getElementById('citationsContainer');
-        citations.forEach((c, i) => container.appendChild(createCard(c, i)));
+    function init() {
+        renderNav();
+        renderRefType();
     }
 
-    function createCard(c, idx) {
-        const card = document.createElement('div');
-        card.className = 'citation-card';
-        card.id = 'ccard-' + idx;
+    function renderNav() {
+        const nav = document.getElementById('refTypeNav');
+        nav.innerHTML = refTypes.map((r, i) => {
+            let cls = 'ref-type-btn';
+            if (i === currentRef) cls += ' active';
+            if (i < completedRefs) cls += ' done';
+            return `<button class="${cls}" onclick="goToRef(${i})">${r.label}</button>`;
+        }).join('');
+    }
 
-        card.innerHTML = `
-            <div class="citation-number">Viittaus ${idx + 1}/${total}</div>
-            <span class="citation-type-tag">📁 ${c.type}</span>
-            <p style="font-size:0.88em;color:#555;margin:0 0 6px;">Opiskelijan kirjoittama viittaus:</p>
-            <div class="citation-example">${c.example}</div>
-            <div class="citation-question">${c.question}</div>
-            <div class="answer-options" id="copts-${idx}"></div>
-            <div class="explanation" id="cexp-${idx}"></div>
+    window.goToRef = function(i) {
+        if (i > completedRefs) return; // Can't jump ahead
+        currentRef = i;
+        selectedTile = null;
+        renderNav();
+        renderRefType();
+    };
+
+    function renderRefType() {
+        const ref = refTypes[currentRef];
+        const container = document.getElementById('refContent');
+        const done = currentRef < completedRefs;
+
+        // Build template HTML with slots
+        let templateHTML = ref.template;
+        ref.slots.forEach(slot => {
+            const isCompleted = done;
+            const slotHtml = `<span class="ref-slot ${isCompleted ? 'filled locked' : ''}" id="slot-${slot.id}" data-slot="${slot.id}" onclick="clickSlot('${slot.id}')">${isCompleted ? slot.id : slot.placeholder}</span>`;
+            templateHTML = templateHTML.replace('[' + slot.id + ']', slotHtml);
+        });
+
+        // Build tiles
+        const tilesHtml = ref.tiles.map(t =>
+            `<span class="elem-tile${t.distractor ? ' distractor' : ''}" id="tile-${t.id}" onclick="clickTile('${t.id}')">${t.text}</span>`
+        ).join('');
+
+        container.innerHTML = `
+            <div class="instructions-box">
+                📋 Viittaustyyppi: <strong>${ref.label}</strong> — Klikkaa ensin palikka alta, sitten paikka viittauspohjasta!
+            </div>
+            <div class="ref-template" id="refTemplate">${templateHTML}</div>
+            <div class="tiles-area" id="tilesArea">${tilesHtml}</div>
+            <div class="ref-complete-bar" id="refCompletBar"></div>
+            <button class="check-ref-btn" id="checkRefBtn" onclick="checkRef()">✓ Tarkista viittaus</button>
+            <button class="copy-ref-btn" id="copyRefBtn" onclick="copyRef()">📋 Kopioi viittaus</button>
+            ${currentRef < refTypes.length - 1 && done ? `<button class="btn btn-primary" onclick="goToRef(${currentRef+1})" style="margin-top:10px;margin-left:8px">Seuraava →</button>` : ''}
         `;
 
-        const opts = card.querySelector('#copts-' + idx);
-        c.options.forEach((opt, oi) => {
-            const btn = document.createElement('button');
-            btn.className = 'answer-option';
-            btn.innerHTML = `<span style="color:#3b82f6;font-weight:700;margin-right:6px;">${String.fromCharCode(65+oi)}.</span> ${opt}`;
-            btn.onclick = () => answerCitation(idx, oi, card, opts);
-            opts.appendChild(btn);
-        });
-
-        return card;
+        if (done) {
+            // Prefill all slots with correct values
+            ref.slots.forEach(slot => {
+                const tile = ref.tiles.find(t => t.slot === slot.id);
+                const el = document.getElementById('slot-' + slot.id);
+                if (el && tile) { el.textContent = tile.text; el.classList.add('filled', 'locked'); }
+            });
+            document.getElementById('checkRefBtn').style.display = 'none';
+            document.getElementById('copyRefBtn').classList.add('show');
+            document.getElementById('refCompletBar').className = 'ref-complete-bar show';
+            document.getElementById('refCompletBar').innerHTML = '✅ Viittaus rakennettu oikein!';
+        }
     }
 
-    function answerCitation(idx, choice, card, opts) {
-        const c = citations[idx];
-        opts.querySelectorAll('.answer-option').forEach((b, i) => {
-            b.disabled = true;
-            if (i === c.correct) b.classList.add('correct');
-            if (i === choice && choice !== c.correct) b.classList.add('incorrect');
-        });
-        const correct = choice === c.correct;
-        if (correct) score++;
-        card.classList.add(correct ? 'answered-correct' : 'answered-incorrect');
+    const filledSlots = {};
 
-        const exp = document.getElementById('cexp-' + idx);
-        exp.className = 'explanation show';
-        exp.innerHTML = `${c.explanation}<br><br><strong>✅ Esimerkki oikeasta viittauksesta:</strong><div class="correct-citation">${c.correctCitation}</div>`;
+    window.clickTile = function(tileId) {
+        const ref = refTypes[currentRef];
+        const tile = ref.tiles.find(t => t.id === tileId);
+        if (!tile) return;
+        const el = document.getElementById('tile-' + tileId);
+        if (el.classList.contains('used')) return;
 
-        completed++;
+        document.querySelectorAll('.elem-tile').forEach(t => t.classList.remove('selected-tile'));
+        if (selectedTile === tileId) { selectedTile = null; return; }
+        selectedTile = tileId;
+        el.classList.add('selected-tile');
+        document.querySelectorAll('.ref-slot:not(.filled)').forEach(s => s.classList.remove('selected-target'));
+    };
+
+    window.clickSlot = function(slotId) {
+        if (!selectedTile) {
+            document.querySelectorAll('.ref-slot:not(.filled)').forEach(s => s.classList.toggle('selected-target', s.dataset.slot === slotId));
+            return;
+        }
+        const ref = refTypes[currentRef];
+        const tile = ref.tiles.find(t => t.id === selectedTile);
+        if (!tile) return;
+        const slotEl = document.getElementById('slot-' + slotId);
+        if (!slotEl || slotEl.classList.contains('filled')) return;
+
+        if (!filledSlots[currentRef]) filledSlots[currentRef] = {};
+
+        if (tile.slot === slotId) {
+            // Correct
+            slotEl.textContent = tile.text;
+            slotEl.classList.add('filled');
+            slotEl.classList.remove('selected-target');
+            const tileEl = document.getElementById('tile-' + selectedTile);
+            if (tileEl) tileEl.classList.add('used');
+            filledSlots[currentRef][slotId] = tile.id;
+            selectedTile = null;
+            document.querySelectorAll('.elem-tile').forEach(t => t.classList.remove('selected-tile'));
+            checkAllFilled();
+        } else {
+            slotEl.classList.add('wrong-fill');
+            setTimeout(() => { slotEl.classList.remove('wrong-fill'); }, 400);
+            const tileEl = document.getElementById('tile-' + selectedTile);
+            if (tileEl) tileEl.classList.remove('selected-tile');
+            selectedTile = null;
+        }
+    };
+
+    function checkAllFilled() {
+        const ref = refTypes[currentRef];
+        const allFilled = ref.slots.every(s => document.getElementById('slot-' + s.id)?.classList.contains('filled'));
+        if (allFilled) {
+            document.getElementById('refCompletBar').className = 'ref-complete-bar show';
+            document.getElementById('refCompletBar').innerHTML = '🎉 Kaikki kentät täytetty oikein! Tarkista viittaus.';
+        }
+    }
+
+    window.checkRef = function() {
+        const ref = refTypes[currentRef];
+        const allFilled = ref.slots.every(s => document.getElementById('slot-' + s.id)?.classList.contains('filled'));
+        if (!allFilled) {
+            document.getElementById('refCompletBar').className = 'ref-complete-bar show';
+            document.getElementById('refCompletBar').style.background = '#fef9c3';
+            document.getElementById('refCompletBar').style.borderColor = '#eab308';
+            document.getElementById('refCompletBar').innerHTML = '⚠️ Kaikkia kenttiä ei ole täytetty vielä!';
+            return;
+        }
+        completedRefs = Math.max(completedRefs, currentRef + 1);
+        document.getElementById('checkRefBtn').style.display = 'none';
+        document.getElementById('copyRefBtn').classList.add('show');
+        document.getElementById('refCompletBar').className = 'ref-complete-bar show';
+        document.getElementById('refCompletBar').innerHTML = '✅ Erinomaista! Viittaus on oikein rakennettu.';
         updateProgress();
-        if (completed === total) setTimeout(showSummary, 600);
-    }
+        renderNav();
+        if (completedRefs >= refTypes.length) {
+            setTimeout(showSummary, 500);
+        } else {
+            const nextBtn = document.createElement('button');
+            nextBtn.className = 'btn btn-primary';
+            nextBtn.style.marginTop = '10px';
+            nextBtn.textContent = 'Seuraava viittaustyyppi →';
+            nextBtn.onclick = () => goToRef(currentRef + 1);
+            document.getElementById('refContent').appendChild(nextBtn);
+        }
+    };
+
+    window.copyRef = function() {
+        const ref = refTypes[currentRef];
+        let text = ref.template;
+        ref.slots.forEach(s => {
+            const el = document.getElementById('slot-' + s.id);
+            text = text.replace('[' + s.id + ']', el ? el.textContent : s.id);
+        });
+        navigator.clipboard.writeText(text).catch(() => {});
+        const btn = document.getElementById('copyRefBtn');
+        btn.textContent = '✅ Kopioitu!';
+        setTimeout(() => { btn.textContent = '📋 Kopioi viittaus'; }, 2000);
+    };
 
     function updateProgress() {
-        document.getElementById('progressFill').style.width = Math.round(completed / total * 100) + '%';
-        document.getElementById('progressCount').textContent = completed;
+        document.getElementById('progressFill').style.width = Math.round(completedRefs / refTypes.length * 100) + '%';
+        document.getElementById('progressCount').textContent = completedRefs;
     }
 
     function showSummary() {
-        const pct = Math.round(score / total * 100);
-        const msg = pct >= 80 ? '🎉 Erinomainen! Lähdeviittauskäytännöt ovat selkiytyneet.' : pct >= 60 ? '👍 Hyvä suoritus! Kiinnitä erityistä huomiota tekoäly- ja videoviittauksiin.' : '📚 Tutustu viittausohjeisiin uudelleen – oikea viittaaminen on tärkeä taito!';
         document.getElementById('summaryContainer').innerHTML = `<div class="summary-panel">
-            <h3>📊 Yhteenveto</h3>
-            <p><strong>Pisteet: ${score}/${total}</strong> (${pct}%)</p>
-            <p>${msg}</p>
-            <button class="btn btn-primary" onclick="location.reload()" style="margin-top:14px;padding:10px 22px;">🔄 Kokeile uudelleen</button>
+            <h3>📚 Kaikki viittaustyypit rakennettu!</h3>
+            <p><strong>Rakennettu: ${refTypes.length}/${refTypes.length} viittausta</strong></p>
+            <p>Osaat nyt lähdeviittauksen perusrakenteen eri lähdetyypeille — verkkosivu, kuva, video ja tekoäly!</p>
+            <div style="background:white;border-radius:8px;padding:14px;margin:12px 0;text-align:left;font-size:0.9em">
+                <strong>💡 Muista nämä perussäännöt:</strong>
+                <p>📌 Verkkosivuista: tekijä, vuosi, otsikko, URL, haettu-päivämäärä</p>
+                <p>🖼️ Kuvista: kuvaaja, vuosi, kuvan nimi, URL, lisenssi</p>
+                <p>🎬 Videoista: tekijä/kanava, vuosi, otsikko, alusta, URL</p>
+                <p>🤖 Tekoälystä: palvelu, vuosi, prompt, haettu — <em>ja maininta, että sisältö on tekoälyn tuottamaa!</em></p>
+            </div>
+            <button class="btn btn-primary" onclick="location.reload()" style="margin-top:8px;padding:10px 22px;">🔄 Kokeile uudelleen</button>
         </div>`;
     }
 
-    initExercise();
+    init();
     </script>
 </body>
 </html>

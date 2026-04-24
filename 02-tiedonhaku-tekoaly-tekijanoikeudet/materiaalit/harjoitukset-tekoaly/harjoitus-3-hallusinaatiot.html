@@ -3,266 +3,372 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Harjoitus 3 – Hallusinaatioiden tunnistaminen</title>
+    <title>Harjoitus 3 – Hallusinaatioiden metsästys</title>
     <link rel="stylesheet" href="styles.css">
     <style>
-        .ai-text-block {
-            background: #f9f9f9;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            padding: 16px;
-            margin: 14px 0;
+        .game-arena {
+            background: #1e293b;
+            border-radius: 14px;
+            padding: 20px 22px;
+            color: white;
+            position: relative;
+            overflow: hidden;
         }
-        .ai-text-block.has-error { border-color: #e74c3c; }
-        .ai-text-block.no-error  { border-color: #27ae60; }
-        .ai-text-block h3 { margin: 0 0 10px; font-size: 1em; color: #0e7490; }
-        .ai-text-content {
-            font-size: 0.95em;
-            line-height: 1.7;
-            background: white;
-            padding: 12px 16px;
-            border-radius: 4px;
-            border-left: 3px solid #0891b2;
-            margin-bottom: 14px;
+        .game-arena::before {
+            content: '';
+            position: absolute; top: 0; left: 0; right: 0; height: 4px;
+            background: linear-gradient(90deg, #0891b2, #06b6d4, #22d3ee);
+            animation: scanline 2s linear infinite;
         }
-        .claim-item {
-            background: white;
-            border: 2px solid #ddd;
-            border-radius: 6px;
-            padding: 10px 14px;
-            margin: 7px 0;
-            cursor: pointer;
-            font-size: 0.92em;
-            transition: all 0.25s;
-            display: flex;
-            align-items: flex-start;
-            gap: 10px;
-        }
-        .claim-item:hover { border-color: #0891b2; background: #e0f7fa; }
-        .claim-item.selected-error { border-color: #e74c3c; background: #fadbd8; }
-        .claim-item.selected-correct { border-color: #27ae60; background: #e8f5e9; }
-        .claim-checkbox {
-            width: 20px;
-            height: 20px;
-            border: 2px solid #ccc;
-            border-radius: 4px;
-            flex-shrink: 0;
+        @keyframes scanline { 0%{opacity:1} 50%{opacity:0.6} 100%{opacity:1} }
+        .ai-typing-label {
+            font-size: 0.78em;
+            color: #06b6d4;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
             display: flex;
             align-items: center;
-            justify-content: center;
-            font-size: 0.9em;
-            margin-top: 1px;
+            gap: 8px;
         }
-        .check-btn {
-            background: #0891b2;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            padding: 9px 20px;
-            font-size: 0.92em;
-            cursor: pointer;
-            margin-top: 8px;
+        .ai-dot { width: 8px; height: 8px; border-radius: 50%; background: #06b6d4; animation: blink 0.7s steps(1) infinite; }
+        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+        .ai-text-output {
+            font-size: 1.02em;
+            line-height: 1.75;
+            min-height: 100px;
+            color: #e2e8f0;
+            position: relative;
+        }
+        .word-span { display: inline; }
+        .word-span.hallucination-revealed { background: #ef4444; color: white; padding: 0 3px; border-radius: 3px; animation: flashRed 0.4s; }
+        .word-span.correct-text { color: #86efac; }
+        @keyframes flashRed { 0%,100%{background:#ef4444} 50%{background:#dc2626} }
+        .cursor-blink {
+            display: inline-block; width: 2px; height: 1.1em;
+            background: #06b6d4; animation: blink 0.7s steps(1) infinite;
+            vertical-align: text-bottom; margin-left: 1px;
+        }
+        /* Stop button */
+        .stop-btn {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white; border: none; border-radius: 12px;
+            padding: 14px 28px; font-size: 1.15em; font-weight: 900;
+            cursor: pointer; transition: all 0.2s;
+            display: block; width: 100%; margin: 14px 0;
+            letter-spacing: 0.3px;
+            box-shadow: 0 4px 14px rgba(239,68,68,0.4);
+        }
+        .stop-btn:hover:not(:disabled) { transform: scale(1.02); box-shadow: 0 6px 20px rgba(239,68,68,0.6); }
+        .stop-btn:disabled { opacity: 0.4; cursor: not-allowed; box-shadow: none; transform: none; }
+        .stop-btn.shake { animation: bigShake 0.4s; }
+        @keyframes bigShake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-8px)} 60%{transform:translateX(8px)} }
+        /* Score bar */
+        .score-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #0f172a;
+            border-radius: 10px;
+            padding: 10px 16px;
+            margin-bottom: 14px;
+            font-size: 0.9em;
+        }
+        .score-val { font-size: 1.4em; font-weight: 900; color: #22d3ee; }
+        .round-indicator { color: #94a3b8; }
+        /* Pick panel */
+        .pick-panel {
+            background: #0f172a;
+            border: 2px solid #06b6d4;
+            border-radius: 10px;
+            padding: 14px 16px;
+            margin: 10px 0;
+            display: none;
+            animation: fadeIn 0.3s;
+        }
+        .pick-panel.show { display: block; }
+        @keyframes fadeIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:none} }
+        .pick-title { font-size: 0.9em; font-weight: 700; color: #06b6d4; margin-bottom: 10px; }
+        .pick-opt {
+            background: #1e293b; color: #e2e8f0;
+            border: 2px solid #334155; border-radius: 8px;
+            padding: 9px 14px; margin: 6px 0;
+            cursor: pointer; font-size: 0.9em;
+            transition: all 0.18s; display: block; width: 100%; text-align: left;
+        }
+        .pick-opt:hover { border-color: #06b6d4; background: #0f172a; }
+        .pick-opt.correct { background: #14532d; border-color: #22c55e; color: #86efac; }
+        .pick-opt.incorrect { background: #7f1d1d; border-color: #ef4444; color: #fca5a5; }
+        .round-result {
+            border-radius: 8px; padding: 12px 16px;
+            margin: 10px 0; font-size: 0.9em; line-height: 1.55;
+            display: none;
+        }
+        .round-result.show { display: block; animation: fadeIn 0.3s; }
+        .round-result.win { background: #14532d; border: 2px solid #22c55e; color: #86efac; }
+        .round-result.lose { background: #7f1d1d; border: 2px solid #ef4444; color: #fca5a5; }
+        .next-round-btn {
+            background: #0891b2; color: white; border: none;
+            border-radius: 8px; padding: 10px 24px; font-size: 0.95em;
+            font-weight: 700; cursor: pointer; margin-top: 8px;
             transition: all 0.2s;
         }
-        .check-btn:hover:not(:disabled) { background: #0e7490; }
-        .check-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-        .result-panel {
-            background: #fff3cd;
-            border-left: 4px solid #f39c12;
-            padding: 12px;
-            border-radius: 4px;
-            margin-top: 10px;
-            display: none;
-            font-size: 0.9em;
-            line-height: 1.5;
+        .next-round-btn:hover { background: #0e7490; }
+        .missed-info {
+            background: #7f1d1d; border: 2px solid #ef4444;
+            border-radius: 10px; padding: 12px 16px; color: #fca5a5;
+            margin: 10px 0; font-size: 0.9em; line-height: 1.55; display: none;
         }
-        .result-panel.show { display: block; }
-        .result-panel.all-correct { background: #e8f5e9; border-color: #27ae60; }
+        .missed-info.show { display: block; animation: fadeIn 0.3s; }
     </style>
 </head>
 <body>
     <a class="back-link" href="index.html">← Takaisin harjoituksiin</a>
     <div class="exercise-container">
         <div class="exercise-header">
-            <h1>🔍 Harjoitus 3 – Hallusinaatioiden tunnistaminen</h1>
-            <p>Lue tekoälyn tuottama teksti. Klikkaa väitteitä, jotka vaikuttavat virheellisiltä tai epäilyttäviltä, ja tarkista sitten vastaukset.</p>
+            <h1>🔴 Harjoitus 3 – Hallusinaatioiden metsästys</h1>
+            <p>Tekoäly kirjoittaa tekstiä reaaliajassa. Pysäytä kirjoitus heti, kun löydät virheen!</p>
         </div>
 
         <div class="info-panel">
-            <h3>⚠️ Mikä on hallusinaatio?</h3>
-            <p>Tekoälymalli voi tuottaa täysin vakuuttavan kuuloista, mutta virheellistä tietoa. Tätä kutsutaan hallusinaatioksi. Tekoäly saattaa keksiä nimiä, päivämääriä, lakeja tai faktoja, joita ei ole olemassa. <strong>Tarkista aina tekoälyn tuottamat väitteet muista lähteistä!</strong></p>
+            <h3>⚠️ Peliohjeet</h3>
+            <p>Tekoäly "kirjoittaa" tekstiä sana kerrallaan. Teksteissä on ilmiselviä virheitä — <strong>factoja jotka eivät pidä paikkaansa</strong>. Kun huomaat virheen, paina isoa punaista nappia välittömästi! Sitten valitse, mikä väite oli virheellinen.</p>
         </div>
 
         <div class="progress-container">
             <div class="progress-bar-track">
                 <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
             </div>
-            <div class="progress-text"><span id="progressCount">0</span> / 3 tekstiä tarkistettu</div>
+            <div class="progress-text">Kierros <span id="progressCount">1</span> / 3</div>
         </div>
 
-        <div id="textsContainer"></div>
+        <div class="score-bar">
+            <span>Pisteet: <span class="score-val" id="scoreVal">0</span></span>
+            <span class="round-indicator" id="roundInd">Kierros 1/3</span>
+            <span id="statusTxt" style="color:#06b6d4;font-size:0.85em;font-weight:700">⏳ Odota…</span>
+        </div>
+
+        <div class="game-arena">
+            <div class="ai-typing-label">
+                <div class="ai-dot" id="aiDot"></div>
+                TEKOÄLY KIRJOITTAA
+            </div>
+            <div class="ai-text-output" id="aiOutput"></div>
+        </div>
+
+        <button class="stop-btn" id="stopBtn" disabled onclick="playerStop()">⛔ PYSÄYTÄ — Löysin virheen!</button>
+
+        <div class="pick-panel" id="pickPanel">
+            <div class="pick-title">🔍 Mikä väite oli virheellinen?</div>
+            <div id="pickOptions"></div>
+        </div>
+
+        <div class="round-result" id="roundResult"></div>
+        <div class="missed-info" id="missedInfo"></div>
+
         <div id="summaryContainer"></div>
     </div>
 
     <script>
-    const texts = [
+    const rounds = [
         {
-            title: '🤖 Tekoälyn vastaus: "Kerro Creative Commons -lisensseistä"',
-            intro: 'Alla on tekoälyn tuottama teksti Creative Commons -lisensseistä. Yhdessä väitteessä on virhe.',
-            claims: [
-                { id: 'cc1', text: 'Creative Commons on vuonna 2001 perustettu voittoa tavoittelematon organisaatio.', isError: false },
-                { id: 'cc2', text: 'CC-lisenssit mahdollistavat sisällön jakamisen tietyin ehdoin, jotka tekijä itse määrittää.', isError: false },
-                { id: 'cc3', text: 'CC BY-ND -lisenssi sallii teoksen muokkaamisen, kunhan tekijä mainitaan.', isError: true },
-                { id: 'cc4', text: 'BY-ehto tarkoittaa, että käyttäjän on mainittava alkuperäinen tekijä.', isError: false }
+            title: 'ChatGPT:n historia',
+            text: [
+                { words: 'ChatGPT on OpenAI:n kehittämä tekoälypohjainen kielimalli, joka julkaistiin marraskuussa ', isError: false },
+                { words: '2019', isError: true, wrongWord: '2019', errorIndex: 0 },
+                { words: ' — huomattavasti aikaisemmin kuin useimmat luulevat. GPT tarkoittaa "Generative Pre-trained Transformer". OpenAI perustettiin vuonna 2015, ja sen perustajiin kuuluu muun muassa Sam Altman.', isError: false }
             ],
-            explanation: '⚠️ Virhe: CC BY-ND (ND = NoDerivatives) <strong>kieltää</strong> muokkaamisen – se ei salli sitä. Tekoäly sekoitti ND-ehdon BY-ehtoon. CC BY sallii muokkauksen tekijä mainiten, mutta BY-ND ei salli muokkauksia lainkaan.'
+            options: [
+                { text: '"julkaistiin marraskuussa 2019" — ChatGPT julkaistiin 2022, ei 2019!', correct: true },
+                { text: '"GPT tarkoittaa Generative Pre-trained Transformer" — tämä on virhe', correct: false },
+                { text: '"OpenAI perustettiin vuonna 2015" — se perustettiin myöhemmin', correct: false }
+            ],
+            explanation: '✅ Oikein! ChatGPT julkaistiin marraskuussa <strong>2022</strong> — ei 2019. Tekoäly sekoitti päivämäärän GPT-2:n julkaisuvuoteen (2019). Tämä on tyypillinen hallusinaatio: vakuuttavan kuuloinen väite väärällä vuosiluvulla.'
         },
         {
-            title: '🤖 Tekoälyn vastaus: "Kuvaa Suomen koululainsäädäntöä lyhyesti"',
-            intro: 'Alla on tekoälyn tuottama teksti. Kahdessa väitteessä on virheellinen tai harhaanjohtava tieto.',
-            claims: [
-                { id: 'law1', text: 'Suomessa oppivelvollisuusikä nousi 18 vuoteen vuonna 2021 voimaan tulleella lailla.', isError: false },
-                { id: 'law2', text: 'Laki ammatillisesta koulutuksesta (531/2017) uudisti ammatillisen koulutuksen rakenneuudistuksen.', isError: false },
-                { id: 'law3', text: 'Suomen perustuslain 17 § takaa kaikille oikeuden maksuttomaan korkeakoulututkintoon.', isError: true },
-                { id: 'law4', text: 'Oppilas- ja opiskelijahuoltolaki (1287/2013) säätelee opiskeluhuoltopalveluja.', isError: false }
+            title: 'Tekijänoikeuksista',
+            text: [
+                { words: 'Tekijänoikeus syntyy Suomessa automaattisesti, kun teos luodaan — rekisteröintiä ei tarvita. Tekijänoikeus suojaa teosta tekijän elinajan ja ', isError: false },
+                { words: '50 vuotta', isError: true, wrongWord: '50 vuotta', errorIndex: 0 },
+                { words: ' kuoleman jälkeen. Creative Commons -lisenssit ovat tekijöiden tapa kertoa etukäteen, miten teosta saa käyttää.', isError: false }
             ],
-            explanation: '⚠️ Virhe: Perustuslain 17 § käsittelee kielellistä oikeutta – ei korkeakoulututkinnon maksuttomuutta. Maksutonta perusopetusta koskee perustuslain 16 §. Tekoäly sekoitti pykälänumerot ja sisällöt. Muut väitteet ovat oikein.'
+            options: [
+                { text: '"suojaa teosta 50 vuotta kuoleman jälkeen" — oikea aika on 70 vuotta!', correct: true },
+                { text: '"Rekisteröintiä ei tarvita" — tekijänoikeus vaatii rekisteröinnin', correct: false },
+                { text: '"Creative Commons -lisenssit ovat tekijöiden tapa" — tämä on virhe', correct: false }
+            ],
+            explanation: '✅ Oikein! EU:ssa tekijänoikeus kestää tekijän elinajan + <strong>70 vuotta</strong> — ei 50. 50 vuotta oli aiempi kansainvälinen minimi. Tekoäly sekoitti nämä. Tärkeää: vanhemmissa teksteissä ja kansainvälisissä lähteissä voi edelleen lukea "50 vuotta".'
         },
         {
-            title: '🤖 Tekoälyn vastaus: "Kerro ChatGPT:n historiasta"',
-            intro: 'Alla on tekoälyn itsensä tuottama kuvaus omasta historiastaan. Etsi yksi virheellinen väite.',
-            claims: [
-                { id: 'hist1', text: 'ChatGPT:n kehitti OpenAI, joka on San Franciscossa toimiva tekoälytutkimusorganisaatio.', isError: false },
-                { id: 'hist2', text: 'ChatGPT 3.5 julkaistiin yleisölle marraskuussa 2022 ja saavutti miljoona käyttäjää viidessä päivässä.', isError: false },
-                { id: 'hist3', text: 'GPT tarkoittaa "Generative Pre-trained Transformer".', isError: false },
-                { id: 'hist4', text: 'OpenAI perustettiin vuonna 2020, ja sen perustajiin kuuluu Elon Musk.', isError: true }
+            title: 'Suomi ja EU',
+            text: [
+                { words: 'Suomi on ollut Euroopan unionin jäsen vuodesta ', isError: false },
+                { words: '1999', isError: true, wrongWord: '1999', errorIndex: 0 },
+                { words: '. Suomi myös hyväksyi euron käyttöön ensimmäisten EU-maiden joukossa vuonna 2002. EU:n jäsenyys on vaikuttanut merkittävästi Suomen lainsäädäntöön ja talouteen.', isError: false }
             ],
-            explanation: '⚠️ Virhe: OpenAI perustettiin vuonna <strong>2015</strong> – ei 2020. Elon Musk oli kyllä yksi perustajista, mutta erosi hallituksesta vuonna 2018. Tekoäly sekoitti perusvuosiluvun. Tällaisia faktoja – erityisesti vuosilukuja ja nimiä – on tärkeää tarkistaa aina muista lähteistä.'
+            options: [
+                { text: '"jäsen vuodesta 1999" — Suomi liittyi EU:hun jo 1995!', correct: true },
+                { text: '"euro käyttöön 2002" — eurot otettiin käyttöön eri vuonna', correct: false },
+                { text: '"EU:n jäsenyys on vaikuttanut lainsäädäntöön" — EU:lla ei ole vaikutusta Suomeen', correct: false }
+            ],
+            explanation: '✅ Oikein! Suomi liittyi EU:hun vuonna <strong>1995</strong> — ei 1999. 1999 on vuosi, jolloin euro otettiin kirjanpidollisesti käyttöön EU:ssa (käteinen 2002). Tekoäly sekoitti nämä vuosiluvut. Tämänkaltaiset aika- ja vuosilukuvirheet ovat yleisimpiä hallusinaatiotyyppejä.'
         }
     ];
 
-    let completedTexts = 0;
-    let totalScore = 0;
-    const totalTexts = texts.length;
-    const selectedClaims = {};
-    texts.forEach(t => t.claims.forEach(c => { selectedClaims[c.id] = false; }));
+    let currentRound = 0;
+    let score = 0;
+    let typingInterval = null;
+    let stoppedEarly = false;
+    let typingDone = false;
 
-    function initExercise() {
-        const container = document.getElementById('textsContainer');
-        texts.forEach((t, i) => container.appendChild(createTextBlock(t, i)));
-    }
-
-    function createTextBlock(t, idx) {
-        const block = document.createElement('div');
-        block.className = 'ai-text-block';
-        block.id = 'tblock-' + idx;
-
-        const h = document.createElement('h3');
-        h.textContent = t.title;
-        block.appendChild(h);
-
-        const intro = document.createElement('p');
-        intro.style.cssText = 'font-size:0.9em;color:#555;margin-bottom:10px;';
-        intro.textContent = t.intro;
-        block.appendChild(intro);
-
-        const claimList = document.createElement('div');
-        t.claims.forEach(c => {
-            const item = document.createElement('div');
-            item.className = 'claim-item';
-            item.id = 'claim-' + c.id;
-            item.onclick = () => toggleClaim(c.id, item, idx);
-            item.innerHTML = `<div class="claim-checkbox" id="chk-${c.id}"></div><span>${c.text}</span>`;
-            claimList.appendChild(item);
-        });
-        block.appendChild(claimList);
-
-        const btn = document.createElement('button');
-        btn.className = 'check-btn';
-        btn.id = 'checkbtn-' + idx;
-        btn.textContent = '🔍 Tarkista vastaukset';
-        btn.onclick = () => checkText(idx);
-        block.appendChild(btn);
-
-        const result = document.createElement('div');
-        result.className = 'result-panel';
-        result.id = 'result-' + idx;
-        block.appendChild(result);
-
-        return block;
-    }
-
-    function toggleClaim(claimId, item, blockIdx) {
-        const btn = document.getElementById('checkbtn-' + blockIdx);
-        if (btn.disabled) return;
-        selectedClaims[claimId] = !selectedClaims[claimId];
-        const chk = document.getElementById('chk-' + claimId);
-        if (selectedClaims[claimId]) {
-            item.classList.add('selected-error');
-            chk.textContent = '⚠️';
-        } else {
-            item.classList.remove('selected-error');
-            chk.textContent = '';
-        }
-    }
-
-    function checkText(idx) {
-        const t = texts[idx];
-        const block = document.getElementById('tblock-' + idx);
-        const btn = document.getElementById('checkbtn-' + idx);
-        const result = document.getElementById('result-' + idx);
-        btn.disabled = true;
-
-        const errorIds = t.claims.filter(c => c.isError).map(c => c.id);
-        const selectedErrors = t.claims.filter(c => c.isError && selectedClaims[c.id]);
-        const falsePositives = t.claims.filter(c => !c.isError && selectedClaims[c.id]);
-
-        // Reveal correct/incorrect selections
-        t.claims.forEach(c => {
-            const item = document.getElementById('claim-' + c.id);
-            const chk  = document.getElementById('chk-' + c.id);
-            item.classList.remove('selected-error');
-            item.style.cursor = 'default';
-            if (c.isError) {
-                item.classList.add('selected-correct');
-                chk.textContent = '⚠️';
-            } else if (selectedClaims[c.id]) {
-                item.classList.add('selected-error');
-                chk.textContent = '✗';
-            }
-        });
-
-        const allCorrect = selectedErrors.length === errorIds.length && falsePositives.length === 0;
-        if (allCorrect) totalScore++;
-
-        result.className = 'result-panel show' + (allCorrect ? ' all-correct' : '');
-        result.innerHTML = (allCorrect ? '<strong>✅ Hyvä löytö!</strong><br>' : '<strong>⚠️ Lähes oikein – katso selitys:</strong><br>') + t.explanation;
-
-        block.classList.add(allCorrect ? 'no-error' : 'has-error');
-
-        completedTexts++;
+    function startRound() {
+        stoppedEarly = false;
+        typingDone = false;
+        document.getElementById('pickPanel').classList.remove('show');
+        document.getElementById('roundResult').classList.remove('show');
+        document.getElementById('missedInfo').classList.remove('show');
+        document.getElementById('aiOutput').innerHTML = '';
+        document.getElementById('stopBtn').disabled = true;
+        document.getElementById('statusTxt').textContent = '⏳ Pian alkaa…';
+        document.getElementById('roundInd').textContent = `Kierros ${currentRound+1}/3`;
         updateProgress();
-        if (completedTexts === totalTexts) setTimeout(showSummary, 600);
+
+        setTimeout(() => {
+            document.getElementById('stopBtn').disabled = false;
+            document.getElementById('statusTxt').textContent = '🔴 Kirjoittaa…';
+            typeRound(rounds[currentRound]);
+        }, 1200);
     }
+
+    function typeRound(round) {
+        const output = document.getElementById('aiOutput');
+        output.innerHTML = '';
+        const cursor = document.createElement('span');
+        cursor.className = 'cursor-blink';
+        output.appendChild(cursor);
+
+        // Build word list
+        const wordList = [];
+        round.text.forEach(seg => {
+            const words = seg.words.split(/(?<=\s)|(?=\s)/);
+            words.forEach(w => wordList.push({ word: w, isError: seg.isError }));
+        });
+
+        let idx = 0;
+        typingInterval = setInterval(() => {
+            if (idx >= wordList.length) {
+                clearInterval(typingInterval);
+                typingInterval = null;
+                typingDone = true;
+                cursor.remove();
+                document.getElementById('stopBtn').disabled = true;
+                document.getElementById('statusTxt').textContent = '✅ Kirjoitus valmis';
+                // Player didn't stop — show missed error
+                if (!stoppedEarly) {
+                    showMissedInfo(round);
+                }
+                return;
+            }
+            const item = wordList[idx];
+            const span = document.createElement('span');
+            span.className = 'word-span';
+            span.textContent = item.word;
+            span.dataset.isError = item.isError ? '1' : '0';
+            output.insertBefore(span, cursor);
+            idx++;
+        }, 90);
+    }
+
+    window.playerStop = function() {
+        if (!typingInterval) return;
+        clearInterval(typingInterval);
+        typingInterval = null;
+        stoppedEarly = true;
+        document.getElementById('stopBtn').disabled = true;
+        document.getElementById('statusTxt').textContent = '⏸️ Pysäytetty!';
+
+        const round = rounds[currentRound];
+        const cursor = document.querySelector('.cursor-blink');
+        if (cursor) cursor.remove();
+
+        // Show pick options
+        const panel = document.getElementById('pickPanel');
+        const opts = document.getElementById('pickOptions');
+        opts.innerHTML = '';
+        round.options.forEach((o, i) => {
+            const btn = document.createElement('button');
+            btn.className = 'pick-opt';
+            btn.textContent = o.text;
+            btn.onclick = () => pickAnswer(i, round);
+            opts.appendChild(btn);
+        });
+        panel.classList.add('show');
+    };
+
+    function pickAnswer(idx, round) {
+        document.querySelectorAll('.pick-opt').forEach(b => b.disabled = true);
+        const chosen = round.options[idx];
+        document.querySelectorAll('.pick-opt').forEach((b, i) => {
+            if (round.options[i].correct) b.classList.add('correct');
+            else if (i === idx && !chosen.correct) b.classList.add('incorrect');
+        });
+        // Reveal error in text
+        document.querySelectorAll('.word-span[data-is-error="1"]').forEach(s => s.classList.add('hallucination-revealed'));
+
+        const result = document.getElementById('roundResult');
+        if (chosen.correct) {
+            score++;
+            result.className = 'round-result show win';
+            result.innerHTML = `<strong>🎯 Oikein pysäytit!</strong><br>${round.explanation}<br><br>
+                <button class="next-round-btn" onclick="nextRound()">${currentRound < 2 ? 'Seuraava kierros →' : 'Näytä tulokset →'}</button>`;
+        } else {
+            result.className = 'round-result show lose';
+            result.innerHTML = `<strong>❌ Väärä väite — mutta oikea ajoitus!</strong><br>${round.explanation}<br><br>
+                <button class="next-round-btn" onclick="nextRound()">${currentRound < 2 ? 'Seuraava kierros →' : 'Näytä tulokset →'}</button>`;
+        }
+        document.getElementById('scoreVal').textContent = score;
+        updateProgress();
+    }
+
+    function showMissedInfo(round) {
+        document.querySelectorAll('.word-span[data-is-error="1"]').forEach(s => s.classList.add('hallucination-revealed'));
+        const info = document.getElementById('missedInfo');
+        info.className = 'missed-info show';
+        info.innerHTML = `<strong>😅 Et pysäyttänyt ajoissa — teksti sisälsi virheen!</strong><br>${round.explanation}<br><br>
+            <button class="next-round-btn" onclick="nextRound()">${currentRound < 2 ? 'Seuraava kierros →' : 'Näytä tulokset →'}</button>`;
+        document.getElementById('stopBtn').disabled = true;
+        updateProgress();
+    }
+
+    window.nextRound = function() {
+        currentRound++;
+        if (currentRound >= 3) showSummary();
+        else startRound();
+    };
 
     function updateProgress() {
-        document.getElementById('progressFill').style.width = Math.round(completedTexts / totalTexts * 100) + '%';
-        document.getElementById('progressCount').textContent = completedTexts;
+        document.getElementById('progressFill').style.width = Math.round(currentRound / 3 * 100) + '%';
+        document.getElementById('progressCount').textContent = Math.min(currentRound + 1, 3);
     }
 
     function showSummary() {
-        const pct = Math.round(totalScore / totalTexts * 100);
-        const msg = pct === 100 ? '🎉 Erinomainen! Hallusinaatioiden tunnistaminen onnistuu.' : pct >= 66 ? '👍 Hyvä suoritus! Muista tarkistaa aina tekoälyn väitteet muista lähteistä.' : '📚 Harjoittele lisää – kriittinen lukeminen on tärkeä taito tekoälyn aikakaudella!';
+        document.getElementById('progressFill').style.width = '100%';
+        document.getElementById('progressCount').textContent = '3';
+        document.querySelector('.game-arena').style.display = 'none';
+        document.getElementById('stopBtn').style.display = 'none';
+        const pct = Math.round(score / 3 * 100);
+        const msg = pct === 100 ? '🏆 Täydelliset pisteet! Hallusinaatioiden tunnistaminen onnistuu erinomaisesti.' : pct >= 66 ? '🎯 Hyvin menee! Muista: jos jokin väite kuulostaa epäilyttävältä, tarkista se aina.' : '📚 Harjoittele! Tekoälyn virheistä opitaan — lue aina kriittisesti.';
         document.getElementById('summaryContainer').innerHTML = `<div class="summary-panel">
             <h3>📊 Yhteenveto</h3>
-            <p><strong>Pisteet: ${totalScore}/${totalTexts}</strong> (${pct}%)</p>
+            <p><strong>Pisteet: ${score}/3</strong> (${pct}%)</p>
             <p>${msg}</p>
-            <p style="font-size:0.9em;color:#555;">💡 Muista: Tarkista aina tekoälyn antamat faktat, nimet, päivämäärät ja lainaukset luotettavasta lähteestä.</p>
+            <p style="font-size:0.9em;color:#555;margin-top:8px">💡 Muista: Tekoäly voi esittää virheelliset faktat täysin vakuuttavan kuuloisina. Tarkista aina vuosiluvut, nimet ja lainaukset luotettavista lähteistä!</p>
             <button class="btn btn-primary" onclick="location.reload()" style="margin-top:14px;padding:10px 22px;">🔄 Kokeile uudelleen</button>
         </div>`;
     }
 
-    initExercise();
+    startRound();
     </script>
 </body>
 </html>

@@ -3,197 +3,503 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Harjoitus 1 – Tekoälyn perusteet -tietovisa</title>
+    <title>Harjoitus 1 – Tekoäly-simulaattori</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Stepper */
+        .stepper { display: flex; gap: 0; margin: 16px 0 20px; border-radius: 10px; overflow: hidden; }
+        .step-item {
+            flex: 1; padding: 10px 8px; text-align: center;
+            font-size: 0.82em; font-weight: 700; background: #e0f7fa; color: #0891b2;
+            cursor: default; transition: all 0.3s; border-right: 2px solid white;
+        }
+        .step-item:last-child { border-right: none; }
+        .step-item.active { background: #0891b2; color: white; }
+        .step-item.done { background: #27ae60; color: white; }
+        .step-icon { font-size: 1.3em; display: block; }
+        /* Chat UI */
+        .chat-window {
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            overflow: hidden;
+            margin: 14px 0;
+            background: #fafafa;
+        }
+        .chat-header {
+            background: linear-gradient(135deg, #0891b2, #06b6d4);
+            color: white;
+            padding: 10px 16px;
+            font-weight: 700;
+            font-size: 0.92em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .chat-messages {
+            min-height: 80px;
+            max-height: 320px;
+            overflow-y: auto;
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .chat-msg {
+            padding: 10px 14px;
+            border-radius: 12px;
+            font-size: 0.92em;
+            line-height: 1.6;
+            max-width: 88%;
+            animation: slideIn 0.25s ease;
+        }
+        @keyframes slideIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:none} }
+        .msg-user { background: #0891b2; color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
+        .msg-ai   { background: white; border: 1px solid #e0e0e0; align-self: flex-start; border-bottom-left-radius: 4px; }
+        .msg-warning { background: #fff3e0; border: 2px solid #f39c12; align-self: flex-start; border-radius: 8px; }
+        .msg-success { background: #e8f5e9; border: 2px solid #27ae60; align-self: flex-start; border-radius: 8px; }
+        .chat-input-row {
+            display: flex;
+            padding: 10px;
+            gap: 8px;
+            border-top: 1px solid #e0e0e0;
+            background: white;
+        }
+        .chat-input {
+            flex: 1;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 0.92em;
+            resize: vertical;
+            min-height: 44px;
+            font-family: inherit;
+        }
+        .send-btn {
+            background: #0891b2; color: white; border: none;
+            border-radius: 8px; padding: 8px 16px; cursor: pointer;
+            font-size: 0.9em; font-weight: 700; transition: all 0.2s; flex-shrink: 0;
+        }
+        .send-btn:hover:not(:disabled) { background: #0e7490; }
+        .send-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        /* Source text box */
+        .source-box {
+            background: #f5f5f5;
+            border: 2px dashed #0891b2;
+            border-radius: 10px;
+            padding: 14px 16px;
+            font-size: 0.9em;
+            line-height: 1.65;
+            color: #333;
+            position: relative;
+            margin: 12px 0;
+        }
+        .source-box-label { font-size: 0.78em; font-weight: 700; color: #0891b2; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .copy-pill {
+            background: #0891b2; color: white; border: none;
+            border-radius: 20px; padding: 5px 14px; font-size: 0.82em;
+            cursor: pointer; margin-top: 8px; transition: all 0.2s; font-weight: 600;
+        }
+        .copy-pill:hover { background: #0e7490; }
+        .copy-pill.copied { background: #27ae60; }
+        /* Phase complete */
+        .phase-complete {
+            background: #e8f5e9; border: 2px solid #27ae60; border-radius: 12px;
+            padding: 16px 20px; text-align: center; margin: 14px 0; display: none;
+        }
+        .phase-complete.show { display: block; animation: fadeIn 0.4s; }
+        @keyframes fadeIn { from{opacity:0;transform:translateY(-6px)} to{opacity:1;transform:none} }
+        /* Canvas image */
+        #genCanvas {
+            display: block; margin: 14px auto;
+            border: 2px solid #0891b2; border-radius: 12px;
+        }
+        .image-info {
+            background: #e0f7fa; border-left: 4px solid #0891b2; border-radius: 4px;
+            padding: 12px 16px; font-size: 0.9em; line-height: 1.6; display: none; margin: 10px 0;
+        }
+        .image-info.show { display: block; animation: fadeIn 0.5s; }
+        .task-instruction {
+            background: #fff9c4; border-left: 4px solid #f39c12; border-radius: 4px;
+            padding: 12px 16px; font-size: 0.93em; margin: 12px 0; font-weight: 600; color: #7c5c00;
+        }
+        .next-phase-btn {
+            background: #0891b2; color: white; border: none;
+            border-radius: 8px; padding: 12px 28px; font-size: 1em; font-weight: 700;
+            cursor: pointer; transition: all 0.2s; margin-top: 10px;
+        }
+        .next-phase-btn:hover { background: #0e7490; transform: translateY(-1px); }
+        .typing-cursor { display: inline-block; width: 2px; height: 1em; background: #333; animation: blink 0.7s steps(1) infinite; vertical-align: text-bottom; }
+        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+    </style>
 </head>
 <body>
     <a class="back-link" href="index.html">← Takaisin harjoituksiin</a>
     <div class="exercise-container">
         <div class="exercise-header">
-            <h1>🧠 Harjoitus 1 – Tekoälyn perusteet -tietovisa</h1>
-            <p>Testaa tietosi generatiivisesta tekoälystä – 8 kysymystä välittömällä palautteella.</p>
+            <h1>🤖 Harjoitus 1 – Tekoäly-simulaattori</h1>
+            <p>Kokeile, miten tekoälysovellukset toimivat — kolme erilaista tehtävää!</p>
         </div>
 
-        <div class="info-panel">
-            <h3>🤖 Mitä on generatiivinen tekoäly?</h3>
-            <p>Generatiivinen tekoäly on koneoppimismalli, joka tuottaa uutta sisältöä – tekstiä, kuvia, ääntä tai koodia – koulutusaineistosta oppimiensa rakenteiden perusteella. Tunnetuimpia esimerkkejä ovat tekstiä tuottavat suuret kielimallit (LLM), kuten ChatGPT, Microsoft Copilot ja Gemini.</p>
+        <div class="stepper" id="stepper">
+            <div class="step-item active" id="step0"><span class="step-icon">✍️</span>Tekstin luominen</div>
+            <div class="step-item" id="step1"><span class="step-icon">📝</span>Yhteenveto</div>
+            <div class="step-item" id="step2"><span class="step-icon">🎨</span>Kuvageneraatio</div>
         </div>
 
-        <div class="progress-container">
-            <div class="progress-bar-track">
-                <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
-            </div>
-            <div class="progress-text"><span id="progressCount">0</span> / 8 kysymystä</div>
-        </div>
-
-        <div id="questionsContainer"></div>
+        <div id="phaseContent"></div>
         <div id="summaryContainer"></div>
     </div>
 
     <script>
-    const questions = [
-        {
-            question: 'Mitä tarkoittaa lyhenne "LLM" tekoälykontekstissa?',
-            options: [
-                'Large Learning Machine – iso oppimiskone',
-                'Large Language Model – suuri kielimalli',
-                'Logical Learning Module – looginen oppimismoduuli',
-                'Light Learning Machine – kevyt oppimiskone'
-            ],
-            correct: 1,
-            explanation: '✅ LLM = Large Language Model (suuri kielimalli). LLM:t ovat tekstiä tuottavia tekoälymalleja, jotka on koulutettu valtavilla tekstiaineistoilla. ChatGPT, Copilot ja Gemini ovat kaikki LLM-pohjaisia.'
-        },
-        {
-            question: 'Mikä seuraavista on esimerkki TEKSTIÄ tuottavasta tekoälytyökalusta?',
-            options: [
-                'DALL-E',
-                'Midjourney',
-                'Adobe Firefly',
-                'Microsoft Copilot'
-            ],
-            correct: 3,
-            explanation: '✅ Microsoft Copilot on tekstiä (ja muuta sisältöä) tuottava tekoälyassistentti. DALL-E, Midjourney ja Adobe Firefly ovat KUVIA tuottavia tekoälytyökaluja.'
-        },
-        {
-            question: 'Mitä tarkoittaa tekoälyn "hallusinaatio"?',
-            options: [
-                'Tekoäly lakkaa vastaamasta',
-                'Tekoäly tuottaa virheellistä tai keksittyä tietoa, joka kuulostaa uskottavalta',
-                'Tekoäly alkaa toistaa samaa vastausta yhä uudelleen',
-                'Tekoäly ei ymmärrä suomenkielistä kyselyä'
-            ],
-            correct: 1,
-            explanation: '✅ Hallusinaatio tarkoittaa, että tekoäly tuottaa vakuuttavan kuuloista, mutta väärää tai täysin keksittyä tietoa. Esimerkiksi tekoäly saattaa keksiä kirjojen nimiä, julkaisuvuosia tai nimiä, jotka eivät ole olemassa.'
-        },
-        {
-            question: 'Miten generatiivinen tekoäly tuottaa tekstiä?',
-            options: [
-                'Se kopioi tekstiä suoraan internetistä',
-                'Se etsii vastauksia tietokannasta hakusanoilla',
-                'Se ennustaa tilastollisesti todennäköisimmän seuraavan sanan aiemman kontekstin perusteella',
-                'Se konsultoi asiantuntijoita reaaliaikaisesti'
-            ],
-            correct: 2,
-            explanation: '✅ Suuret kielimallit ennustavat tilastollisesti, mikä sana tai lauseenosa on todennäköisin seuraava annetun kontekstin perusteella. Tämä tarkoittaa, etteivät ne "tiedä" asioita – ne arvioivat todennäköisyyksiä.'
-        },
-        {
-            question: 'Mikä on riski, jos syötät tekoälylle luottamuksellisia henkilötietoja (esim. asiakkaan tietoja)?',
-            options: [
-                'Tekoäly saattaa käyttää tietoja muiden käyttäjien vastausten kouluttamiseen',
-                'Tiedot voidaan tallentaa palveluntarjoajan palvelimille',
-                'Luottamuksellisten tietojen syöttäminen voi loukata tietosuojalainsäädäntöä',
-                'Kaikki edellä mainitut'
-            ],
-            correct: 3,
-            explanation: '✅ Kaikki mainitut riskit ovat todellisia. Siksi Mercurian ohjeen mukaan tekoälyyn ei tule syöttää henkilötietoja, salassapidettäviä tietoja tai muita luottamuksellisia tietoja.'
-        },
-        {
-            question: 'Mikä seuraavista on esimerkki tekoälyn HYÖDYLLISESTÄ käytöstä opiskelussa?',
-            options: [
-                'Tekoäly kirjoittaa palautettavan esseen puolestasi kokonaan',
-                'Tekoäly auttaa selittämään vaikean käsitteen eri tavoin, kunnes se selviää',
-                'Tekoäly korvaa kaiken tiedonhaun – ei tarvita muita lähteitä',
-                'Tekoäly antaa aina oikeat vastaukset tentissä'
-            ],
-            correct: 1,
-            explanation: '✅ Tekoäly on hyvä selittäjä, ideointiapuri ja oppimisen tuki. Sen sijaan tekoälyn tekemän työn palauttaminen omanaan on plagiointia. Tekoäly myös hallusinoi, joten se ei korvaa tiedonhakua luotettavista lähteistä.'
-        },
-        {
-            question: 'Mitä tarkoittaa "prompt" tekoälykontekstissa?',
-            options: [
-                'Tekoälyn antama varoitus vaarallisesta sisällöstä',
-                'Käyttäjän tekoälylle antama syöte, kysymys tai ohje',
-                'Tekoälyn lähdekoodin päivitys',
-                'Palvelun kirjautumisikkuna'
-            ],
-            correct: 1,
-            explanation: '✅ Prompt on käyttäjän tekoälylle antama syöte – esimerkiksi kysymys, tehtävänanto tai ohje. Hyvä prompt on täsmällinen, sisältää kontekstin ja kertoo tekoälylle, millainen vastaus halutaan.'
-        },
-        {
-            question: 'Miksi tekoälyn tuottamaan sisältöön pitää aina viitata lähteenä raporteissa tai töissä?',
-            options: [
-                'Ei tarvitse viitata – tekoälyn tuotos on aina tekijänoikeudesta vapaata',
-                'Tekoäly on joka tapauksessa ihmistä älykkäämpi, joten viittaus nostaa työn arvoa',
-                'Läpinäkyvyyden ja akateemisen rehellisyyden vuoksi – lukija tietää, mistä tieto on peräisin',
-                'Ainoastaan, jos tekoäly on keksinyt uutta tietoa'
-            ],
-            correct: 2,
-            explanation: '✅ Akateeminen ja ammatillinen rehellisyys edellyttää, että kerrot, kenen tai minkä tuottamaa sisältö on. Tekoälyn käytön mainitseminen on osa läpinäkyvyyttä – aivan kuin mainitset muutkin lähteesi.'
+    let currentPhase = 0;
+    let phase1Warned = false;
+
+    const COMPANY_TEXT = `Yritys: TehoPainos Oy, Y-tunnus: 1234567-8
+Asiakas: Maija Meikäläinen (asiakas@email.fi)
+Tilaus #4521: 500 kpl flyer-esitteitä, toimitus 3.5.2026
+Hinta: 450 € + alv 24%
+Yhteyshlö: Pekka Virtanen, pekka.virtanen@tehopainos.fi`;
+
+    const CLEAN_TEXT = `Asiakas tilasi 500 kpl flyer-esitteitä. Toimitus on sovittu toukokuun alkuun. Kirjoita asiakkaalle kohtelias sähköpostiviesti tilauksen vahvistuksesta.`;
+
+    const LONG_AI_TEXT = `Tekoäly ammatillisessa koulutuksessa – Katsaus vuoteen 2026
+
+Tekoälyn integroituminen ammatilliseen koulutukseen on edennyt nopeasti viime vuosina. Oppilaitokset ympäri Suomea ovat alkaneet hyödyntää tekoälytyökaluja opetuksen tukena, arvioinnissa ja hallinnollisissa tehtävissä.
+
+Erityisesti generatiiviset tekoälyt, kuten Microsoft Copilot ja ChatGPT, ovat muuttaneet tapaa, jolla opiskelijat hankkivat tietoa ja tuottavat kirjallisia töitä. Opetushallituksen vuoden 2026 kartoituksen mukaan yli 60 % ammatillisten oppilaitosten opiskelijoista käyttää tekoälyä vähintään viikoittain opinnoissaan.
+
+Samalla on noussut esiin kysymyksiä akateemisesta rehellisyydestä: milloin tekoälyn käyttö on hyväksyttävää ja milloin se ylittää plagioinnin rajat? Mercuria kauppaoppilaitos on laatinut selkeät pelisäännöt: tekoälyä saa käyttää apuvälineenä, mutta opiskelijan oma osaaminen pitää näkyä lopputuloksessa.
+
+Tekoälyyn liittyy myös tietosuojakysymyksiä. Opiskelijoita ohjeistetaan olemaan syöttämättä henkilötietoja tai luottamuksellisia tietoja ulkopuolisiin tekoälypalveluihin. Microsoft Copilot koulutilillä on turvallisempi vaihtoehto, koska tiedot eivät siirry Microsoftin koulutusdataan.
+
+Tulevaisuudessa tekoälyosaaminen tulee olemaan keskeinen taito kaikilla aloilla. Työnantajat odottavat, että vastavalmistuneet osaavat sekä käyttää tekoälytyökaluja tehokkaasti että arvioida niiden tuottamia tuloksia kriittisesti.`;
+
+    const IMAGE_PROMPT = `Kuvitus: ammattikoululainen käyttää kannettavaa tietokonetta modernissa luokkahuoneessa, lämmin valaistus, teal- ja valkoinen väritys`;
+
+    function setStep(n) {
+        document.querySelectorAll('.step-item').forEach((el, i) => {
+            el.classList.toggle('active', i === n);
+            el.classList.toggle('done', i < n);
+        });
+    }
+
+    function renderPhase() {
+        setStep(currentPhase);
+        const c = document.getElementById('phaseContent');
+        c.innerHTML = '';
+        if (currentPhase === 0) renderPhase1(c);
+        else if (currentPhase === 1) renderPhase2(c);
+        else if (currentPhase === 2) renderPhase3(c);
+        else showFinalSummary();
+    }
+
+    // ═══════════════ PHASE 1: Tekstin luominen ═══════════════════════════════
+    function renderPhase1(c) {
+        c.innerHTML = `
+            <div class="task-instruction">
+                ✍️ <strong>Vaihe 1: Tekstin luominen tekoälyllä</strong><br>
+                Alla on yrityksen luonnos asiakasviestistä. Kopioi se ja liitä tekoälychat-kenttään pyytääksesi sen muotoilemaan viestin sähköpostimuotoon.
+            </div>
+            <div class="source-box">
+                <div class="source-box-label">📋 Lähdeteksti (kopioi tämä chatiin):</div>
+                <pre style="white-space:pre-wrap;margin:0;font-family:inherit">${COMPANY_TEXT}</pre>
+                <button class="copy-pill" id="copyBtn1" onclick="copyText1()">📋 Kopioi teksti</button>
+            </div>
+            <div class="chat-window">
+                <div class="chat-header">🤖 AI-assistentti &nbsp;<span style="opacity:0.7;font-weight:400;font-size:0.9em">Simulaatio</span></div>
+                <div class="chat-messages" id="msgs1"></div>
+                <div class="chat-input-row">
+                    <textarea class="chat-input" id="input1" placeholder="Liitä teksti tähän ja pyydä muotoilemaan sähköpostiviestiksi..." rows="3"></textarea>
+                    <button class="send-btn" id="send1" onclick="sendPhase1()">Lähetä ➤</button>
+                </div>
+            </div>
+            <div class="phase-complete" id="pc1">
+                <span style="font-size:2.5em">✅</span>
+                <h3 style="color:#27ae60;margin:8px 0">Vaihe 1 suoritettu!</h3>
+                <p style="color:#555;font-size:0.93em">Opit: tekoälylle ei saa syöttää luottamuksellisia tietoja, mutta anonyymiä tekstiä se osaa muotoilla erinomaisesti!</p>
+                <button class="next-phase-btn" onclick="nextPhase()">Seuraava vaihe →</button>
+            </div>`;
+    }
+
+    window.copyText1 = function() {
+        const btn = document.getElementById('copyBtn1');
+        const input = document.getElementById('input1');
+        navigator.clipboard.writeText(COMPANY_TEXT).catch(()=>{});
+        input.value = COMPANY_TEXT;
+        btn.textContent = '✅ Kopioitu!';
+        btn.classList.add('copied');
+        setTimeout(() => { btn.textContent = '📋 Kopioi teksti'; btn.classList.remove('copied'); }, 1800);
+    };
+
+    window.sendPhase1 = function() {
+        const input = document.getElementById('input1');
+        const text = input.value.trim();
+        if (!text) return;
+        const btn = document.getElementById('send1');
+        btn.disabled = true;
+
+        addMsg('msgs1', text, 'user');
+        input.value = '';
+
+        setTimeout(() => {
+            const hasCompanyData = /Y-tunnus|1234567|TehoPainos|pekka\.virtanen|Meikäläinen|asiakas@email/i.test(text);
+            if (hasCompanyData && !phase1Warned) {
+                phase1Warned = true;
+                addMsg('msgs1', `⚠️ <strong>Huomio: luottamuksellisia tietoja havaittu!</strong><br><br>
+Viestissäsi on henkilötietoja ja yrityksen sisäisiä tietoja (Y-tunnus, asiakkaan sähköposti, hintatiedot, yhteyshenkilön tiedot).<br><br>
+<strong>Tekoälypalveluihin ei tule syöttää:</strong><br>
+• Henkilötietoja (nimi, sähköposti, puhelinnumero)<br>
+• Y-tunnuksia tai muita yritysrekisteritietoja<br>
+• Luottamuksellisia sopimustietoja<br>
+• Hintoja tai kaupallisia ehtoja<br><br>
+Poista luottamukselliset tiedot ja kokeile uudelleen! 🔒`, 'warning');
+                btn.disabled = false;
+                addMsg('msgs1', `💡 <strong>Vihje – kokeile tätä sen sijaan:</strong><br><em>"${CLEAN_TEXT}"</em>`, 'ai');
+            } else {
+                typeMessage('msgs1', `📧 <strong>Sähköpostiluonnos:</strong><br><br>
+Aihe: Tilausvahvistus – flyer-esitteet<br><br>
+Hyvä asiakas,<br><br>
+Kiitos tilauksestasi! Vahvistamme, että tilauksenne on vastaanotettu ja käsittelyssä.<br><br>
+<strong>Tilauksen tiedot:</strong><br>
+• Tuote: Flyer-esitteet<br>
+• Toimitus: Sovitun aikataulun mukaisesti toukokuun alussa<br><br>
+Olemme teille yhteydessä, mikäli tarvitsemme lisätietoja. Arvostamme asiakasuhteitamme ja toivomme mukavaa yhteistyön jatkumista!<br><br>
+Ystävällisin terveisin,<br><em>[Yhteyshenkilön nimi]</em><br><em>[Yritys]</em>`, 'success', () => {
+                    document.getElementById('pc1').classList.add('show');
+                });
+            }
+        }, 700);
+    };
+
+    // ═══════════════ PHASE 2: Yhteenveto ═════════════════════════════════════
+    function renderPhase2(c) {
+        c.innerHTML = `
+            <div class="task-instruction">
+                📝 <strong>Vaihe 2: Yhteenvedon tekeminen</strong><br>
+                Alla on pitkä artikkeli tekoälystä ammatillisessa koulutuksessa. Kopioi teksti ja liitä se chatiin pyydettäessä!
+            </div>
+            <div class="source-box">
+                <div class="source-box-label">📄 Artikkeli (kopioi tämä):</div>
+                <div style="max-height:140px;overflow-y:auto;font-size:0.88em;line-height:1.6;">${LONG_AI_TEXT}</div>
+                <button class="copy-pill" id="copyBtn2" onclick="copyText2()">📋 Kopioi artikkeli</button>
+            </div>
+            <div class="chat-window">
+                <div class="chat-header">🤖 AI-assistentti &nbsp;<span style="opacity:0.7;font-weight:400;font-size:0.9em">Simulaatio</span></div>
+                <div class="chat-messages" id="msgs2">
+                    <div class="chat-msg msg-ai">👋 Hei! Liitä alla oleva artikkeli tähän ja pyydä minulta yhteenveto sekä kysymyksiä — esim: <em>"Tee yhteenveto ja laadi 3 pohdintakysymystä opiskelijalle"</em></div>
+                </div>
+                <div class="chat-input-row">
+                    <textarea class="chat-input" id="input2" placeholder="Liitä artikkeli + pyyntö tähän..." rows="3"></textarea>
+                    <button class="send-btn" id="send2" onclick="sendPhase2()">Lähetä ➤</button>
+                </div>
+            </div>
+            <div class="phase-complete" id="pc2">
+                <span style="font-size:2.5em">✅</span>
+                <h3 style="color:#27ae60;margin:8px 0">Vaihe 2 suoritettu!</h3>
+                <p style="color:#555;font-size:0.93em">Opit: tekoäly osaa tiivistää pitkiä tekstejä ja auttaa syventymään aiheeseen kysymysten avulla. Muista tarkistaa aina yhteenvedon faktat!</p>
+                <button class="next-phase-btn" onclick="nextPhase()">Seuraava vaihe →</button>
+            </div>`;
+    }
+
+    window.copyText2 = function() {
+        const btn = document.getElementById('copyBtn2');
+        const input = document.getElementById('input2');
+        const fullReq = LONG_AI_TEXT + '\n\nTee tästä lyhyt yhteenveto ja laadi 3 pohdintakysymystä opiskelijalle.';
+        navigator.clipboard.writeText(fullReq).catch(()=>{});
+        input.value = fullReq;
+        btn.textContent = '✅ Kopioitu!';
+        btn.classList.add('copied');
+        setTimeout(() => { btn.textContent = '📋 Kopioi artikkeli'; btn.classList.remove('copied'); }, 1800);
+    };
+
+    window.sendPhase2 = function() {
+        const input = document.getElementById('input2');
+        const text = input.value.trim();
+        if (!text) return;
+        document.getElementById('send2').disabled = true;
+        addMsg('msgs2', text.substring(0, 100) + (text.length > 100 ? '…' : ''), 'user');
+        input.value = '';
+        setTimeout(() => {
+            typeMessage('msgs2', `📝 <strong>Yhteenveto:</strong><br>
+Tekoäly on integroitunut vahvasti suomalaiseen ammatilliseen koulutukseen. Yli 60 % opiskelijoista käyttää tekoälyä viikoittain. Keskeisiä teemoja ovat: akateeminen rehellisyys, tietosuoja ja tekoälyosaaminen tulevaisuuden taitona. Mercurian ohjeet: käytä apuvälineenä, älä anna tehdä kaikkea puolestasi.<br><br>
+<strong>🤔 Kolme pohdintakysymystä sinulle:</strong><br>
+1. <em>Milloin tekoälyn käyttö on mielestäsi hyväksyttävää opiskelussa — missä menee raja?</em><br>
+2. <em>Mitä tietoja sinun ei mielestäsi pitäisi koskaan syöttää tekoälypalveluun — ja miksi?</em><br>
+3. <em>Miten tekoälyosaaminen voisi auttaa sinua omalla alallasi tulevaisuudessa?</em>`, 'success', () => {
+                document.getElementById('pc2').classList.add('show');
+            });
+        }, 900);
+    };
+
+    // ═══════════════ PHASE 3: Kuvageneraatio ═════════════════════════════════
+    function renderPhase3(c) {
+        c.innerHTML = `
+            <div class="task-instruction">
+                🎨 <strong>Vaihe 3: Kuvan luominen tekoälyllä</strong><br>
+                Alla on valmis kuvaprompt. Kopioi se kenttään ja paina "Generoi kuva" — näet, miten tekoäly luo kuvia!
+            </div>
+            <div class="source-box">
+                <div class="source-box-label">🖼️ Kuvaprompt (valmis — kopioi chatiin):</div>
+                <em style="font-size:0.95em">"${IMAGE_PROMPT}"</em>
+                <br><button class="copy-pill" id="copyBtn3" onclick="copyPrompt3()">📋 Kopioi prompt</button>
+            </div>
+            <div class="chat-window">
+                <div class="chat-header">🎨 Kuvageneraattori (simulaatio) &nbsp;<span style="opacity:0.7;font-weight:400;font-size:0.9em">AI Image Gen</span></div>
+                <div class="chat-messages" id="msgs3">
+                    <div class="chat-msg msg-ai">🎨 Syötä kuvaprompt alla olevaan kenttään ja paina "Generoi"!</div>
+                </div>
+                <div class="chat-input-row">
+                    <input class="chat-input" id="input3" placeholder="Liitä kuvaprompt tähän..." style="min-height:auto;resize:none">
+                    <button class="send-btn" id="send3" onclick="sendPhase3()">Generoi 🎨</button>
+                </div>
+            </div>
+            <canvas id="genCanvas" width="320" height="220" style="display:none"></canvas>
+            <div class="image-info" id="imageInfo">
+                💡 <strong>Mitä tekoälykuvista tulee muistaa?</strong><br>
+                Tekoäly generoi kuvia yhdistämällä koulutusaineistosta opittuja visuaalisia malleja — tulos on <em>tilastollinen arvaus</em> siitä, miltä kuvan tulisi näyttää. Tekoälykuvissa voi olla vääristymiä (esim. ylimääräisiä sormia tai tekstin kirjoitusvirheitä). Lisäksi tekoälykuvien <strong>tekijänoikeudellinen asema on vielä epäselvä</strong> — tarkista aina käyttöehdot ennen julkaisemista!
+            </div>
+            <div class="phase-complete" id="pc3">
+                <span style="font-size:2.5em">��</span>
+                <h3 style="color:#27ae60;margin:8px 0">Kaikki kolme vaihetta suoritettu!</h3>
+                <p style="color:#555;font-size:0.93em">Opit tekoälyn kolme keskeistä käyttötapaa — tekstin luominen, yhteenveto ja kuvageneraatio!</p>
+                <button class="next-phase-btn" onclick="nextPhase()">Näytä tulokset →</button>
+            </div>`;
+    }
+
+    window.copyPrompt3 = function() {
+        const btn = document.getElementById('copyBtn3');
+        const inp = document.getElementById('input3');
+        navigator.clipboard.writeText(IMAGE_PROMPT).catch(()=>{});
+        inp.value = IMAGE_PROMPT;
+        btn.textContent = '✅ Kopioitu!';
+        btn.classList.add('copied');
+        setTimeout(() => { btn.textContent = '📋 Kopioi prompt'; btn.classList.remove('copied'); }, 1800);
+    };
+
+    window.sendPhase3 = function() {
+        const input = document.getElementById('input3');
+        const text = input.value.trim();
+        if (!text) return;
+        document.getElementById('send3').disabled = true;
+        addMsg('msgs3', text, 'user');
+        addMsg('msgs3', '⏳ Generoidaan kuvaa… (analysoidaan prompt, haetaan visuaaliset elementit, renderöidään…)', 'ai');
+        const canvas = document.getElementById('genCanvas');
+        canvas.style.display = 'block';
+        animateImageGeneration(canvas, () => {
+            document.getElementById('imageInfo').classList.add('show');
+            addMsg('msgs3', '✅ Kuva generoitu! Tekoäly loi kuvan promptin pohjalta yhdistämällä oppimaansa visuaalista dataa.', 'success');
+            setTimeout(() => document.getElementById('pc3').classList.add('show'), 600);
+        });
+    };
+
+    function animateImageGeneration(canvas, onDone) {
+        const ctx = canvas.getContext('2d');
+        const W = canvas.width, H = canvas.height;
+        const CELL = 8;
+        const cols = Math.ceil(W / CELL), rows = Math.ceil(H / CELL);
+        const totalCells = cols * rows;
+        const cells = [];
+        // Final "painting" — simplified illustration
+        const finalPalette = [
+            [8, 145, 178], [14, 116, 144], [6, 182, 212], [240, 244, 248],
+            [255, 255, 255], [30, 41, 59], [100, 180, 220]
+        ];
+        for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
+            // Color based on position for a stylized result
+            let ci = 4; // white default
+            if (r > rows * 0.6) ci = 0; // teal floor
+            else if (r < rows * 0.15) ci = 3; // light top
+            else if (c > cols * 0.15 && c < cols * 0.85 && r > rows * 0.15 && r < rows * 0.6) ci = 1; // mid teal (desk)
+            if (c > cols * 0.3 && c < cols * 0.7 && r > rows * 0.2 && r < rows * 0.55) ci = 2; // laptop screen
+            if (c > cols * 0.35 && c < cols * 0.65 && r > rows * 0.3 && r < rows * 0.5) ci = 6; // screen content
+            cells.push({ r, c, final: finalPalette[ci] });
         }
-    ];
-
-    let completed = 0, score = 0;
-    const total = questions.length;
-
-    function initExercise() {
-        const container = document.getElementById('questionsContainer');
-        questions.forEach((q, i) => container.appendChild(createCard(q, i)));
+        // Shuffle for random reveal
+        cells.sort(() => Math.random() - 0.5);
+        let revealed = 0;
+        const total = cells.length;
+        // First: draw noise
+        for (let r = 0; r < rows; r++) for (let c2 = 0; c2 < cols; c2++) {
+            const v = Math.random() * 200;
+            ctx.fillStyle = `rgb(${v|0},${v|0},${v|0})`;
+            ctx.fillRect(c2 * CELL, r * CELL, CELL, CELL);
+        }
+        const interval = setInterval(() => {
+            const batch = Math.ceil(total * 0.04);
+            for (let i = 0; i < batch && revealed < total; i++, revealed++) {
+                const cell = cells[revealed];
+                const prog = revealed / total;
+                // Blend from noise to final color
+                const [fr, fg, fb] = cell.final;
+                const noise = (Math.random() * 80 * (1 - prog)) | 0;
+                ctx.fillStyle = `rgb(${(fr + noise * (Math.random() > 0.5 ? 1 : -1))|0},${(fg + noise)|0},${(fb + noise)|0})`;
+                ctx.fillRect(cell.c * CELL, cell.r * CELL, CELL, CELL);
+            }
+            if (revealed >= total) {
+                clearInterval(interval);
+                // Final overlay text
+                ctx.fillStyle = 'rgba(0,0,0,0.55)';
+                ctx.fillRect(0, H - 36, W, 36);
+                ctx.fillStyle = 'white';
+                ctx.font = 'bold 13px sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillText('AI-GENEROITU KUVA (simulaatio)', W / 2, H - 14);
+                onDone();
+            }
+        }, 60);
     }
 
-    function createCard(q, idx) {
-        const card = document.createElement('div');
-        card.className = 'question-card';
-        card.id = 'qcard-' + idx;
-
-        const qText = document.createElement('div');
-        qText.className = 'question-text';
-        qText.innerHTML = `<span style="color:#6366f1;font-size:0.85em;">Kysymys ${idx + 1}/${total}</span><br>${q.question}`;
-        card.appendChild(qText);
-
-        const opts = document.createElement('div');
-        opts.className = 'options-container';
-        q.options.forEach((opt, oi) => {
-            const btn = document.createElement('button');
-            btn.className = 'option-btn';
-            btn.innerHTML = `<span style="color:#6366f1;font-weight:700;margin-right:6px;">${String.fromCharCode(65+oi)}.</span> ${opt}`;
-            btn.onclick = () => answer(idx, oi, card, opts);
-            opts.appendChild(btn);
-        });
-        card.appendChild(opts);
-
-        const exp = document.createElement('div');
-        exp.className = 'explanation';
-        exp.id = 'exp-' + idx;
-        card.appendChild(exp);
-
-        return card;
+    // ═══════════════ Shared helpers ══════════════════════════════════════════
+    function addMsg(containerId, html, type) {
+        const msgs = document.getElementById(containerId);
+        if (!msgs) return;
+        const div = document.createElement('div');
+        div.className = 'chat-msg msg-' + type;
+        div.innerHTML = html;
+        msgs.appendChild(div);
+        msgs.scrollTop = msgs.scrollHeight;
     }
 
-    function answer(idx, choice, card, opts) {
-        const q = questions[idx];
-        opts.querySelectorAll('.option-btn').forEach((b, i) => {
-            b.disabled = true;
-            if (i === q.correct) b.classList.add('correct');
-            if (i === choice && choice !== q.correct) b.classList.add('incorrect');
-        });
-        const correct = choice === q.correct;
-        if (correct) score++;
-        card.classList.add(correct ? 'answered-correct' : 'answered-incorrect');
-        const exp = document.getElementById('exp-' + idx);
-        exp.className = 'explanation show';
-        exp.innerHTML = q.explanation;
-        completed++;
-        updateProgress();
-        if (completed === total) setTimeout(showSummary, 600);
+    function typeMessage(containerId, fullHtml, type, onDone) {
+        const msgs = document.getElementById(containerId);
+        if (!msgs) return;
+        const div = document.createElement('div');
+        div.className = 'chat-msg msg-' + type;
+        msgs.appendChild(div);
+        msgs.scrollTop = msgs.scrollHeight;
+
+        // Show as HTML but animate entry
+        div.style.opacity = '0';
+        div.innerHTML = fullHtml;
+        setTimeout(() => {
+            div.style.transition = 'opacity 0.4s';
+            div.style.opacity = '1';
+            msgs.scrollTop = msgs.scrollHeight;
+            if (onDone) setTimeout(onDone, 400);
+        }, 200);
     }
 
-    function updateProgress() {
-        document.getElementById('progressFill').style.width = Math.round(completed / total * 100) + '%';
-        document.getElementById('progressCount').textContent = completed;
-    }
+    window.nextPhase = function() {
+        currentPhase++;
+        renderPhase();
+    };
 
-    function showSummary() {
-        const pct = Math.round(score / total * 100);
-        const msg = pct >= 87 ? '🎉 Erinomainen! Tekoälyn perusteet ovat hallussa.' : pct >= 62 ? '👍 Hyvä suoritus! Muutama käsite kaipaa vielä kertausta.' : '📚 Palaa materiaaliin ja yritä uudelleen!';
+    function showFinalSummary() {
+        document.getElementById('phaseContent').innerHTML = '';
+        setStep(3);
         document.getElementById('summaryContainer').innerHTML = `<div class="summary-panel">
-            <h3>📊 Yhteenveto</h3>
-            <p><strong>Pisteet: ${score}/${total}</strong> (${pct}%)</p>
-            <p>${msg}</p>
-            <button class="btn btn-primary" onclick="location.reload()" style="margin-top:14px;padding:10px 22px;">🔄 Kokeile uudelleen</button>
+            <h3>🎉 Tekoäly-simulaattori suoritettu!</h3>
+            <p>Kävit läpi kaikki kolme tekoälyn keskeistä käyttötapaa:</p>
+            <div style="background:white;border-radius:8px;padding:16px;margin:12px 0;text-align:left;font-size:0.92em">
+                <p>✍️ <strong>Tekstin luominen:</strong> Tekoäly muotoilee tekstiä erinomaisesti — mutta muista, että sille ei saa syöttää luottamuksellisia tai henkilötietoja!</p>
+                <p>📝 <strong>Yhteenveto:</strong> Tekoäly voi tiivistää pitkiä tekstejä ja auttaa oppimisessa kysymysten avulla. Tarkista aina faktat!</p>
+                <p>🎨 <strong>Kuvageneraatio:</strong> Tekoälykuvat ovat tilastollisia arvauksia — ne voivat sisältää virheitä, ja niiden tekijänoikeudellinen asema on epäselvä.</p>
+            </div>
+            <button class="btn btn-primary" onclick="location.reload()" style="margin-top:8px;padding:10px 22px;">🔄 Kokeile uudelleen</button>
         </div>`;
     }
 
-    initExercise();
+    renderPhase();
     </script>
 </body>
 </html>

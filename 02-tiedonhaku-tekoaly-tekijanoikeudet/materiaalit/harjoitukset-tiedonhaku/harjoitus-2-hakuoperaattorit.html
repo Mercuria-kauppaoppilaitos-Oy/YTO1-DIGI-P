@@ -3,196 +3,465 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Harjoitus 2 – Hakuoperaattorit</title>
+    <title>Harjoitus 2 – Hakukone-simulaattori</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Google-like SERP UI */
+        .google-bar {
+            background: white;
+            border: 1px solid #dfe1e5;
+            border-radius: 24px;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 12px 0;
+            box-shadow: 0 1px 6px rgba(0,0,0,0.12);
+        }
+        .google-logo { font-size: 1.5em; font-weight: 900; letter-spacing: -1px; }
+        .google-logo span:nth-child(1) { color: #4285F4; }
+        .google-logo span:nth-child(2) { color: #EA4335; }
+        .google-logo span:nth-child(3) { color: #FBBC05; }
+        .google-logo span:nth-child(4) { color: #4285F4; }
+        .google-logo span:nth-child(5) { color: #34A853; }
+        .google-logo span:nth-child(6) { color: #EA4335; }
+        .search-display {
+            background: white;
+            border: 1px solid #dfe1e5;
+            border-radius: 24px;
+            padding: 8px 16px;
+            flex: 1;
+            font-size: 0.95em;
+            color: #333;
+        }
+        .serp-container { margin: 8px 0; }
+        .serp-stats { font-size: 0.82em; color: #70757a; margin: 8px 0 12px; }
+        /* AI Overview */
+        .ai-overview {
+            background: #f8f9fc;
+            border: 1px solid #d2e3fc;
+            border-radius: 12px;
+            padding: 14px 16px;
+            margin: 8px 0 14px;
+            position: relative;
+        }
+        .ai-overview-header { display: flex; align-items: center; gap: 8px; font-weight: 700; color: #1a73e8; margin-bottom: 10px; font-size: 0.9em; }
+        .ai-overview-text { font-size: 0.9em; line-height: 1.6; color: #333; }
+        .ai-badge { background: linear-gradient(135deg, #4285F4, #8b5cf6); color: white; border-radius: 6px; padding: 2px 8px; font-size: 0.75em; font-weight: 700; }
+        /* Search result items */
+        .serp-result {
+            margin: 6px 0;
+            padding: 12px 14px;
+            border-radius: 8px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+        .serp-result:hover { background: #f8f9fa; border-color: #ddd; }
+        .serp-result.ad-result { border-color: #f0e6c8; background: #fffdf2; }
+        .serp-result.ad-result:hover { border-color: #f39c12; }
+        .ad-tag {
+            display: inline-block;
+            background: #f39c12;
+            color: white;
+            font-size: 0.7em;
+            font-weight: 700;
+            padding: 1px 6px;
+            border-radius: 3px;
+            margin-right: 6px;
+            letter-spacing: 0.5px;
+        }
+        .result-url { font-size: 0.8em; color: #1a73e8; margin-bottom: 3px; }
+        .result-url .domain { font-weight: 600; }
+        .result-title { font-size: 1.05em; color: #1a0dab; font-weight: 600; margin-bottom: 4px; }
+        .result-snippet { font-size: 0.88em; color: #4d5156; line-height: 1.5; }
+        .serp-result.ad-clicked { background: #fff3e0; border-color: #f39c12; }
+        .serp-result.best-result { border-color: #4caf50; background: #f1f8e9; }
+        .serp-result.wrong-click { border-color: #e74c3c; background: #fff5f5; animation: shake 0.3s; }
+        @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+        /* Query buttons */
+        .query-options { display: grid; gap: 8px; margin: 10px 0; }
+        .query-btn {
+            background: white;
+            border: 2px solid #0891b2;
+            border-radius: 8px;
+            padding: 10px 14px;
+            cursor: pointer;
+            text-align: left;
+            font-size: 0.92em;
+            transition: all 0.2s;
+            font-family: 'Courier New', monospace;
+        }
+        .query-btn:hover { background: #e0f7fa; border-color: #0e7490; }
+        .query-btn.selected { background: #0891b2; color: white; border-color: #0891b2; }
+        .query-label { font-family: sans-serif; font-weight: 700; color: #0891b2; margin-right: 6px; }
+        .query-btn.selected .query-label { color: white; }
+        /* Round header */
+        .round-header {
+            background: linear-gradient(135deg, #0891b2, #06b6d4);
+            color: white;
+            border-radius: 10px;
+            padding: 12px 18px;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .round-num { font-size: 1.8em; font-weight: 900; opacity: 0.8; }
+        .round-title { font-size: 1.1em; font-weight: 700; }
+        .round-desc { font-size: 0.88em; opacity: 0.92; margin-top: 2px; }
+        .task-box {
+            background: #fff9c4;
+            border-left: 4px solid #f39c12;
+            border-radius: 4px;
+            padding: 10px 14px;
+            margin: 10px 0;
+            font-size: 0.93em;
+            font-weight: 600;
+            color: #7c5c00;
+        }
+        .feedback-overlay {
+            background: #e8f5e9;
+            border: 2px solid #27ae60;
+            border-radius: 10px;
+            padding: 14px 18px;
+            margin: 14px 0;
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+        @keyframes fadeIn { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:none} }
+        .feedback-overlay.show { display: block; }
+        .feedback-overlay.error { background: #fff5f5; border-color: #e74c3c; }
+        .ad-counter { font-weight: 700; color: #f39c12; font-size: 1.1em; }
+        .round-complete-btn {
+            background: #0891b2; color: white; border: none;
+            border-radius: 8px; padding: 11px 24px;
+            font-size: 1em; font-weight: 700; cursor: pointer;
+            margin-top: 12px; transition: all 0.2s;
+            display: none;
+        }
+        .round-complete-btn:hover { background: #0e7490; transform: translateY(-2px); }
+        .round-complete-btn.show { display: inline-block; }
+        @media (max-width: 600px) {
+            .google-bar { flex-wrap: wrap; }
+        }
+    </style>
 </head>
 <body>
     <a class="back-link" href="index.html">← Takaisin harjoituksiin</a>
     <div class="exercise-container">
         <div class="exercise-header">
-            <h1>⌨️ Harjoitus 2 – Hakuoperaattorit</h1>
-            <p>Testaa tietosi Google-hakuoperaattoreista. Valitse oikea operaattori kuhunkin tilanteeseen.</p>
-        </div>
-
-        <div class="info-panel">
-            <h3>🔑 Tärkeimmät hakuoperaattorit</h3>
-            <ul>
-                <li><strong>"lainausmerkit"</strong> – Hae täsmälleen tiettyä lausetta tai sanayhdistelmää</li>
-                <li><strong>site:domain.fi</strong> – Hae tuloksia vain tietystä verkkosivustosta</li>
-                <li><strong>filetype:pdf</strong> – Hae tietyn tiedostotyypin tiedostoja</li>
-                <li><strong>-sana</strong> – Jätä hakutuloksista pois tietyn sanan sisältävät sivut</li>
-                <li><strong>OR</strong> – Hae jommallakummalla sanalla (esim. koira OR kissa)</li>
-            </ul>
+            <h1>🔍 Harjoitus 2 – Hakukone-simulaattori</h1>
+            <p>Tutki hakukoneita kuin tutkija! Kolme kierrosta, kolme opittavaa asiaa.</p>
         </div>
 
         <div class="progress-container">
             <div class="progress-bar-track">
                 <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
             </div>
-            <div class="progress-text"><span id="progressCount">0</span> / 7 kysymystä</div>
+            <div class="progress-text">Kierros <span id="progressCount">0</span> / 3 suoritettu</div>
         </div>
 
-        <div id="questionsContainer"></div>
+        <div id="roundContainer"></div>
         <div id="summaryContainer"></div>
     </div>
 
     <script>
-    const questions = [
+    let currentRound = 0;
+    let score = 0;
+    const totalRounds = 3;
+
+    const rounds = [
         {
-            question: 'Haluat löytää tarkalleen lauseen "tekoäly mullistaa koulutuksen". Mitä hakuoperaattoria käytät?',
-            options: [
-                'site:tekoaly.fi',
-                '"tekoäly mullistaa koulutuksen"',
-                'tekoäly -mullistaa',
-                'tekoäly OR koulutus'
-            ],
-            correct: 1,
-            explanation: '✅ Lainausmerkit etsivät täsmälleen annettua lausetta. Ilman lainausmerkkejä Google hakee sivuja, joilla esiintyy kaikki sanat erikseen, mutta ei välttämättä peräkkäin.'
+            num: 1,
+            icon: '🎯',
+            title: 'Tunnista mainokset',
+            desc: 'Opettele erottamaan mainokset orgaanisista hakutuloksista',
+            task: '🎯 Tehtäväsi: Klikkaa kaikki mainokset (MAINOS-merkintä) — löydä kaikki 3 mainosta ennen kuin jatkat!',
+            render: renderRound1
         },
         {
-            question: 'Haluat hakea tietoa vain Verohallinon viralliselta sivustolta (vero.fi). Millainen hakuoperaattori sopii?',
-            options: [
-                '"vero.fi"',
-                'filetype:vero.fi',
-                'site:vero.fi opiskelijan verotus',
-                'vero.fi -verotus'
-            ],
-            correct: 2,
-            explanation: '✅ site: -operaattori rajaa hakutulokset tiettyyn verkkotunnukseen. Esimerkiksi "site:vero.fi opiskelijan verotus" hakee verotietoa vain vero.fi-sivustolta.'
+            num: 2,
+            icon: '⚡',
+            title: 'Paranna hakuasi',
+            desc: 'Eri hakusanat tuottavat hyvin erilaisia tuloksia',
+            task: '⚡ Tehtäväsi: Sinun pitää löytää luotettavaa tietoa opiskelijan verotuksesta. Valitse ensin paras hakutermi, sitten klikkaa luotettavin tulos!',
+            render: renderRound2
         },
         {
-            question: 'Haluat löytää PDF-muotoisia oppaita tiedonhausta. Mikä hakuoperaattori auttaa?',
-            options: [
-                'tiedonhaku "pdf"',
-                'tiedonhaku filetype:pdf',
-                'tiedonhaku site:pdf',
-                'tiedonhaku -docx'
-            ],
-            correct: 1,
-            explanation: '✅ filetype: -operaattori rajaa tulokset tiettyyn tiedostomuotoon. "filetype:pdf tiedonhaku" löytää PDF-tiedostoja, joissa käsitellään tiedonhakua.'
-        },
-        {
-            question: 'Haet tietoa digihyvinvoinnista, mutta et halua tuloksiin sosiaalisen median mainoksia. Mitä teet?',
-            options: [
-                'digihyvinvointi site:some.fi',
-                'digihyvinvointi "ei mainoksia"',
-                'digihyvinvointi -mainos',
-                'digihyvinvointi filetype:mainos'
-            ],
-            correct: 2,
-            explanation: '✅ Miinusmerkki (-) poistaa hakutuloksista sivut, joilla esiintyy kyseinen sana. "digihyvinvointi -mainos" jättää pois tulokset, joissa esiintyy sana "mainos".'
-        },
-        {
-            question: 'Haet tietoa joko tietoturvasta tai kyberturvallisuudesta – molemmat aiheet sopivat. Mitä käytät?',
-            options: [
-                '"tietoturva kyberturvallisuus"',
-                'tietoturva + kyberturvallisuus',
-                'tietoturva OR kyberturvallisuus',
-                'site:tietoturva.fi'
-            ],
-            correct: 2,
-            explanation: '✅ OR-operaattori hakee tuloksia, joissa esiintyy jompi kumpi sanoista. Isolla kirjoitettu OR on tärkeä – pienellä kirjoitettu "or" ei toimi samoin Googlessa.'
-        },
-        {
-            question: 'Olet kirjoittamassa raporttia ja haet tieteellisiä artikkeleita tekoälystä. Mikä hakuyhdistelmä antaa parhaan tuloksen?',
-            options: [
-                'tekoäly filetype:pdf site:scholar.google.com',
-                '"tekoäly" -wikipedia',
-                'tekoäly OR AI filetype:pdf',
-                'tekoäly site:yle.fi filetype:pdf'
-            ],
-            correct: 2,
-            explanation: '✅ "tekoäly OR AI filetype:pdf" yhdistää kaksi hakusanaa OR-operaattorilla ja rajaa tulokset PDF-tiedostoihin. Tämä löytää sekä suomenkieliset että englanninkieliset tieteelliset artikkelit.'
-        },
-        {
-            question: 'Mikä seuraavista hakuoperaattorien kuvauksista on VIRHEELLINEN?',
-            options: [
-                'site: rajaa hakutulokset tiettyyn verkkotunnukseen',
-                'filetype: rajaa hakutulokset tiettyyn tiedostomuotoon',
-                '"lainausmerkit" etsivät täsmällistä lausetta',
-                'site: -operaattori löytää ainoastaan PDF-tiedostoja'
-            ],
-            correct: 3,
-            explanation: '✅ Oikein tunnistettu virhe! site: -operaattori rajaa tulokset tiettyyn verkkotunnukseen – ei tiedostotyypin mukaan. PDF-tiedostoja haetaan filetype:pdf -operaattorilla.'
+            num: 3,
+            icon: '🤖',
+            title: 'Tekoäly-yhteenveto',
+            desc: 'Hakukoneissa näkyy nykyään tekoälyn tuottama yhteenveto — mitä se tarkoittaa?',
+            task: '🤖 Tehtäväsi: Lue tekoälyn yhteenveto alla ja vastaa sitä koskevaan kysymykseen!',
+            render: renderRound3
         }
     ];
 
-    let completed = 0;
-    let score = 0;
-    const total = questions.length;
-
-    function initExercise() {
-        const container = document.getElementById('questionsContainer');
-        questions.forEach((q, i) => container.appendChild(createCard(q, i)));
-    }
-
-    function createCard(q, idx) {
-        const card = document.createElement('div');
-        card.className = 'question-card';
-        card.id = 'qcard-' + idx;
-
-        const qText = document.createElement('div');
-        qText.className = 'question-text';
-        qText.innerHTML = `<span style="color:#0891b2;font-size:0.85em;">Kysymys ${idx + 1}/${total}</span><br>${q.question}`;
-        card.appendChild(qText);
-
-        const opts = document.createElement('div');
-        opts.className = 'options-container';
-        q.options.forEach((opt, oi) => {
-            const btn = document.createElement('button');
-            btn.className = 'option-btn';
-            btn.innerHTML = `<span style="color:#0891b2;font-weight:700;margin-right:6px;">${String.fromCharCode(65+oi)}.</span> ${opt}`;
-            btn.onclick = () => answer(idx, oi, card, opts);
-            opts.appendChild(btn);
-        });
-        card.appendChild(opts);
-
-        const exp = document.createElement('div');
-        exp.className = 'explanation';
-        exp.id = 'exp-' + idx;
-        card.appendChild(exp);
-
-        return card;
-    }
-
-    function answer(idx, choice, card, opts) {
-        const q = questions[idx];
-        opts.querySelectorAll('.option-btn').forEach((b, i) => {
-            b.disabled = true;
-            if (i === q.correct) b.classList.add('correct');
-            if (i === choice && choice !== q.correct) b.classList.add('incorrect');
-        });
-
-        const correct = choice === q.correct;
-        if (correct) score++;
-        card.classList.add(correct ? 'answered-correct' : 'answered-incorrect');
-
-        const exp = document.getElementById('exp-' + idx);
-        exp.className = 'explanation show';
-        exp.innerHTML = q.explanation;
-
-        completed++;
+    function renderCurrentRound() {
+        if (currentRound >= totalRounds) { showFinalSummary(); return; }
+        const round = rounds[currentRound];
+        document.getElementById('roundContainer').innerHTML = '';
+        round.render(document.getElementById('roundContainer'), round);
         updateProgress();
-        if (completed === total) setTimeout(showSummary, 600);
     }
 
     function updateProgress() {
-        document.getElementById('progressFill').style.width = Math.round(completed / total * 100) + '%';
-        document.getElementById('progressCount').textContent = completed;
+        document.getElementById('progressFill').style.width = Math.round(currentRound / totalRounds * 100) + '%';
+        document.getElementById('progressCount').textContent = currentRound;
     }
 
-    function showSummary() {
-        const pct = Math.round(score / total * 100);
-        const msg = pct >= 86 ? '🎉 Hakuoperaattorit hallinnassa – erinomaisesti!' : pct >= 57 ? '👍 Hyvä tulos! Jotkin operaattorit ovat jo tuttuja.' : '📚 Harjoittele lisää – hakuoperaattorit tehostavat tiedonhakua merkittävästi!';
+    // ── ROUND 1: Tunnista mainokset ──────────────────────────────────────────
+    function renderRound1(container, round) {
+        let adsClicked = 0;
+        const adCount = 3;
+        container.innerHTML = `
+            <div class="round-header">
+                <div class="round-num">${round.icon}</div>
+                <div><div class="round-title">Kierros ${round.num}/3: ${round.title}</div>
+                <div class="round-desc">${round.desc}</div></div>
+            </div>
+            <div class="task-box">${round.task}</div>
+            <div class="google-bar">
+                <div class="google-logo"><span>G</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span></div>
+                <div class="search-display">pikalaina halpaa</div>
+            </div>
+            <div class="serp-stats">Noin 48 200 000 tulosta (0,42 sekuntia)</div>
+            <div class="serp-container" id="serpR1">
+                ${[
+                    {ad:true, domain:'fastcash.fi', path:'pikalaina', title:'FastCash.fi – Hae 200–5000€ pikalaina heti tilille!', snippet:'Lainapäätös hetkessä. Rahat tilillesi heti hyväksymisen jälkeen. Hae ilman vakuuksia...'},
+                    {ad:true, domain:'pikalainaraha.com', path:'hae-nyt', title:'PikaLainaraha – Lainaa 100€ – 3000€ – Aina hyväksytään!', snippet:'Jopa luottotiedottomille. Täytä lainahakemus 2 min. Rahat sinulle samana päivänä...'},
+                    {ad:true, domain:'rahoitusboss.fi', path:'lainaa', title:'RahoitusBoss – Nopein pikalaina Suomessa | Hae nyt', snippet:'Vertaile 20+ lainatarjoajaa yhdessä hakemuksessa. Säästä aikaa ja rahaa...'},
+                    {ad:false, domain:'kuluttajaliitto.fi', path:'rahoitus/pikalainat', title:'Pikalainojen riskit – Mitä sinun tulee tietää', snippet:'Kuluttajaliitto varoittaa: korkeat korot voivat johtaa velkaantumiseen. Lue vinkit ennen lainaamista...'},
+                    {ad:false, domain:'taloudellinenriippumattomuus.fi', path:'pikalaina-sudenkuopat', title:'Pikalainafirmat käyttävät hyväksi hätää – tässä riskit', snippet:'Yksityishenkilöiden kokemusten mukaan pikalainat voivat tulla kalliiksi. Vertaile harkiten...'}
+                ].map((r,i) => `
+                    <div class="serp-result ${r.ad ? 'ad-result' : ''}" id="r1item-${i}" onclick="clickAdItem(${i}, ${r.ad})">
+                        <div class="result-url">${r.ad ? '<span class="ad-tag">Mainos</span>' : ''}<span class="domain">${r.domain}</span> › ${r.path}</div>
+                        <div class="result-title">${r.title}</div>
+                        <div class="result-snippet">${r.snippet}</div>
+                    </div>`).join('')}
+            </div>
+            <div class="feedback-overlay" id="fbR1"></div>
+            <span class="ad-counter" id="adCounter">Löydettyjä mainoksia: 0 / 3</span>
+            <br><button class="round-complete-btn" id="r1next" onclick="finishRound1()">Jatka kierrokselle 2 →</button>
+        `;
+
+        window.clickAdItem = function(i, isAd) {
+            const el = document.getElementById('r1item-' + i);
+            if (el.dataset.done) return;
+            if (isAd) {
+                el.classList.add('ad-clicked');
+                el.dataset.done = '1';
+                adsClicked++;
+                document.getElementById('adCounter').textContent = 'Löydettyjä mainoksia: ' + adsClicked + ' / 3';
+                if (adsClicked === adCount) {
+                    showFeedback('fbR1', false, '🎉 Löysit kaikki 3 mainosta! Huomaa: mainokset merkitään hakutuloksissa selkeästi "Mainos"-tunnisteella, mutta ne näyttävät muuten lähes samanlaisilta kuin orgaaniset tulokset. Tämä on tarkoituksellista.');
+                    document.getElementById('r1next').classList.add('show');
+                }
+            } else {
+                el.classList.add('wrong-click');
+                setTimeout(() => el.classList.remove('wrong-click'), 400);
+                showFeedback('fbR1', true, '💡 Tämä ei ole mainos — se on orgaaninen hakutulos. Mainokset merkitään aina "Mainos"-tarralla hakutuloksen yhteydessä.');
+            }
+        };
+    }
+
+    window.finishRound1 = function() { score++; currentRound++; renderCurrentRound(); };
+
+    // ── ROUND 2: Paranna hakua ───────────────────────────────────────────────
+    function renderRound2(container, round) {
+        const queries = [
+            { label: 'A', text: 'opiskelija verotus',          results: resultsSet2A },
+            { label: 'B', text: 'opiskelija verotus suomi 2026', results: resultsSet2B },
+            { label: 'C', text: 'site:vero.fi opiskelijan verotus', results: resultsSet2C, best: true }
+        ];
+        let selectedQuery = null;
+        let resultClicked = false;
+
+        function resultsSet2A() {
+            return [
+                {ad:true, domain:'pikaverolaskuri.net', path:'laskin', title:'PIKAVEROLASKURI – Laske verot nyt!', snippet:'Kaupallinen verolaskuri. Syötä tulosi ja laske verotuksesi...'},
+                {ad:false, domain:'opiskelija-blogi.blogspot.com', path:'verot-2020', title:'Opiskelijan verot – kaikki mitä tietää!', snippet:'Kirjoitin tähän kaiken mitä olen kuullut opiskelijan verotuksesta...', reliable: false},
+                {ad:false, domain:'vero.fi', path:'opiskelija', title:'Opiskelijan verotus – Vero.fi', snippet:'Opiskelijana olet verovelvollinen Suomessa, jos saat veronalaista tuloa. Verokortin hakeminen...', reliable: true},
+                {ad:false, domain:'opiskelu.net', path:'rahat/verotus', title:'Opiskelijan rahat ja verotus', snippet:'Opiskelijan verotuksesta löytyy tietoa monesta paikasta. Tässä yhteenveto...', reliable: false}
+            ];
+        }
+        function resultsSet2B() {
+            return [
+                {ad:false, domain:'vero.fi', path:'opiskelija', title:'Opiskelijan verotus – Vero.fi', snippet:'Opiskelijana olet verovelvollinen Suomessa. Päivitetty 2026: verokortin hakeminen, tulorajat...', reliable: true},
+                {ad:false, domain:'yle.fi', path:'uutiset/opiskelija-verotus', title:'Yle: Opiskelijan verotus 2026 – muutokset', snippet:'Yle selvitti opiskelijan verotuksen muutokset vuodelle 2026...', reliable: true},
+                {ad:false, domain:'opiskelija-talous.fi', path:'verot', title:'Opiskelijan talous: verot ja tulorajat', snippet:'Kaikki mitä opiskelijan pitää tietää veroista 2026...', reliable: false}
+            ];
+        }
+        function resultsSet2C() {
+            return [
+                {ad:false, domain:'vero.fi', path:'opiskelija', title:'Opiskelijan verotus – Vero.fi (virallinen)', snippet:'Opiskelijana olet verovelvollinen Suomessa, jos saat veronalaista tuloa. Verokortin hakeminen, tulorajat ja veroilmoituksen täyttäminen...', reliable: true},
+                {ad:false, domain:'vero.fi', path:'verokortti', title:'Verokortin hakeminen – Vero.fi', snippet:'Hae verokortti OmaVero-palvelusta. Opiskelijoilla on usein alennettu pidätysprosentti...', reliable: true},
+                {ad:false, domain:'vero.fi', path:'opintoraha-verotus', title:'Opintorahan verotus – Vero.fi', snippet:'Opintoraha on veronalainen tulo. Katso, miten se vaikuttaa verokorttiin...', reliable: true}
+            ];
+        }
+
+        container.innerHTML = `
+            <div class="round-header">
+                <div class="round-num">${round.icon}</div>
+                <div><div class="round-title">Kierros ${round.num}/3: ${round.title}</div>
+                <div class="round-desc">${round.desc}</div></div>
+            </div>
+            <div class="task-box">${round.task}</div>
+            <p style="font-weight:700;color:#0e7490;margin:10px 0 6px;">Valitse hakutermi:</p>
+            <div class="query-options" id="queryOpts">
+                ${queries.map((q,i) => `<button class="query-btn" id="qbtn-${i}" onclick="selectQuery(${i})">
+                    <span class="query-label">${q.label}.</span> ${q.text}
+                </button>`).join('')}
+            </div>
+            <div class="google-bar" id="googleBar2" style="opacity:0.5">
+                <div class="google-logo"><span>G</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span></div>
+                <div class="search-display" id="searchDisplay2">— valitse hakutermi yllä —</div>
+            </div>
+            <div id="serpR2"></div>
+            <div class="feedback-overlay" id="fbR2"></div>
+            <button class="round-complete-btn" id="r2next" onclick="finishRound2()">Jatka kierrokselle 3 →</button>
+        `;
+
+        window.selectQuery = function(idx) {
+            if (resultClicked) return;
+            selectedQuery = idx;
+            queries.forEach((_,i) => {
+                document.getElementById('qbtn-' + i).classList.toggle('selected', i === idx);
+            });
+            document.getElementById('searchDisplay2').textContent = queries[idx].text;
+            document.getElementById('googleBar2').style.opacity = '1';
+            renderResults2(queries[idx].results());
+        };
+
+        function renderResults2(results) {
+            const serp = document.getElementById('serpR2');
+            serp.innerHTML = `<div class="serp-stats">Noin ${results.length * 3}00 000 tulosta</div>` +
+                results.map((r,i) => `
+                    <div class="serp-result ${r.ad ? 'ad-result' : ''}" id="r2item-${i}" onclick="clickResult2(${i}, ${!!r.reliable})">
+                        <div class="result-url">${r.ad ? '<span class="ad-tag">Mainos</span>' : ''}<span class="domain">${r.domain}</span> › ${r.path}</div>
+                        <div class="result-title">${r.title}</div>
+                        <div class="result-snippet">${r.snippet}</div>
+                    </div>`).join('');
+        }
+
+        window.clickResult2 = function(i, isReliable) {
+            if (resultClicked) return;
+            resultClicked = true;
+            const el = document.getElementById('r2item-' + i);
+            if (isReliable) {
+                el.classList.add('best-result');
+                const isBestQuery = selectedQuery === 2;
+                if (isBestQuery) {
+                    showFeedback('fbR2', false, '🎉 Erinomainen! Valitsit parhaan hakutermin (site:vero.fi) JA luotettavimman tuloksen. site: -operaattori rajaa tulokset tiettyyn verkkotunnukseen — tämä on erittäin tehokas tapa löytää tietoa virallisilta sivuilta.');
+                    score++;
+                } else {
+                    showFeedback('fbR2', false, '✅ Hyvä — valitsit luotettavan tuloksen! Tiesitkö, että hakutermi "site:vero.fi opiskelijan verotus" olisi antanut pelkkiä virallisia Verohallinnon sivuja? Kokeile site:-operaattoria oikeassa haussa!');
+                }
+                document.getElementById('r2next').classList.add('show');
+            } else {
+                el.classList.add('wrong-click');
+                setTimeout(() => el.classList.remove('wrong-click'), 500);
+                showFeedback('fbR2', true, '⚠️ Tarkista lähde — tämä sivusto ei ole viranomaissivusto. Etsi luotettavampi tulos listalta!');
+                resultClicked = false;
+            }
+        };
+    }
+
+    window.finishRound2 = function() { currentRound++; renderCurrentRound(); };
+
+    // ── ROUND 3: Tekoäly-yhteenveto ─────────────────────────────────────────
+    function renderRound3(container, round) {
+        container.innerHTML = `
+            <div class="round-header">
+                <div class="round-num">${round.icon}</div>
+                <div><div class="round-title">Kierros ${round.num}/3: ${round.title}</div>
+                <div class="round-desc">${round.desc}</div></div>
+            </div>
+            <div class="task-box">${round.task}</div>
+            <div class="google-bar">
+                <div class="google-logo"><span>G</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span></div>
+                <div class="search-display">mitä on tekoäly</div>
+            </div>
+            <div class="serp-stats">Noin 182 000 000 tulosta (0,38 sekuntia)</div>
+            <div class="ai-overview">
+                <div class="ai-overview-header">
+                    <span class="ai-badge">✦ AI</span> Tekoälyn yhteenveto
+                </div>
+                <div class="ai-overview-text">
+                    <strong>Tekoäly (artificial intelligence, AI)</strong> tarkoittaa tietokonejärjestelmiä, jotka suorittavat tehtäviä, jotka tavallisesti vaativat ihmisälykkyyttä. Niihin kuuluvat esimerkiksi kielen ymmärtäminen, kuvantunnistus ja päätöksenteko.<br><br>
+                    Generatiivinen tekoäly, kuten <em>ChatGPT</em>, on kielimalli, joka tuottaa uutta tekstiä tai muuta sisältöä koulutusaineiston perusteella. Suomessa tekoäly on noussut merkittäväksi aiheeksi koulutuksessa vuosina 2024–2026.
+                </div>
+                <div style="font-size:0.75em;color:#5f6368;margin-top:8px;">⚠️ Tekoäly voi tehdä virheitä. Tarkista tärkeät tiedot.</div>
+            </div>
+            <div id="r3serp">
+                ${[
+                    {domain:'fi.wikipedia.org', path:'wiki/Tekoäly', title:'Tekoäly – Wikipedia', snippet:'Tekoäly (artificial intelligence, AI) on tietojenkäsittelytieteen osa-alue, jossa tutkitaan älykkäiden...'},
+                    {domain:'yle.fi', path:'aihe/tekoaly', title:'Yle Aihe: Tekoäly – mitä on ja miten muuttaa maailmaa', snippet:'Yle kokoaa tekoälyä käsittelevät jutut yhteen. Lue uusimmat uutiset ja taustat...'},
+                    {domain:'tietosuoja.fi', path:'tekoaly-ja-tietosuoja', title:'Tekoäly ja tietosuoja – Tietosuojavaltuutettu', snippet:'Tekoälyä kehitettäessä ja käytettäessä tulee huomioida EU:n tietosuoja-asetus (GDPR)...'}
+                ].map((r,i) => `
+                    <div class="serp-result">
+                        <div class="result-url"><span class="domain">${r.domain}</span> › ${r.path}</div>
+                        <div class="result-title">${r.title}</div>
+                        <div class="result-snippet">${r.snippet}</div>
+                    </div>`).join('')}
+            </div>
+            <p style="font-weight:700;color:#0e7490;margin:16px 0 8px;">Mitä tekoäly-yhteenvedosta (AI Overview) tulee tietää?</p>
+            <div style="display:grid;gap:8px" id="r3opts">
+                ${[
+                    {text: 'Se on aina täysin oikea tieto — tekoäly ei koskaan tee virheitä', correct: false},
+                    {text: 'Se on tekoälyn kooste hakutuloksista — se voi sisältää virheitä ja on aina hyvä tarkistaa alkuperäislähteistä', correct: true},
+                    {text: 'Se on Googlen maksettu mainos — älä ota sitä huomioon', correct: false}
+                ].map((o,i) => `<button class="option-btn" onclick="answerR3(${i}, ${o.correct})">${o.text}</button>`).join('')}
+            </div>
+            <div class="feedback-overlay" id="fbR3"></div>
+            <button class="round-complete-btn" id="r3next" onclick="finishRound3()">Näytä tulokset →</button>
+        `;
+
+        window.answerR3 = function(i, correct) {
+            document.getElementById('r3opts').querySelectorAll('.option-btn').forEach(b => b.disabled = true);
+            const btns = document.getElementById('r3opts').querySelectorAll('.option-btn');
+            btns[i].classList.add(correct ? 'correct' : 'incorrect');
+            if (!correct) btns[1].classList.add('correct');
+            if (correct) { score++; showFeedback('fbR3', false, '✅ Juuri niin! Tekoäly-yhteenveto on käytännöllinen apuväline, mutta tekoäly voi hallusinoida eli keksiä tietoa, jota ei ole. Tärkeät tiedot kannattaa aina tarkistaa alkuperäisistä lähteistä. Hakukone myös itse varoittaa tästä yhteenvedon alla!'); }
+            else { showFeedback('fbR3', true, '❌ Ei ihan. Tekoäly-yhteenveto ei ole mainos eikä täysin luotettava — se on tekoälyn automaattinen tiivistys hakutuloksista, joka voi sisältää virheitä.'); }
+            document.getElementById('r3next').classList.add('show');
+        };
+    }
+
+    window.finishRound3 = function() { currentRound++; renderCurrentRound(); };
+
+    // ── Helper ───────────────────────────────────────────────────────────────
+    function showFeedback(id, isError, text) {
+        const el = document.getElementById(id);
+        el.innerHTML = text;
+        el.className = 'feedback-overlay show' + (isError ? ' error' : '');
+    }
+
+    function showFinalSummary() {
+        document.getElementById('roundContainer').innerHTML = '';
+        updateProgress();
+        document.getElementById('progressFill').style.width = '100%';
+        document.getElementById('progressCount').textContent = totalRounds;
+        const pct = Math.round(score / totalRounds * 100);
+        const msg = pct === 100 ? '🎉 Erinomainen! Olet hakukoneammattilainen!' : pct >= 66 ? '👍 Hyvä suoritus! Muista tarkistaa aina lähteen luotettavuus.' : '📚 Kertaa hakukoneosaaminen — hyvä haku säästää aikaa!';
         document.getElementById('summaryContainer').innerHTML = `<div class="summary-panel">
             <h3>📊 Yhteenveto</h3>
-            <p><strong>Pisteet: ${score}/${total}</strong> (${pct}%)</p>
+            <p><strong>Kierroksia suoritettu: ${totalRounds}/3</strong></p>
+            <p><strong>Pisteet: ${score}/${totalRounds}</strong> (${pct}%)</p>
             <p>${msg}</p>
-            <button class="btn btn-primary" onclick="location.reload()" style="margin-top:14px;padding:10px 22px;">🔄 Kokeile uudelleen</button>
+            <div style="background:white;border-radius:8px;padding:14px;margin:14px 0;text-align:left;font-size:0.9em">
+                <strong>🧠 Kolme tärkeää oppia:</strong>
+                <p>1️⃣ <strong>Mainokset</strong> merkitään aina "Mainos"-tunnisteella — orgaaniset tulokset ovat merkittävämpiä hakukoneoptimointia varten.</p>
+                <p>2️⃣ <strong>site:-operaattori</strong> (esim. site:vero.fi) rajaa tulokset tiettyyn verkkotunnukseen — tehokas tapa löytää viralliset lähteet.</p>
+                <p>3️⃣ <strong>Tekoäly-yhteenveto</strong> on kätevä mutta voi sisältää virheitä — tarkista tärkeät asiat aina alkuperäislähteestä.</p>
+            </div>
+            <button class="btn btn-primary" onclick="location.reload()" style="margin-top:8px;padding:10px 22px;">🔄 Kokeile uudelleen</button>
         </div>`;
     }
 
-    initExercise();
+    renderCurrentRound();
     </script>
 </body>
 </html>

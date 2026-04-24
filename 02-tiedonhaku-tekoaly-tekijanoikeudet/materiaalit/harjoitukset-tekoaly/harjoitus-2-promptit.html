@@ -3,63 +3,129 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Harjoitus 2 – Hyvä vs. huono prompt</title>
+    <title>Harjoitus 2 – Promptin rakentaja</title>
     <link rel="stylesheet" href="styles.css">
     <style>
-        .prompt-pair-card {
+        .builder-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px;
+            margin: 16px 0;
+        }
+        .element-block {
             background: #f9f9f9;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            padding: 16px;
-            margin: 14px 0;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 14px;
+            transition: all 0.3s;
         }
-        .prompt-pair-card.answered-correct { border-color: #27ae60; background: #e8f5e9; }
-        .prompt-pair-card.answered-incorrect { border-color: #e74c3c; background: #fadbd8; }
-        .prompt-scenario {
-            font-size: 0.93em;
-            color: #555;
-            margin-bottom: 12px;
-            font-style: italic;
-            background: #e0f7fa;
-            border-left: 3px solid #0891b2;
-            padding: 8px 12px;
-            border-radius: 4px;
-        }
-        .prompt-question { font-weight: bold; font-size: 1.02em; margin-bottom: 14px; color: #2c3e50; }
-        .prompt-options { display: grid; grid-template-columns: 1fr; gap: 10px; }
-        .prompt-option {
-            border: 2px solid #ddd;
-            border-radius: 6px;
-            padding: 12px;
-            cursor: pointer;
-            background: white;
-            font-size: 0.93em;
-            text-align: left;
-            transition: all 0.25s;
-        }
-        .prompt-option:hover:not(:disabled) { border-color: #6366f1; background: #f0f0ff; }
-        .prompt-option:disabled { cursor: not-allowed; }
-        .prompt-option.correct { background: #27ae60; color: white; border-color: #27ae60; }
-        .prompt-option.incorrect { background: #e74c3c; color: white; border-color: #e74c3c; }
-        .prompt-label {
-            display: inline-block;
-            font-size: 0.78em;
-            font-weight: 700;
+        .element-block.filled { border-color: #0891b2; background: #e0f7fa; }
+        .element-label {
+            font-size: 0.82em;
+            font-weight: 800;
+            text-transform: uppercase;
             letter-spacing: 0.5px;
-            padding: 2px 7px;
-            border-radius: 4px;
-            margin-bottom: 6px;
+            margin-bottom: 10px;
+            color: #0e7490;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
-        .label-a { background: #e0e7ff; color: #4338ca; }
-        .label-b { background: #fce7f3; color: #be185d; }
-        .prompt-text {
+        .element-options {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .elem-opt {
+            background: white;
+            border: 2px solid #d0d0d0;
+            border-radius: 7px;
+            padding: 7px 11px;
+            font-size: 0.88em;
+            cursor: pointer;
+            transition: all 0.18s;
+            text-align: left;
+        }
+        .elem-opt:hover { border-color: #0891b2; background: #e0f7fa; }
+        .elem-opt.selected { background: #0891b2; color: white; border-color: #0891b2; }
+        /* Quality meter */
+        .meter-section {
+            background: #1e293b;
+            border-radius: 12px;
+            padding: 16px 20px;
+            color: white;
+            margin: 16px 0;
+        }
+        .meter-label { font-size: 0.85em; color: #94a3b8; margin-bottom: 8px; font-weight: 600; }
+        .meter-track {
+            background: #334155;
+            height: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+        .meter-fill {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.5s;
+            width: 0%;
+            background: linear-gradient(90deg, #ef4444, #f59e0b);
+        }
+        .meter-fill.good { background: linear-gradient(90deg, #f59e0b, #22c55e); }
+        .meter-fill.great { background: linear-gradient(90deg, #22c55e, #10b981); }
+        .meter-pct { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); font-size: 0.8em; font-weight: 700; color: white; }
+        .prompt-preview {
+            background: #0f172a;
+            border-radius: 8px;
+            padding: 12px 16px;
+            font-size: 0.88em;
+            color: #e2e8f0;
+            margin-top: 12px;
+            min-height: 48px;
             font-family: 'Courier New', monospace;
-            background: rgba(0,0,0,0.06);
-            padding: 6px 10px;
-            border-radius: 4px;
-            margin-top: 6px;
-            font-size: 0.96em;
-            line-height: 1.5;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+        .meter-stars { font-size: 1.3em; margin-top: 6px; letter-spacing: 2px; }
+        /* Response comparison */
+        .compare-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin: 16px 0;
+        }
+        .response-box {
+            border-radius: 10px;
+            padding: 14px;
+            font-size: 0.88em;
+            line-height: 1.6;
+        }
+        .response-box.weak { background: #fff5f5; border: 2px solid #e74c3c; }
+        .response-box.strong { background: #f0fff4; border: 2px solid #27ae60; }
+        .response-header {
+            font-weight: 800;
+            font-size: 0.82em;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .response-box.weak .response-header { color: #e74c3c; }
+        .response-box.strong .response-header { color: #27ae60; }
+        .send-prompt-btn {
+            background: linear-gradient(135deg, #0891b2, #06b6d4);
+            color: white; border: none; border-radius: 10px;
+            padding: 13px 28px; font-size: 1.05em; font-weight: 700;
+            cursor: pointer; transition: all 0.25s; display: none; margin: 14px 0;
+            width: 100%;
+        }
+        .send-prompt-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(8,145,178,0.4); }
+        .send-prompt-btn.show { display: block; animation: popIn 0.4s; }
+        @keyframes popIn { 0%{transform:scale(0.8);opacity:0} 80%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+        @media (max-width: 600px) {
+            .builder-grid { grid-template-columns: 1fr; }
+            .compare-section { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -67,137 +133,144 @@
     <a class="back-link" href="index.html">← Takaisin harjoituksiin</a>
     <div class="exercise-container">
         <div class="exercise-header">
-            <h1>💬 Harjoitus 2 – Hyvä vs. huono prompt</h1>
-            <p>Vertaa kahta promptia ja valitse kumpi on parempi. Saat palautteen ja selityksen.</p>
+            <h1>⚡ Harjoitus 2 – Promptin rakentaja</h1>
+            <p>Rakenna täydellinen tekoälypyyntö neljästä osasta. Katso, miten laatu paranee!</p>
         </div>
 
         <div class="info-panel">
-            <h3>✍️ Hyvän promptin ominaisuudet</h3>
-            <ul>
-                <li><strong>Täsmällisyys:</strong> Kerro tarkasti, mitä haluat tekoälyltä</li>
-                <li><strong>Konteksti:</strong> Kerro kuka olet, mikä on tilanne tai tavoite</li>
-                <li><strong>Muoto:</strong> Ilmoita haluttu vastausmuoto (lista, teksti, sähköposti…)</li>
-                <li><strong>Rajaus:</strong> Kerro tärkeät rajoitukset (pituus, tyyli, kohderyhmä)</li>
-            </ul>
+            <h3>🏗️ Laadukkaan promptin osat</h3>
+            <p><strong>Rooli</strong> – Kerro AI:lle, kuka olet tai kenen näkökulmasta kirjoitat. &nbsp;|&nbsp; <strong>Tehtävä</strong> – Mitä AI:n tulee tehdä? &nbsp;|&nbsp; <strong>Konteksti</strong> – Lisätietoa tilanteesta. &nbsp;|&nbsp; <strong>Muoto</strong> – Miten vastaus esitetään?</p>
         </div>
 
-        <div class="progress-container">
-            <div class="progress-bar-track">
-                <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+        <div class="meter-section">
+            <div class="meter-label">🎯 AI-vastauksen laadukkuus</div>
+            <div class="meter-track">
+                <div class="meter-fill" id="meterFill"></div>
+                <span class="meter-pct" id="meterPct">0%</span>
             </div>
-            <div class="progress-text"><span id="progressCount">0</span> / 4 vertailuparia</div>
+            <div class="meter-stars" id="meterStars">☆☆☆☆</div>
+            <div class="prompt-preview" id="promptPreview">— aloita valitsemalla osia alla —</div>
         </div>
 
-        <div id="pairsContainer"></div>
-        <div id="summaryContainer"></div>
+        <div class="builder-grid">
+            <div class="element-block" id="block-role">
+                <div class="element-label">🎭 Rooli</div>
+                <div class="element-options">
+                    <button class="elem-opt" onclick="selectElem('role', 0, this)">Olen ammattikoululainen Mercurialla</button>
+                    <button class="elem-opt" onclick="selectElem('role', 1, this)">Toimin markkinointiassistenttina</button>
+                    <button class="elem-opt" onclick="selectElem('role', 2, this)">Olen pienyrittäjä</button>
+                </div>
+            </div>
+            <div class="element-block" id="block-task">
+                <div class="element-label">📋 Tehtävä</div>
+                <div class="element-options">
+                    <button class="elem-opt" onclick="selectElem('task', 0, this)">Kirjoita asiakasviesti</button>
+                    <button class="elem-opt" onclick="selectElem('task', 1, this)">Laadi lyhyt esittely</button>
+                    <button class="elem-opt" onclick="selectElem('task', 2, this)">Tee tiivistelmä tekstistä</button>
+                </div>
+            </div>
+            <div class="element-block" id="block-context">
+                <div class="element-label">🌍 Konteksti</div>
+                <div class="element-options">
+                    <button class="elem-opt" onclick="selectElem('context', 0, this)">Asiakas tilasi tuotteen ja haluaa toimitusvahvistuksen</button>
+                    <button class="elem-opt" onclick="selectElem('context', 1, this)">Tekstin tulee sopia nuorille aikuisille</button>
+                    <button class="elem-opt" onclick="selectElem('context', 2, this)">Kyseessä on ammatillinen harjoitustehtävä</button>
+                </div>
+            </div>
+            <div class="element-block" id="block-format">
+                <div class="element-label">📐 Muoto</div>
+                <div class="element-options">
+                    <button class="elem-opt" onclick="selectElem('format', 0, this)">Kirjoita sähköpostimuodossa, max 150 sanaa</button>
+                    <button class="elem-opt" onclick="selectElem('format', 1, this)">Käytä selkeää listaa, korkeintaan 5 kohtaa</button>
+                    <button class="elem-opt" onclick="selectElem('format', 2, this)">Lyhyt ja ytimekäs, ystävällinen sävy</button>
+                </div>
+            </div>
+        </div>
+
+        <button class="send-prompt-btn" id="sendBtn" onclick="sendPrompt()">🚀 Lähetä prompt — katso tulokset!</button>
+
+        <div id="compareContainer" style="display:none">
+            <h3 style="color:#0e7490;margin:16px 0 10px">🔬 Vertailu: heikko vs. rakennettu prompt</h3>
+            <div class="compare-section">
+                <div class="response-box weak">
+                    <div class="response-header">❌ Heikko prompt: "Kirjoita viesti"</div>
+                    <p><em>Kirjoitan sinulle viestin. Kerro lisätietoja siitä, mitä haluat viestissä sanottavan ja kenelle se on osoitettu. Millainen sävy sopii?</em></p>
+                    <p style="font-size:0.85em;color:#888;margin-top:8px">⚠️ AI ei tiedä mitään — kysyy lisätietoja. Ei hyödyllinen!</p>
+                </div>
+                <div class="response-box strong" id="strongResponse">
+                    <div class="response-header">✅ Rakennettu promptisi:</div>
+                    <div id="aiResponseText" style="font-style:italic;color:#555">— odottaa lähetystä —</div>
+                </div>
+            </div>
+            <div class="info-panel" style="margin-top:10px">
+                <h3>💡 Mitä opit?</h3>
+                <p>Laadukas prompt sisältää <strong>kontekstin</strong> (kuka, missä tilanteessa), <strong>tehtävän</strong> (mitä tehdään), <strong>roolin</strong> (kenelle kirjoitetaan) ja <strong>muodon</strong> (miten). Mitä enemmän tietoa annat, sitä paremman vastauksen saat!</p>
+            </div>
+            <button class="btn btn-primary" onclick="location.reload()" style="margin-top:14px;padding:10px 22px;">🔄 Kokeile eri yhdistelmällä</button>
+        </div>
     </div>
 
     <script>
-    const pairs = [
-        {
-            scenario: 'Tilanteen kuvaus: Olet opiskelija ja kirjoitat raporttia tekoälyn vaikutuksesta työelämään.',
-            question: 'Kumpi prompt tuottaa hyödyllisemmän ja tarkemman vastauksen?',
-            optionA: 'Kerro tekoälystä.',
-            optionB: 'Olen ammatillisen oppilaitoksen opiskelija ja kirjoitan raporttia tekoälyn vaikutuksista suomalaiseen työelämään vuosina 2025–2030. Listaa 5 keskeistä muutosta lyhyesti, korkeintaan 2 lausetta kutakin.',
-            correct: 'B',
-            explanation: '✅ Vaihtoehto B on parempi. Se kertoo kontekstin (opiskelija, aihe), rajaa teeman (suomalainen työelämä, 2025–2030), pyytää täsmällisen määrän kohtia (5) ja määrittää vastauksen pituuden. Vague "Kerro tekoälystä" johtaa yleiseen ja usein liian pitkään vastaukseen.'
-        },
-        {
-            scenario: 'Tilanteen kuvaus: Sinulla on vaikea matematiikan käsite, jonka haluat ymmärtää.',
-            question: 'Kumpi prompt auttaa ymmärtämään asian paremmin?',
-            optionA: 'Selitä prosenttilaskenta yksinkertaisesti kuin olisin 15-vuotias, jolla ei ole aiempaa kokemusta aiheesta. Käytä käytännön esimerkkiä kuten kaupassa ostamista.',
-            optionB: 'Prosenttilaskenta on vaikea. Selitä.',
-            correct: 'A',
-            explanation: '✅ Vaihtoehto A on parempi. Se antaa tekoälylle ohjeen selityksen tasosta ("kuin 15-vuotias"), pyytää käytännön esimerkkiä ja rajaa kontekstin (ei aiempaa kokemusta). Näin tekoäly voi sovittaa vastauksensa juuri sinulle sopivaksi.'
-        },
-        {
-            scenario: 'Tilanteen kuvaus: Tarvitset sähköpostin, jonka lähetät opettajallesi poissaolon vuoksi.',
-            question: 'Kumpi prompt tuottaa sopivamman viestin?',
-            optionA: 'Kirjoita sähköpostiviesti.',
-            optionB: 'Kirjoita lyhyt ja asiallinen sähköpostiviesti ammatillisen oppilaitoksen opiskelijalta opettajalle. Selitän poissaoloni huomisesta oppitunnista sairauden vuoksi ja pyydän saada tehtävät myöhemmin. Tyyli: kohtelias ja virallinen.',
-            correct: 'B',
-            explanation: '✅ Vaihtoehto B on parempi. Se määrittelee: viestin tyypin (sähköposti), kirjoittajan (opiskelija), vastaanottajan (opettaja), sisällön (poissaolo, syy, pyyntö) ja sävyn (kohtelias ja virallinen). Tulos on käyttökelpoinen heti.'
-        },
-        {
-            scenario: 'Tilanteen kuvaus: Olet opettaja, joka haluaa harjoitustehtäviä oppilailleen.',
-            question: 'Kumpi prompt antaa opettajalle paremmin käyttökelpoisia tehtäviä?',
-            optionA: 'Tee tehtäviä.',
-            optionB: 'Olet ammatillisen oppilaitoksen opettaja. Luo 3 lyhyttä monivalintakysymystä tekijänoikeuksista 16–18-vuotiaille opiskelijoille. Jokainen kysymys sisältää 4 vastausvaihtoehtoa ja oikean vastauksen selityksen. Taso: perustiedot.',
-            correct: 'B',
-            explanation: '✅ Vaihtoehto B on parempi. Se kertoo roolin (opettaja), lukumäärän (3 kysymystä), aiheen (tekijänoikeudet), kohderyhmän (16–18-vuotiaat), rakenteen (4 vaihtoehtoa + selitys) ja tason (perustiedot). Vague "Tee tehtäviä" tuottaa arvailun varaan jäävän tuloksen.'
+    const selections = { role: null, task: null, context: null, format: null };
+    const labels = {
+        role:    ['Olen ammattikoululainen Mercurialla', 'Toimin markkinointiassistenttina', 'Olen pienyrittäjä'],
+        task:    ['Kirjoita asiakasviesti', 'Laadi lyhyt esittely', 'Tee tiivistelmä tekstistä'],
+        context: ['Asiakas tilasi tuotteen ja haluaa toimitusvahvistuksen', 'Tekstin tulee sopia nuorille aikuisille', 'Kyseessä on ammatillinen harjoitustehtävä'],
+        format:  ['Kirjoita sähköpostimuodossa, max 150 sanaa', 'Käytä selkeää listaa, korkeintaan 5 kohtaa', 'Lyhyt ja ytimekäs, ystävällinen sävy']
+    };
+    const placeholders = { role: '[Rooli puuttuu]', task: '[Tehtävä puuttuu]', context: '[Konteksti puuttuu]', format: '[Muoto puuttuu]' };
+
+    const aiResponses = {
+        '0-0-0-0': `Hyvä asiakas,\n\nKiitos tilauksestanne! Olemme vastaanottaneet tilauksenne ja se on käsittelyssä. Toimitus tapahtuu sovitun aikataulun mukaisesti.\n\nOtamme teihin yhteyttä, jos tarvitsemme lisätietoja. Tervetuloa asioimaan uudelleen!\n\nYstävällisin terveisin,\n[Yhteyshenkilö]`,
+        'default': `Hei!\n\nKiitos yhteydenotostanne. Tilausvahvistuksenne on vastaanotettu. Käsittelemme tilauksen ja olemme teille pian yhteydessä.\n\nParhain terveisin`
+    };
+
+    window.selectElem = function(key, idx, btn) {
+        selections[key] = idx;
+        // Update button styles in this block
+        btn.closest('.element-options').querySelectorAll('.elem-opt').forEach((b, i) => {
+            b.classList.toggle('selected', i === idx);
+        });
+        document.getElementById('block-' + key).classList.add('filled');
+        updateMeter();
+    };
+
+    function updateMeter() {
+        const filled = Object.values(selections).filter(v => v !== null).length;
+        const pct = (filled / 4) * 100;
+
+        const fill = document.getElementById('meterFill');
+        fill.style.width = pct + '%';
+        fill.className = 'meter-fill' + (pct >= 75 ? ' great' : pct >= 50 ? ' good' : '');
+        document.getElementById('meterPct').textContent = pct + '%';
+        document.getElementById('meterStars').textContent = '★'.repeat(filled) + '☆'.repeat(4 - filled);
+
+        const parts = [];
+        if (selections.role    !== null) parts.push(labels.role[selections.role]);
+        if (selections.task    !== null) parts.push(labels.task[selections.task]);
+        if (selections.context !== null) parts.push(labels.context[selections.context]);
+        if (selections.format  !== null) parts.push(labels.format[selections.format]);
+
+        const preview = document.getElementById('promptPreview');
+        if (parts.length === 0) {
+            preview.textContent = '— aloita valitsemalla osia alla —';
+        } else {
+            preview.textContent = parts.join('. ') + '.';
         }
-    ];
 
-    let completed = 0, score = 0;
-    const total = pairs.length;
-
-    function initExercise() {
-        const container = document.getElementById('pairsContainer');
-        pairs.forEach((p, i) => container.appendChild(createPairCard(p, i)));
+        const btn = document.getElementById('sendBtn');
+        if (filled === 4) btn.classList.add('show');
+        else btn.classList.remove('show');
     }
 
-    function createPairCard(p, idx) {
-        const card = document.createElement('div');
-        card.className = 'prompt-pair-card';
-        card.id = 'pcard-' + idx;
-
-        card.innerHTML = `
-            <div class="prompt-scenario">📌 ${p.scenario}</div>
-            <div class="prompt-question">${p.question}</div>
-            <div class="prompt-options" id="popts-${idx}">
-                <button class="prompt-option" onclick="answerPair(${idx}, 'A')">
-                    <span class="prompt-label label-a">Prompt A</span>
-                    <div class="prompt-text">${p.optionA}</div>
-                </button>
-                <button class="prompt-option" onclick="answerPair(${idx}, 'B')">
-                    <span class="prompt-label label-b">Prompt B</span>
-                    <div class="prompt-text">${p.optionB}</div>
-                </button>
-            </div>
-            <div class="explanation" id="pexp-${idx}"></div>
-        `;
-        return card;
-    }
-
-    function answerPair(idx, choice) {
-        const p = pairs[idx];
-        const card = document.getElementById('pcard-' + idx);
-        const opts = document.getElementById('popts-' + idx).querySelectorAll('.prompt-option');
-        opts.forEach(b => b.disabled = true);
-
-        const correct = choice === p.correct;
-        if (correct) score++;
-        card.classList.add(correct ? 'answered-correct' : 'answered-incorrect');
-
-        opts[0].classList.add(p.correct === 'A' ? 'correct' : (choice === 'A' ? 'incorrect' : ''));
-        opts[1].classList.add(p.correct === 'B' ? 'correct' : (choice === 'B' ? 'incorrect' : ''));
-
-        const exp = document.getElementById('pexp-' + idx);
-        exp.className = 'explanation show';
-        exp.innerHTML = `${correct ? '' : `<strong>Oikea vastaus: Prompt ${p.correct}</strong><br>`}${p.explanation}`;
-
-        completed++;
-        updateProgress();
-        if (completed === total) setTimeout(showSummary, 600);
-    }
-
-    function updateProgress() {
-        document.getElementById('progressFill').style.width = Math.round(completed / total * 100) + '%';
-        document.getElementById('progressCount').textContent = completed;
-    }
-
-    function showSummary() {
-        const pct = Math.round(score / total * 100);
-        const msg = pct === 100 ? '🎉 Erinomainen! Hyvien promptien kirjoittaminen on hallussa.' : pct >= 50 ? '👍 Hyvä yritys! Muista: konteksti ja täsmällisyys ovat avain.' : '📚 Harjoittele promptaamista – pienet muutokset parantavat tulosta merkittävästi!';
-        document.getElementById('summaryContainer').innerHTML = `<div class="summary-panel">
-            <h3>📊 Yhteenveto</h3>
-            <p><strong>Pisteet: ${score}/${total}</strong> (${pct}%)</p>
-            <p>${msg}</p>
-            <button class="btn btn-primary" onclick="location.reload()" style="margin-top:14px;padding:10px 22px;">🔄 Kokeile uudelleen</button>
-        </div>`;
-    }
-
-    initExercise();
+    window.sendPrompt = function() {
+        document.getElementById('sendBtn').style.display = 'none';
+        const key = Object.values(selections).join('-');
+        const response = aiResponses[key] || aiResponses['default'];
+        document.getElementById('aiResponseText').innerHTML = response.replace(/\n/g, '<br>');
+        document.getElementById('compareContainer').style.display = 'block';
+        document.getElementById('compareContainer').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
     </script>
 </body>
 </html>

@@ -3,190 +3,305 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Harjoitus 4 – Vastuullinen tekoälyn käyttö</title>
+    <title>Harjoitus 4 – Opiskelijan koulupäivä</title>
     <link rel="stylesheet" href="styles.css">
     <style>
-        .scenario-card {
-            background: #f9f9f9;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            padding: 16px;
-            margin: 14px 0;
+        /* Scene card */
+        .scene-card {
+            border-radius: 16px;
+            padding: 22px 20px;
+            margin: 12px 0;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s;
+            animation: sceneIn 0.4s ease;
         }
-        .scenario-card.answered-correct  { border-color: #27ae60; background: #e8f5e9; }
-        .scenario-card.answered-incorrect { border-color: #e74c3c; background: #fadbd8; }
-        .scenario-number { font-size: 0.8em; color: #6366f1; font-weight: 700; margin-bottom: 6px; }
-        .scenario-text {
-            font-size: 0.97em;
-            line-height: 1.6;
-            margin-bottom: 14px;
-            background: white;
-            padding: 10px 14px;
-            border-left: 3px solid #6366f1;
-            border-radius: 4px;
-        }
-        .scenario-question { font-weight: bold; margin-bottom: 12px; color: #1e1b4b; }
-        .answer-buttons { display: flex; gap: 8px; flex-wrap: wrap; }
-        .answer-buttons button {
-            flex: 1; min-width: 120px; padding: 10px 12px;
-            border: none; border-radius: 6px; font-size: 0.9em;
-            cursor: pointer; font-weight: 600; transition: all 0.25s;
-        }
-        .answer-buttons button:disabled { opacity: 0.6; cursor: not-allowed; }
-        .btn-allowed    { background: #27ae60; color: white; }
-        .btn-conditional { background: #f39c12; color: white; }
-        .btn-forbidden  { background: #e74c3c; color: white; }
-        .scenario-tag {
+        @keyframes sceneIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:none} }
+        .scene-bg-1 { background: linear-gradient(135deg, #dbeafe, #bfdbfe); border: 2px solid #93c5fd; }
+        .scene-bg-2 { background: linear-gradient(135deg, #dcfce7, #bbf7d0); border: 2px solid #86efac; }
+        .scene-bg-3 { background: linear-gradient(135deg, #fef3c7, #fde68a); border: 2px solid #fcd34d; }
+        .scene-bg-4 { background: linear-gradient(135deg, #fce7f3, #fbcfe8); border: 2px solid #f9a8d4; }
+        .scene-bg-5 { background: linear-gradient(135deg, #ede9fe, #ddd6fe); border: 2px solid #c4b5fd; }
+        .scene-tag {
             display: inline-block;
-            padding: 3px 9px; border-radius: 12px; font-size: 0.78em;
-            font-weight: 700; margin-bottom: 8px; letter-spacing: 0.3px;
+            background: rgba(0,0,0,0.12);
+            border-radius: 20px;
+            padding: 3px 12px;
+            font-size: 0.78em;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #333;
         }
-        .tag-allowed    { background: #d5f4e6; color: #1a7d4a; }
-        .tag-conditional { background: #fdebd0; color: #b34a00; }
-        .tag-forbidden  { background: #fadbd8; color: #c0392b; }
+        .scene-emoji {
+            font-size: 4em;
+            display: block;
+            text-align: center;
+            margin: 8px 0 14px;
+            filter: drop-shadow(0 3px 6px rgba(0,0,0,0.15));
+        }
+        .scene-name { font-size: 1.1em; font-weight: 900; color: #1e293b; margin-bottom: 8px; text-align: center; }
+        .scene-story { font-size: 0.93em; line-height: 1.7; color: #1e293b; margin-bottom: 14px; }
+        .scene-question { font-weight: 700; font-size: 0.95em; color: #0e7490; margin-bottom: 12px; }
+        /* Choice buttons */
+        .choices { display: grid; gap: 8px; }
+        .choice-btn {
+            background: white;
+            border: 2px solid #d1d5db;
+            border-radius: 10px;
+            padding: 12px 16px;
+            font-size: 0.92em;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.2s;
+            line-height: 1.45;
+        }
+        .choice-btn:hover:not(:disabled) { border-color: #0891b2; background: #e0f7fa; transform: translateX(4px); }
+        .choice-btn:disabled { cursor: not-allowed; }
+        .choice-btn.chosen-good { background: #e8f5e9; border-color: #27ae60; color: #14532d; }
+        .choice-btn.chosen-bad  { background: #fff5f5; border-color: #e74c3c; color: #7f1d1d; }
+        /* Consequence overlay */
+        .consequence {
+            border-radius: 12px;
+            padding: 14px 16px;
+            margin: 12px 0;
+            font-size: 0.91em;
+            line-height: 1.6;
+            display: none;
+            animation: popIn 0.35s;
+        }
+        @keyframes popIn { 0%{transform:scale(0.95);opacity:0} 80%{transform:scale(1.02)} 100%{transform:scale(1);opacity:1} }
+        .consequence.show { display: block; }
+        .consequence.good { background: #e8f5e9; border: 2px solid #27ae60; }
+        .consequence.bad  { background: #fff5f5; border: 2px solid #e74c3c; }
+        .retry-btn {
+            background: #f39c12; color: white; border: none;
+            border-radius: 8px; padding: 9px 20px; font-size: 0.9em;
+            font-weight: 700; cursor: pointer; margin-top: 8px; transition: all 0.2s;
+        }
+        .retry-btn:hover { background: #e67e22; }
+        .next-scene-btn {
+            background: #0891b2; color: white; border: none;
+            border-radius: 10px; padding: 12px 26px; font-size: 0.95em;
+            font-weight: 700; cursor: pointer; margin-top: 10px;
+            transition: all 0.2s; display: none;
+        }
+        .next-scene-btn:hover { background: #0e7490; transform: translateY(-1px); }
+        .next-scene-btn.show { display: inline-block; animation: popIn 0.3s; }
+        /* Day log */
+        .day-log {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+        .day-log-title { font-weight: 800; color: #0e7490; margin-bottom: 10px; font-size: 0.95em; }
+        .log-entry { display: flex; align-items: center; gap: 10px; padding: 6px 0; border-bottom: 1px solid #e2e8f0; font-size: 0.88em; }
+        .log-entry:last-child { border-bottom: none; }
+        .log-badge { font-size: 1.2em; flex-shrink: 0; }
+        .log-text { flex: 1; color: #334155; }
     </style>
 </head>
 <body>
     <a class="back-link" href="index.html">← Takaisin harjoituksiin</a>
     <div class="exercise-container">
         <div class="exercise-header">
-            <h1>⚖️ Harjoitus 4 – Vastuullinen tekoälyn käyttö Mercurialla</h1>
-            <p>Arvioi jokainen tilanne: onko tekoälyn käyttö sallittu, ehdollisesti sallittu vai kielletty?</p>
-        </div>
-
-        <div class="info-panel">
-            <h3>📋 Mercurian tekoälyohjeistuksen pääperiaatteet</h3>
-            <ul>
-                <li>🔒 <strong>Tietosuoja:</strong> Tekoälyyn ei syötetä henkilötietoja, opiskelija- tai henkilöstötietoja eikä muita luottamuksellisia tietoja</li>
-                <li>✍️ <strong>Akateeminen rehellisyys:</strong> Tekoälyn kokonaan kirjoittaman työn palauttaminen omanaan on kiellettyä</li>
-                <li>🔍 <strong>Kriittinen arviointi:</strong> Tekoälyn tuottamat tiedot tulee aina tarkistaa – tekoäly voi hallusinoida</li>
-                <li>📝 <strong>Läpinäkyvyys:</strong> Tekoälyn käyttö tulee mainita töissä, joissa sitä on hyödynnetty</li>
-                <li>🛠️ <strong>Hyväksytyt työkalut:</strong> Suositeltavia ovat Microsoft Copilot (koulutilit), Copilot-kirjautuminen, ja muut opettajan hyväksymät välineet</li>
-            </ul>
+            <h1>🎒 Harjoitus 4 – Opiskelijan koulupäivä</h1>
+            <p>Seuraa Ainoaa koulupäivän läpi. Jokaisessa tilanteessa sinun pitää tehdä päätös tekoälyn käytöstä!</p>
         </div>
 
         <div class="progress-container">
             <div class="progress-bar-track">
                 <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
             </div>
-            <div class="progress-text"><span id="progressCount">0</span> / 6 tilannetta arvioitu</div>
+            <div class="progress-text">Kohtaus <span id="progressCount">1</span> / 5</div>
         </div>
 
-        <div id="scenariosContainer"></div>
+        <div id="sceneContainer"></div>
         <div id="summaryContainer"></div>
     </div>
 
     <script>
-    const scenarios = [
+    const scenes = [
         {
-            situation: 'Opiskelija Aino kirjoittaa tekstinkäsittelyharjoituksen raporttia. Hän käyttää Microsoft Copilotia (koulutilillä), jotta saa ehdotuksia oikeinkirjoituksesta ja lauserakenteista – mutta muokkaa tekstin itse lopulliseen muotoon ja palauttaa oman tekstinsä.',
-            question: 'Onko tämä tekoälyn käyttö sallittua?',
-            correct: 'allowed',
-            feedback: '✅ Sallittu. Copilot koulutilillä on hyväksytty apuväline. Opiskelija käyttää tekoälyä kielentarkistukseen ja ideoiden hiomiseen, mutta tuottaa tekstin itse. Tämä vastaa oikeinkirjoitusohjelman käyttöä. Hyvä tapa mainita lyhyesti tekoälyn käyttö palautuksen yhteydessä.'
+            tag: '📚 Klo 8:30 — Englannin tunti',
+            emoji: '📖',
+            name: 'Aino on englannin tunnilla',
+            bgClass: 'scene-bg-1',
+            story: 'Aino saa tehtäväksi kirjoittaa lyhyen esittelytekstin englanniksi. Tekstin tulee osoittaa hänen englannin kielen taitoaan. Kotitehtävä palautetaan huomenna. Aino avaa puhelimensa tunnin jälkeen — ChatGPT on pari napautuksen päässä...',
+            question: '🤔 Mitä Ainon pitäisi tehdä?',
+            choices: [
+                { text: 'A) Antaa ChatGPT:n kirjoittaa koko esittelytekstin ja palauttaa se sellaisenaan', isGood: false,
+                  consequence: '❌ Väärä päätös! Aino palautti tekoälyn kirjoittaman tekstin omanaan. Opettaja huomasi tavan kirjoittaa ja pyysi Ainoa perustelemaan tekstin suullisesti tunnilla — Aino ei pystynytkään. Opettaja merkitsi tehtävän plagioituksi. Tekijänoikeudellisesti ja akateemisesti tämä on vilppiä — opiskelija ei opi englantia eikä osoita omaa osaamistaan.'},
+                { text: 'B) Kirjoittaa itse ja käyttää tekoälyä kieliopin tarkistamiseen lopuksi', isGood: true,
+                  consequence: '✅ Erinomainen päätös! Aino kirjoittaa itse — kehittää näin omaa englannin taitoaan — ja käyttää tekoälyä apuna kielioppivirheiden löytämiseen. Tämä on juuri se tapa, miten tekoälyä kuuluukin hyödyntää: oppimisen apuvälineenä, ei korvikkeena.'},
+                { text: 'C) Kysyä tekoälyltä muutamaa englanninkielistä sanaa, joita ei muista ulkoa', isGood: true,
+                  consequence: '✅ Hyvä! Yksittäisten sanojen hakeminen tekoälystä (tai sanakirjasta) on täysin hyväksyttävää. Koko tekstin antaminen tekoälylle kirjoitettavaksi olisi eri asia — se ei kehitä osaamista eikä ole rehellistä.'}
+            ]
         },
         {
-            situation: 'Opiskelija Matti kopioi ChatGPT:n antaman vastauksen suoraan arvioitavaan harjoitustehtävään lisäämättä mitään omaa tai muokkaamatta tekstiä. Hän ei mainitse tekoälyn käyttöä.',
-            question: 'Onko tämä tekoälyn käyttö sallittua?',
-            correct: 'forbidden',
-            feedback: '❌ Kielletty. Tekoälyn kokonaan kirjoittaman työn palauttaminen omanaan on plagiointia. Opiskelija ei osoita omaa osaamistaan eikä mainitse lähdettä. Tämä loukkaa Mercurian rehellisyysperiaatteita ja voi johtaa tehtävän hylkäämiseen.'
+            tag: '🍕 Klo 11:15 — Välitunti',
+            emoji: '💻',
+            name: 'Tiedonhaku raporttiin',
+            bgClass: 'scene-bg-2',
+            story: 'Aino ja Matti tekevät yhdessä liiketalouden raporttia. He tarvitsevat tietoa yrityksen perustamisesta. Matti ehdottaa: "Käytetään Copilotia, se vastaa kaikkeen!" Aino miettii, miten tekoälyn vastaukset pitäisi käsitellä.',
+            question: '🤔 Miten tekoälyn vastauksiin pitää suhtautua?',
+            choices: [
+                { text: 'A) Kopioida Copilotin vastaukset suoraan raporttiin — se tietää kaiken', isGood: false,
+                  consequence: '❌ Vaarallinen päätös! Tekoäly voi hallusinoida — esimerkiksi keksiä väärän lain pykälän tai yritysrekisterin tiedot. Lopputulos: raportti, jossa on virheellisiä faktoja. Lisäksi tekoälyn vastauksen kopioiminen ilman omaa muokkausta on yleensä kiellettyä — muista Mercurian ohjeet!'},
+                { text: 'B) Käyttää tekoälyä ideoiden saamiseen ja tiedon hakuun, mutta tarkistaa faktat virallisista lähteistä (PRH, vero.fi)', isGood: true,
+                  consequence: '✅ Ammattitaitoinen lähestyminen! Tekoäly on hyvä apuri ideoiden ja rakenteiden hahmottamiseen, mutta faktat — kuten lain pykälät ja rekisteritiedot — on aina tarkistettava virallisista lähteistä. Tämä on kriittistä ajattelua käytännössä.'},
+                { text: 'C) Olla käyttämättä tekoälyä lainkaan, koska se on aina epäluotettava', isGood: false,
+                  consequence: '⚠️ Ei optimaali! Tekoäly on hyödyllinen työkalu, kun sitä käyttää oikein. Täydellinen kieltäytyminen on turhaa. Avain on kriittisyys: käytä tekoälyä apuna, mutta tarkista aina tärkeät faktat muualta.'}
+            ]
         },
         {
-            situation: 'Harjoitustunnilla opettaja pyytää oppilaita kokeilemaan Copilotia tiedonhaussa ja arvioimaan kriittisesti sen vastauksia vertaamalla niitä yle.fi:n uutisiin. Opiskelijat kirjaavat havaintonsa ylös oppimispäiväkirjaan.',
-            question: 'Onko tämä tekoälyn käyttö sallittua?',
-            correct: 'allowed',
-            feedback: '✅ Sallittu ja suositeltavaa! Tämä on juuri se tapa, miten tekoälyä opitaan käyttämään vastuullisesti: kokeillaan, vertaillaan ja arvioidaan kriittisesti. Opettajan ohjaama käyttö tukee oppimista erinomaisesti.'
+            tag: '👥 Klo 13:00 — Ryhmätyö',
+            emoji: '🤝',
+            name: 'Ryhmän tiedot tekoälylle?',
+            bgClass: 'scene-bg-3',
+            story: 'Ryhmässä on 5 henkilöä: Aino, Matti, Jasmin, Leon ja Sofia. Aino on kirjannut muistiin kaikkien ideat nimien kera. Hän haluaa käyttää tekoälyä tiivistämään ideat yhteiseksi ehdotukseksi. Hän miettii, miten syöttää tiedot chatiin.',
+            question: '🤔 Miten Ainon pitäisi käsitellä ryhmäläisten tiedot?',
+            choices: [
+                { text: 'A) Syöttää kaikki nimet, sähköpostit ja ideat ChatGPT:hen sellaisenaan', isGood: false,
+                  consequence: '❌ Tietosuojarikkomus! Henkilötietojen (nimet + sähköpostit) syöttäminen ulkoiseen tekoälypalveluun ilman lupaa rikkoo GDPR:ää. Ryhmäläiset eivät ole antaneet suostumustaan tietojensa käyttöön tällä tavoin. Käytä aina ainoastaan anonymisoituja tietoja!'},
+                { text: 'B) Poistaa nimet ja muut henkilötiedot — syöttää vain anonymisoidut ideat: "Henkilö 1 ehdottaa..., Henkilö 2 ehdottaa..."', isGood: true,
+                  consequence: '✅ Oikein tehty! Anonymisoimalla tiedot Aino kunnioittaa ryhmäläistensä yksityisyyttä ja toimii GDPR:n mukaisesti. Tekoäly saa silti auttaa ideoiden tiivistämisessä — se ei tarvitse nimiä tehdäkseen työtä.'},
+                { text: 'C) Ei käytä tekoälyä lainkaan ryhmätöissä', isGood: false,
+                  consequence: '⚠️ Turhan varovainen! Tekoälyä voi käyttää ryhmätöissä — kunhan anonymisoi henkilötiedot ensin. Täydellinen välttäminen ei ole tarpeellista, jos tietosuoja-asiat hoidetaan oikein.'}
+            ]
         },
         {
-            situation: 'Opiskelija haluaa tehdä ryhmätehtävässä tiivistelmän yhteisestä muistiosta. Hän kopioi muistiopohjaan kaikkien ryhmäläisten nimet ja muistiinpanot ja syöttää ne ChatGPT:hen pyytäen tiivistelmää.',
-            question: 'Onko tämä tekoälyn käyttö sallittua?',
-            correct: 'conditional',
-            feedback: '🟡 Ehdollisesti sallittu – mutta tässä muodossa ongelmallinen. Muiden opiskelijoiden nimet ovat henkilötietoja, joita ei tule syöttää ulkopuoliseen tekoälypalveluun. Ratkaisuna: poista nimet tai käytä Microsoft Copilotia koulutilillä, jolloin tietosuoja on paremmin hallinnassa.'
+            tag: '🏠 Klo 17:00 — Kotitehtävä',
+            emoji: '😴',
+            name: 'Väsynyt Aino ja kolmesivuinen essee',
+            bgClass: 'scene-bg-4',
+            story: 'Aino on väsynyt pitkän koulupäivän jälkeen. Kotitehtävänä on kolmesivuinen essee Suomen historiasta — palautus huomisaamuna. Tekoäly kirjoittaisi koko esseen minuuteissa. Aino miettii...',
+            question: '🤔 Mitä Ainon pitäisi tehdä?',
+            choices: [
+                { text: 'A) Antaa tekoälyn kirjoittaa koko esseen ja palauttaa se omanaan', isGood: false,
+                  consequence: '❌ Vakava virhe! Tämä on plagiointi — tekoälyn tuottaman tekstin esittäminen omanaan ilman ilmoitusta. Lisäksi Aino ei opi mitään Suomen historiasta. Jos opettaja tarkistaa tekstin AI-tunnistustyökalulla, seuraukset voivat olla vakavat. Väsymys ei oikeuta vilppiin.'},
+                { text: 'B) Käyttää tekoälyä esseen rakenteen ja pääteemojen ideointiin, sitten kirjoittaa itse', isGood: true,
+                  consequence: '✅ Hyvä ratkaisu! Tekoäly voi auttaa hahmottamaan rakenteen ("Miten jakaisin Suomen historian aihealueisiin?") ja ideoinnissa — mutta varsinainen kirjoittaminen, lähteiden etsiminen ja analyysi ovat Ainon vastuulla. Tämä on hyväksyttävä tapa käyttää tekoälyä apuvälineenä.'},
+                { text: 'C) Pyytää tekoälyä tekemään esseen ja ilmoittaa asiasta opettajalle', isGood: true,
+                  consequence: '✅ Rehellinen tapa! Jos opiskelija ilmoittaa avoimesti tekoälyn käytöstä laajemminkin kuin pelkässä ideoinnissa, opettaja voi arvioida tilanteen. Läpinäkyvyys on aina parempi kuin piilottelu. Kysy opettajalta lupa ennen laajaa tekoälyn käyttöä arvioiduissa tehtävissä!'}
+            ]
         },
         {
-            situation: 'Opiskelija Liisa käyttää tekoälyä englanninkielisen harjoitusviestin kääntämiseen suomeksi ymmärtääkseen tehtävänannon. Hän tekee tehtävän itse omalla äidinkielellä.',
-            question: 'Onko tämä tekoälyn käyttö sallittua?',
-            correct: 'allowed',
-            feedback: '✅ Sallittu. Tekoälyn käyttö kääntämiseen ymmärtämisen tueksi on hyväksyttävää – tämä on apuvälineen käyttöä, ei oman työn ulkoistamista. Samanlaista apua saisi myös sanakirjasta tai Google Kääntäjältä.'
-        },
-        {
-            situation: 'Opiskelija pyytää tekoälyä tuottamaan esseen arvioitavaan näyttötehtävään, jonka tavoitteena on osoittaa omaa osaamista. Opiskelija lisää esseen alkuun maininnon "Kirjoitettu ChatGPT:n avulla".',
-            question: 'Onko tämä tekoälyn käyttö sallittua?',
-            correct: 'forbidden',
-            feedback: '❌ Kielletty – mainninnasta huolimatta. Arvioitavan näyttötehtävän tarkoitus on osoittaa opiskelijan oma osaaminen. Tekoälyn kokonainen kirjoittama essee ei osoita tätä, vaikka lähde olisi merkitty. Opiskelija voi käyttää tekoälyä ideointiin ja palautteeseen, mutta kirjoittaa itse.'
+            tag: '📋 Klo 8:45 — Seuraava aamu: Näyttötehtävä',
+            emoji: '🎓',
+            name: 'Näyttötehtävä — Ainon oma osaaminen',
+            bgClass: 'scene-bg-5',
+            story: 'Ainolla on tärkeä näyttötehtävä, jossa hänen pitää osoittaa omaa ammatillista osaamistaan asiakaspalvelutilanteessa. Tehtävä arvioidaan. Aino miettii, miten tekoälyä voisi hyödyntää.',
+            question: '🤔 Miten Aino voi käyttää tekoälyä vastuullisesti näyttötehtävässä?',
+            choices: [
+                { text: 'A) Antaa tekoälyn tehdä kaiken — arvioijat eivät huomaa eroa', isGood: false,
+                  consequence: '❌ Vakava virhe ja eettinen ongelma! Näyttötehtävät on suunniteltu mittaamaan opiskelijan omaa osaamista — jos tekoäly tekee kaiken, näyttö ei osoita mitään. Arvioijat ovat yhä parempia tunnistamaan tekoälyn tuottaman tekstin. Seuraukset: hylätty näyttö tai vakavampi.'},
+                { text: 'B) Käyttää tekoälyä kielenhuoltoon (oikeinkirjoitus, lauserakenne) omassa tekstissään', isGood: true,
+                  consequence: '✅ Hyväksyttävä käyttö! Tekoäly toimii kuin kehittynyt tekstieditori — auttaa hiomaan kieliasuaan, mutta sisältö ja asiantuntemus ovat Ainon omia. Kielenhuolto on yleensä hyväksyttävää apua, ellei tehtäväohjeessa erikseen kielletä. Tarkista aina ohjeet!'},
+                { text: 'C) Kysyä opettajalta etukäteen, miten tekoälyä saa käyttää tässä tehtävässä', isGood: true,
+                  consequence: '✅ Ehdottomasti paras vaihtoehto! Ennen kuin käyttää tekoälyä arvioiduissa tehtävissä, kannattaa aina varmistaa ohjaajalta, mikä on sallittua. Mercurialla on selkeät tekoälyn käyttöohjeet — niitä noudattamalla pysyy varmasti oikealla polulla.'}
+            ]
         }
     ];
 
-    let completed = 0, score = 0;
-    const total = scenarios.length;
+    let currentScene = 0;
+    let score = 0;
+    const total = scenes.length;
+    const dayLog = [];
 
-    const answerLabels = {
-        allowed:     '✅ Sallittu',
-        conditional: '🟡 Ehdoin sallittu',
-        forbidden:   '❌ Kielletty'
-    };
-    const tagClasses = { allowed: 'tag-allowed', conditional: 'tag-conditional', forbidden: 'tag-forbidden' };
-
-    function initExercise() {
-        const container = document.getElementById('scenariosContainer');
-        scenarios.forEach((s, i) => container.appendChild(createCard(s, i)));
-    }
-
-    function createCard(s, idx) {
-        const card = document.createElement('div');
-        card.className = 'scenario-card';
-        card.id = 'scard-' + idx;
-
-        card.innerHTML = `
-            <div class="scenario-number">Tilanne ${idx + 1}/${total}</div>
-            <div class="scenario-text">${s.situation}</div>
-            <div class="scenario-question">${s.question}</div>
-            <div class="answer-buttons" id="abtns-${idx}">
-                <button class="btn-allowed"    onclick="answerScenario(${idx},'allowed')">✅ Sallittu</button>
-                <button class="btn-conditional" onclick="answerScenario(${idx},'conditional')">🟡 Ehdoin sallittu</button>
-                <button class="btn-forbidden"  onclick="answerScenario(${idx},'forbidden')">❌ Kielletty</button>
-            </div>
-            <div class="explanation" id="sexp-${idx}"></div>
-        `;
-        return card;
-    }
-
-    function answerScenario(idx, choice) {
-        const s = scenarios[idx];
-        const card = document.getElementById('scard-' + idx);
-        document.getElementById('abtns-' + idx).querySelectorAll('button').forEach(b => b.disabled = true);
-
-        const correct = choice === s.correct;
-        if (correct) score++;
-        card.classList.add(correct ? 'answered-correct' : 'answered-incorrect');
-
-        const exp = document.getElementById('sexp-' + idx);
-        exp.className = 'explanation show';
-        const tagHtml = `<span class="scenario-tag ${tagClasses[s.correct]}">${answerLabels[s.correct]}</span>`;
-        exp.innerHTML = (correct ? '' : `<strong>Oikea vastaus:</strong> ${tagHtml}<br><br>`) + s.feedback;
-
-        completed++;
+    function renderScene() {
+        const scene = scenes[currentScene];
         updateProgress();
-        if (completed === total) setTimeout(showSummary, 700);
+        document.getElementById('sceneContainer').innerHTML = `
+            <div class="scene-card ${scene.bgClass}">
+                <div class="scene-tag">${scene.tag}</div>
+                <span class="scene-emoji">${scene.emoji}</span>
+                <div class="scene-name">${scene.name}</div>
+                <div class="scene-story">${scene.story}</div>
+                <div class="scene-question">${scene.question}</div>
+                <div class="choices" id="choicesEl">
+                    ${scene.choices.map((c,i) => `<button class="choice-btn" id="choice-${i}" onclick="chooseOption(${i})">${c.text}</button>`).join('')}
+                </div>
+                <div class="consequence" id="consequenceEl"></div>
+                <div style="display:flex;gap:10px;flex-wrap:wrap">
+                    <button class="retry-btn" id="retryBtn" style="display:none" onclick="renderScene()">↩ Valitse uudelleen</button>
+                    <button class="next-scene-btn" id="nextBtn" onclick="nextScene()">${currentScene < total - 1 ? 'Seuraava kohtaus →' : 'Katso yhteenveto →'}</button>
+                </div>
+            </div>`;
     }
+
+    window.chooseOption = function(idx) {
+        const scene = scenes[currentScene];
+        const choice = scene.choices[idx];
+        document.querySelectorAll('.choice-btn').forEach(b => b.disabled = true);
+        document.getElementById('choice-' + idx).classList.add(choice.isGood ? 'chosen-good' : 'chosen-bad');
+
+        const cons = document.getElementById('consequenceEl');
+        cons.className = 'consequence show ' + (choice.isGood ? 'good' : 'bad');
+        cons.innerHTML = choice.consequence;
+
+        if (choice.isGood) {
+            score++;
+            dayLog.push({ ok: true, tag: scene.tag, note: choice.text.substring(0, 50) + '…' });
+            document.getElementById('nextBtn').classList.add('show');
+            document.getElementById('retryBtn').style.display = 'none';
+        } else {
+            dayLog.push({ ok: false, tag: scene.tag, note: choice.text.substring(0, 50) + '…' });
+            document.getElementById('retryBtn').style.display = 'inline-block';
+            document.getElementById('nextBtn').classList.remove('show');
+            // On retry, show nextBtn after correct choice
+            document.getElementById('retryBtn').onclick = function() {
+                // re-enable buttons after retry
+                document.querySelectorAll('.choice-btn').forEach(b => { b.disabled = false; b.className = 'choice-btn'; });
+                cons.className = 'consequence';
+                this.style.display = 'none';
+            };
+        }
+        updateProgress();
+    };
+
+    window.nextScene = function() {
+        currentScene++;
+        if (currentScene >= total) showSummary();
+        else renderScene();
+    };
 
     function updateProgress() {
-        document.getElementById('progressFill').style.width = Math.round(completed / total * 100) + '%';
-        document.getElementById('progressCount').textContent = completed;
+        document.getElementById('progressFill').style.width = Math.round(currentScene / total * 100) + '%';
+        document.getElementById('progressCount').textContent = Math.min(currentScene + 1, total);
     }
 
     function showSummary() {
+        document.getElementById('progressFill').style.width = '100%';
+        document.getElementById('sceneContainer').innerHTML = '';
         const pct = Math.round(score / total * 100);
-        const msg = pct >= 83 ? '🎉 Erinomainen! Vastuullinen tekoälyn käyttö on hallussa.' : pct >= 66 ? '👍 Hyvä suoritus! Muutama raja on vielä epäselvä – palaa ohjeistukseen.' : '📚 Tutustu Mercurian tekoälyohjeistukseen uudelleen ja yritä sitten uudelleen.';
+        const msg = pct === 100 ? '🏆 Täydellinen koulupäivä! Tekoälyn vastuullinen käyttö on hallussa.' : pct >= 80 ? '🎓 Hyvin menee! Muutama asia vielä pohdittavana.' : '📚 Kertaa Mercurian tekoälyohjeet — vastuullinen käyttö on tärkeää!';
         document.getElementById('summaryContainer').innerHTML = `<div class="summary-panel">
-            <h3>📊 Yhteenveto</h3>
-            <p><strong>Pisteet: ${score}/${total}</strong> (${pct}%)</p>
+            <h3>📊 Koulupäivä ohi — yhteenveto!</h3>
+            <p><strong>Oikeat valinnat: ${score}/${total}</strong> (${pct}%)</p>
             <p>${msg}</p>
-            <p style="font-size:0.9em;color:#555;">💡 Epävarmoissa tilanteissa kysy aina opettajalta, saako tekoälyä käyttää tehtävässä.</p>
-            <button class="btn btn-primary" onclick="location.reload()" style="margin-top:14px;padding:10px 22px;">🔄 Kokeile uudelleen</button>
+            <div class="day-log">
+                <div class="day-log-title">📋 Päivän valinnat:</div>
+                ${scenes.map((s,i) => {
+                    const entry = dayLog.find(l => l.tag === s.tag);
+                    const ok = entry && entry.ok;
+                    return `<div class="log-entry"><span class="log-badge">${ok ? '✅' : '⚠️'}</span>
+                        <div class="log-text"><strong>${s.tag}</strong><br>${ok ? 'Hyvä valinta!' : 'Vaati uudelleenpohdintaa'}</div></div>`;
+                }).join('')}
+            </div>
+            <div style="background:white;border-radius:8px;padding:14px;margin:10px 0;text-align:left;font-size:0.9em">
+                <strong>🔑 Muista nämä:</strong>
+                <p>🔒 Ei henkilötietoja tekoälypalveluihin</p>
+                <p>✍️ Oma osaaminen on aina osoitettava</p>
+                <p>🔍 Tarkista aina tekoälyn antamat faktat</p>
+                <p>💬 Kysy opettajalta, jos olet epävarma käyttöoikeuksista</p>
+            </div>
+            <button class="btn btn-primary" onclick="location.reload()" style="margin-top:8px;padding:10px 22px;">🔄 Kokeile uudelleen</button>
         </div>`;
     }
 
-    initExercise();
+    renderScene();
     </script>
 </body>
 </html>
