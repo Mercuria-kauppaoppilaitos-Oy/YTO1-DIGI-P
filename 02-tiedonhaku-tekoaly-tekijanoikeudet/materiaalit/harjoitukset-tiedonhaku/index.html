@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tiedonhaku ja lähdekritiikki – harjoitukset</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .exercises-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin: 24px 0;
+        }
+        .exercise-tile {
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+        .exercise-tile:nth-child(1) { background: linear-gradient(135deg, #0891b2 0%, #0e7490 100%); }
+        .exercise-tile:nth-child(2) { background: linear-gradient(135deg, #06b6d4 0%, #0284c7 100%); }
+        .exercise-tile:nth-child(3) { background: linear-gradient(135deg, #14b8a6 0%, #0f766e 100%); }
+        .exercise-tile:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+        .exercise-tile a {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 28px 20px;
+            color: white;
+            text-decoration: none;
+            min-height: 190px;
+            text-align: center;
+        }
+        .tile-icon { font-size: 3em; margin-bottom: 12px; }
+        .tile-title { font-weight: 700; font-size: 1.05em; margin-bottom: 6px; }
+        .tile-desc  { font-size: 0.88em; opacity: 0.93; }
+    </style>
+</head>
+<body>
+    <div class="exercise-container">
+        <div class="exercise-header">
+            <h1>🔍 Tiedonhaku ja lähdekritiikki – harjoitukset</h1>
+            <p>3 interaktiivista harjoitusta tiedonhaun ja lähdekritiikin harjoitteluun.</p>
+        </div>
+
+        <div class="info-panel">
+            <h3>📚 Harjoituksista</h3>
+            <p>Jokainen harjoitus käsittelee eri aihetta käytännön kautta. Vastaukset tallentuvat harjoituksen ajaksi ja saat palautetta.</p>
+        </div>
+
+        <div class="exercises-grid">
+            <div class="exercise-tile">
+                <a href="harjoitus-1-lahteen-luotettavuus.html">
+                    <div class="tile-icon">🔎</div>
+                    <div class="tile-title">1. Lähteen luotettavuus</div>
+                    <div class="tile-desc">Arvioi erilaisten verkkosivujen luotettavuus</div>
+                </a>
+            </div>
+            <div class="exercise-tile">
+                <a href="harjoitus-2-hakuoperaattorit.html">
+                    <div class="tile-icon">⌨️</div>
+                    <div class="tile-title">2. Hakuoperaattorit</div>
+                    <div class="tile-desc">Testaa tietosi Google-hakuoperaattoreista</div>
+                </a>
+            </div>
+            <div class="exercise-tile">
+                <a href="harjoitus-3-valeuutiset.html">
+                    <div class="tile-icon">📰</div>
+                    <div class="tile-title">3. Valeuutisten tunnistus</div>
+                    <div class="tile-desc">Erottele aito uutinen valeuutisesta</div>
+                </a>
+            </div>
+        </div>
+
+        <a class="back-link" href="../../index.html">← Takaisin materiaaleihin</a>
+    </div>
+</body>
+</html>

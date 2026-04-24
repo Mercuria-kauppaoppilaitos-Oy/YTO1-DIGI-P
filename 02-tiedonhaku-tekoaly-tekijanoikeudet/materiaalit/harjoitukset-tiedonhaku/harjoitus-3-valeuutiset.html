@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harjoitus 3 – Valeuutisten tunnistaminen</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <a class="back-link" href="index.html">← Takaisin harjoituksiin</a>
+    <div class="exercise-container">
+        <div class="exercise-header">
+            <h1>📰 Harjoitus 3 – Valeuutisten tunnistaminen</h1>
+            <p>Onko uutinen aito vai vale? Merkitse jokainen uutinen ja katso selitys.</p>
+        </div>
+
+        <div class="info-panel">
+            <h3>🚩 Valeuutisten varoitusmerkit</h3>
+            <ul>
+                <li>❌ Sensaatiohakuinen tai liioiteltu otsikko ("PALJASTUS!", "KAIKKI PETTÄÄ!")</li>
+                <li>❌ Ei tunnettua tai nimettyä julkaisijaa</li>
+                <li>❌ Epäselvä tai harhaanjohtava verkko-osoite (esim. yle-fi.net, hs-uutiset.com)</li>
+                <li>❌ Ei päivämäärää tai tekijää</li>
+                <li>❌ Väitteitä ilman lähteitä – "tutkimukset osoittavat" ilman viittausta</li>
+                <li>❌ Voimakkaita tunnelatauksisia sanoja herättämään tunteet</li>
+            </ul>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress-bar-track">
+                <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+            </div>
+            <div class="progress-text"><span id="progressCount">0</span> / 4 uutista arvioitu</div>
+        </div>
+
+        <div id="newsContainer"></div>
+        <div id="summaryContainer"></div>
+    </div>
+
+    <script>
+    const news = [
+        {
+            source: 'Yle Uutiset',
+            sourceUrl: 'yle.fi/uutiset',
+            date: '22.4.2026 klo 09:14',
+            author: 'Toimitus: Anna Mäkinen',
+            headline: 'Suomalaisten some-käyttö kasvaa edelleen – nuorten suosituimmat alustat vaihtelevat nopeasti',
+            lead: 'Tilastokeskuksen tuoreen tutkimuksen mukaan suomalaiset viettävät sosiaalisessa mediassa keskimäärin 2,1 tuntia päivässä. Nuorten suosituimpien alustojen lista on muuttunut viidessä vuodessa merkittävästi – Facebook on menettänyt suosiotaan alle 30-vuotiaiden keskuudessa.',
+            isFake: false,
+            flags: [
+                '✅ Tunnistettu julkaisija (Yle Uutiset) ja toimittaja (Anna Mäkinen)',
+                '✅ Nimetty lähde: Tilastokeskuksen tutkimus',
+                '✅ Otsikko on asiallinen ja vastaa artikkelin sisältöä',
+                '✅ Päivämäärä ja kellonaika selvät'
+            ]
+        },
+        {
+            source: 'PALJASTUS-UUTISET.com',
+            sourceUrl: 'paljastus-uutiset.com/tekoaly',
+            date: 'Ei päivämäärää',
+            author: 'Ei tekijää',
+            headline: '🔴 PALJASTUS: Tekoäly ottaa kaiken kontrollin – hallitukset vaiennettavat totuus!',
+            lead: 'Salainen raportti todistaa, että tekoäly on jo "ottanut vallan" kaikissa länsimaissa. Tutkijat, jotka yrittivät paljastaa tämän, on hiljennetty. Jaa tämä ennen kuin se poistetaan! Lue myös: Kuinka suojata itsesi tekoälyvalvonnalta – KLIKKAA TÄSTÄ.',
+            isFake: true,
+            flags: [
+                '⚠️ "PALJASTUS"-otsikko isolla – klassinen clickbait-malli',
+                '⚠️ Ei tekijää, ei päivämäärää, ei tunnettua julkaisijaa',
+                '⚠️ Epäilyttävä verkkotunnus (ei .fi tai tunnettu media)',
+                '⚠️ "Jaa ennen kuin poistetaan" – kiireellisyystaktiikka',
+                '⚠️ "Salainen raportti" ilman lähdettä tai viittausta'
+            ]
+        },
+        {
+            source: 'Helsingin Sanomat',
+            sourceUrl: 'hs.fi/kotimaa',
+            date: '20.4.2026 klo 11:45',
+            author: 'Janne Korhonen, HS',
+            headline: 'Ammatillinen koulutus kasvattaa suosiotaan – hakijamäärä nousi 8 prosenttia',
+            lead: 'Opetushallituksen tilastojen mukaan ammatilliseen koulutukseen haki tänä keväänä noin 8 prosenttia enemmän opiskelijoita kuin vuotta aiemmin. Kasvu näkyy erityisesti tekniikan ja liiketalouden aloilla. Rehtorit pitävät syinä parantunutta imagoa ja työelämäläheistä opetusta.',
+            isFake: false,
+            flags: [
+                '✅ Tunnistettu julkaisija (HS) ja toimittaja (Janne Korhonen)',
+                '✅ Nimetty lähde: Opetushallituksen tilastot',
+                '✅ Konkreettiset luvut (8%) ja selitykset',
+                '✅ Asiallinen otsikko ilman tunnelatauksia'
+            ]
+        },
+        {
+            source: 'hs-uutiset24.net',
+            sourceUrl: 'hs-uutiset24.net/talous',
+            date: '23.4.2026',
+            author: 'hs-uutiset24 toimitus',
+            headline: 'SHOKKITIETO: Pankit siirtyvät TÄYSIN tekoälyyn – pankkivirkailijat irtisanotaan KAIKKI tänä vuonna',
+            lead: 'Lähteidemme mukaan kolme suurinta suomalaisista pankkeista aikoo irtisanoa koko henkilöstönsä vuoden loppuun mennessä ja korvata heidät tekoälyllä. Asiaa ei ole vahvistettu virallisesti, mutta "sisäpiiri tietää". Pankit eivät kommentoi asiaa.',
+            isFake: true,
+            flags: [
+                '⚠️ Verkkotunnus hs-uutiset24.net – jäljittelee HS:ää, mutta on eri sivusto',
+                '⚠️ ISOT KIRJAIMET otsikossa – tyypillinen manipulaatiotaktiikka',
+                '⚠️ "Lähteidemme mukaan" ja "sisäpiiri tietää" – epämääräiset lähteet',
+                '⚠️ "Asiaa ei ole vahvistettu virallisesti" – tieto on perusteetonta',
+                '⚠️ Väite on epärealistinen ja kohdistuu herättämään pelkoa'
+            ]
+        }
+    ];
+
+    let completed = 0;
+    let score = 0;
+    const total = news.length;
+
+    function initExercise() {
+        const container = document.getElementById('newsContainer');
+        news.forEach((item, i) => container.appendChild(createNewsCard(item, i)));
+    }
+
+    function createNewsCard(item, idx) {
+        const card = document.createElement('div');
+        card.className = 'news-card';
+        card.id = 'ncard-' + idx;
+
+        card.innerHTML = `
+            <div class="news-source-bar">
+                <span>📢 <strong>${item.source}</strong> — ${item.sourceUrl}</span>
+                <span>🗓️ ${item.date}</span>
+            </div>
+            <div class="news-source-bar" style="margin-bottom:10px;">
+                <span>✍️ ${item.author}</span>
+            </div>
+            <div class="news-headline">${item.headline}</div>
+            <div class="news-lead">${item.lead}</div>
+            <div class="news-buttons" id="nbtns-${idx}">
+                <button class="btn-fake" onclick="answerNews(${idx}, true)">⚠️ Valeuutinen</button>
+                <button class="btn-real" onclick="answerNews(${idx}, false)">✅ Aito uutinen</button>
+            </div>
+            <div class="news-flags" id="nflags-${idx}">
+                <h4 id="nflagsTitle-${idx}"></h4>
+                <div id="nflagsList-${idx}"></div>
+            </div>
+        `;
+        return card;
+    }
+
+    function answerNews(idx, guessedFake) {
+        const item = news[idx];
+        const card = document.getElementById('ncard-' + idx);
+        const btns = document.getElementById('nbtns-' + idx);
+        const flags = document.getElementById('nflags-' + idx);
+        const title = document.getElementById('nflagsTitle-' + idx);
+        const list  = document.getElementById('nflagsList-' + idx);
+
+        btns.querySelectorAll('button').forEach(b => b.disabled = true);
+
+        const correct = guessedFake === item.isFake;
+        if (correct) score++;
+        card.classList.add(correct ? 'correct' : 'incorrect');
+
+        title.textContent = item.isFake ? '🚩 Valeuutinen – varoitusmerkit:' : '✅ Aito uutinen – luotettavuustekijät:';
+        item.flags.forEach(f => {
+            const d = document.createElement('div');
+            d.className = 'flag-item';
+            d.textContent = f;
+            list.appendChild(d);
+        });
+        flags.className = 'news-flags show';
+
+        completed++;
+        updateProgress();
+        if (completed === total) setTimeout(showSummary, 700);
+    }
+
+    function updateProgress() {
+        document.getElementById('progressFill').style.width = Math.round(completed / total * 100) + '%';
+        document.getElementById('progressCount').textContent = completed;
+    }
+
+    function showSummary() {
+        const pct = Math.round(score / total * 100);
+        const msg = pct === 100 ? '🎉 Erinomainen! Tunnistat valeuutiset luotettavasti.' : pct >= 50 ? '👍 Hyvä yritys! Muista tarkistaa aina lähde ja julkaisija.' : '📚 Valeuutiset voivat olla vakuuttavia – harjoittele lisää!';
+        document.getElementById('summaryContainer').innerHTML = `<div class="summary-panel">
+            <h3>📊 Yhteenveto</h3>
+            <p><strong>Pisteet: ${score}/${total}</strong> (${pct}%)</p>
+            <p>${msg}</p>
+            <button class="btn btn-primary" onclick="location.reload()" style="margin-top:14px;padding:10px 22px;">🔄 Kokeile uudelleen</button>
+        </div>`;
+    }
+
+    initExercise();
+    </script>
+</body>
+</html>

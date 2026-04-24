@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harjoitus 4 – Vastuullinen tekoälyn käyttö</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .scenario-card {
+            background: #f9f9f9;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 14px 0;
+        }
+        .scenario-card.answered-correct  { border-color: #27ae60; background: #e8f5e9; }
+        .scenario-card.answered-incorrect { border-color: #e74c3c; background: #fadbd8; }
+        .scenario-number { font-size: 0.8em; color: #6366f1; font-weight: 700; margin-bottom: 6px; }
+        .scenario-text {
+            font-size: 0.97em;
+            line-height: 1.6;
+            margin-bottom: 14px;
+            background: white;
+            padding: 10px 14px;
+            border-left: 3px solid #6366f1;
+            border-radius: 4px;
+        }
+        .scenario-question { font-weight: bold; margin-bottom: 12px; color: #1e1b4b; }
+        .answer-buttons { display: flex; gap: 8px; flex-wrap: wrap; }
+        .answer-buttons button {
+            flex: 1; min-width: 120px; padding: 10px 12px;
+            border: none; border-radius: 6px; font-size: 0.9em;
+            cursor: pointer; font-weight: 600; transition: all 0.25s;
+        }
+        .answer-buttons button:disabled { opacity: 0.6; cursor: not-allowed; }
+        .btn-allowed    { background: #27ae60; color: white; }
+        .btn-conditional { background: #f39c12; color: white; }
+        .btn-forbidden  { background: #e74c3c; color: white; }
+        .scenario-tag {
+            display: inline-block;
+            padding: 3px 9px; border-radius: 12px; font-size: 0.78em;
+            font-weight: 700; margin-bottom: 8px; letter-spacing: 0.3px;
+        }
+        .tag-allowed    { background: #d5f4e6; color: #1a7d4a; }
+        .tag-conditional { background: #fdebd0; color: #b34a00; }
+        .tag-forbidden  { background: #fadbd8; color: #c0392b; }
+    </style>
+</head>
+<body>
+    <a class="back-link" href="index.html">← Takaisin harjoituksiin</a>
+    <div class="exercise-container">
+        <div class="exercise-header">
+            <h1>⚖️ Harjoitus 4 – Vastuullinen tekoälyn käyttö Mercurialla</h1>
+            <p>Arvioi jokainen tilanne: onko tekoälyn käyttö sallittu, ehdollisesti sallittu vai kielletty?</p>
+        </div>
+
+        <div class="info-panel">
+            <h3>📋 Mercurian tekoälyohjeistuksen pääperiaatteet</h3>
+            <ul>
+                <li>🔒 <strong>Tietosuoja:</strong> Tekoälyyn ei syötetä henkilötietoja, opiskelija- tai henkilöstötietoja eikä muita luottamuksellisia tietoja</li>
+                <li>✍️ <strong>Akateeminen rehellisyys:</strong> Tekoälyn kokonaan kirjoittaman työn palauttaminen omanaan on kiellettyä</li>
+                <li>🔍 <strong>Kriittinen arviointi:</strong> Tekoälyn tuottamat tiedot tulee aina tarkistaa – tekoäly voi hallusinoida</li>
+                <li>📝 <strong>Läpinäkyvyys:</strong> Tekoälyn käyttö tulee mainita töissä, joissa sitä on hyödynnetty</li>
+                <li>🛠️ <strong>Hyväksytyt työkalut:</strong> Suositeltavia ovat Microsoft Copilot (koulutilit), Copilot-kirjautuminen, ja muut opettajan hyväksymät välineet</li>
+            </ul>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress-bar-track">
+                <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+            </div>
+            <div class="progress-text"><span id="progressCount">0</span> / 6 tilannetta arvioitu</div>
+        </div>
+
+        <div id="scenariosContainer"></div>
+        <div id="summaryContainer"></div>
+    </div>
+
+    <script>
+    const scenarios = [
+        {
+            situation: 'Opiskelija Aino kirjoittaa tekstinkäsittelyharjoituksen raporttia. Hän käyttää Microsoft Copilotia (koulutilillä), jotta saa ehdotuksia oikeinkirjoituksesta ja lauserakenteista – mutta muokkaa tekstin itse lopulliseen muotoon ja palauttaa oman tekstinsä.',
+            question: 'Onko tämä tekoälyn käyttö sallittua?',
+            correct: 'allowed',
+            feedback: '✅ Sallittu. Copilot koulutilillä on hyväksytty apuväline. Opiskelija käyttää tekoälyä kielentarkistukseen ja ideoiden hiomiseen, mutta tuottaa tekstin itse. Tämä vastaa oikeinkirjoitusohjelman käyttöä. Hyvä tapa mainita lyhyesti tekoälyn käyttö palautuksen yhteydessä.'
+        },
+        {
+            situation: 'Opiskelija Matti kopioi ChatGPT:n antaman vastauksen suoraan arvioitavaan harjoitustehtävään lisäämättä mitään omaa tai muokkaamatta tekstiä. Hän ei mainitse tekoälyn käyttöä.',
+            question: 'Onko tämä tekoälyn käyttö sallittua?',
+            correct: 'forbidden',
+            feedback: '❌ Kielletty. Tekoälyn kokonaan kirjoittaman työn palauttaminen omanaan on plagiointia. Opiskelija ei osoita omaa osaamistaan eikä mainitse lähdettä. Tämä loukkaa Mercurian rehellisyysperiaatteita ja voi johtaa tehtävän hylkäämiseen.'
+        },
+        {
+            situation: 'Harjoitustunnilla opettaja pyytää oppilaita kokeilemaan Copilotia tiedonhaussa ja arvioimaan kriittisesti sen vastauksia vertaamalla niitä yle.fi:n uutisiin. Opiskelijat kirjaavat havaintonsa ylös oppimispäiväkirjaan.',
+            question: 'Onko tämä tekoälyn käyttö sallittua?',
+            correct: 'allowed',
+            feedback: '✅ Sallittu ja suositeltavaa! Tämä on juuri se tapa, miten tekoälyä opitaan käyttämään vastuullisesti: kokeillaan, vertaillaan ja arvioidaan kriittisesti. Opettajan ohjaama käyttö tukee oppimista erinomaisesti.'
+        },
+        {
+            situation: 'Opiskelija haluaa tehdä ryhmätehtävässä tiivistelmän yhteisestä muistiosta. Hän kopioi muistiopohjaan kaikkien ryhmäläisten nimet ja muistiinpanot ja syöttää ne ChatGPT:hen pyytäen tiivistelmää.',
+            question: 'Onko tämä tekoälyn käyttö sallittua?',
+            correct: 'conditional',
+            feedback: '🟡 Ehdollisesti sallittu – mutta tässä muodossa ongelmallinen. Muiden opiskelijoiden nimet ovat henkilötietoja, joita ei tule syöttää ulkopuoliseen tekoälypalveluun. Ratkaisuna: poista nimet tai käytä Microsoft Copilotia koulutilillä, jolloin tietosuoja on paremmin hallinnassa.'
+        },
+        {
+            situation: 'Opiskelija Liisa käyttää tekoälyä englanninkielisen harjoitusviestin kääntämiseen suomeksi ymmärtääkseen tehtävänannon. Hän tekee tehtävän itse omalla äidinkielellä.',
+            question: 'Onko tämä tekoälyn käyttö sallittua?',
+            correct: 'allowed',
+            feedback: '✅ Sallittu. Tekoälyn käyttö kääntämiseen ymmärtämisen tueksi on hyväksyttävää – tämä on apuvälineen käyttöä, ei oman työn ulkoistamista. Samanlaista apua saisi myös sanakirjasta tai Google Kääntäjältä.'
+        },
+        {
+            situation: 'Opiskelija pyytää tekoälyä tuottamaan esseen arvioitavaan näyttötehtävään, jonka tavoitteena on osoittaa omaa osaamista. Opiskelija lisää esseen alkuun maininnon "Kirjoitettu ChatGPT:n avulla".',
+            question: 'Onko tämä tekoälyn käyttö sallittua?',
+            correct: 'forbidden',
+            feedback: '❌ Kielletty – mainninnasta huolimatta. Arvioitavan näyttötehtävän tarkoitus on osoittaa opiskelijan oma osaaminen. Tekoälyn kokonainen kirjoittama essee ei osoita tätä, vaikka lähde olisi merkitty. Opiskelija voi käyttää tekoälyä ideointiin ja palautteeseen, mutta kirjoittaa itse.'
+        }
+    ];
+
+    let completed = 0, score = 0;
+    const total = scenarios.length;
+
+    const answerLabels = {
+        allowed:     '✅ Sallittu',
+        conditional: '🟡 Ehdoin sallittu',
+        forbidden:   '❌ Kielletty'
+    };
+    const tagClasses = { allowed: 'tag-allowed', conditional: 'tag-conditional', forbidden: 'tag-forbidden' };
+
+    function initExercise() {
+        const container = document.getElementById('scenariosContainer');
+        scenarios.forEach((s, i) => container.appendChild(createCard(s, i)));
+    }
+
+    function createCard(s, idx) {
+        const card = document.createElement('div');
+        card.className = 'scenario-card';
+        card.id = 'scard-' + idx;
+
+        card.innerHTML = `
+            <div class="scenario-number">Tilanne ${idx + 1}/${total}</div>
+            <div class="scenario-text">${s.situation}</div>
+            <div class="scenario-question">${s.question}</div>
+            <div class="answer-buttons" id="abtns-${idx}">
+                <button class="btn-allowed"    onclick="answerScenario(${idx},'allowed')">✅ Sallittu</button>
+                <button class="btn-conditional" onclick="answerScenario(${idx},'conditional')">🟡 Ehdoin sallittu</button>
+                <button class="btn-forbidden"  onclick="answerScenario(${idx},'forbidden')">❌ Kielletty</button>
+            </div>
+            <div class="explanation" id="sexp-${idx}"></div>
+        `;
+        return card;
+    }
+
+    function answerScenario(idx, choice) {
+        const s = scenarios[idx];
+        const card = document.getElementById('scard-' + idx);
+        document.getElementById('abtns-' + idx).querySelectorAll('button').forEach(b => b.disabled = true);
+
+        const correct = choice === s.correct;
+        if (correct) score++;
+        card.classList.add(correct ? 'answered-correct' : 'answered-incorrect');
+
+        const exp = document.getElementById('sexp-' + idx);
+        exp.className = 'explanation show';
+        const tagHtml = `<span class="scenario-tag ${tagClasses[s.correct]}">${answerLabels[s.correct]}</span>`;
+        exp.innerHTML = (correct ? '' : `<strong>Oikea vastaus:</strong> ${tagHtml}<br><br>`) + s.feedback;
+
+        completed++;
+        updateProgress();
+        if (completed === total) setTimeout(showSummary, 700);
+    }
+
+    function updateProgress() {
+        document.getElementById('progressFill').style.width = Math.round(completed / total * 100) + '%';
+        document.getElementById('progressCount').textContent = completed;
+    }
+
+    function showSummary() {
+        const pct = Math.round(score / total * 100);
+        const msg = pct >= 83 ? '🎉 Erinomainen! Vastuullinen tekoälyn käyttö on hallussa.' : pct >= 66 ? '👍 Hyvä suoritus! Muutama raja on vielä epäselvä – palaa ohjeistukseen.' : '📚 Tutustu Mercurian tekoälyohjeistukseen uudelleen ja yritä sitten uudelleen.';
+        document.getElementById('summaryContainer').innerHTML = `<div class="summary-panel">
+            <h3>📊 Yhteenveto</h3>
+            <p><strong>Pisteet: ${score}/${total}</strong> (${pct}%)</p>
+            <p>${msg}</p>
+            <p style="font-size:0.9em;color:#555;">💡 Epävarmoissa tilanteissa kysy aina opettajalta, saako tekoälyä käyttää tehtävässä.</p>
+            <button class="btn btn-primary" onclick="location.reload()" style="margin-top:14px;padding:10px 22px;">🔄 Kokeile uudelleen</button>
+        </div>`;
+    }
+
+    initExercise();
+    </script>
+</body>
+</html>

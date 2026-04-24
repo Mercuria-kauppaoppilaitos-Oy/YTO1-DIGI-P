@@ -46,13 +46,15 @@ Osion oppimateriaali on koottu yhteen kirja-aktiviteettiin: **Tiedonhaku, tekoä
 
 Materialit-kansion tiedostot (tiedonhaku-ja-lahdekritiikki.md, generatiivinen-tekoaly.md, tekijanoikeudet-ja-cc-lisenssit.md) ovat sisältösuunnittelun apuvälineitä. Varsinainen oppimateriaalin sisältö on kirjoitettu kirja-aktiviteettiin (kirja/kirja-tiedonhaku-tekoaly-tekijanoikeudet.md).
 
-### Interaktiiviset selainharjoitukset — suunnitteilla
+### Interaktiiviset selainharjoitukset
 
-| Aihe | Mahdolliset harjoitukset |
-|---|---|
-| Tiedonhaku ja lähdekritiikki | Lähteen luotettavuuden arviointi, hakustrategiat |
-| Tekoäly | Tekoälyn tuottaman ja ihmisen kirjoittaman tekstin tunnistaminen |
-| Tekijänoikeudet | CC-lisenssien tunnistaminen, oikea lähdeviittaustapa |
+Interaktiiviset HTML/JS/CSS-harjoitukset on laadittu jokaiselle aihealueelle. Ne toimivat suoraan selaimessa.
+
+| Aihe | Kansio | Harjoitukset |
+|---|---|---|
+| 🔍 Tiedonhaku & lähdekritiikki | `materiaalit/harjoitukset-tiedonhaku/` | Lähteen luotettavuus, hakuoperaattorit, valeuutiset |
+| 🤖 Tekoäly | `materiaalit/harjoitukset-tekoaly/` | Tekoälyn perusteet, promptit, hallusinaatiot, vastuullinen käyttö |
+| ©️ Tekijänoikeudet | `materiaalit/harjoitukset-tekijanoikeudet/` | CC-lisenssit, tekijänoikeustietovisa, lähdeviittaukset |
 
 ### Tehtävätiedostot
 
