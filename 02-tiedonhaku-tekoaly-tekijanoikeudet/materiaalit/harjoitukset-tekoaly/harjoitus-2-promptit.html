@@ -220,9 +220,22 @@
     };
     const placeholders = { role: '[Rooli puuttuu]', task: '[Tehtävä puuttuu]', context: '[Konteksti puuttuu]', format: '[Muoto puuttuu]' };
 
+    // AI responses keyed by role-task-context-format selection indices.
+    // Having all 4 elements always produces a specific, high-quality response;
+    // the 'default' fallback is still good but slightly more generic.
     const aiResponses = {
+        // role=opiskelija, task=asiakasviesti, context=tilausvahvistus, format=sähköposti
         '0-0-0-0': `Hyvä asiakas,\n\nKiitos tilauksestanne! Olemme vastaanottaneet tilauksenne ja se on käsittelyssä. Toimitus tapahtuu sovitun aikataulun mukaisesti.\n\nOtamme teihin yhteyttä, jos tarvitsemme lisätietoja. Tervetuloa asioimaan uudelleen!\n\nYstävällisin terveisin,\n[Yhteyshenkilö]`,
-        'default': `Hei!\n\nKiitos yhteydenotostanne. Tilausvahvistuksenne on vastaanotettu. Käsittelemme tilauksen ja olemme teille pian yhteydessä.\n\nParhain terveisin`
+        // role=markkinointiassistentti, task=asiakasviesti, context=tilausvahvistus, format=sähköposti
+        '1-0-0-0': `Hyvä arvoisa asiakas,\n\nIloksemme ilmoitamme, että tilauksenne on vastaanotettu ja käsitelty. Lähetämme tuotteenne sovitussa aikataulussa.\n\nArvostamme asiakassuhdettamme ja toivomme teille miellyttävää käyttökokemusta. Otamme teihin yhteyttä toimituksen etenemisestä.\n\nLämpimin terveisin,\nMarkkinointitiimi`,
+        // role=pienyrittäjä, task=asiakasviesti, context=tilausvahvistus, format=sähköposti
+        '2-0-0-0': `Moi!\n\nTilaus vastaanotettu, kiitos! Laitetaan tilauksesi käsittelyyn heti. Toimitetaan sinulle sovitusti.\n\nJos tulee kysyttävää, ota rohkeasti yhteyttä.\n\nTerveisin 👍`,
+        // role=opiskelija, task=esittely, context=ammatillinen, format=lista
+        '0-1-2-1': `Tässä lyhyt esittely opiskelijana:\n\n• Opiskelen liiketaloutta Mercurialla\n• Suuntautuminen: markkinointi ja asiakaspalvelu\n• Vahvuuteni: tiimityö, asiakaslähtöinen ajattelu\n• Tavoitteeni: valmistua 2027 ja työllistyä myyntialalle\n• Harjoittelupaikka: kaupan ala`,
+        // role=opiskelija, task=tiivistelmä, context=harjoitustehtävä, format=lyhyesti
+        '0-2-2-2': `Tiivistelmä:\n\nTeksti käsittelee digitaalisia taitoja ammatillisessa koulutuksessa. Keskeisiä teemoja ovat tiedonhaku, tekoälyn hyödyntäminen ja tekijänoikeuksien noudattaminen. Opiskelijan on tärkeää kehittää kriittistä medialukutaitoa ja vastuullista tekoälyn käyttöä.`,
+        // default: shown for any other valid 4-element combination
+        'default': `Hyvä asiakas,\n\nTilauksenne on vastaanotettu onnistuneesti. Käsittelemme sen ja toimitamme sovitun aikataulun mukaan.\n\nOtamme tarvittaessa yhteyttä lisätietojen osalta.\n\nYstävällisin terveisin`
     };
 
     window.selectElem = function(key, idx, btn) {

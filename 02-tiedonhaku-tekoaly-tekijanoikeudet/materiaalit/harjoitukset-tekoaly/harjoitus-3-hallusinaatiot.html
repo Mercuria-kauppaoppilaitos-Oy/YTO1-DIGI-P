@@ -251,7 +251,8 @@
         // Build word list
         const wordList = [];
         round.text.forEach(seg => {
-            const words = seg.words.split(/(?<=\s)|(?=\s)/);
+            // Split on whitespace boundaries while preserving spaces in the result
+        const words = seg.words.split(/(?<=\s)|(?=\s)/);
             words.forEach(w => wordList.push({ word: w, isError: seg.isError }));
         });
 
