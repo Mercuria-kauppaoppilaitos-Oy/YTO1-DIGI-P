@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tekijänoikeudet – harjoitukset</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .exercises-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin: 24px 0;
+        }
+        .exercise-tile { border-radius: 8px; overflow: hidden; transition: all 0.3s; }
+        .exercise-tile:nth-child(1) { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
+        .exercise-tile:nth-child(2) { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
+        .exercise-tile:nth-child(3) { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); }
+        .exercise-tile:hover { transform: translateY(-4px); box-shadow: 0 8px 16px rgba(0,0,0,0.2); }
+        .exercise-tile a {
+            display: flex; flex-direction: column; align-items: center;
+            justify-content: center; padding: 28px 18px; color: white;
+            text-decoration: none; min-height: 190px; text-align: center;
+        }
+        .tile-icon { font-size: 3em; margin-bottom: 12px; }
+        .tile-title { font-weight: 700; font-size: 1.05em; margin-bottom: 6px; }
+        .tile-desc  { font-size: 0.88em; opacity: 0.93; }
+    </style>
+</head>
+<body>
+    <div class="exercise-container">
+        <div class="exercise-header">
+            <h1>©️ Tekijänoikeudet – harjoitukset</h1>
+            <p>3 interaktiivista harjoitusta tekijänoikeuksien, Creative Commons -lisenssien ja lähdeviittausten oppimiseen.</p>
+        </div>
+
+        <div class="info-panel">
+            <h3>📚 Harjoituksista</h3>
+            <p>Harjoitukset kattavat CC-lisenssien tunnistamisen, tekijänoikeuden perusteet ja oikeat lähdeviittauskäytännöt myös tekoälyn osalta.</p>
+        </div>
+
+        <div class="exercises-grid">
+            <div class="exercise-tile">
+                <a href="harjoitus-1-cc-lisenssit.html">
+                    <div class="tile-icon">🏷️</div>
+                    <div class="tile-title">1. CC-lisenssit</div>
+                    <div class="tile-desc">Milloin saa käyttää ja muokata CC-sisältöjä?</div>
+                </a>
+            </div>
+            <div class="exercise-tile">
+                <a href="harjoitus-2-tekijanoikeustietovisa.html">
+                    <div class="tile-icon">⚖️</div>
+                    <div class="tile-title">2. Tekijänoikeustietovisa</div>
+                    <div class="tile-desc">Testaa tekijänoikeuden perustietosi</div>
+                </a>
+            </div>
+            <div class="exercise-tile">
+                <a href="harjoitus-3-lahdeviittaukset.html">
+                    <div class="tile-icon">📎</div>
+                    <div class="tile-title">3. Lähdeviittaukset</div>
+                    <div class="tile-desc">Tunnista virheet lähdeviittauksissa</div>
+                </a>
+            </div>
+        </div>
+
+        <a class="back-link" href="../../index.html">← Takaisin materiaaleihin</a>
+    </div>
+</body>
+</html>

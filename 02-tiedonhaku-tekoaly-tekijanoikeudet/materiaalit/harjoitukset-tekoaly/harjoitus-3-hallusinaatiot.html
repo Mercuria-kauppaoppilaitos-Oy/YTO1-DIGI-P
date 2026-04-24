@@ -110,12 +110,12 @@
             title: '🤖 Tekoälyn vastaus: "Kerro Creative Commons -lisensseistä"',
             intro: 'Alla on tekoälyn tuottama teksti Creative Commons -lisensseistä. Yhdessä väitteessä on virhe.',
             claims: [
-                { id: 'cc1', text: 'Creative Commons on vuonna 2001 perustettu voittoa tavoittelematon organisaatio.', isError: true },
+                { id: 'cc1', text: 'Creative Commons on vuonna 2001 perustettu voittoa tavoittelematon organisaatio.', isError: false },
                 { id: 'cc2', text: 'CC-lisenssit mahdollistavat sisällön jakamisen tietyin ehdoin, jotka tekijä itse määrittää.', isError: false },
-                { id: 'cc3', text: 'CC0-lisenssi tarkoittaa, että teos on vapautettu kaikista tekijänoikeuksista julkiseen käyttöön.', isError: false },
+                { id: 'cc3', text: 'CC BY-ND -lisenssi sallii teoksen muokkaamisen, kunhan tekijä mainitaan.', isError: true },
                 { id: 'cc4', text: 'BY-ehto tarkoittaa, että käyttäjän on mainittava alkuperäinen tekijä.', isError: false }
             ],
-            explanation: '⚠️ Virhe: Creative Commons perustettiin vuonna <strong>2001</strong> – tekoäly antoi väärän perustusvuoden. Muut väitteet ovat oikein. Tarkistit tämän hyvin!'
+            explanation: '⚠️ Virhe: CC BY-ND (ND = NoDerivatives) <strong>kieltää</strong> muokkaamisen – se ei salli sitä. Tekoäly sekoitti ND-ehdon BY-ehtoon. CC BY sallii muokkauksen tekijä mainiten, mutta BY-ND ei salli muokkauksia lainkaan.'
         },
         {
             title: '🤖 Tekoälyn vastaus: "Kuvaa Suomen koululainsäädäntöä lyhyesti"',
@@ -133,11 +133,11 @@
             intro: 'Alla on tekoälyn itsensä tuottama kuvaus omasta historiastaan. Etsi yksi virheellinen väite.',
             claims: [
                 { id: 'hist1', text: 'ChatGPT:n kehitti OpenAI, joka on San Franciscossa toimiva tekoälytutkimusorganisaatio.', isError: false },
-                { id: 'hist2', text: 'ChatGPT 3.5 julkaistiin yleisölle marraskuussa 2022 ja saavutti miljoona käyttäjää viidessä päivässä.', isError: true },
+                { id: 'hist2', text: 'ChatGPT 3.5 julkaistiin yleisölle marraskuussa 2022 ja saavutti miljoona käyttäjää viidessä päivässä.', isError: false },
                 { id: 'hist3', text: 'GPT tarkoittaa "Generative Pre-trained Transformer".', isError: false },
-                { id: 'hist4', text: 'OpenAI:n perustajiin kuuluu Sam Altman, joka toimii toimitusjohtajana.', isError: false }
+                { id: 'hist4', text: 'OpenAI perustettiin vuonna 2020, ja sen perustajiin kuuluu Elon Musk.', isError: true }
             ],
-            explanation: '⚠️ Osittainen virhe: ChatGPT saavutti miljoona käyttäjää viidessä <strong>päivässä</strong> – tässä tekoäly antoi liian lyhyen ajan. Todellisuudessa ChatGPT 3.5 saavutti miljoona käyttäjää <strong>viidessä päivässä</strong>, mutta tekoälyt voivat vaihdella tätä lukua. Tarkista aina tällaiset tilastot alkuperäisistä lähteistä!'
+            explanation: '⚠️ Virhe: OpenAI perustettiin vuonna <strong>2015</strong> – ei 2020. Elon Musk oli kyllä yksi perustajista, mutta erosi hallituksesta vuonna 2018. Tekoäly sekoitti perusvuosiluvun. Tällaisia faktoja – erityisesti vuosilukuja ja nimiä – on tärkeää tarkistaa aina muista lähteistä.'
         }
     ];
 

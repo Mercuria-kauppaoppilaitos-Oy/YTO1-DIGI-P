@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harjoitus 3 – Lähdeviittaukset</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .citation-card {
+            background: #f9f9f9;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 14px 0;
+        }
+        .citation-card.answered-correct  { border-color: #27ae60; background: #e8f5e9; }
+        .citation-card.answered-incorrect { border-color: #e74c3c; background: #fadbd8; }
+        .citation-number { font-size: 0.8em; color: #3b82f6; font-weight: 700; margin-bottom: 6px; }
+        .citation-type-tag {
+            display: inline-block;
+            background: #dbeafe;
+            color: #1e40af;
+            font-size: 0.78em;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 12px;
+            margin-bottom: 8px;
+        }
+        .citation-example {
+            background: white;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            padding: 12px 16px;
+            font-family: 'Georgia', serif;
+            font-size: 0.92em;
+            line-height: 1.7;
+            margin-bottom: 12px;
+            color: #374151;
+        }
+        .citation-question { font-weight: bold; margin-bottom: 12px; color: #1e3a5f; }
+        .answer-options { display: grid; grid-template-columns: 1fr; gap: 8px; }
+        .answer-option {
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            padding: 10px 14px;
+            background: white;
+            cursor: pointer;
+            font-size: 0.91em;
+            text-align: left;
+            transition: all 0.25s;
+            line-height: 1.4;
+        }
+        .answer-option:hover:not(:disabled) { border-color: #3b82f6; background: #eff6ff; }
+        .answer-option:disabled { cursor: not-allowed; }
+        .answer-option.correct   { background: #27ae60; color: white; border-color: #27ae60; }
+        .answer-option.incorrect { background: #e74c3c; color: white; border-color: #e74c3c; }
+        .correct-citation {
+            background: #e8f5e9;
+            border-left: 4px solid #27ae60;
+            padding: 10px 14px;
+            border-radius: 4px;
+            font-family: 'Georgia', serif;
+            font-size: 0.91em;
+            line-height: 1.7;
+            margin: 10px 0 4px;
+        }
+    </style>
+</head>
+<body>
+    <a class="back-link" href="index.html">← Takaisin harjoituksiin</a>
+    <div class="exercise-container">
+        <div class="exercise-header">
+            <h1>📎 Harjoitus 3 – Lähdeviittaukset</h1>
+            <p>Jokaisessa viittauksessa on jokin ongelma. Tunnista, mikä tieto puuttuu tai on virheellinen.</p>
+        </div>
+
+        <div class="info-panel">
+            <h3>📌 Hyvä lähdeviittaus sisältää</h3>
+            <ul>
+                <li><strong>Verkkosivusto:</strong> Tekijä tai organisaatio. Julkaisuvuosi. Artikkelin nimi. Sivuston nimi. URL. [Haettu pvm.]</li>
+                <li><strong>Kuva:</strong> Kuvaaja. Julkaisuvuosi. Kuvan nimi tai kuvaus. Lähde/kuvapankki. URL tai sijainti. Lisenssi (esim. CC BY).</li>
+                <li><strong>Video:</strong> Tekijä tai kanava. Julkaisupvm. Videon otsikko. Alusta (esim. YouTube). URL.</li>
+                <li><strong>Tekoäly:</strong> Tekoälytyökalun nimi ja versio. Käyttöpäivämäärä. Prompt tai kuvaus käyttötarkoituksesta. Palveluntarjoaja.</li>
+            </ul>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress-bar-track">
+                <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+            </div>
+            <div class="progress-text"><span id="progressCount">0</span> / 5 viittausta tarkistettu</div>
+        </div>
+
+        <div id="citationsContainer"></div>
+        <div id="summaryContainer"></div>
+    </div>
+
+    <script>
+    const citations = [
+        {
+            type: 'Verkkosivusto',
+            example: 'Vero.fi. Opiskelijan verotus. https://vero.fi/henkiloasiakkaat/opiskelija',
+            question: 'Mikä tärkeä tieto puuttuu tästä verkkosivuviittauksesta?',
+            options: [
+                'Puuttuu: tekijän nimi tai organisaatio',
+                'Puuttuu: haettu/viitattu päivämäärä (esim. [Haettu 23.4.2026])',
+                'Puuttuu: artikkelin pituus sivuina',
+                'Ei puutu mitään – viittaus on täydellinen'
+            ],
+            correct: 1,
+            correctCitation: 'Verohallinto. 2026. Opiskelijan verotus. Vero.fi. https://vero.fi/henkiloasiakkaat/opiskelija [Haettu 23.4.2026].',
+            explanation: '✅ Verkkosivuviittauksesta puuttuu hakupäivämäärä. Verkkosivujen sisältö voi muuttua, joten on tärkeää ilmoittaa, milloin olet hakenut tiedon. Lisäksi organisaatio (Verohallinto) ja julkaisuvuosi kannattaa mainita.'
+        },
+        {
+            type: 'Kuva',
+            example: 'Kuva: laptop.jpg (haettu Unsplashista)',
+            question: 'Mikä on suurin ongelma tässä kuvaviittauksessa?',
+            options: [
+                'Tiedostonimen mainitseminen on turhaa',
+                'Puuttuu: kuvaaja, julkaisuvuosi, lisenssi ja tarkka URL',
+                'Kuvia ei tarvitse viitata, koska Unsplash on ilmainen',
+                'Puuttuu: kuvan resoluutio'
+            ],
+            correct: 1,
+            correctCitation: 'Doe, J. 2024. Young woman working on laptop. Unsplash. https://unsplash.com/photos/abc123 CC0.',
+            explanation: '✅ Kuvasta puuttuu oleelliset tiedot: kuvaajan nimi, julkaisuvuosi, tarkka URL ja lisenssi. Vaikka Unsplash-kuvat ovat vapaaseen käyttöön, hyvä tapa on silti mainita kuvaaja ja lähde. Lisenssin mainitseminen osoittaa, että olet tarkistanut käyttöoikeudet.'
+        },
+        {
+            type: 'YouTube-video',
+            example: 'Tekoäly-video, YouTube 2025.',
+            question: 'Mikä tieto on selvästi puutteellinen tässä videoviittauksessa?',
+            options: [
+                'Videon kesto puuttuu',
+                'Videon otsikko, kanavan nimi, tarkka julkaisupäivä ja URL puuttuvat',
+                'Viittauksen pitäisi olla englanninkielinen',
+                'Puuttuu: katsojakommentit'
+            ],
+            correct: 1,
+            correctCitation: 'Yle Kioski. 3.2.2025. Tekoäly – Mikä se oikeasti on? YouTube. https://www.youtube.com/watch?v=abc123',
+            explanation: '✅ Videoviittaus on hyvin puutteellinen. Siitä puuttuu: kanavan tai tekijän nimi, videon tarkka otsikko, tarkka julkaisupäivä ja URL. Ilman näitä tietoja viittauksesta ei voi löytää alkuperäistä lähdettä.'
+        },
+        {
+            type: 'Tekoäly',
+            example: 'Tietoa haettiin tekoälyllä.',
+            question: 'Mikä on ongelma tässä tekoälyviittauksessa?',
+            options: [
+                'Tekoälyn käyttöä ei tarvitse viitata lainkaan',
+                'Maininta on liian epämääräinen – puuttuu: työkalu, versio, päivämäärä ja mitä käytettiin',
+                'Pitäisi mainita tekoälyn koulutusdata',
+                'Tekoälyä ei saa käyttää lähdemateriaalina missään tilanteessa'
+            ],
+            correct: 1,
+            correctCitation: 'OpenAI. ChatGPT-4o. Käytetty 23.4.2026. Prompt: "Tiivistä Creative Commons -lisenssityypit lyhyesti." https://chat.openai.com',
+            explanation: '✅ Tekoälyviittauksen pitää olla täsmällinen: mainitse työkalu ja versio (esim. ChatGPT-4o), milloin käytit (päivämäärä), mihin tarkoitukseen ja minkä palveluntarjoajan kautta. Näin lukija tietää, miten tietoa on haettu ja voi arvioida sen luotettavuuden.'
+        },
+        {
+            type: 'Verkkosivusto',
+            example: 'Mäkinen, Anna. 2026. Tekoäly kouluissa kasvaa. Yle Uutiset.',
+            question: 'Mikä tärkeä tieto puuttuu tästä uutisviittauksesta?',
+            options: [
+                'Tekijän sukupuoli pitäisi mainita',
+                'Puuttuu: artikkelin URL ja haettu päivämäärä',
+                'Puuttuu: artikkelin kommenttien määrä',
+                'Viittaus on täydellinen'
+            ],
+            correct: 1,
+            correctCitation: 'Mäkinen, A. 5.1.2026. Tekoäly kouluissa kasvaa – opettajat kertovat muutoksesta. Yle Uutiset. https://yle.fi/uutiset/3-14823671 [Haettu 23.4.2026].',
+            explanation: '✅ Viittauksesta puuttuu artikkelin tarkka URL ja haettu päivämäärä. Lisäksi artikkelin koko nimi on hyvä mainita. URL mahdollistaa alkuperäisen artikkelin löytämisen, ja hakupäivämäärä kertoo, milloin tieto on ollut saatavilla.'
+        }
+    ];
+
+    let completed = 0, score = 0;
+    const total = citations.length;
+
+    function initExercise() {
+        const container = document.getElementById('citationsContainer');
+        citations.forEach((c, i) => container.appendChild(createCard(c, i)));
+    }
+
+    function createCard(c, idx) {
+        const card = document.createElement('div');
+        card.className = 'citation-card';
+        card.id = 'ccard-' + idx;
+
+        card.innerHTML = `
+            <div class="citation-number">Viittaus ${idx + 1}/${total}</div>
+            <span class="citation-type-tag">📁 ${c.type}</span>
+            <p style="font-size:0.88em;color:#555;margin:0 0 6px;">Opiskelijan kirjoittama viittaus:</p>
+            <div class="citation-example">${c.example}</div>
+            <div class="citation-question">${c.question}</div>
+            <div class="answer-options" id="copts-${idx}"></div>
+            <div class="explanation" id="cexp-${idx}"></div>
+        `;
+
+        const opts = card.querySelector('#copts-' + idx);
+        c.options.forEach((opt, oi) => {
+            const btn = document.createElement('button');
+            btn.className = 'answer-option';
+            btn.innerHTML = `<span style="color:#3b82f6;font-weight:700;margin-right:6px;">${String.fromCharCode(65+oi)}.</span> ${opt}`;
+            btn.onclick = () => answerCitation(idx, oi, card, opts);
+            opts.appendChild(btn);
+        });
+
+        return card;
+    }
+
+    function answerCitation(idx, choice, card, opts) {
+        const c = citations[idx];
+        opts.querySelectorAll('.answer-option').forEach((b, i) => {
+            b.disabled = true;
+            if (i === c.correct) b.classList.add('correct');
+            if (i === choice && choice !== c.correct) b.classList.add('incorrect');
+        });
+        const correct = choice === c.correct;
+        if (correct) score++;
+        card.classList.add(correct ? 'answered-correct' : 'answered-incorrect');
+
+        const exp = document.getElementById('cexp-' + idx);
+        exp.className = 'explanation show';
+        exp.innerHTML = `${c.explanation}<br><br><strong>✅ Esimerkki oikeasta viittauksesta:</strong><div class="correct-citation">${c.correctCitation}</div>`;
+
+        completed++;
+        updateProgress();
+        if (completed === total) setTimeout(showSummary, 600);
+    }
+
+    function updateProgress() {
+        document.getElementById('progressFill').style.width = Math.round(completed / total * 100) + '%';
+        document.getElementById('progressCount').textContent = completed;
+    }
+
+    function showSummary() {
+        const pct = Math.round(score / total * 100);
+        const msg = pct >= 80 ? '🎉 Erinomainen! Lähdeviittauskäytännöt ovat selkiytyneet.' : pct >= 60 ? '👍 Hyvä suoritus! Kiinnitä erityistä huomiota tekoäly- ja videoviittauksiin.' : '📚 Tutustu viittausohjeisiin uudelleen – oikea viittaaminen on tärkeä taito!';
+        document.getElementById('summaryContainer').innerHTML = `<div class="summary-panel">
+            <h3>📊 Yhteenveto</h3>
+            <p><strong>Pisteet: ${score}/${total}</strong> (${pct}%)</p>
+            <p>${msg}</p>
+            <button class="btn btn-primary" onclick="location.reload()" style="margin-top:14px;padding:10px 22px;">🔄 Kokeile uudelleen</button>
+        </div>`;
+    }
+
+    initExercise();
+    </script>
+</body>
+</html>
