@@ -173,6 +173,15 @@ Pidä alkuperäinen `.docx` tai `.xlsx` tallessa muokkaamista varten — PDF ei 
 
 ---
 
+> **Harjoittele:** Ennen kuin siirryt tehtäviin, tee tiedostonhallintaharjoitukset eKampuksella. Harjoitukset löytyvät osion etusivulta.
+>
+> - Harjoitus 1: Etsi tiedosto kansiorakenteesta
+> - Harjoitus 2: Järjestä ja nimeä tiedostoja
+> - Harjoitus 3: Paikallinen tallentaminen ja pilvi — erot käytännössä
+> - Harjoitus 4: Tiedostomuodot tuntemaan
+
+---
+
 ## Luku 2 — Pilvipalvelut ja tiedostojen jakaminen
 
 *Tässä luvussa opit käyttämään OneDrivea tiedostojen tallentamiseen ja jakamiseen sekä muokkaamaan tiedostoja yhdessä muiden kanssa.*
@@ -411,6 +420,15 @@ Excelin kaavion saa siirrettyä PowerPointiin:
 
 ---
 
+> **Harjoittele:** Ennen kuin siirryt tehtäviin, tee taulukkolaskentaharjoitukset eKampuksella. Harjoitukset löytyvät osion etusivulta.
+>
+> - Harjoitus 1: Peruslaskutoimitukset soluissa
+> - Harjoitus 2: Summa- ja keskiarvo-funktiot
+> - Harjoitus 3: Täyttökahva ja sarjojen luominen
+> - Harjoitus 4: Absoluuttinen viittaus kaavassa
+
+---
+
 ## Luku 4 — Word — tekstinkäsittely
 
 *Tässä luvussa opit tuottamaan ammattimaisia asiakirjoja Wordilla: muotoilemaan tekstiä, rakentamaan asiakirjan oikein ja lisäämään taulukoita ja kuvia.*
@@ -533,6 +551,16 @@ Muista: kaikki verkosta löytyvät kuvat eivät ole vapaasti käytettävissä. K
 
 ---
 
+> **Harjoittele:** Ennen kuin siirryt tehtäviin, tee tekstinkäsittelyharjoitukset eKampuksella. Harjoitukset löytyvät osion etusivulta.
+>
+> - Harjoitus 1: Tekstin muotoilu — lihavointi, kursiivi, alleviivaus
+> - Harjoitus 2: Tyylit ja otsikkorakenne
+> - Harjoitus 3: Pikanäppäimet tehokäyttöön
+> - Harjoitus 4: Sarkaimen asettaminen ja tekstin tasaukset
+> - Harjoitus 5: Erikoismerkit ja symbolit
+
+---
+
 ## Luku 5 — PowerPoint — esitysgrafiikka
 
 *Tässä luvussa opit tekemään selkeän ja ammattimaisen diaesityksen PowerPointilla sekä esittämään sen yleisölle.*
@@ -647,6 +675,13 @@ Jos esitys täytyy palauttaa nauhoitettuna (esim. etäopiskelu):
 >
 > - [PowerPointin ohjeet ja oppaat](https://support.microsoft.com/fi-fi/powerpoint) — Microsoftin virallinen PowerPoint-tukisivusto (suomeksi)
 > - [PowerPoint-videokoulutus](https://support.microsoft.com/fi-fi/office/powerpoint-for-windows-training-40e8c930-cb0b-40d8-82c4-bd53d3398787) — Ilmaiset opetusvideot aloittelijoista edistyneille
+
+---
+
+> **Harjoittele:** Ennen kuin siirryt tehtäviin, tee esitysgrafiikkaharjoitukset eKampuksella. Harjoitukset löytyvät osion etusivulta.
+>
+> - Harjoitus 1: Diarakenteen suunnittelu
+> - Harjoitus 2: Korjaa esityksen virheet
 
 ---
 

@@ -1,125 +1,91 @@
 # Osio 1: Digitaidot ja tiedostonhallinta
 
-## Osaamistavoitteet (VVTD26)
+Tässä osiossa harjoittelet työelämän tärkeimpiä digitaitoja: tiedostojen hallintaa, taulukkolaskentaa, tekstinkäsittelyä ja esitysgrafiikkaa. Harjoitukset on rakennettu liiketoimintakontekstiin — teet töitä kuvitteellisen yrityksen digitaalisen materiaalipaketin parissa.
 
-- **(5)** käyttää tekstinkäsittelysovellusta
-- **(6)** käyttää taulukkolaskentasovellusta
-- **(7)** käyttää esitysgrafiikkasovellusta
-- **(9)** käsittelee ja järjestää tiedostoja sekä kansioita
-- **(10)** jakaa sisältöjä ja käsittelee jaettua tiedostoa
+Osion punainen lanka on **yrityksen digitaalinen materiaalipaketti**: rakennat kurssin aikana Excel-budjetin, Word-raportin ja PowerPoint-esityksen, jotka kaikki liittyvät samaan kuvitteelliseen yritykseen.
 
-## Kuvaus
+Osio etenee kolmessa vaiheessa:
 
-Osion punainen lanka on **"Yrityksen digitaalinen materiaalipaketti"** — opiskelija rakentaa kurssin aikana kuvitteelliselle yritykselle digitaalisen materiaalipaketin, johon kuuluu Excel-budjetti, Word-raportti ja PowerPoint-esitys.
+1. **Interaktiivinen harjoittelu** — opit perusteet selainharjoitusten avulla
+2. **Harjoittelu todellisilla ohjelmilla** — teet valmentavia harjoitustehtäviä Excelissä, Wordissa ja PowerPointissa
+3. **Arvioitava tehtävä** — osoitat osaamisesi projektiluonteisella tehtävällä
 
-Osio noudattaa kolmivaiheista pedagogista progressiota:
+**Ammattitaitovaatimukset, joita tämä osio käsittelee:**
 
-1. **🖥️ Interaktiivinen harjoittelu selaimessa** — peruskäsitteet ja toimintalogiikka (SCORM-paketit Moodlessa)
-2. **💻 Harjoittelu todellisilla ohjelmilla** — valmentavat tehtävät Excelissä, Wordissa ja PowerPointissa
-3. **📝 Arvioitava tehtävä** — projektitehtävä, jossa osaaminen osoitetaan
+- Käyttää tekstinkäsittelysovellusta (vaatimus 5)
+- Käyttää taulukkolaskentasovellusta (vaatimus 6)
+- Käyttää esitysgrafiikkasovellusta (vaatimus 7)
+- Käsittelee ja järjestää tiedostoja sekä kansioita (vaatimus 9)
+- Jakaa sisältöjä ja käsittelee jaettua tiedostoa (vaatimus 10)
 
-## Kesto
-- Lähiopetus nuoret: ~22h
-- Aikuisten iltakurssi: ~10h
+**Arvioitu aika:** noin 22 tuntia lähiopetuksessa tai noin 10 tuntia aikuisten iltakurssilla
 
 ---
 
-## Rakenne
+## Tämän osion sisältö
 
-### Materiaalit (`materiaalit/`)
-| Tiedosto | Sisältö |
+### Oppimateriaali
+
+Osion oppimateriaali on koottu yhteen kirja-aktiviteettiin: **Digitaidot ja tiedostonhallinta — oppimateriaali**. Kirja kattaa kaikki osion aihepiirit luvuittain.
+
+Kirjan sisään on upotettu interaktiivisia selainharjoituksia, joissa harjoittelet taitoja turvallisessa simulaattoriympäristössä ennen kuin siirryt todellisiin ohjelmiin.
+
+### Harjoitukset ja tehtävät — lähiopetus
+
+| Numero | Tehtävä | Arviointi |
+|---|---|---|
+| 1.1 | Tiedostonhallintaharjoitus | Hyväksytty / hylätty |
+| 1.2 | Excel-harjoitus 1: Perustaidot | Valmentava |
+| 1.3 | Excel-harjoitus 2: Kaavat ja kaaviot | Valmentava |
+| **1.4** | **Excel: Yrityksen budjettilaskelma** | **Arvioitava 1–5** |
+| 1.5 | Word-harjoitus 1: Perustaidot | Valmentava |
+| 1.6 | Word-harjoitus 2: Asiakirja | Valmentava |
+| **1.7** | **Word: Yrityksen raportti** | **Arvioitava 1–5** |
+| 1.8 | PowerPoint-harjoitus 1: Perustaidot | Valmentava |
+| **1.9** | **PowerPoint: Yrityksen esitys** | **Arvioitava 1–5** |
+| 1.10 | Jaettu tiedosto -harjoitus | Hyväksytty / hylätty |
+
+### Harjoitukset ja tehtävät — itsenäinen suorittaminen
+
+| Numero | Tehtävä | Arviointi |
+|---|---|---|
+| I-1.1 | Tiedostonhallintaharjoitus | Hyväksytty / hylätty |
+| **I-1.2** | **Excel: Yrityksen budjettilaskelma** | **Arvioitava 1–5** |
+| **I-1.3** | **Word: Yrityksen raportti** | **Arvioitava 1–5** |
+| **I-1.4** | **PowerPoint: Yrityksen esitys (nauhoitettu)** | **Arvioitava 1–5** |
+| I-1.5 | Jaettu tiedosto -harjoitus | Hyväksytty / hylätty |
+
+---
+
+## Rakentamismuistiinpanot
+
+*Tämä osio opettajalle ja rakentamisvaiheeseen. Ei näytetä opiskelijoille.*
+
+### Materiaalitiedostot (kaikki sisältö on koottu kirja-aktiviteettiin)
+
+Erilliset suunnittelutiedostot materiaalit-kansiossa (excel-perusteet-ja-kaavat.md, word-perusteet-ja-muotoilu.md, powerpoint-perusteet.md, tiedostonhallinta-ohje.md, onedrive-ja-jaetut-tiedostot.md) ovat sisältösuunnittelun apuvälineitä. Varsinainen oppimateriaalin sisältö on kirjoitettu kirja-aktiviteettiin (kirja/kirja-digitaidot-ja-tiedostonhallinta.md).
+
+### Interaktiiviset selainharjoitukset (SCORM)
+
+| Kokonaisuus | Kansio | Harjoitusten määrä |
+|---|---|---|
+| Tiedostonhallinta | harjoitukset-tiedostonhallinta/ | 4 harjoitusta |
+| Taulukkolaskenta | harjoitukset-taulukkolaskenta/ | 4 harjoitusta |
+| Tekstinkäsittely | harjoitukset-tekstinkasittely/ | 5 harjoitusta |
+| Esitysgrafiikka | harjoitukset-esitysgrafiikka/ | 2 harjoitusta |
+
+Harjoitukset pakataan SCORM 1.2 -paketeiksi Moodleen. Tunnetut bugit ja kehityskohteet on dokumentoitu tiedostossa materiaalit/Kommentteja interaktiivisiin harjoituksiin.md.
+
+### H5P-aktiviteetit (Moodlessa erillisinä)
+
+| H5P | Sijainti kirjassa |
 |---|---|
-| tiedostonhallinta-ohje.md | Kansiot, nimeämiskäytännöt, pilvipalvelut |
-| onedrive-ja-jaetut-tiedostot.md | OneDrive, jakaminen, yhteismuokkaus |
-| excel-perusteet-ja-kaavat.md | Excel-perusteet, kaavat, funktiot, kaaviot |
-| word-perusteet-ja-muotoilu.md | Word-perusteet, asiakirjamuotoilu |
-| powerpoint-perusteet.md | PowerPoint-perusteet, esityssuunnittelu |
-| h5p-tiedostot-ja-kansiot.md | H5P: Tiedostot ja kansiot |
-| h5p-nappaimistokomennot.md | H5P: Näppäinyhdistelmät |
+| H5P: Tiedostot ja kansiot (päivitetty vanhasta) | Kirjan luku 1 — Tiedostonhallinta |
+| H5P: Näppäinyhdistelmät (päivitetty vanhasta) | Kirjan luku 3–5 (Excel, Word, PPT) |
 
-### Interaktiiviset selainharjoitukset (`materiaalit/harjoitukset-*/`)
+### Tehtävätiedostot
 
-Jokainen kokonaisuus sisältää HTML+JS-simulaattorin, joka toimii sekä paikallisesti selaimessa että SCORM 1.2 -pakettina Moodlessa. Suoritustieto ja pisteet siirtyvät Moodlen arviointikirjaan automaattisesti.
+- Lähiopetuksen tehtävät: tehtavat-lahiopetus/ (10 tiedostoa)
+- Itsenäisen suorittamisen tehtävät: tehtavat-itsenainen/ (5 tiedostoa)
 
-#### Tiedostonhallinta (`harjoitukset-tiedostonhallinta/`) — 4 harjoitusta
-| Harjoitus | Kuvaus | Taidot |
-|---|---|---|
-| 1. Etsi tiedosto | Kansionavigaatio sotkuinen vs siisti rakenne | Kansiorakenne, navigointi |
-| 2. Järjestä ja nimeä | Luo kansiot → nimeä tiedostot → raahaa paikoilleen | Nimeämiskäytännöt, organisointi |
-| 3. Paikallinen vs pilvi | Tunnista ja luokittele tallennuspaikat | Pilvipalvelut, tiedostopolut |
-| 4. Tiedostomuodot | Raahaa tiedostot kategorioihin + tietovisa | Tiedostopäätteet, ohjelmat |
 
-#### Taulukkolaskenta (`harjoitukset-taulukkolaskenta/`) — 4 harjoitusta
-| Harjoitus | Kuvaus | Taidot |
-|---|---|---|
-| 1. Laskutoimitukset | Peruslaskutoimitukset soluissa | Kaavat, operaattorit |
-| 2. Summa ja funktiot | SUM, AVERAGE, MIN, MAX | Funktiot |
-| 3. Täyttökahva | Solujen kopiointi vetämällä | Sarjat, täyttö |
-| 4. Absoluuttinen viittaus | $-merkinnän käyttö kaavoissa | Suhteellinen vs absoluuttinen |
-
-#### Tekstinkäsittely (`harjoitukset-tekstinkasittely/`) — 5 harjoitusta
-| Harjoitus | Kuvaus | Taidot |
-|---|---|---|
-| 1. Tekstin muotoilu | Lihavointi, kursivointi, fontti, koko | Perusmuotoilu |
-| 2. Tyylit ja otsikot | Otsikoiden hierarkia, tyylien käyttö | Asiakirjarakenne |
-| 3. Pikanäppäimet | Ctrl+B, Ctrl+C, jne. | Näppäinyhdistelmät |
-| 4. Sarkain ja tasaukset | Sisennykset, tasaustyypit | Kappaleiden muotoilu |
-| 5. Erikoismerkit | Erikoismerkkien lisääminen | Symbolit |
-
-#### Esitysgrafiikka (`harjoitukset-esitysgrafiikka/`) — 2 harjoitusta
-| Harjoitus | Kuvaus | Taidot |
-|---|---|---|
-| 1. Diarakenne | Dian osien tunnistaminen ja rakentaminen | Dian elementit |
-| 2. Korjaa esitys | Etsi ja korjaa virheet esityksestä | Hyvän esityksen periaatteet |
-
----
-
-### Tehtävät — Lähiopetus (`tehtavat-lahiopetus/`)
-
-Tehtävät on järjestetty aihealueittain kolmivaiheisen progression mukaan:
-
-#### A) Tiedostonhallinta
-| Vaihe | Tiedosto | Tehtävä | Arviointi |
-|---|---|---|---|
-| 🖥️ Interaktiivinen | *harjoitukset-tiedostonhallinta/* | 4 selainharjoitusta (SCORM) | Automaattinen |
-| 💻 Oikeilla ohjelmilla | 1-01-tiedostonhallintaharjoitus.md | Tiedostonhallintaharjoitus | Hyv/hyl |
-
-#### B) Taulukkolaskenta (Excel)
-| Vaihe | Tiedosto | Tehtävä | Arviointi |
-|---|---|---|---|
-| 🖥️ Interaktiivinen | *harjoitukset-taulukkolaskenta/* | 4 selainharjoitusta (SCORM) | Automaattinen |
-| 💻 Valmentava | 1-02-excel-harjoitus-1.md | Excel-harjoitus 1: Perustaidot | Valmentava |
-| 💻 Valmentava | 1-03-excel-harjoitus-2.md | Excel-harjoitus 2: Kaavat ja kaaviot | Valmentava |
-| 📝 **Arvioitava** | 1-04-excel-yrityksen-budjettilaskelma.md | **Excel: Yrityksen budjettilaskelma** | **1–5** |
-
-#### C) Tekstinkäsittely (Word)
-| Vaihe | Tiedosto | Tehtävä | Arviointi |
-|---|---|---|---|
-| 🖥️ Interaktiivinen | *harjoitukset-tekstinkasittely/* | 5 selainharjoitusta (SCORM) | Automaattinen |
-| 💻 Valmentava | 1-05-word-harjoitus-1.md | Word-harjoitus 1: Perustaidot | Valmentava |
-| 💻 Valmentava | 1-06-word-harjoitus-2.md | Word-harjoitus 2: Asiakirja | Valmentava |
-| 📝 **Arvioitava** | 1-07-word-yrityksen-raportti.md | **Word: Yrityksen raportti** | **1–5** |
-
-#### D) Esitysgrafiikka (PowerPoint)
-| Vaihe | Tiedosto | Tehtävä | Arviointi |
-|---|---|---|---|
-| 🖥️ Interaktiivinen | *harjoitukset-esitysgrafiikka/* | 2 selainharjoitusta (SCORM) | Automaattinen |
-| 💻 Valmentava | 1-08-ppt-harjoitus-1.md | PPT-harjoitus 1: Perustaidot | Valmentava |
-| 📝 **Arvioitava** | 1-09-ppt-yrityksen-esitys.md | **PPT: Yrityksen esitys** | **1–5** |
-
-#### E) Jaetut tiedostot (OneDrive)
-| Vaihe | Tiedosto | Tehtävä | Arviointi |
-|---|---|---|---|
-| 💻 Oikeilla ohjelmilla | 1-10-jaettu-tiedosto-harjoitus.md | Jaettu tiedosto -harjoitus | Hyv/hyl |
-
-### Tehtävät — Itsenäinen suorittaminen (`tehtavat-itsenainen/`)
-
-Itsenäisessä suorituksessa opiskelija käy ensin läpi interaktiiviset selainharjoitukset Moodlessa (SCORM) ja tekee sitten arvioitavat tehtävät.
-
-| Tiedosto | Tehtävä | Arviointi |
-|---|---|---|
-| I-1-01-tiedostonhallintaharjoitus.md | Tiedostonhallintaharjoitus | Hyv/hyl |
-| I-1-02-excel-budjettilaskelma.md | Excel: Yrityksen budjettilaskelma | 1–5 |
-| I-1-03-word-raportti.md | Word: Yrityksen raportti | 1–5 |
-| I-1-04-ppt-esitys.md | PPT: Yrityksen esitys (nauhoitettu) | 1–5 |
-| I-1-05-jaettu-tiedosto.md | Jaettu tiedosto -harjoitus | Hyv/hyl |

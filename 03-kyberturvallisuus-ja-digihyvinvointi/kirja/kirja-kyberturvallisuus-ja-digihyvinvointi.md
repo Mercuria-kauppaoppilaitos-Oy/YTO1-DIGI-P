@@ -143,6 +143,14 @@ Kun jotain on julkaistu verkossa, sitä on vaikea poistaa kokonaan. Kuvakaappauk
 
 ---
 
+> **Harjoittele:** Ennen kuin siirryt tehtäviin, tee tietosuojaharjoitukset eKampuksella. Harjoitukset löytyvät osion etusivulta.
+>
+> - Harjoitus 5: Yksityisyysasetukset — säädä some-tilin asetukset oikein
+> - Harjoitus 6: Datatalous — miten data liikkuu ja kuka sitä käyttää
+> - Harjoitus 7: Digijalanjälki — tunnista oma digijalanjälkesi
+
+---
+
 ## Luku 2 — Kyberturvallisuus
 
 *Tässä luvussa opit tunnistamaan yleisimmät kyberturvallisuusuhat ja toimimaan oikein, jos kohtaat sellaisen.*
@@ -300,6 +308,13 @@ VPN (Virtual Private Network) salaa internet-liikennettäsi. Se on erityisen hy�
 
 ---
 
+> **Harjoittele:** Ennen kuin siirryt tehtäviin, tee kyberturvallisuusharjoitukset eKampuksella. Harjoitukset löytyvät osion etusivulta.
+>
+> - Harjoitus 1: Phishing-viestien tunnistaminen — tunnista aito ja väärennetty viesti
+> - Harjoitus 2: Salasanat — arvioi salasanan vahvuus ja luo turvallinen salasana
+
+---
+
 ## Luku 3 — Sosiaalinen media ja vastuullisuus
 
 *Tässä luvussa käsitellään sosiaalisen median vastuullista käyttöä — omaa yksityisyyttä, muiden kunnioittamista ja verkkoviestinnän seurauksia.*
@@ -409,6 +424,10 @@ Ole tietoinen tästä. Hakeudu tietoisesti myös erilaisten näkemysten äärell
 >
 > - [Poliisi — Verkkorikollisuus](https://www.poliisi.fi/rikokset/verkkorikollisuus) — Tietoa verkkorikoksista ja ilmoittamismenettelystä
 > - [Traficom — Sosiaalinen media](https://www.traficom.fi/fi/viestinta/median-kaytto/sosiaalinen-media) — Ohjeita sosiaalisen median turvalliseen käyttöön
+
+---
+
+> **Harjoittele:** Tähän lukuun ei toistaiseksi liity erillisiä interaktiivisia harjoituksia. Palaa digijalanjälki-harjoitukseen luvun 1 lopussa, jos et ole vielä tehnyt sitä.
 
 ---
 
@@ -535,6 +554,13 @@ Vastuullinen digikäyttäjä ottaa nämä huomioon: pidät laitteesi pidempään
 > - [Työterveyslaitos — Ergonomia](https://www.ttl.fi/teemat/ergonomia/) — Ohjeita työn ergonomiaan ja kuormituksen hallintaan
 > - [THL — Mielenterveys](https://thl.fi/aiheet/mielenterveys/) — Tietoa mielenterveydestä, hyvinvoinnista ja omahoidosta
 > - [Mielenterveystalo.fi](https://www.mielenterveystalo.fi/) — Omahoito-ohjelmat ja tietoa digitaalisesta hyvinvoinnista
+
+---
+
+> **Harjoittele:** Ennen kuin siirryt tehtäviin, tee digihyvinvointiharjoitukset eKampuksella. Harjoitukset löytyvät osion etusivulta.
+>
+> - Harjoitus 3: Ergonomia — ergonomian perusteet digitaalisessa työssä
+> - Harjoitus 4: Digihyvinvointi — ruutuajan hallinta ja hyvinvointi
 
 ---
 

@@ -1,24 +1,41 @@
 # Esittely ja ohjausta
 
-## Kuvaus
+Tervetuloa kurssille Toiminta digitaalisessa ympäristössä!
 
-Tämä osio on kurssin aloitusosio, jossa opiskelija tutustuu kurssin rakenteeseen, tavoitteisiin, arviointikriteereihin ja tukipalveluihin. Osio sisältää myös osaamisen tunnistamisen kartoituksen.
+Tässä aloitusosiossa tutustut kurssiin: sen tavoitteisiin, rakenteeseen ja arviointiin. Täältä löydät myös tukipalvelut koko kurssin ajaksi.
 
-## Sisältö
+Aloita katsomalla tervetuloa-video, jossa käydään läpi kurssin rakenne ja etenemistapa. Tutustu sen jälkeen tavoitteisiin ja arviointikriteereihin. Täytä myös osaamisen kartoituskysely — se auttaa opettajaa tutustumaan lähtötasoosi eikä vaikuta arvosanaasi.
 
-| Aktiviteetti | Tyyppi | Kuvaus |
+Tämä osio ei sisällä arvioitavia tehtäviä.
+
+**Arvioitu aika:** noin 30–60 minuuttia
+
+---
+
+## Tämän osion sisältö
+
+| Aktiviteetti | Tyyppi | Mitä teet |
 |---|---|---|
-| Tervetuloa-video | Video | Kurssin esittelyvideo |
-| Tavoitteet | Sivu | VVTD26-osaamistavoitteet selkokielellä |
-| Arviointi ja palaute | Linkki | Arvioinnin periaatteet ja palautelinkki |
-| Osaamisen arviointikriteerit | Linkki | Linkki ePerusteisiin |
-| Osaamisen tunnistaminen | Kartoitus | Osaamisen kartoituskysely |
-| Uutisia, tukea ja jelppiä | Foorumi | Opettajan ja opiskelijoiden välinen viestintäkanava |
-| Nähdään verkossa | Videoneuvottelu | Etäopetuksen videoneuvottelulinkki |
+| Tervetuloa-video | Video | Katsot kurssin esittelyvideon |
+| Tavoitteet | Sivu | Tutustut kurssin osaamistavoitteisiin |
+| Arviointi ja palaute | Sivu | Luet, miten arvosana muodostuu |
+| Osaamisen arviointikriteerit | Linkki | Tutustut virallisiin arviointikriteereihin |
+| Osaamisen tunnistaminen | Kysely | Täytät alkukartoituksen |
+| Uutisia, tukea ja jelppiä | Foorumi | Seuraat kurssitiedotteita ja esität kysymyksiä |
+| Nähdään verkossa | Videoneuvottelu | Osallistut etätunnille tai -ohjaukseen |
 
-## Tavoitteet
+---
 
-- Opiskelija ymmärtää kurssin rakenteen ja tavoitteet
-- Opiskelija tietää arviointikriteerit ja arvioitavat tehtävät
-- Opiskelija osaa käyttää kurssin tukipalveluja
-- Opettaja saa käsityksen opiskelijoiden lähtötasosta osaamisen kartoituksen kautta
+## Rakentamismuistiinpanot
+
+*Tämä osio rakennetaan eKampukselle ennen muita osioita. Aktiviteetit lisätään yksitellen kurssin pääsivulle.*
+
+| Tiedosto | Aktiviteetti eKampuksella |
+|---|---|
+| tervetuloa-video.md | Sivu + upotettu video |
+| tavoitteet.md | Sivu |
+| arviointi-ja-palaute.md | Sivu |
+| osaamisen-arviointikriteerit.md | Ulkoinen linkki ePerusteisiin |
+| osaamisen-tunnistaminen.md | Kysely (questionnaire) |
+| uutisia-tukea-ja-jelppia.md | Foorumi |
+| nahdaan-verkossa.md | Videoneuvottelu (BigBlueButton) |
