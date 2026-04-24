@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harjoitus 1 – Lähteen luotettavuus</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <a class="back-link" href="index.html">← Takaisin harjoituksiin</a>
+    <div class="exercise-container">
+        <div class="exercise-header">
+            <h1>🔎 Harjoitus 1 – Lähteen luotettavuuden arviointi</h1>
+            <p>Arvioi jokaisen lähteen luotettavuus. Saat palautetta valinnan jälkeen.</p>
+        </div>
+
+        <div class="info-panel">
+            <h3>📌 Luotettavuuden arviointikriteerit (TAANT)</h3>
+            <ul>
+                <li><strong>Tekijä:</strong> Kuka on kirjoittanut tai julkaissut?</li>
+                <li><strong>Ajantasaisuus:</strong> Milloin sisältö on julkaistu tai päivitetty?</li>
+                <li><strong>Alkuperä:</strong> Mihin väitteet perustuvat – onko lähteillä lähteitä?</li>
+                <li><strong>Näyttö:</strong> Onko sisältö faktapohjaista vai mielipidettä?</li>
+                <li><strong>Tarkoitus:</strong> Miksi sisältö on tuotettu – tiedottaa, myydä vai vaikuttaa?</li>
+            </ul>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress-bar-track">
+                <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+            </div>
+            <div class="progress-text"><span id="progressCount">0</span> / 5 lähdettä arvioitu</div>
+        </div>
+
+        <div id="sourcesContainer"></div>
+        <div id="summaryContainer"></div>
+    </div>
+
+    <script>
+    const sources = [
+        {
+            title: 'Wikipedia – Generatiivinen tekoäly',
+            url: 'fi.wikipedia.org/wiki/Generatiivinen_tekoäly',
+            type: 'Tietosanakirja (yhteisöllinen)',
+            date: 'Päivitetty 12.3.2026',
+            excerpt: 'Generatiivinen tekoäly on koneoppimismalli, joka tuottaa uutta sisältöä, kuten tekstiä, kuvia tai ääntä. Malleja koulutetaan suurilla aineistoilla, joista ne oppivat tilastolliset rakenteet...',
+            correctAnswer: 'check',
+            feedback: 'Wikipedia on hyvä lähtökohta, mutta ei tieteellinen lähde. Artikkeleita voivat muokata kaikki käyttäjät. Käytä sitä taustatiedoksi ja etsi tarkemmista lähteistä lisätietoja. Arvioluokka: "Tarvitsee tarkistaa".'
+        },
+        {
+            title: 'Yle Uutiset – Tekoäly mullistaa ammatillisen koulutuksen',
+            url: 'yle.fi/uutiset/3-14823671',
+            type: 'Julkinen yleisradioyhtiö',
+            date: 'Julkaistu 5.1.2026',
+            excerpt: 'Ammatillisten oppilaitosten opettajat kertovat, että tekoälytyökalujen käyttö on lisääntynyt selvästi viime vuoden aikana. Yle haastatteli kymmentä opettajaa eri puolilta Suomea...',
+            correctAnswer: 'reliable',
+            feedback: '✅ Oikein! Yle on julkinen yleisradioyhtiö, jolla on vahva toimituksellinen vastuu. Artikkelissa on mainittu lähteet (haastattelut), päivämäärä on selvä ja sisältö on journalistisesti tuotettu. Luotettava lähde.'
+        },
+        {
+            title: 'ParasRahoitus.fi – 5 syytä ottaa pikalaina juuri nyt!',
+            url: 'parasrahoitus.fi/blogi/pikalaina-nyt',
+            type: 'Kaupallinen blogi',
+            date: 'Julkaistu 2.4.2026',
+            excerpt: 'Pikalaina voi pelastaa tilanteen, kun rahat loppuvat yllättäen! Haemme sinulle parhaan lainatarjouksen hetkessä. Monet suomalaiset ovat hyötyneet pikavipistä – lue heidän tarinansa...',
+            correctAnswer: 'unreliable',
+            feedback: '❌ Epäluotettava lähde. Sivuston tarkoitus on myydä rahoitustuotteita, ei tiedottaa puolueettomasti. Otsikko on sensaatiohakuinen, lähteisiin ei viitata ja "tarinat" ovat todennäköisesti markkinointimateriaalia.'
+        },
+        {
+            title: 'Vero.fi – Opiskelijan verotus',
+            url: 'vero.fi/henkiloasiakkaat/elaman-tapahtumat/opiskelija',
+            type: 'Verohallinnon viranomaissivusto',
+            date: 'Päivitetty 1.2.2026',
+            excerpt: 'Opiskelijana olet verovelvollinen Suomessa, jos saat veronalaista tuloa. Sivulta löydät ohjeet verokortin hakemiseen, tulorajoihin ja veroilmoituksen täyttämiseen...',
+            correctAnswer: 'reliable',
+            feedback: '✅ Oikein! Verohallinto on viranomainen, joka vastaa verotukseen liittyvästä tiedotuksesta. Sivusto on ajantasainen, tekijä (Verohallinto) on selvä ja tarkoitus on neutraali tiedottaminen. Erittäin luotettava lähde.'
+        },
+        {
+            title: 'TekoalyBlog.blogspot.com – Tekoäly vie kaikki työpaikat ensi vuonna',
+            url: 'tekoalyblog.blogspot.com/2026/tekoaly-vie-tyot',
+            type: 'Yksityinen blogi',
+            date: 'Julkaistu 15.4.2026',
+            excerpt: 'Asiantuntijat ennustavat, että 90 % nykyisistä töistä katoaa jo ensi vuonna. Tekoäly korvaa lääkärit, opettajat, insinöörit ja kaikki muutkin. Sijoita tekoälyosakkeisiin nyt!',
+            correctAnswer: 'unreliable',
+            feedback: '❌ Epäluotettava lähde. Otsikko on selvästi sensaatiohakuinen ("kaikki työpaikat ensi vuonna"). "Asiantuntijat" -viittaus ilman nimiä on tyypillinen valeuutismerkki. Lopussa kehotetaan sijoittamaan – siis sisältö palvelee kaupallista tarkoitusta.'
+        }
+    ];
+
+    let completed = 0;
+    let score = 0;
+    const total = sources.length;
+
+    const labels = { reliable: '✅ Luotettava', check: '🟡 Tarvitsee tarkistaa', unreliable: '❌ Epäluotettava' };
+
+    function initExercise() {
+        const container = document.getElementById('sourcesContainer');
+        sources.forEach((src, i) => {
+            container.appendChild(createSourceCard(src, i));
+        });
+    }
+
+    function createSourceCard(src, idx) {
+        const card = document.createElement('div');
+        card.className = 'source-card';
+        card.id = 'card-' + idx;
+
+        card.innerHTML = `
+            <div class="source-title">📄 ${src.title}</div>
+            <div class="source-meta">🌐 ${src.url} &nbsp;|&nbsp; ${src.type} &nbsp;|&nbsp; 🗓️ ${src.date}</div>
+            <div class="source-excerpt">${src.excerpt}</div>
+            <div class="source-buttons" id="btns-${idx}">
+                <button class="btn-reliable" onclick="answer(${idx},'reliable')">✅ Luotettava</button>
+                <button class="btn-check" onclick="answer(${idx},'check')">🟡 Tarvitsee tarkistaa</button>
+                <button class="btn-unreliable" onclick="answer(${idx},'unreliable')">❌ Epäluotettava</button>
+            </div>
+            <div class="feedback-box" id="feedback-${idx}"></div>
+        `;
+        return card;
+    }
+
+    function answer(idx, choice) {
+        const src = sources[idx];
+        const card = document.getElementById('card-' + idx);
+        const btns = document.getElementById('btns-' + idx);
+        const feedbackEl = document.getElementById('feedback-' + idx);
+
+        btns.querySelectorAll('button').forEach(b => b.disabled = true);
+
+        const correct = choice === src.correctAnswer;
+        if (correct) score++;
+
+        card.classList.add(correct ? 'correct' : 'incorrect');
+        feedbackEl.className = 'feedback-box show ' + (correct ? 'correct-feedback' : 'incorrect-feedback');
+        feedbackEl.innerHTML = `<strong>${correct ? '✅ Oikein!' : '❌ Väärin.'}</strong> Oikea arvio: <strong>${labels[src.correctAnswer]}</strong><br><br>${src.feedback}`;
+
+        completed++;
+        updateProgress();
+        if (completed === total) setTimeout(showSummary, 800);
+    }
+
+    function updateProgress() {
+        document.getElementById('progressFill').style.width = Math.round(completed / total * 100) + '%';
+        document.getElementById('progressCount').textContent = completed;
+    }
+
+    function showSummary() {
+        const pct = Math.round(score / total * 100);
+        const msg = pct >= 80 ? '🎉 Erinomainen lähdekritiikki!' : pct >= 60 ? '👍 Hyvä suoritus!' : '📚 Harjoittele lisää – lähdekritiikki on tärkeä taito!';
+        document.getElementById('summaryContainer').innerHTML = `<div class="summary-panel">
+            <h3>📊 Yhteenveto</h3>
+            <p><strong>Pisteet: ${score}/${total}</strong> (${pct}%)</p>
+            <p>${msg}</p>
+            <button class="btn btn-primary" onclick="location.reload()" style="margin-top:14px;padding:10px 22px;">🔄 Kokeile uudelleen</button>
+        </div>`;
+    }
+
+    initExercise();
+    </script>
+</body>
+</html>

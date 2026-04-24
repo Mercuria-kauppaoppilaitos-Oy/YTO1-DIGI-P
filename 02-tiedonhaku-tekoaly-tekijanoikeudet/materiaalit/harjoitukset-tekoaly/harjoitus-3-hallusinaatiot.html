@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harjoitus 3 – Hallusinaatioiden tunnistaminen</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .ai-text-block {
+            background: #f9f9f9;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 14px 0;
+        }
+        .ai-text-block.has-error { border-color: #e74c3c; }
+        .ai-text-block.no-error  { border-color: #27ae60; }
+        .ai-text-block h3 { margin: 0 0 10px; font-size: 1em; color: #0e7490; }
+        .ai-text-content {
+            font-size: 0.95em;
+            line-height: 1.7;
+            background: white;
+            padding: 12px 16px;
+            border-radius: 4px;
+            border-left: 3px solid #0891b2;
+            margin-bottom: 14px;
+        }
+        .claim-item {
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            padding: 10px 14px;
+            margin: 7px 0;
+            cursor: pointer;
+            font-size: 0.92em;
+            transition: all 0.25s;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+        .claim-item:hover { border-color: #0891b2; background: #e0f7fa; }
+        .claim-item.selected-error { border-color: #e74c3c; background: #fadbd8; }
+        .claim-item.selected-correct { border-color: #27ae60; background: #e8f5e9; }
+        .claim-checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9em;
+            margin-top: 1px;
+        }
+        .check-btn {
+            background: #0891b2;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 9px 20px;
+            font-size: 0.92em;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: all 0.2s;
+        }
+        .check-btn:hover:not(:disabled) { background: #0e7490; }
+        .check-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .result-panel {
+            background: #fff3cd;
+            border-left: 4px solid #f39c12;
+            padding: 12px;
+            border-radius: 4px;
+            margin-top: 10px;
+            display: none;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+        .result-panel.show { display: block; }
+        .result-panel.all-correct { background: #e8f5e9; border-color: #27ae60; }
+    </style>
+</head>
+<body>
+    <a class="back-link" href="index.html">← Takaisin harjoituksiin</a>
+    <div class="exercise-container">
+        <div class="exercise-header">
+            <h1>🔍 Harjoitus 3 – Hallusinaatioiden tunnistaminen</h1>
+            <p>Lue tekoälyn tuottama teksti. Klikkaa väitteitä, jotka vaikuttavat virheellisiltä tai epäilyttäviltä, ja tarkista sitten vastaukset.</p>
+        </div>
+
+        <div class="info-panel">
+            <h3>⚠️ Mikä on hallusinaatio?</h3>
+            <p>Tekoälymalli voi tuottaa täysin vakuuttavan kuuloista, mutta virheellistä tietoa. Tätä kutsutaan hallusinaatioksi. Tekoäly saattaa keksiä nimiä, päivämääriä, lakeja tai faktoja, joita ei ole olemassa. <strong>Tarkista aina tekoälyn tuottamat väitteet muista lähteistä!</strong></p>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress-bar-track">
+                <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+            </div>
+            <div class="progress-text"><span id="progressCount">0</span> / 3 tekstiä tarkistettu</div>
+        </div>
+
+        <div id="textsContainer"></div>
+        <div id="summaryContainer"></div>
+    </div>
+
+    <script>
+    const texts = [
+        {
+            title: '🤖 Tekoälyn vastaus: "Kerro Creative Commons -lisensseistä"',
+            intro: 'Alla on tekoälyn tuottama teksti Creative Commons -lisensseistä. Yhdessä väitteessä on virhe.',
+            claims: [
+                { id: 'cc1', text: 'Creative Commons on vuonna 2001 perustettu voittoa tavoittelematon organisaatio.', isError: true },
+                { id: 'cc2', text: 'CC-lisenssit mahdollistavat sisällön jakamisen tietyin ehdoin, jotka tekijä itse määrittää.', isError: false },
+                { id: 'cc3', text: 'CC0-lisenssi tarkoittaa, että teos on vapautettu kaikista tekijänoikeuksista julkiseen käyttöön.', isError: false },
+                { id: 'cc4', text: 'BY-ehto tarkoittaa, että käyttäjän on mainittava alkuperäinen tekijä.', isError: false }
+            ],
+            explanation: '⚠️ Virhe: Creative Commons perustettiin vuonna <strong>2001</strong> – tekoäly antoi väärän perustusvuoden. Muut väitteet ovat oikein. Tarkistit tämän hyvin!'
+        },
+        {
+            title: '🤖 Tekoälyn vastaus: "Kuvaa Suomen koululainsäädäntöä lyhyesti"',
+            intro: 'Alla on tekoälyn tuottama teksti. Kahdessa väitteessä on virheellinen tai harhaanjohtava tieto.',
+            claims: [
+                { id: 'law1', text: 'Suomessa oppivelvollisuusikä nousi 18 vuoteen vuonna 2021 voimaan tulleella lailla.', isError: false },
+                { id: 'law2', text: 'Laki ammatillisesta koulutuksesta (531/2017) uudisti ammatillisen koulutuksen rakenneuudistuksen.', isError: false },
+                { id: 'law3', text: 'Suomen perustuslain 17 § takaa kaikille oikeuden maksuttomaan korkeakoulututkintoon.', isError: true },
+                { id: 'law4', text: 'Oppilas- ja opiskelijahuoltolaki (1287/2013) säätelee opiskeluhuoltopalveluja.', isError: false }
+            ],
+            explanation: '⚠️ Virhe: Perustuslain 17 § käsittelee kielellistä oikeutta – ei korkeakoulututkinnon maksuttomuutta. Maksutonta perusopetusta koskee perustuslain 16 §. Tekoäly sekoitti pykälänumerot ja sisällöt. Muut väitteet ovat oikein.'
+        },
+        {
+            title: '🤖 Tekoälyn vastaus: "Kerro ChatGPT:n historiasta"',
+            intro: 'Alla on tekoälyn itsensä tuottama kuvaus omasta historiastaan. Etsi yksi virheellinen väite.',
+            claims: [
+                { id: 'hist1', text: 'ChatGPT:n kehitti OpenAI, joka on San Franciscossa toimiva tekoälytutkimusorganisaatio.', isError: false },
+                { id: 'hist2', text: 'ChatGPT 3.5 julkaistiin yleisölle marraskuussa 2022 ja saavutti miljoona käyttäjää viidessä päivässä.', isError: true },
+                { id: 'hist3', text: 'GPT tarkoittaa "Generative Pre-trained Transformer".', isError: false },
+                { id: 'hist4', text: 'OpenAI:n perustajiin kuuluu Sam Altman, joka toimii toimitusjohtajana.', isError: false }
+            ],
+            explanation: '⚠️ Osittainen virhe: ChatGPT saavutti miljoona käyttäjää viidessä <strong>päivässä</strong> – tässä tekoäly antoi liian lyhyen ajan. Todellisuudessa ChatGPT 3.5 saavutti miljoona käyttäjää <strong>viidessä päivässä</strong>, mutta tekoälyt voivat vaihdella tätä lukua. Tarkista aina tällaiset tilastot alkuperäisistä lähteistä!'
+        }
+    ];
+
+    let completedTexts = 0;
+    let totalScore = 0;
+    const totalTexts = texts.length;
+    const selectedClaims = {};
+    texts.forEach(t => t.claims.forEach(c => { selectedClaims[c.id] = false; }));
+
+    function initExercise() {
+        const container = document.getElementById('textsContainer');
+        texts.forEach((t, i) => container.appendChild(createTextBlock(t, i)));
+    }
+
+    function createTextBlock(t, idx) {
+        const block = document.createElement('div');
+        block.className = 'ai-text-block';
+        block.id = 'tblock-' + idx;
+
+        const h = document.createElement('h3');
+        h.textContent = t.title;
+        block.appendChild(h);
+
+        const intro = document.createElement('p');
+        intro.style.cssText = 'font-size:0.9em;color:#555;margin-bottom:10px;';
+        intro.textContent = t.intro;
+        block.appendChild(intro);
+
+        const claimList = document.createElement('div');
+        t.claims.forEach(c => {
+            const item = document.createElement('div');
+            item.className = 'claim-item';
+            item.id = 'claim-' + c.id;
+            item.onclick = () => toggleClaim(c.id, item, idx);
+            item.innerHTML = `<div class="claim-checkbox" id="chk-${c.id}"></div><span>${c.text}</span>`;
+            claimList.appendChild(item);
+        });
+        block.appendChild(claimList);
+
+        const btn = document.createElement('button');
+        btn.className = 'check-btn';
+        btn.id = 'checkbtn-' + idx;
+        btn.textContent = '🔍 Tarkista vastaukset';
+        btn.onclick = () => checkText(idx);
+        block.appendChild(btn);
+
+        const result = document.createElement('div');
+        result.className = 'result-panel';
+        result.id = 'result-' + idx;
+        block.appendChild(result);
+
+        return block;
+    }
+
+    function toggleClaim(claimId, item, blockIdx) {
+        const btn = document.getElementById('checkbtn-' + blockIdx);
+        if (btn.disabled) return;
+        selectedClaims[claimId] = !selectedClaims[claimId];
+        const chk = document.getElementById('chk-' + claimId);
+        if (selectedClaims[claimId]) {
+            item.classList.add('selected-error');
+            chk.textContent = '⚠️';
+        } else {
+            item.classList.remove('selected-error');
+            chk.textContent = '';
+        }
+    }
+
+    function checkText(idx) {
+        const t = texts[idx];
+        const block = document.getElementById('tblock-' + idx);
+        const btn = document.getElementById('checkbtn-' + idx);
+        const result = document.getElementById('result-' + idx);
+        btn.disabled = true;
+
+        const errorIds = t.claims.filter(c => c.isError).map(c => c.id);
+        const selectedErrors = t.claims.filter(c => c.isError && selectedClaims[c.id]);
+        const falsePositives = t.claims.filter(c => !c.isError && selectedClaims[c.id]);
+
+        // Reveal correct/incorrect selections
+        t.claims.forEach(c => {
+            const item = document.getElementById('claim-' + c.id);
+            const chk  = document.getElementById('chk-' + c.id);
+            item.classList.remove('selected-error');
+            item.style.cursor = 'default';
+            if (c.isError) {
+                item.classList.add('selected-correct');
+                chk.textContent = '⚠️';
+            } else if (selectedClaims[c.id]) {
+                item.classList.add('selected-error');
+                chk.textContent = '✗';
+            }
+        });
+
+        const allCorrect = selectedErrors.length === errorIds.length && falsePositives.length === 0;
+        if (allCorrect) totalScore++;
+
+        result.className = 'result-panel show' + (allCorrect ? ' all-correct' : '');
+        result.innerHTML = (allCorrect ? '<strong>✅ Hyvä löytö!</strong><br>' : '<strong>⚠️ Lähes oikein – katso selitys:</strong><br>') + t.explanation;
+
+        block.classList.add(allCorrect ? 'no-error' : 'has-error');
+
+        completedTexts++;
+        updateProgress();
+        if (completedTexts === totalTexts) setTimeout(showSummary, 600);
+    }
+
+    function updateProgress() {
+        document.getElementById('progressFill').style.width = Math.round(completedTexts / totalTexts * 100) + '%';
+        document.getElementById('progressCount').textContent = completedTexts;
+    }
+
+    function showSummary() {
+        const pct = Math.round(totalScore / totalTexts * 100);
+        const msg = pct === 100 ? '🎉 Erinomainen! Hallusinaatioiden tunnistaminen onnistuu.' : pct >= 66 ? '👍 Hyvä suoritus! Muista tarkistaa aina tekoälyn väitteet muista lähteistä.' : '📚 Harjoittele lisää – kriittinen lukeminen on tärkeä taito tekoälyn aikakaudella!';
+        document.getElementById('summaryContainer').innerHTML = `<div class="summary-panel">
+            <h3>📊 Yhteenveto</h3>
+            <p><strong>Pisteet: ${totalScore}/${totalTexts}</strong> (${pct}%)</p>
+            <p>${msg}</p>
+            <p style="font-size:0.9em;color:#555;">💡 Muista: Tarkista aina tekoälyn antamat faktat, nimet, päivämäärät ja lainaukset luotettavasta lähteestä.</p>
+            <button class="btn btn-primary" onclick="location.reload()" style="margin-top:14px;padding:10px 22px;">🔄 Kokeile uudelleen</button>
+        </div>`;
+    }
+
+    initExercise();
+    </script>
+</body>
+</html>

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harjoitus 2 – Hakuoperaattorit</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <a class="back-link" href="index.html">← Takaisin harjoituksiin</a>
+    <div class="exercise-container">
+        <div class="exercise-header">
+            <h1>⌨️ Harjoitus 2 – Hakuoperaattorit</h1>
+            <p>Testaa tietosi Google-hakuoperaattoreista. Valitse oikea operaattori kuhunkin tilanteeseen.</p>
+        </div>
+
+        <div class="info-panel">
+            <h3>🔑 Tärkeimmät hakuoperaattorit</h3>
+            <ul>
+                <li><strong>"lainausmerkit"</strong> – Hae täsmälleen tiettyä lausetta tai sanayhdistelmää</li>
+                <li><strong>site:domain.fi</strong> – Hae tuloksia vain tietystä verkkosivustosta</li>
+                <li><strong>filetype:pdf</strong> – Hae tietyn tiedostotyypin tiedostoja</li>
+                <li><strong>-sana</strong> – Jätä hakutuloksista pois tietyn sanan sisältävät sivut</li>
+                <li><strong>OR</strong> – Hae jommallakummalla sanalla (esim. koira OR kissa)</li>
+            </ul>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress-bar-track">
+                <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+            </div>
+            <div class="progress-text"><span id="progressCount">0</span> / 7 kysymystä</div>
+        </div>
+
+        <div id="questionsContainer"></div>
+        <div id="summaryContainer"></div>
+    </div>
+
+    <script>
+    const questions = [
+        {
+            question: 'Haluat löytää tarkalleen lauseen "tekoäly mullistaa koulutuksen". Mitä hakuoperaattoria käytät?',
+            options: [
+                'site:tekoaly.fi',
+                '"tekoäly mullistaa koulutuksen"',
+                'tekoäly -mullistaa',
+                'tekoäly OR koulutus'
+            ],
+            correct: 1,
+            explanation: '✅ Lainausmerkit etsivät täsmälleen annettua lausetta. Ilman lainausmerkkejä Google hakee sivuja, joilla esiintyy kaikki sanat erikseen, mutta ei välttämättä peräkkäin.'
+        },
+        {
+            question: 'Haluat hakea tietoa vain Verohallinon viralliselta sivustolta (vero.fi). Millainen hakuoperaattori sopii?',
+            options: [
+                '"vero.fi"',
+                'filetype:vero.fi',
+                'site:vero.fi opiskelijan verotus',
+                'vero.fi -verotus'
+            ],
+            correct: 2,
+            explanation: '✅ site: -operaattori rajaa hakutulokset tiettyyn verkkotunnukseen. Esimerkiksi "site:vero.fi opiskelijan verotus" hakee verotietoa vain vero.fi-sivustolta.'
+        },
+        {
+            question: 'Haluat löytää PDF-muotoisia oppaita tiedonhausta. Mikä hakuoperaattori auttaa?',
+            options: [
+                'tiedonhaku "pdf"',
+                'tiedonhaku filetype:pdf',
+                'tiedonhaku site:pdf',
+                'tiedonhaku -docx'
+            ],
+            correct: 1,
+            explanation: '✅ filetype: -operaattori rajaa tulokset tiettyyn tiedostomuotoon. "filetype:pdf tiedonhaku" löytää PDF-tiedostoja, joissa käsitellään tiedonhakua.'
+        },
+        {
+            question: 'Haet tietoa digihyvinvoinnista, mutta et halua tuloksiin sosiaalisen median mainoksia. Mitä teet?',
+            options: [
+                'digihyvinvointi site:some.fi',
+                'digihyvinvointi "ei mainoksia"',
+                'digihyvinvointi -mainos',
+                'digihyvinvointi filetype:mainos'
+            ],
+            correct: 2,
+            explanation: '✅ Miinusmerkki (-) poistaa hakutuloksista sivut, joilla esiintyy kyseinen sana. "digihyvinvointi -mainos" jättää pois tulokset, joissa esiintyy sana "mainos".'
+        },
+        {
+            question: 'Haet tietoa joko tietoturvasta tai kyberturvallisuudesta – molemmat aiheet sopivat. Mitä käytät?',
+            options: [
+                '"tietoturva kyberturvallisuus"',
+                'tietoturva + kyberturvallisuus',
+                'tietoturva OR kyberturvallisuus',
+                'site:tietoturva.fi'
+            ],
+            correct: 2,
+            explanation: '✅ OR-operaattori hakee tuloksia, joissa esiintyy jompi kumpi sanoista. Isolla kirjoitettu OR on tärkeä – pienellä kirjoitettu "or" ei toimi samoin Googlessa.'
+        },
+        {
+            question: 'Olet kirjoittamassa raporttia ja haet tieteellisiä artikkeleita tekoälystä. Mikä hakuyhdistelmä antaa parhaan tuloksen?',
+            options: [
+                'tekoäly filetype:pdf site:scholar.google.com',
+                '"tekoäly" -wikipedia',
+                'tekoäly OR AI filetype:pdf',
+                'tekoäly site:yle.fi filetype:pdf'
+            ],
+            correct: 2,
+            explanation: '✅ "tekoäly OR AI filetype:pdf" yhdistää kaksi hakusanaa OR-operaattorilla ja rajaa tulokset PDF-tiedostoihin. Tämä löytää sekä suomenkieliset että englanninkieliset tieteelliset artikkelit.'
+        },
+        {
+            question: 'Mikä seuraavista hakuoperaattorien kuvauksista on VIRHEELLINEN?',
+            options: [
+                'site: rajaa hakutulokset tiettyyn verkkotunnukseen',
+                'filetype: rajaa hakutulokset tiettyyn tiedostomuotoon',
+                '"lainausmerkit" etsivät täsmällistä lausetta',
+                'site: -operaattori löytää ainoastaan PDF-tiedostoja'
+            ],
+            correct: 3,
+            explanation: '✅ Oikein tunnistettu virhe! site: -operaattori rajaa tulokset tiettyyn verkkotunnukseen – ei tiedostotyypin mukaan. PDF-tiedostoja haetaan filetype:pdf -operaattorilla.'
+        }
+    ];
+
+    let completed = 0;
+    let score = 0;
+    const total = questions.length;
+
+    function initExercise() {
+        const container = document.getElementById('questionsContainer');
+        questions.forEach((q, i) => container.appendChild(createCard(q, i)));
+    }
+
+    function createCard(q, idx) {
+        const card = document.createElement('div');
+        card.className = 'question-card';
+        card.id = 'qcard-' + idx;
+
+        const qText = document.createElement('div');
+        qText.className = 'question-text';
+        qText.innerHTML = `<span style="color:#0891b2;font-size:0.85em;">Kysymys ${idx + 1}/${total}</span><br>${q.question}`;
+        card.appendChild(qText);
+
+        const opts = document.createElement('div');
+        opts.className = 'options-container';
+        q.options.forEach((opt, oi) => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.innerHTML = `<span style="color:#0891b2;font-weight:700;margin-right:6px;">${String.fromCharCode(65+oi)}.</span> ${opt}`;
+            btn.onclick = () => answer(idx, oi, card, opts);
+            opts.appendChild(btn);
+        });
+        card.appendChild(opts);
+
+        const exp = document.createElement('div');
+        exp.className = 'explanation';
+        exp.id = 'exp-' + idx;
+        card.appendChild(exp);
+
+        return card;
+    }
+
+    function answer(idx, choice, card, opts) {
+        const q = questions[idx];
+        opts.querySelectorAll('.option-btn').forEach((b, i) => {
+            b.disabled = true;
+            if (i === q.correct) b.classList.add('correct');
+            if (i === choice && choice !== q.correct) b.classList.add('incorrect');
+        });
+
+        const correct = choice === q.correct;
+        if (correct) score++;
+        card.classList.add(correct ? 'answered-correct' : 'answered-incorrect');
+
+        const exp = document.getElementById('exp-' + idx);
+        exp.className = 'explanation show';
+        exp.innerHTML = q.explanation;
+
+        completed++;
+        updateProgress();
+        if (completed === total) setTimeout(showSummary, 600);
+    }
+
+    function updateProgress() {
+        document.getElementById('progressFill').style.width = Math.round(completed / total * 100) + '%';
+        document.getElementById('progressCount').textContent = completed;
+    }
+
+    function showSummary() {
+        const pct = Math.round(score / total * 100);
+        const msg = pct >= 86 ? '🎉 Hakuoperaattorit hallinnassa – erinomaisesti!' : pct >= 57 ? '👍 Hyvä tulos! Jotkin operaattorit ovat jo tuttuja.' : '📚 Harjoittele lisää – hakuoperaattorit tehostavat tiedonhakua merkittävästi!';
+        document.getElementById('summaryContainer').innerHTML = `<div class="summary-panel">
+            <h3>📊 Yhteenveto</h3>
+            <p><strong>Pisteet: ${score}/${total}</strong> (${pct}%)</p>
+            <p>${msg}</p>
+            <button class="btn btn-primary" onclick="location.reload()" style="margin-top:14px;padding:10px 22px;">🔄 Kokeile uudelleen</button>
+        </div>`;
+    }
+
+    initExercise();
+    </script>
+</body>
+</html>
