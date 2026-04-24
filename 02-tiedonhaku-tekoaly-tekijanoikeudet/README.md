@@ -1,99 +1,62 @@
 # Osio 2: Tiedonhaku, tekoäly ja tekijänoikeudet
 
-## Osaamistavoitteet (VVTD26)
+Tässä osiossa opit hakemaan tietoa tehokkaasti, arvioimaan sen luotettavuutta kriittisesti, käyttämään tekoälytyökaluja vastuullisesti ja noudattamaan tekijänoikeuksia omissa töissäsi.
 
-- **(4)** hakee tietoa ja arvioi kriittisesti sen luotettavuutta ja hyödynnettävyyttä
-- **(8)** noudattaa tekijänoikeuksia tuottaessaan sisältöjä
-- **(11)** tunnistaa generatiivisen tekoälyn toimintaperiaatteita, hyödyntämismahdollisuuksia ja riskejä
+Nämä kolme teemaa kuuluvat yhteen: kun haet tietoa, kohtaat sekä luotettavia että epäluotettavia lähteitä — ja yhä useammin myös tekoälyn tuottamaa sisältöä. Kun tuotat itse materiaalia, sinun täytyy tietää, mitä kuvia ja tekstejä saat käyttää ja miten ne merkitään oikein.
 
-## Kuvaus
+Kurssin tärkein uusi kokonaisuus on tekoäly-työpaja, jossa pääset itse kokeilemaan tekoälytyökaluja ja arvioimaan niitä kriittisesti.
 
-Osion merkittävin uudistus on **tekoälyn** lisääminen kurssin sisältöön. Tekoäly-työpaja on kurssin uusin ja ajankohtaisin kokonaisuus.
+**Ammattitaitovaatimukset, joita tämä osio käsittelee:**
 
-Osio yhdistää tiedonhaun, kriittisen arvioinnin, tekoälyn käytön ja tekijänoikeudet yhdeksi kokonaisuudeksi, sillä nämä teemat liittyvät luontevasti toisiinsa: tietoa haetaan, arvioidaan kriittisesti (myös tekoälyn tuottamaa), ja sisältöjä tuotetaan tekijänoikeuksia noudattaen.
+- Hakee tietoa ja arvioi kriittisesti sen luotettavuutta ja hyödynnettävyyttä (vaatimus 4)
+- Noudattaa tekijänoikeuksia tuottaessaan sisältöjä (vaatimus 8)
+- Tunnistaa generatiivisen tekoälyn toimintaperiaatteita, hyödyntämismahdollisuuksia ja riskejä (vaatimus 11)
 
-Osio noudattaa kolmivaiheista pedagogista progressiota:
-
-1. **🖥️ Interaktiivinen harjoittelu selaimessa** — peruskäsitteet ja tunnistaminen (SCORM-paketit Moodlessa)
-2. **💻 Käytännön tekeminen** — oikeat työkalut ja palvelut
-3. **📝 Arvioitava tehtävä** — osaamisen osoittaminen
-
-## Kesto
-- Lähiopetus nuoret: ~8h
-- Aikuisten iltakurssi: ~4h
+**Arvioitu aika:** noin 8 tuntia lähiopetuksessa tai noin 4 tuntia aikuisten iltakurssilla
 
 ---
 
-## Rakenne
+## Tämän osion sisältö
 
-### Materiaalit (`materiaalit/`)
-| Tiedosto | Sisältö |
-|---|---|
-| tiedonhaku-ja-lahdekritiikki.md | Tiedonhaku, lähdekritiikki, luotettavuuden arviointi |
-| generatiivinen-tekoaly.md | Tekoälyn toimintaperiaatteet, käyttö, hyödyt ja riskit |
-| tekijanoikeudet-ja-cc-lisenssit.md | Tekijänoikeudet, Creative Commons, lähdeviittaukset |
+### Oppimateriaali
+
+Osion oppimateriaali on koottu yhteen kirja-aktiviteettiin: **Tiedonhaku, tekoäly ja tekijänoikeudet — oppimateriaali**. Kirja kattaa kaikki kolme aihealuetta luvuittain.
+
+### Harjoitukset ja tehtävät — lähiopetus
+
+| Numero | Tehtävä | Arviointi |
+|---|---|---|
+| 2.1 | Tiedonhaku ja lähdekritiikki | Hyväksytty / hylätty |
+| **2.2** | **Tekoäly tutuksi -työpaja** | **Arvioitava 1–5** |
+| 2.3 | Tekijänoikeudet käytännössä | Hyväksytty / hylätty |
+
+### Harjoitukset ja tehtävät — itsenäinen suorittaminen
+
+| Numero | Tehtävä | Arviointi |
+|---|---|---|
+| I-2.1 | Tiedonhaku ja lähdekritiikki | Hyväksytty / hylätty |
+| **I-2.2** | **Tekoäly: tutkimustehtävä** | **Arvioitava 1–5** |
+| I-2.3 | Tekijänoikeudet käytännössä | Hyväksytty / hylätty |
+
+---
+
+## Rakentamismuistiinpanot
+
+*Tämä osio opettajalle ja rakentamisvaiheeseen. Ei näytetä opiskelijoille.*
+
+Materialit-kansion tiedostot (tiedonhaku-ja-lahdekritiikki.md, generatiivinen-tekoaly.md, tekijanoikeudet-ja-cc-lisenssit.md) ovat sisältösuunnittelun apuvälineitä. Varsinainen oppimateriaalin sisältö on kirjoitettu kirja-aktiviteettiin (kirja/kirja-tiedonhaku-tekoaly-tekijanoikeudet.md).
 
 ### Interaktiiviset selainharjoitukset
 
-Jokaiselle aihealueelle on laadittu interaktiiviset HTML/JS/CSS-harjoitukset, jotka toimivat suoraan selaimessa (myös SCORM-pakettina Moodleen).
+Interaktiiviset HTML/JS/CSS-harjoitukset on laadittu jokaiselle aihealueelle. Ne toimivat suoraan selaimessa.
 
-| Aihe | Kansio | Harjoitukset | Status |
-|---|---|---|---|
-| Tiedonhaku & lähdekritiikki | `materiaalit/harjoitukset-tiedonhaku/` | Lähteen luotettavuus, hakuoperaattorit, valeuutiset | ✅ Valmis |
-| Tekoäly | `materiaalit/harjoitukset-tekoaly/` | Tekoälyn perusteet, promptit, hallusinaatiot, vastuullinen käyttö | ✅ Valmis |
-| Tekijänoikeudet | `materiaalit/harjoitukset-tekijanoikeudet/` | CC-lisenssit, tekijänoikeustietovisa, lähdeviittaukset | ✅ Valmis |
-
-#### 🔍 Tiedonhaku & lähdekritiikki — `materiaalit/harjoitukset-tiedonhaku/`
-
-| # | Tiedosto | Kuvaus |
+| Aihe | Kansio | Harjoitukset |
 |---|---|---|
-| 1 | harjoitus-1-lahteen-luotettavuus.html | Arvioi 5 erilaisen lähteen luotettavuus (TAANT-kriteerit) |
-| 2 | harjoitus-2-hakuoperaattorit.html | 7 MCQ-kysymystä Google-hakuoperaattoreista |
-| 3 | harjoitus-3-valeuutiset.html | Tunnista 4 uutisesta, mitkä ovat valeuutisia |
+| 🔍 Tiedonhaku & lähdekritiikki | `materiaalit/harjoitukset-tiedonhaku/` | Lähteen luotettavuus, hakuoperaattorit, valeuutiset |
+| 🤖 Tekoäly | `materiaalit/harjoitukset-tekoaly/` | Tekoälyn perusteet, promptit, hallusinaatiot, vastuullinen käyttö |
+| ©️ Tekijänoikeudet | `materiaalit/harjoitukset-tekijanoikeudet/` | CC-lisenssit, tekijänoikeustietovisa, lähdeviittaukset |
 
-#### 🤖 Tekoäly — `materiaalit/harjoitukset-tekoaly/`
+### Tehtävätiedostot
 
-| # | Tiedosto | Kuvaus |
-|---|---|---|
-| 1 | harjoitus-1-tekoaly-perusteet.html | 8 MCQ-kysymystä generatiivisen tekoälyn käsitteistä |
-| 2 | harjoitus-2-promptit.html | 4 prompt-vertailuparia – valitse parempi pyyntö |
-| 3 | harjoitus-3-hallusinaatiot.html | Löydä virheelliset väitteet tekoälyn tuottamista teksteistä |
-| 4 | harjoitus-4-vastuullinen-kaytto.html | 6 tilanneskenaariota: sallittu / ehdoin sallittu / kielletty (Mercurian ohjeistuksen mukaan) |
-
-#### ©️ Tekijänoikeudet — `materiaalit/harjoitukset-tekijanoikeudet/`
-
-| # | Tiedosto | Kuvaus |
-|---|---|---|
-| 1 | harjoitus-1-cc-lisenssit.html | 5 CC-lisenssin käyttötilannetta – saako käyttää? |
-| 2 | harjoitus-2-tekijanoikeustietovisa.html | 8 MCQ tekijänoikeuden perusteista + tekoälyyn liittyvät kysymykset |
-| 3 | harjoitus-3-lahdeviittaukset.html | Tunnista 5 puutteellisen viittauksen ongelma (verkkosivut, kuvat, video, tekoäly) |
-
-### Tehtävät — Lähiopetus (`tehtavat-lahiopetus/`)
-
-#### A) Tiedonhaku ja lähdekritiikki
-| Vaihe | Tiedosto | Tehtävä | Arviointi |
-|---|---|---|---|
-| 🖥️ Interaktiivinen | materiaalit/harjoitukset-tiedonhaku/ | Selainharjoitukset 1–3 | Automaattinen |
-| 💻 Käytännön tekeminen | 2-01-tiedonhaku-ja-lahdekritiikki.md | Tiedonhaku ja lähdekritiikki | Hyv/hyl |
-
-#### B) Tekoäly
-| Vaihe | Tiedosto | Tehtävä | Arviointi |
-|---|---|---|---|
-| 🖥️ Interaktiivinen | materiaalit/harjoitukset-tekoaly/ | Selainharjoitukset 1–4 | Automaattinen |
-| 📝 **Arvioitava** | 2-02-tekoaly-tutuksi-tyopaja.md | **Tekoäly tutuksi -työpaja** | **1–5** |
-
-#### C) Tekijänoikeudet
-| Vaihe | Tiedosto | Tehtävä | Arviointi |
-|---|---|---|---|
-| 🖥️ Interaktiivinen | materiaalit/harjoitukset-tekijanoikeudet/ | Selainharjoitukset 1–3 | Automaattinen |
-| 💻 Käytännön tekeminen | 2-03-tekijanoikeudet-kaytannossa.md | Tekijänoikeudet käytännössä | Hyv/hyl |
-
-### Tehtävät — Itsenäinen suorittaminen (`tehtavat-itsenainen/`)
-
-Itsenäisessä suorituksessa opiskelija käy ensin läpi interaktiiviset selainharjoitukset (kansiot `materiaalit/harjoitukset-*/`) ja tekee sitten arvioitavat tehtävät.
-
-| Tiedosto | Tehtävä | Arviointi |
-|---|---|---|
-| I-2-01-tiedonhaku-ja-lahdekritiikki.md | Tiedonhaku ja lähdekritiikki | Hyv/hyl |
-| I-2-02-tekoaly-tutkimustehtava.md | Tekoäly: tutkimustehtävä | 1–5 |
-| I-2-03-tekijanoikeudet-kaytannossa.md | Tekijänoikeudet käytännössä | Hyv/hyl |
+- Lähiopetuksen tehtävät: tehtavat-lahiopetus/ (3 tiedostoa)
+- Itsenäisen suorittamisen tehtävät: tehtavat-itsenainen/ (3 tiedostoa)

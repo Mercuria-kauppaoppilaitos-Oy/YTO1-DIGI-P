@@ -1,20 +1,33 @@
-# Osio 4: Itsearviointi oppimisesta ja kurssin palautteen antaminen
+# Osio 4: Itsearviointi ja kurssipalaute
 
-## Kuvaus
+Kurssin päättävässä osiossa arvioit omaa oppimistasi ja annat palautetta kurssin toteutuksesta.
 
-Kurssin päättävä osio, jossa opiskelija reflektoi omaa oppimistaan ja antaa palautetta kurssin toteutuksesta. Itsearviointi on osa ammatillista kasvua — opiskelija oppii arvioimaan omaa osaamistaan suhteessa asetettuihin tavoitteisiin.
+Itsearviointi tarkoittaa, että vertaat omaa osaamistasi kurssin alussa asetettuihin tavoitteisiin: missä kehityit, missä sinulla on vielä opittavaa? Itsensä arviointi on keskeinen työelämätaito, jota harjoitellaan tarkoituksella.
 
-## Tavoitteet
-- Opiskelija arvioi omaa oppimistaan ja osaamistaan kurssin tavoitteiden suhteen
-- Opiskelija tunnistaa omat vahvuutensa ja kehittämiskohteensa digitaidoissa
-- Opettaja saa palautetta kurssin toteutuksesta ja kehittämisideoita
+Kurssin palautekysely auttaa opettajaa kehittämään kurssia. Palaute on anonyymi.
 
-## Rakenne
+Tämä osio ei sisällä arvioitavia tehtäviä, mutta itsearvioinnin suorittaminen on edellytys kurssin hyväksytylle suorittamiselle.
 
-| Tiedosto | Sisältö | Tyyppi |
+**Arvioitu aika:** noin 20–40 minuuttia
+
+---
+
+## Tämän osion sisältö
+
+| Aktiviteetti | Tyyppi | Kuvaus |
 |---|---|---|
-| itsearviointi.md | Oppimisen reflektio | Kysely |
-| kurssipalaute.md | Kurssin palautekysely | Kysely |
+| Itsearviointi | Kysely | Arvioit omaa oppimistasi suhteessa kurssin tavoitteisiin |
+| Kurssipalaute | Kysely | Annat palautetta kurssin toteutuksesta |
 
-## Vanha materiaali
-- Vanhan kurssin "Itsearviointi oppimisesta ja kurssin palautteen antaminen" -kysely — päivitettävissä
+---
+
+## Rakentamismuistiinpanot
+
+*Tämä osio opettajalle ja rakentamisvaiheeseen. Ei näytetä opiskelijoille.*
+
+| Tiedosto | Aktiviteetti eKampuksella |
+|---|---|
+| itsearviointi.md | Kysely (questionnaire) |
+| kurssipalaute.md | Kysely (questionnaire) |
+
+Vanhan kurssin itsearviointi- ja palautekysely on käytettävissä pohjana. Päivitetään vastaamaan uusia osaamistavoitteita (VVTD26).
