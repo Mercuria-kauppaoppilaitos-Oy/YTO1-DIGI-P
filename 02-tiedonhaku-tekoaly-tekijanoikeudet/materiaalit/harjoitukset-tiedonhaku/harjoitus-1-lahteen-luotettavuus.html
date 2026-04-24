@@ -3,138 +3,339 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Harjoitus 1 – Lähteen luotettavuus</title>
+    <title>Harjoitus 1 – Tutkijapöytä</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        .drop-zones {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin: 20px 0;
+        }
+        .drop-zone {
+            min-height: 120px;
+            border: 3px dashed;
+            border-radius: 12px;
+            padding: 12px;
+            text-align: center;
+            transition: all 0.25s;
+            position: relative;
+        }
+        .drop-zone.reliable  { border-color: #27ae60; background: #f0fff4; }
+        .drop-zone.check     { border-color: #f39c12; background: #fffbf0; }
+        .drop-zone.unreliable{ border-color: #e74c3c; background: #fff5f5; }
+        .drop-zone.drag-over { transform: scale(1.04); box-shadow: 0 6px 20px rgba(0,0,0,0.2); }
+        .drop-zone-label {
+            font-weight: 800;
+            font-size: 0.95em;
+            margin-bottom: 8px;
+            display: block;
+        }
+        .drop-zone.reliable .drop-zone-label  { color: #27ae60; }
+        .drop-zone.check .drop-zone-label     { color: #b45309; }
+        .drop-zone.unreliable .drop-zone-label{ color: #e74c3c; }
+        .drop-zone-icon { font-size: 2em; display: block; margin-bottom: 6px; }
+        .zone-empty { font-size: 0.78em; color: #aaa; font-style: italic; }
+        .source-pool { margin: 16px 0; }
+        .pool-label { color: #0e7490; font-weight: 700; margin: 0 0 10px; }
+        .draggable-card {
+            background: white;
+            border: 2px solid #0891b2;
+            border-radius: 10px;
+            padding: 13px 16px;
+            margin: 10px 0;
+            cursor: grab;
+            transition: all 0.22s;
+            user-select: none;
+            position: relative;
+        }
+        .draggable-card:hover { box-shadow: 0 4px 14px rgba(8,145,178,0.35); transform: translateY(-2px); }
+        .draggable-card.dragging { opacity: 0.45; cursor: grabbing; }
+        .draggable-card.placed-out { opacity: 0.3; pointer-events: none; border-style: dashed; }
+        .card-title { font-weight: 700; color: #0e7490; margin-bottom: 4px; font-size: 1em; }
+        .card-meta { font-size: 0.82em; color: #777; margin-bottom: 7px; }
+        .url-link { color: #0891b2; text-decoration: underline dashed; cursor: help; }
+        .taant-hint {
+            display: none;
+            background: #e0f7fa;
+            border: 1px solid #0891b2;
+            border-radius: 6px;
+            padding: 8px 12px;
+            font-size: 0.82em;
+            margin: 6px 0 4px;
+            text-align: left;
+            line-height: 1.5;
+        }
+        .card-excerpt { font-size: 0.88em; color: #444; line-height: 1.45; }
+        .mini-placed {
+            background: white;
+            border-radius: 6px;
+            padding: 7px 10px;
+            margin: 5px 0;
+            font-size: 0.83em;
+            text-align: left;
+            animation: popIn 0.3s ease;
+        }
+        @keyframes popIn {
+            0% { transform: scale(0.7); opacity: 0; }
+            80% { transform: scale(1.05); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .mini-placed.correct   { border-left: 4px solid #27ae60; background: #e8f5e9; }
+        .mini-placed.incorrect { border-left: 4px solid #e74c3c; background: #fadbd8; }
+        .score-flash {
+            position: fixed; top: 50%; left: 50%;
+            transform: translate(-50%, -50%) scale(0.5);
+            font-size: 3em; font-weight: 900;
+            pointer-events: none; z-index: 9999;
+            transition: all 0.5s ease;
+            opacity: 0;
+        }
+        @media (max-width: 600px) {
+            .drop-zones { grid-template-columns: 1fr; }
+        }
+    </style>
 </head>
 <body>
     <a class="back-link" href="index.html">← Takaisin harjoituksiin</a>
     <div class="exercise-container">
         <div class="exercise-header">
-            <h1>🔎 Harjoitus 1 – Lähteen luotettavuuden arviointi</h1>
-            <p>Arvioi jokaisen lähteen luotettavuus. Saat palautetta valinnan jälkeen.</p>
+            <h1>🔎 Harjoitus 1 – Tutkijapöytä</h1>
+            <p>Raahaa jokainen lähdekortti oikeaan koteloon. Vie hiiri URL-osoitteen päälle, niin saat TAANT-vihjeen!</p>
         </div>
 
         <div class="info-panel">
-            <h3>📌 Luotettavuuden arviointikriteerit (TAANT)</h3>
-            <ul>
-                <li><strong>Tekijä:</strong> Kuka on kirjoittanut tai julkaissut?</li>
-                <li><strong>Ajantasaisuus:</strong> Milloin sisältö on julkaistu tai päivitetty?</li>
-                <li><strong>Alkuperä:</strong> Mihin väitteet perustuvat – onko lähteillä lähteitä?</li>
-                <li><strong>Näyttö:</strong> Onko sisältö faktapohjaista vai mielipidettä?</li>
-                <li><strong>Tarkoitus:</strong> Miksi sisältö on tuotettu – tiedottaa, myydä vai vaikuttaa?</li>
-            </ul>
+            <h3>📌 TAANT-arviointikriteerit</h3>
+            <p><strong>T</strong>ekijä &nbsp;·&nbsp; <strong>A</strong>jantasaisuus &nbsp;·&nbsp; <strong>A</strong>lkuperä &nbsp;·&nbsp; <strong>N</strong>äyttö &nbsp;·&nbsp; <strong>T</strong>arkoitus — vie hiiri URL:n päälle saadaksesi vihjeen!</p>
         </div>
 
         <div class="progress-container">
             <div class="progress-bar-track">
                 <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
             </div>
-            <div class="progress-text"><span id="progressCount">0</span> / 5 lähdettä arvioitu</div>
+            <div class="progress-text"><span id="progressCount">0</span> / 5 lähdettä sijoitettu</div>
         </div>
 
-        <div id="sourcesContainer"></div>
+        <div class="drop-zones">
+            <div class="drop-zone reliable" id="zone-reliable"
+                 ondragover="dragOver(event,'reliable')"
+                 ondragleave="dragLeave(event,'reliable')"
+                 ondrop="dropCard(event,'reliable')">
+                <span class="drop-zone-icon">✅</span>
+                <span class="drop-zone-label">Luotettava</span>
+                <span class="zone-empty" id="empty-reliable">Raahaa tänne</span>
+                <div id="placed-reliable"></div>
+            </div>
+            <div class="drop-zone check" id="zone-check"
+                 ondragover="dragOver(event,'check')"
+                 ondragleave="dragLeave(event,'check')"
+                 ondrop="dropCard(event,'check')">
+                <span class="drop-zone-icon">🟡</span>
+                <span class="drop-zone-label">Tarkista</span>
+                <span class="zone-empty" id="empty-check">Raahaa tänne</span>
+                <div id="placed-check"></div>
+            </div>
+            <div class="drop-zone unreliable" id="zone-unreliable"
+                 ondragover="dragOver(event,'unreliable')"
+                 ondragleave="dragLeave(event,'unreliable')"
+                 ondrop="dropCard(event,'unreliable')">
+                <span class="drop-zone-icon">❌</span>
+                <span class="drop-zone-label">Epäluotettava</span>
+                <span class="zone-empty" id="empty-unreliable">Raahaa tänne</span>
+                <div id="placed-unreliable"></div>
+            </div>
+        </div>
+
+        <div class="source-pool">
+            <p class="pool-label">📚 Lähdekortteja — raahaa oikeaan koteloon:</p>
+            <div id="cardPool"></div>
+        </div>
+
         <div id="summaryContainer"></div>
     </div>
+
+    <div class="score-flash" id="scoreFlash"></div>
 
     <script>
     const sources = [
         {
+            id: 's0',
             title: 'Wikipedia – Generatiivinen tekoäly',
             url: 'fi.wikipedia.org/wiki/Generatiivinen_tekoäly',
             type: 'Tietosanakirja (yhteisöllinen)',
             date: 'Päivitetty 12.3.2026',
-            excerpt: 'Generatiivinen tekoäly on koneoppimismalli, joka tuottaa uutta sisältöä, kuten tekstiä, kuvia tai ääntä. Malleja koulutetaan suurilla aineistoilla, joista ne oppivat tilastolliset rakenteet...',
-            correctAnswer: 'check',
-            feedback: 'Wikipedia on hyvä lähtökohta, mutta ei tieteellinen lähde. Artikkeleita voivat muokata kaikki käyttäjät. Käytä sitä taustatiedoksi ja etsi tarkemmista lähteistä lisätietoja. Arvioluokka: "Tarvitsee tarkistaa".'
+            excerpt: 'Generatiivinen tekoäly on koneoppimismalli, joka tuottaa uutta sisältöä kuten tekstiä, kuvia tai ääntä...',
+            correct: 'check',
+            taant: '🟡 Tekijä: yhteisöllinen muokkaus. Alkuperä: viitteet vaihtelevat. Tarkoitus: tiedon jakaminen. Hyvä lähtökohta, tarkista faktat muualta.',
+            feedback: 'Wikipedia on hyvä lähtökohta, mutta ei tieteellinen lähde. Käytä sitä taustatiedoksi!'
         },
         {
+            id: 's1',
             title: 'Yle Uutiset – Tekoäly mullistaa ammatillisen koulutuksen',
             url: 'yle.fi/uutiset/3-14823671',
             type: 'Julkinen yleisradioyhtiö',
             date: 'Julkaistu 5.1.2026',
-            excerpt: 'Ammatillisten oppilaitosten opettajat kertovat, että tekoälytyökalujen käyttö on lisääntynyt selvästi viime vuoden aikana. Yle haastatteli kymmentä opettajaa eri puolilta Suomea...',
-            correctAnswer: 'reliable',
-            feedback: '✅ Oikein! Yle on julkinen yleisradioyhtiö, jolla on vahva toimituksellinen vastuu. Artikkelissa on mainittu lähteet (haastattelut), päivämäärä on selvä ja sisältö on journalistisesti tuotettu. Luotettava lähde.'
+            excerpt: 'Ammatillisten oppilaitosten opettajat kertovat, että tekoälytyökalujen käyttö on lisääntynyt selvästi...',
+            correct: 'reliable',
+            taant: '✅ Tekijä: Anna Mäkinen, Yle. Alkuperä: 10 opettajan haastattelu. Tarkoitus: julkinen tiedottaminen. Vahva toimituksellinen prosessi.',
+            feedback: 'Yle on julkinen yleisradioyhtiö, jolla on vahva toimituksellinen vastuu. Luotettava lähde!'
         },
         {
+            id: 's2',
             title: 'ParasRahoitus.fi – 5 syytä ottaa pikalaina juuri nyt!',
             url: 'parasrahoitus.fi/blogi/pikalaina-nyt',
             type: 'Kaupallinen blogi',
             date: 'Julkaistu 2.4.2026',
-            excerpt: 'Pikalaina voi pelastaa tilanteen, kun rahat loppuvat yllättäen! Haemme sinulle parhaan lainatarjouksen hetkessä. Monet suomalaiset ovat hyötyneet pikavipistä – lue heidän tarinansa...',
-            correctAnswer: 'unreliable',
-            feedback: '❌ Epäluotettava lähde. Sivuston tarkoitus on myydä rahoitustuotteita, ei tiedottaa puolueettomasti. Otsikko on sensaatiohakuinen, lähteisiin ei viitata ja "tarinat" ovat todennäköisesti markkinointimateriaalia.'
+            excerpt: 'Pikalaina voi pelastaa tilanteen! Haemme sinulle parhaan lainatarjouksen hetkessä. Klikkaa tästä!',
+            correct: 'unreliable',
+            taant: '❌ Tekijä: ei mainittu. Alkuperä: ei lähteitä. Tarkoitus: myydä rahoitustuotteita. Selvästi kaupallinen, ei neutraali.',
+            feedback: 'Sivuston tarkoitus on myydä tuotteita — ei tiedottaa puolueettomasti. Tyypillinen epäluotettava kaupallinen blogi.'
         },
         {
+            id: 's3',
             title: 'Vero.fi – Opiskelijan verotus',
             url: 'vero.fi/henkiloasiakkaat/elaman-tapahtumat/opiskelija',
             type: 'Verohallinnon viranomaissivusto',
             date: 'Päivitetty 1.2.2026',
-            excerpt: 'Opiskelijana olet verovelvollinen Suomessa, jos saat veronalaista tuloa. Sivulta löydät ohjeet verokortin hakemiseen, tulorajoihin ja veroilmoituksen täyttämiseen...',
-            correctAnswer: 'reliable',
-            feedback: '✅ Oikein! Verohallinto on viranomainen, joka vastaa verotukseen liittyvästä tiedotuksesta. Sivusto on ajantasainen, tekijä (Verohallinto) on selvä ja tarkoitus on neutraali tiedottaminen. Erittäin luotettava lähde.'
+            excerpt: 'Opiskelijana olet verovelvollinen Suomessa, jos saat veronalaista tuloa. Löydät ohjeet verokortin hakemiseen...',
+            correct: 'reliable',
+            taant: '✅ Tekijä: Verohallinto (viranomainen). Ajantasainen 2026. Alkuperä: lainsäädäntö. Tarkoitus: neutraali tiedottaminen. Erittäin luotettava.',
+            feedback: 'Verohallinto on viranomainen, joka vastaa verotuksesta. Erittäin luotettava lähde!'
         },
         {
-            title: 'TekoalyBlog.blogspot.com – Tekoäly vie kaikki työpaikat ensi vuonna',
-            url: 'tekoalyblog.blogspot.com/2026/tekoaly-vie-tyot',
+            id: 's4',
+            title: 'TekoalyBlog.blogspot.com – Tekoäly vie kaikki työpaikat!',
+            url: 'tekoalyblog.blogspot.com/tekoaly-vie-tyot',
             type: 'Yksityinen blogi',
             date: 'Julkaistu 15.4.2026',
-            excerpt: 'Asiantuntijat ennustavat, että 90 % nykyisistä töistä katoaa jo ensi vuonna. Tekoäly korvaa lääkärit, opettajat, insinöörit ja kaikki muutkin. Sijoita tekoälyosakkeisiin nyt!',
-            correctAnswer: 'unreliable',
-            feedback: '❌ Epäluotettava lähde. Otsikko on selvästi sensaatiohakuinen ("kaikki työpaikat ensi vuonna"). "Asiantuntijat" -viittaus ilman nimiä on tyypillinen valeuutismerkki. Lopussa kehotetaan sijoittamaan – siis sisältö palvelee kaupallista tarkoitusta.'
+            excerpt: '"Asiantuntijat ennustavat, että 90% töistä katoaa ensi vuonna. Tekoäly korvaa kaikki. Sijoita tekoälyosakkeisiin nyt!"',
+            correct: 'unreliable',
+            taant: '❌ Tekijä: ei mainittu. Alkuperä: "asiantuntijat" ilman nimiä. Tarkoitus: sijoitusneuvot. Sensaatiohakuinen, ei lähteitä.',
+            feedback: 'Sensaatiohakuinen otsikko, nimettömät "asiantuntijat" ja sijoituskehotus ovat selviä varoitusmerkkejä!'
         }
     ];
 
-    let completed = 0;
-    let score = 0;
+    let draggingId = null;
+    let completed = 0, score = 0;
     const total = sources.length;
+    let touchCard = null, touchClone = null;
 
-    const labels = { reliable: '✅ Luotettava', check: '🟡 Tarvitsee tarkistaa', unreliable: '❌ Epäluotettava' };
-
-    function initExercise() {
-        const container = document.getElementById('sourcesContainer');
-        sources.forEach((src, i) => {
-            container.appendChild(createSourceCard(src, i));
-        });
+    function init() {
+        const pool = document.getElementById('cardPool');
+        sources.forEach(src => pool.appendChild(createCard(src)));
     }
 
-    function createSourceCard(src, idx) {
+    function createCard(src) {
         const card = document.createElement('div');
-        card.className = 'source-card';
-        card.id = 'card-' + idx;
-
+        card.className = 'draggable-card';
+        card.id = 'card-' + src.id;
+        card.draggable = true;
         card.innerHTML = `
-            <div class="source-title">📄 ${src.title}</div>
-            <div class="source-meta">🌐 ${src.url} &nbsp;|&nbsp; ${src.type} &nbsp;|&nbsp; 🗓️ ${src.date}</div>
-            <div class="source-excerpt">${src.excerpt}</div>
-            <div class="source-buttons" id="btns-${idx}">
-                <button class="btn-reliable" onclick="answer(${idx},'reliable')">✅ Luotettava</button>
-                <button class="btn-check" onclick="answer(${idx},'check')">🟡 Tarvitsee tarkistaa</button>
-                <button class="btn-unreliable" onclick="answer(${idx},'unreliable')">❌ Epäluotettava</button>
+            <div class="card-title">📄 ${src.title}</div>
+            <div class="card-meta">
+                🌐 <span class="url-link" onmouseenter="showHint('hint-${src.id}')" onmouseleave="hideHint('hint-${src.id}')"
+                    title="Vie hiiri päälle TAANT-vihjeeksi">${src.url}</span>
+                &nbsp;·&nbsp; ${src.type} &nbsp;·&nbsp; 🗓️ ${src.date}
             </div>
-            <div class="feedback-box" id="feedback-${idx}"></div>
+            <div class="taant-hint" id="hint-${src.id}">💡 <strong>TAANT-vihje:</strong> ${src.taant}</div>
+            <div class="card-excerpt">${src.excerpt}</div>
         `;
+        card.addEventListener('dragstart', e => {
+            draggingId = src.id;
+            e.dataTransfer.effectAllowed = 'move';
+            setTimeout(() => card.classList.add('dragging'), 0);
+        });
+        card.addEventListener('dragend', () => card.classList.remove('dragging'));
+        card.addEventListener('touchstart', touchStart, {passive: false});
+        card.addEventListener('touchmove', touchMove, {passive: false});
+        card.addEventListener('touchend', touchEnd, {passive: false});
         return card;
     }
 
-    function answer(idx, choice) {
-        const src = sources[idx];
-        const card = document.getElementById('card-' + idx);
-        const btns = document.getElementById('btns-' + idx);
-        const feedbackEl = document.getElementById('feedback-' + idx);
+    function showHint(id) { const el = document.getElementById(id); if (el) el.style.display = 'block'; }
+    function hideHint(id) { const el = document.getElementById(id); if (el) el.style.display = 'none'; }
 
-        btns.querySelectorAll('button').forEach(b => b.disabled = true);
+    function dragOver(e, zone) {
+        e.preventDefault();
+        document.getElementById('zone-' + zone).classList.add('drag-over');
+    }
+    function dragLeave(e, zone) {
+        document.getElementById('zone-' + zone).classList.remove('drag-over');
+    }
+    function dropCard(e, zone) {
+        e.preventDefault();
+        document.getElementById('zone-' + zone).classList.remove('drag-over');
+        if (!draggingId) return;
+        placeCard(draggingId, zone);
+        draggingId = null;
+    }
 
-        const correct = choice === src.correctAnswer;
+    function touchStart(e) {
+        touchCard = e.currentTarget;
+        const rect = touchCard.getBoundingClientRect();
+        touchClone = touchCard.cloneNode(true);
+        touchClone.style.cssText = 'position:fixed;opacity:0.88;pointer-events:none;z-index:9999;width:' + rect.width + 'px;border-radius:10px;border:2px solid #0891b2;background:white;padding:12px 16px;box-shadow:0 8px 24px rgba(0,0,0,0.25);font-size:0.9em;';
+        document.body.appendChild(touchClone);
+        moveTouchClone(e.touches[0]);
+        e.preventDefault();
+    }
+    function touchMove(e) {
+        e.preventDefault();
+        if (touchClone) moveTouchClone(e.touches[0]);
+    }
+    function moveTouchClone(t) {
+        if (!touchClone) return;
+        touchClone.style.left = (t.clientX - 80) + 'px';
+        touchClone.style.top  = (t.clientY - 40) + 'px';
+    }
+    function touchEnd(e) {
+        if (!touchCard || !touchClone) return;
+        const t = e.changedTouches[0];
+        if (touchClone.parentNode) touchClone.parentNode.removeChild(touchClone);
+        touchClone = null;
+        const srcId = touchCard.id.replace('card-', '');
+        const el = document.elementFromPoint(t.clientX, t.clientY);
+        if (!el) { touchCard = null; return; }
+        const zone = el.closest('.drop-zone');
+        if (!zone) { touchCard = null; return; }
+        const zoneType = zone.classList.contains('reliable') ? 'reliable'
+                       : zone.classList.contains('check')    ? 'check' : 'unreliable';
+        placeCard(srcId, zoneType);
+        touchCard = null;
+    }
+
+    function placeCard(srcId, zone) {
+        const src = sources.find(s => s.id === srcId);
+        if (!src) return;
+        const card = document.getElementById('card-' + srcId);
+        if (!card || card.classList.contains('placed-out')) return;
+        card.classList.add('placed-out');
+
+        const correct = (zone === src.correct);
         if (correct) score++;
-
-        card.classList.add(correct ? 'correct' : 'incorrect');
-        feedbackEl.className = 'feedback-box show ' + (correct ? 'correct-feedback' : 'incorrect-feedback');
-        feedbackEl.innerHTML = `<strong>${correct ? '✅ Oikein!' : '❌ Väärin.'}</strong> Oikea arvio: <strong>${labels[src.correctAnswer]}</strong><br><br>${src.feedback}`;
-
         completed++;
+
+        const mini = document.createElement('div');
+        mini.className = 'mini-placed ' + (correct ? 'correct' : 'incorrect');
+        mini.innerHTML = `<strong>${correct ? '✅' : '❌'} ${src.title}</strong><br><span style="font-size:0.9em">${src.feedback}</span>`;
+        document.getElementById('placed-' + zone).appendChild(mini);
+        document.getElementById('empty-' + zone).style.display = 'none';
+
+        flashScore(correct);
         updateProgress();
-        if (completed === total) setTimeout(showSummary, 800);
+        if (completed === total) setTimeout(showSummary, 700);
+    }
+
+    function flashScore(correct) {
+        const el = document.getElementById('scoreFlash');
+        el.textContent = correct ? '+1 ✅' : '❌';
+        el.style.color = correct ? '#27ae60' : '#e74c3c';
+        el.style.opacity = '1';
+        el.style.transform = 'translate(-50%, -50%) scale(1.2)';
+        setTimeout(() => {
+            el.style.opacity = '0';
+            el.style.transform = 'translate(-50%, -80%) scale(0.8)';
+        }, 700);
     }
 
     function updateProgress() {
@@ -153,7 +354,7 @@
         </div>`;
     }
 
-    initExercise();
+    init();
     </script>
 </body>
 </html>

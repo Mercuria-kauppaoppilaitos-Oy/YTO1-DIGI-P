@@ -3,187 +3,327 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Harjoitus 3 – Valeuutisten tunnistaminen</title>
+    <title>Harjoitus 3 – Toimittajan pöytä</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        .article-frame {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 14px 0;
+            font-family: Georgia, serif;
+            position: relative;
+        }
+        .article-frame.locked { pointer-events: none; }
+        .article-frame .site-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 14px;
+            font-family: sans-serif;
+        }
+        .site-name { font-weight: 900; font-size: 1.15em; color: #111; }
+        .site-url  { font-size: 0.8em; color: #666; }
+        .article-date-author { font-size: 0.82em; color: #888; font-family: sans-serif; margin-bottom: 10px; }
+        .article-headline { font-size: 1.3em; font-weight: 900; color: #111; line-height: 1.35; margin-bottom: 10px; }
+        .article-lead { font-size: 0.97em; line-height: 1.7; color: #333; margin-bottom: 10px; }
+        /* Flaggable spans */
+        .flaggable {
+            cursor: pointer;
+            border-bottom: 2px dotted #bbb;
+            border-radius: 2px;
+            padding: 0 2px;
+            transition: all 0.15s;
+            position: relative;
+        }
+        .flaggable:hover { background: #fff3cd; border-color: #f39c12; }
+        .flaggable.flagged { background: #fff3cd; border-bottom: 2px solid #f39c12; }
+        .flaggable.revealed-bad  { background: #fadbd8; border-color: #e74c3c; color: #c0392b; font-weight: 700; }
+        .flaggable.revealed-good { background: #e8f5e9; border-color: #27ae60; border-style: solid; }
+        .flaggable.miss          { background: #fadbd8; border: 2px solid #e74c3c; animation: pulse 0.5s; }
+        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+        .flag-tooltip {
+            display: none;
+            position: absolute;
+            bottom: 115%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #333;
+            color: white;
+            font-size: 0.78em;
+            padding: 5px 9px;
+            border-radius: 5px;
+            white-space: nowrap;
+            z-index: 10;
+            pointer-events: none;
+            font-family: sans-serif;
+        }
+        .flaggable:hover .flag-tooltip { display: block; }
+        .flag-hint { font-size: 0.78em; color: #0891b2; font-style: italic; font-family: sans-serif; margin-bottom: 10px; }
+        .article-nav {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 14px 0 8px;
+            font-family: sans-serif;
+            font-size: 0.9em;
+            font-weight: 700;
+            color: #555;
+        }
+        .article-dot { width: 10px; height: 10px; border-radius: 50%; background: #ddd; cursor: pointer; }
+        .article-dot.active { background: #0891b2; }
+        .article-dot.done-ok   { background: #27ae60; }
+        .article-dot.done-miss { background: #e74c3c; }
+        .check-btn {
+            background: #0891b2; color: white; border: none;
+            border-radius: 8px; padding: 10px 20px;
+            font-size: 0.95em; font-weight: 700; cursor: pointer;
+            transition: all 0.2s; margin-top: 8px;
+        }
+        .check-btn:hover { background: #0e7490; transform: translateY(-1px); }
+        .check-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .result-row { display: flex; gap: 8px; margin: 4px 0; font-size: 0.88em; font-family: sans-serif; align-items: flex-start; }
+        .badge-hit   { background: #27ae60; color: white; padding: 2px 8px; border-radius: 4px; font-weight: 700; flex-shrink: 0; }
+        .badge-miss  { background: #e74c3c; color: white; padding: 2px 8px; border-radius: 4px; font-weight: 700; flex-shrink: 0; }
+        .badge-fp    { background: #f39c12; color: white; padding: 2px 8px; border-radius: 4px; font-weight: 700; flex-shrink: 0; }
+        .article-score { font-size: 1.15em; font-weight: 700; color: #0e7490; margin: 8px 0; font-family: sans-serif; }
+    </style>
 </head>
 <body>
     <a class="back-link" href="index.html">← Takaisin harjoituksiin</a>
     <div class="exercise-container">
         <div class="exercise-header">
-            <h1>📰 Harjoitus 3 – Valeuutisten tunnistaminen</h1>
-            <p>Onko uutinen aito vai vale? Merkitse jokainen uutinen ja katso selitys.</p>
+            <h1>📰 Harjoitus 3 – Toimittajan pöytä</h1>
+            <p>Lue artikkeli ja klikkaa epäilyttäviä kohtia tekstissä korostaaksesi ne. Sitten paina "Tarkista analyysi"!</p>
         </div>
 
         <div class="info-panel">
-            <h3>🚩 Valeuutisten varoitusmerkit</h3>
-            <ul>
-                <li>❌ Sensaatiohakuinen tai liioiteltu otsikko ("PALJASTUS!", "KAIKKI PETTÄÄ!")</li>
-                <li>❌ Ei tunnettua tai nimettyä julkaisijaa</li>
-                <li>❌ Epäselvä tai harhaanjohtava verkko-osoite (esim. yle-fi.net, hs-uutiset.com)</li>
-                <li>❌ Ei päivämäärää tai tekijää</li>
-                <li>❌ Väitteitä ilman lähteitä – "tutkimukset osoittavat" ilman viittausta</li>
-                <li>❌ Voimakkaita tunnelatauksisia sanoja herättämään tunteet</li>
-            </ul>
+            <h3>🚩 Etsi näitä varoitusmerkkejä</h3>
+            <p>Epäilyttävä otsikko · Tuntematon tai harhaanjohtava verkkotunnus · Nimettömät kirjoittajat · Väitteet ilman lähteitä · Sensaatiohakuinen kieli</p>
         </div>
 
         <div class="progress-container">
             <div class="progress-bar-track">
                 <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
             </div>
-            <div class="progress-text"><span id="progressCount">0</span> / 4 uutista arvioitu</div>
+            <div class="progress-text">Artikkeli <span id="progressCount">1</span> / 3</div>
         </div>
 
-        <div id="newsContainer"></div>
+        <div class="article-nav" id="articleNav"></div>
+        <div id="articleContainer"></div>
         <div id="summaryContainer"></div>
     </div>
 
     <script>
-    const news = [
+    const articles = [
         {
-            source: 'Yle Uutiset',
-            sourceUrl: 'yle.fi/uutiset',
-            date: '22.4.2026 klo 09:14',
-            author: 'Toimitus: Anna Mäkinen',
-            headline: 'Suomalaisten some-käyttö kasvaa edelleen – nuorten suosituimmat alustat vaihtelevat nopeasti',
-            lead: 'Tilastokeskuksen tuoreen tutkimuksen mukaan suomalaiset viettävät sosiaalisessa mediassa keskimäärin 2,1 tuntia päivässä. Nuorten suosituimpien alustojen lista on muuttunut viidessä vuodessa merkittävästi – Facebook on menettänyt suosiotaan alle 30-vuotiaiden keskuudessa.',
-            isFake: false,
-            flags: [
-                '✅ Tunnistettu julkaisija (Yle Uutiset) ja toimittaja (Anna Mäkinen)',
-                '✅ Nimetty lähde: Tilastokeskuksen tutkimus',
-                '✅ Otsikko on asiallinen ja vastaa artikkelin sisältöä',
-                '✅ Päivämäärä ja kellonaika selvät'
-            ]
-        },
-        {
-            source: 'PALJASTUS-UUTISET.com',
-            sourceUrl: 'paljastus-uutiset.com/tekoaly',
-            date: 'Ei päivämäärää',
-            author: 'Ei tekijää',
+            isFake: true,
+            siteName: 'PALJASTUS-UUTISET.com',
+            siteUrl: 'paljastus-uutiset.com',
+            date: null,
+            author: null,
             headline: '🔴 PALJASTUS: Tekoäly ottaa kaiken kontrollin – hallitukset vaiennettavat totuus!',
             lead: 'Salainen raportti todistaa, että tekoäly on jo "ottanut vallan" kaikissa länsimaissa. Tutkijat, jotka yrittivät paljastaa tämän, on hiljennetty. Jaa tämä ennen kuin se poistetaan! Lue myös: Kuinka suojata itsesi tekoälyvalvonnalta – KLIKKAA TÄSTÄ.',
-            isFake: true,
             flags: [
-                '⚠️ "PALJASTUS"-otsikko isolla – klassinen clickbait-malli',
-                '⚠️ Ei tekijää, ei päivämäärää, ei tunnettua julkaisijaa',
-                '⚠️ Epäilyttävä verkkotunnus (ei .fi tai tunnettu media)',
-                '⚠️ "Jaa ennen kuin poistetaan" – kiireellisyystaktiikka',
-                '⚠️ "Salainen raportti" ilman lähdettä tai viittausta'
+                { id: 'f0', selector: 'siteUrl', label: 'Verkkotunnus', suspicious: true,   tip: 'Klikkaa: onko tämä verkkotunnus tuttu?', reveal: 'Epäilyttävä verkkotunnus — ei .fi eikä tunnettu media. Kopioi nimeä jättäen .com pois.' },
+                { id: 'f1', selector: 'date',    label: 'Päivämäärä',  suspicious: true,   tip: 'Klikkaa: onko päivämäärä selvä?',         reveal: 'Artikkeleissa pitää aina olla julkaisupäivämäärä. Ilman sitä on mahdotonta arvioida ajantasaisuutta.' },
+                { id: 'f2', selector: 'author',  label: 'Kirjoittaja', suspicious: true,   tip: 'Klikkaa: kuka kirjoitti tämän?',           reveal: 'Tekijätön artikkeli — ei voi arvioida kuka on vastuussa sisällöstä. Luotettavissa medioissa tekijä aina mainitaan.' },
+                { id: 'f3', selector: 'headline',label: 'Otsikko',     suspicious: true,   tip: 'Klikkaa: mikä tunnelma otsikossa?',        reveal: 'ISOT KIRJAIMET ja "PALJASTUS" ovat klassisia clickbait-keinoja. Tarkoitus herättää tunteita, ei tiedottaa.' },
+                { id: 'f4', selector: 'lead1',   label: 'Väite',       suspicious: true,   tip: 'Klikkaa: onko tässä lähde?',               reveal: '"Salainen raportti" ilman lähdettä tai viittausta. Tyypillinen väite valeuutisissa.' },
+                { id: 'f5', selector: 'lead2',   label: 'Jakamiskehotus', suspicious: true, tip: 'Klikkaa: miksi tähän kiirehditetään?',    reveal: '"Jaa ennen kuin poistetaan" on manipulaatiotaktiikka. Luo keinotekoisesti kiireellisyyden tunnetta.' }
             ]
         },
         {
-            source: 'Helsingin Sanomat',
-            sourceUrl: 'hs.fi/kotimaa',
+            isFake: false,
+            siteName: 'Helsingin Sanomat',
+            siteUrl: 'hs.fi/kotimaa',
             date: '20.4.2026 klo 11:45',
             author: 'Janne Korhonen, HS',
             headline: 'Ammatillinen koulutus kasvattaa suosiotaan – hakijamäärä nousi 8 prosenttia',
             lead: 'Opetushallituksen tilastojen mukaan ammatilliseen koulutukseen haki tänä keväänä noin 8 prosenttia enemmän opiskelijoita kuin vuotta aiemmin. Kasvu näkyy erityisesti tekniikan ja liiketalouden aloilla. Rehtorit pitävät syinä parantunutta imagoa ja työelämäläheistä opetusta.',
-            isFake: false,
             flags: [
-                '✅ Tunnistettu julkaisija (HS) ja toimittaja (Janne Korhonen)',
-                '✅ Nimetty lähde: Opetushallituksen tilastot',
-                '✅ Konkreettiset luvut (8%) ja selitykset',
-                '✅ Asiallinen otsikko ilman tunnelatauksia'
+                { id: 'g0', selector: 'siteUrl',  label: 'Verkkotunnus', suspicious: false,  tip: 'Klikkaa: onko tämä tuttu verkkotunnus?',   reveal: 'hs.fi on Helsingin Sanomien virallinen verkkotunnus. Luotettava, tunnettu suomalainen media.' },
+                { id: 'g1', selector: 'date',     label: 'Päivämäärä',   suspicious: false,  tip: 'Klikkaa: onko päivämäärä selvä?',          reveal: 'Päivämäärä ja kellonaika on selkeästi merkitty. Tämä on luotettavuuden merkki.' },
+                { id: 'g2', selector: 'author',   label: 'Kirjoittaja',  suspicious: false,  tip: 'Klikkaa: kuka kirjoitti?',                 reveal: 'Nimetty toimittaja "Janne Korhonen, HS". Vastuullinen toimittaja taustalla — luotettavuusmerkki.' },
+                { id: 'g3', selector: 'headline', label: 'Otsikko',      suspicious: false,  tip: 'Klikkaa: millainen otsikko?',              reveal: 'Asiallinen otsikko ilman tunnelatauksia. Kertoo faktan (8%) ilman sensaatiohakuisuutta.' },
+                { id: 'g4', selector: 'lead1',    label: 'Lähde',        suspicious: false,  tip: 'Klikkaa: onko lähde mainittu?',            reveal: 'Opetushallituksen tilastot on nimetty lähteeksi. Tarkistettavissa oleva viranomaislähde — luotettavuusmerkki.' }
             ]
         },
         {
-            source: 'hs-uutiset24.net',
-            sourceUrl: 'hs-uutiset24.net/talous',
+            isFake: true,
+            siteName: 'hs-uutiset24.net',
+            siteUrl: 'hs-uutiset24.net/talous',
             date: '23.4.2026',
             author: 'hs-uutiset24 toimitus',
             headline: 'SHOKKITIETO: Pankit siirtyvät TÄYSIN tekoälyyn – pankkivirkailijat irtisanotaan KAIKKI tänä vuonna',
-            lead: 'Lähteidemme mukaan kolme suurinta suomalaisista pankkeista aikoo irtisanoa koko henkilöstönsä vuoden loppuun mennessä ja korvata heidät tekoälyllä. Asiaa ei ole vahvistettu virallisesti, mutta "sisäpiiri tietää". Pankit eivät kommentoi asiaa.',
-            isFake: true,
+            lead: 'Lähteidemme mukaan kolme suurinta suomalaista pankkia aikoo irtisanoa koko henkilöstönsä vuoden loppuun mennessä. Asiaa ei ole vahvistettu virallisesti, mutta "sisäpiiri tietää". Pankit eivät kommentoi asiaa.',
             flags: [
-                '⚠️ Verkkotunnus hs-uutiset24.net – jäljittelee HS:ää, mutta on eri sivusto',
-                '⚠️ ISOT KIRJAIMET otsikossa – tyypillinen manipulaatiotaktiikka',
-                '⚠️ "Lähteidemme mukaan" ja "sisäpiiri tietää" – epämääräiset lähteet',
-                '⚠️ "Asiaa ei ole vahvistettu virallisesti" – tieto on perusteetonta',
-                '⚠️ Väite on epärealistinen ja kohdistuu herättämään pelkoa'
+                { id: 'h0', selector: 'siteUrl',  label: 'Verkkotunnus', suspicious: true,  tip: 'Klikkaa: onko tämä tuttu osoite?',        reveal: 'hs-uutiset24.net jäljittelee HS:ää mutta on täysin eri sivusto! Tyypillinen tekniikka harhauttaa lukijaa luulemaan, että kyse on Helsingin Sanomista.' },
+                { id: 'h1', selector: 'headline', label: 'Otsikko',      suspicious: true,  tip: 'Klikkaa: mitä mieltä otsikosta?',         reveal: '"SHOKKITIETO" ja ISOT KIRJAIMET ovat manipulaatiotekniikkaa. Otsikko on tarkoitettu herättämään pelkoa.' },
+                { id: 'h2', selector: 'lead1',    label: 'Lähde',        suspicious: true,  tip: 'Klikkaa: mistä tieto on peräisin?',       reveal: '"Lähteidemme mukaan" ja "sisäpiiri tietää" ovat epämääräisiä ja tarkistamattomia lähteitä. Luotettava media nimeää lähteensä.' },
+                { id: 'h3', selector: 'lead2',    label: 'Vahvistus',    suspicious: true,  tip: 'Klikkaa: mikä on tässä ongelmana?',       reveal: '"Ei ole vahvistettu virallisesti" — toimittaja itse myöntää, että tieto on perusteeton. Silti julkaistaan! Luotettava media odottaa vahvistuksen.' },
+                { id: 'h4', selector: 'author',   label: 'Kirjoittaja',  suspicious: true,  tip: 'Klikkaa: kuka kirjoitti?',                reveal: '"hs-uutiset24 toimitus" on anonyymi — kukaan ei ota henkilökohtaista vastuuta sisällöstä. Luotettavissa medioissa toimittaja aina mainitaan.' }
             ]
         }
     ];
 
-    let completed = 0;
-    let score = 0;
-    const total = news.length;
+    let currentArticle = 0;
+    let totalScore = 0;
+    const total = articles.length;
+    let flagged = {};
 
-    function initExercise() {
-        const container = document.getElementById('newsContainer');
-        news.forEach((item, i) => container.appendChild(createNewsCard(item, i)));
+    function renderNav() {
+        const nav = document.getElementById('articleNav');
+        nav.innerHTML = 'Artikkeli: ' + articles.map((a,i) => {
+            let cls = 'article-dot';
+            if (i === currentArticle) cls += ' active';
+            return `<span class="${cls}" id="dot-${i}" title="Artikkeli ${i+1}"></span>`;
+        }).join('') + ` &nbsp; ${currentArticle+1} / ${total}`;
     }
 
-    function createNewsCard(item, idx) {
-        const card = document.createElement('div');
-        card.className = 'news-card';
-        card.id = 'ncard-' + idx;
+    function renderArticle() {
+        const art = articles[currentArticle];
+        flagged = {};
+        art.flags.forEach(f => { flagged[f.id] = false; });
 
-        card.innerHTML = `
-            <div class="news-source-bar">
-                <span>📢 <strong>${item.source}</strong> — ${item.sourceUrl}</span>
-                <span>🗓️ ${item.date}</span>
+        const buildFlaggable = (text, id, tip) =>
+            `<span class="flaggable" id="${id}" onclick="toggleFlag('${id}')" title="">${text}<span class="flag-tooltip">${tip}</span></span>`;
+
+        let siteUrlEl   = buildFlaggable(art.siteUrl,   art.flags.find(f=>f.selector==='siteUrl')?.id,   art.flags.find(f=>f.selector==='siteUrl')?.tip   || '');
+        let dateEl      = art.date   ? buildFlaggable(art.date,   art.flags.find(f=>f.selector==='date')?.id,   art.flags.find(f=>f.selector==='date')?.tip   || '') : buildFlaggable('Ei päivämäärää', art.flags.find(f=>f.selector==='date')?.id, art.flags.find(f=>f.selector==='date')?.tip || '');
+        let authorEl    = art.author ? buildFlaggable(art.author, art.flags.find(f=>f.selector==='author')?.id, art.flags.find(f=>f.selector==='author')?.tip || '') : buildFlaggable('Ei kirjoittajaa', art.flags.find(f=>f.selector==='author')?.id, art.flags.find(f=>f.selector==='author')?.tip || '');
+        let headlineEl  = buildFlaggable(art.headline,  art.flags.find(f=>f.selector==='headline')?.id,  art.flags.find(f=>f.selector==='headline')?.tip  || '');
+
+        // Split lead for multiple flaggable parts
+        let leadHTML = art.lead;
+        const leadFlags = art.flags.filter(f => f.selector === 'lead1' || f.selector === 'lead2');
+        if (leadFlags.length === 2) {
+            const mid = Math.floor(art.lead.length / 2);
+            const breakAt = art.lead.indexOf('. ', mid);
+            if (breakAt > 0) {
+                const p1 = art.lead.substring(0, breakAt + 1);
+                const p2 = art.lead.substring(breakAt + 2);
+                leadHTML = buildFlaggable(p1, leadFlags[0].id, leadFlags[0].tip) + ' ' +
+                           buildFlaggable(p2, leadFlags[1].id, leadFlags[1].tip);
+            }
+        } else if (leadFlags.length === 1) {
+            leadHTML = buildFlaggable(art.lead, leadFlags[0].id, leadFlags[0].tip);
+        }
+
+        document.getElementById('articleContainer').innerHTML = `
+            <p class="flag-hint">🖊️ Klikkaa epäilyttäviä kohtia korostaaksesi ne. Klikkaa uudelleen poistaaksesi korostuksen.</p>
+            <div class="article-frame" id="artFrame">
+                <div class="site-header">
+                    <div class="site-name">${art.siteName}</div>
+                    <div class="site-url">${siteUrlEl}</div>
+                </div>
+                <div class="article-date-author">${dateEl} &nbsp;·&nbsp; ${authorEl}</div>
+                <div class="article-headline">${headlineEl}</div>
+                <div class="article-lead">${leadHTML}</div>
             </div>
-            <div class="news-source-bar" style="margin-bottom:10px;">
-                <span>✍️ ${item.author}</span>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:10px 0;">
+                <button class="check-btn" id="checkBtn" onclick="checkArticle()">🔍 Tarkista analyysi</button>
+                <span style="font-size:0.88em;color:#888;font-style:italic;">Klikkaa ensin epäilyttäviä kohtia, sitten tarkista!</span>
             </div>
-            <div class="news-headline">${item.headline}</div>
-            <div class="news-lead">${item.lead}</div>
-            <div class="news-buttons" id="nbtns-${idx}">
-                <button class="btn-fake" onclick="answerNews(${idx}, true)">⚠️ Valeuutinen</button>
-                <button class="btn-real" onclick="answerNews(${idx}, false)">✅ Aito uutinen</button>
-            </div>
-            <div class="news-flags" id="nflags-${idx}">
-                <h4 id="nflagsTitle-${idx}"></h4>
-                <div id="nflagsList-${idx}"></div>
-            </div>
+            <div id="articleFeedback"></div>
         `;
-        return card;
     }
 
-    function answerNews(idx, guessedFake) {
-        const item = news[idx];
-        const card = document.getElementById('ncard-' + idx);
-        const btns = document.getElementById('nbtns-' + idx);
-        const flags = document.getElementById('nflags-' + idx);
-        const title = document.getElementById('nflagsTitle-' + idx);
-        const list  = document.getElementById('nflagsList-' + idx);
+    window.toggleFlag = function(id) {
+        if (!flagged.hasOwnProperty(id)) return;
+        flagged[id] = !flagged[id];
+        const el = document.getElementById(id);
+        if (el) el.classList.toggle('flagged', flagged[id]);
+    };
 
-        btns.querySelectorAll('button').forEach(b => b.disabled = true);
+    window.checkArticle = function() {
+        const art = articles[currentArticle];
+        document.getElementById('checkBtn').disabled = true;
+        document.getElementById('artFrame').classList.add('locked');
 
-        const correct = guessedFake === item.isFake;
-        if (correct) score++;
-        card.classList.add(correct ? 'correct' : 'incorrect');
+        let hits = 0, misses = 0, falsePositives = 0;
+        const resultsHTML = [];
 
-        title.textContent = item.isFake ? '🚩 Valeuutinen – varoitusmerkit:' : '✅ Aito uutinen – luotettavuustekijät:';
-        item.flags.forEach(f => {
-            const d = document.createElement('div');
-            d.className = 'flag-item';
-            d.textContent = f;
-            list.appendChild(d);
+        art.flags.forEach(f => {
+            const el = document.getElementById(f.id);
+            if (!el) return;
+            el.classList.remove('flagged');
+            if (f.suspicious) {
+                if (flagged[f.id]) {
+                    el.classList.add('revealed-bad');
+                    hits++;
+                    resultsHTML.push(`<div class="result-row"><span class="badge-hit">✅ Löysit</span> <span><strong>${f.label}:</strong> ${f.reveal}</span></div>`);
+                } else {
+                    el.classList.add('miss');
+                    misses++;
+                    resultsHTML.push(`<div class="result-row"><span class="badge-miss">❌ Missasi</span> <span><strong>${f.label}:</strong> ${f.reveal}</span></div>`);
+                }
+            } else {
+                if (flagged[f.id]) {
+                    el.classList.add('revealed-bad');
+                    falsePositives++;
+                    resultsHTML.push(`<div class="result-row"><span class="badge-fp">⚠️ Väärä</span> <span><strong>${f.label}:</strong> ${f.reveal}</span></div>`);
+                } else {
+                    el.classList.add('revealed-good');
+                }
+            }
         });
-        flags.className = 'news-flags show';
 
-        completed++;
+        const suspCount = art.flags.filter(f => f.suspicious).length;
+        if (hits === suspCount && falsePositives === 0) { totalScore++; }
+
+        const verdict = art.isFake ?
+            '<strong style="color:#e74c3c">⚠️ Tämä oli valeuutinen / epäluotettava artikkeli</strong>' :
+            '<strong style="color:#27ae60">✅ Tämä oli aito, luotettava artikkeli</strong>';
+
+        document.getElementById('articleFeedback').innerHTML = `
+            <div class="source-card" style="border-color:#0891b2;background:#e0f7fa">
+                <p class="article-score">${verdict}</p>
+                <p style="font-size:0.88em;color:#555;margin:0 0 10px">Löysit <strong>${hits}/${suspCount}</strong> varoitusmerkkiä${falsePositives > 0 ? `, virheellistä merkintää: ${falsePositives}` : ''}.</p>
+                ${resultsHTML.join('')}
+                <br>
+                ${currentArticle < total - 1
+                    ? `<button class="check-btn" onclick="nextArticle()">Seuraava artikkeli →</button>`
+                    : `<button class="check-btn" onclick="showFinalSummary()">Näytä tulokset →</button>`}
+            </div>`;
+    };
+
+    window.nextArticle = function() {
+        const dot = document.getElementById('dot-' + currentArticle);
+        if (dot) dot.className = 'article-dot done-ok';
+        currentArticle++;
         updateProgress();
-        if (completed === total) setTimeout(showSummary, 700);
-    }
+        renderNav();
+        renderArticle();
+    };
 
     function updateProgress() {
-        document.getElementById('progressFill').style.width = Math.round(completed / total * 100) + '%';
-        document.getElementById('progressCount').textContent = completed;
+        document.getElementById('progressFill').style.width = Math.round(currentArticle / total * 100) + '%';
+        document.getElementById('progressCount').textContent = currentArticle + 1;
     }
 
-    function showSummary() {
-        const pct = Math.round(score / total * 100);
-        const msg = pct === 100 ? '🎉 Erinomainen! Tunnistat valeuutiset luotettavasti.' : pct >= 50 ? '👍 Hyvä yritys! Muista tarkistaa aina lähde ja julkaisija.' : '📚 Valeuutiset voivat olla vakuuttavia – harjoittele lisää!';
+    window.showFinalSummary = function() {
+        const dot = document.getElementById('dot-' + currentArticle);
+        if (dot) dot.className = 'article-dot done-ok';
+        document.getElementById('progressFill').style.width = '100%';
+        document.getElementById('progressCount').textContent = total;
+        document.getElementById('articleContainer').innerHTML = '';
+        const pct = Math.round(totalScore / total * 100);
+        const msg = pct === 100 ? '🎉 Erinomainen! Tunnistat valeuutiset luotettavasti.' : pct >= 66 ? '👍 Hyvä yritys! Muista tarkistaa aina lähde, kirjoittaja ja verkkotunnus.' : '📚 Valeuutiset voivat olla vakuuttavia — harjoittele lisää!';
         document.getElementById('summaryContainer').innerHTML = `<div class="summary-panel">
             <h3>📊 Yhteenveto</h3>
-            <p><strong>Pisteet: ${score}/${total}</strong> (${pct}%)</p>
+            <p><strong>Artikkeleita läpikäyty: ${total}/${total}</strong></p>
+            <p><strong>Pisteet: ${totalScore}/${total}</strong> (${pct}%)</p>
             <p>${msg}</p>
             <button class="btn btn-primary" onclick="location.reload()" style="margin-top:14px;padding:10px 22px;">🔄 Kokeile uudelleen</button>
         </div>`;
-    }
+    };
 
-    initExercise();
+    renderNav();
+    renderArticle();
     </script>
 </body>
 </html>
