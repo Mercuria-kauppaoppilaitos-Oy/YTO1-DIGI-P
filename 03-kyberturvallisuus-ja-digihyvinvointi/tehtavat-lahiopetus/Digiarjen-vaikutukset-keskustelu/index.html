@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Digiarjen vaikutukset</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="app-shell">
+    <header class="hero panel">
+      <h1>Digiarjen vaikutukset</h1>
+
+      <div class="hero-tools">
+        <button id="randomThemeBtn" class="btn btn-primary" type="button">Arvo uusi teema</button>
+      </div>
+    </header>
+
+    <section class="theme-layout">
+      <article class="panel theme-panel">
+        <div class="theme-meta">
+          <span id="themeCategory" class="meta-pill"></span>
+          <span id="themePerspective" class="meta-pill meta-pill-soft"></span>
+        </div>
+
+        <p id="themeId" class="theme-id"></p>
+        <h2 id="themeTitle" class="theme-title"></h2>
+
+        <div class="theme-block">
+          <p class="section-label">Tilanne</p>
+          <p id="themeSituation" class="theme-text"></p>
+        </div>
+
+        <div class="theme-block">
+          <p class="section-label">Keskustelkaa ryhmässä</p>
+          <ul class="goal-list">
+            <li>Tunnistakaa teemaan liittyvät hyödyt ja haitat.</li>
+            <li>Pohtikaa asiaa sekä yksilön että yhteiskunnan näkökulmasta.</li>
+            <li>Laatikaa viisi käytännön suositusta.</li>
+            <li>Valitkaa yksi ehdotus, jolla olisi suurin vaikutus arjessa.</li>
+          </ul>
+        </div>
+
+        <div class="theme-block output-block">
+          <p class="section-label">Kirjatkaa muistiin</p>
+          <ul id="themeOutput" class="goal-list"></ul>
+        </div>
+      </article>
+
+      <aside class="panel prompts-panel">
+        <h3>Purkukysymykset</h3>
+        <ol id="discussionPrompts" class="prompt-list"></ol>
+      </aside>
+    </section>
+  </main>
+
+  <div class="floating-actions">
+    <button
+      id="teacherGuideToggle"
+      class="teacher-guide-toggle"
+      type="button"
+      aria-haspopup="dialog"
+      aria-controls="teacherGuide"
+      aria-expanded="false"
+    >
+      <span class="menu-toggle-icon">i</span>
+      <span>Opettajan ohje</span>
+    </button>
+
+    <button
+      id="themeMenuToggle"
+      class="theme-menu-toggle"
+      type="button"
+      aria-haspopup="dialog"
+      aria-controls="themeMenu"
+      aria-expanded="false"
+    >
+      <span class="menu-toggle-icon">≡</span>
+      <span>Valitse teema</span>
+    </button>
+  </div>
+
+  <div id="menuScrim" class="menu-scrim" hidden></div>
+
+  <aside id="teacherGuide" class="teacher-guide" hidden aria-label="Opettajan ohje">
+    <div class="dialog-header">
+      <div>
+        <p class="eyebrow">Opettajan ohje</p>
+        <h2>Vedä keskustelu näin</h2>
+      </div>
+
+      <button id="closeGuideBtn" class="btn btn-ghost" type="button">Sulje</button>
+    </div>
+
+    <div class="guide-grid">
+      <article class="guide-card guide-card-wide">
+        <p class="section-label">45 min tuntirunko</p>
+        <ol class="guide-list ordered">
+          <li>Jaa opiskelijat 3–4 hengen ryhmiin.</li>
+          <li>Arvo tai valitse teema.</li>
+          <li>Anna ryhmille 20–25 minuuttia aikaa keskustella ja kirjata vastaukset.</li>
+          <li>Pyydä ryhmää kokoamaan viisi käytännön suositusta.</li>
+          <li>Pyydä ryhmää valitsemaan yksi tärkein ehdotus ja kertomaan se muulle luokalle.</li>
+          <li>Pitäkää lopuksi yhteinen purku ja vertailkaa ehdotuksia.</li>
+        </ol>
+      </article>
+
+      <article class="guide-card">
+        <p class="section-label">Kysy purussa</p>
+        <ul class="guide-list">
+          <li>Miten teema vaikuttaa arkeen juuri nyt?</li>
+          <li>Mitä hyötyjä ja haittoja ryhmä tunnisti?</li>
+          <li>Ketkä kärsivät tai hyötyvät eniten?</li>
+          <li>Mikä ehdotuksista olisi realistisin toteuttaa?</li>
+        </ul>
+      </article>
+
+      <article class="guide-card">
+        <p class="section-label">Painota näitä</p>
+        <ul class="guide-list">
+          <li>Pelkkä oma kokemus ei riitä, tarvitaan myös yhteiskunnallinen näkökulma.</li>
+          <li>Kaikkea digikäyttöä ei tarvitse kuvata vain ongelmana.</li>
+          <li>Ratkaisujen pitää olla konkreettisia, ei vain yleisiä toiveita.</li>
+          <li>Myös koulun, työyhteisön ja palvelujen vastuu kuuluu keskusteluun.</li>
+        </ul>
+      </article>
+    </div>
+  </aside>
+
+  <aside id="themeMenu" class="theme-menu" hidden aria-label="Teemavalikko">
+    <div class="dialog-header">
+      <div>
+        <p class="eyebrow">Teemavalikko</p>
+        <h2>Näytä haluttu teema</h2>
+      </div>
+
+      <button id="closeMenuBtn" class="btn btn-ghost" type="button">Sulje</button>
+    </div>
+
+    <p class="theme-menu-copy">Voit arpoa teeman tai valita suoraan haluamasi keskusteluaiheen.</p>
+
+    <div id="themeMenuList" class="theme-menu-list"></div>
+  </aside>
+
+  <script src="script.js"></script>
+</body>
+</html>
