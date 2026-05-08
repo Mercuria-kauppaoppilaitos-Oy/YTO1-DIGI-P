@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kyberturvan casekeskustelu</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="app-shell">
+    <header class="hero panel">
+      <h1>Kyberturvallisuus ja toiminta uhkatilanteissa</h1>
+
+      <div class="hero-tools">
+        <button id="randomCaseBtn" class="btn btn-primary" type="button">Arvo uusi case</button>
+        <button id="resetTimerBtn" class="btn btn-secondary" type="button">Aloita 2 min uudelleen</button>
+
+        <div class="timer-card" aria-live="polite">
+          <span class="timer-label">Mallivastaus avautuu</span>
+          <strong id="timerValue" class="timer-value">02:00</strong>
+        </div>
+      </div>
+    </header>
+
+    <section class="case-layout">
+      <article class="panel case-panel">
+        <div class="case-meta">
+          <span id="caseCategory" class="meta-pill"></span>
+          <span id="caseLevel" class="meta-pill meta-pill-soft"></span>
+        </div>
+
+        <p id="caseId" class="case-id"></p>
+        <h2 id="caseTitle" class="case-title"></h2>
+
+        <div class="case-block">
+          <p class="section-label">Tilanne</p>
+          <p id="caseSituation" class="case-text"></p>
+        </div>
+
+        <div class="case-block">
+          <p class="section-label">Ryhmän tavoite</p>
+          <ul class="goal-list">
+            <li>Tunnistakaa, mikä uhka tai riski tilanteessa on.</li>
+            <li>Sopikaa kolme ensimmäistä turvallista toimenpidettä.</li>
+            <li>Päättäkää, mitä tässä tilanteessa ei pidä tehdä.</li>
+            <li>Keksikää yksi keino, jolla vastaava tilanne voidaan ehkäistä etukäteen.</li>
+          </ul>
+        </div>
+      </article>
+
+      <aside class="panel discussion-panel">
+        <h3>Keskustelkaa näistä</h3>
+        <ol id="discussionPrompts" class="prompt-list"></ol>
+      </aside>
+    </section>
+
+    <section class="panel reveal-panel">
+      <p id="revealStatus" class="reveal-status">Mallivastaus avautuu 2:00 kuluttua.</p>
+
+      <button id="revealBtn" class="btn btn-primary" type="button" disabled>Avautuu 02:00</button>
+    </section>
+
+    <section id="answerPanel" class="panel answer-panel" hidden>
+      <div class="answer-header">
+        <div>
+          <p class="eyebrow">Turvallinen toimintamalli</p>
+          <h3 id="answerHeading">Mitä tässä casessa pitää huomioida?</h3>
+        </div>
+
+        <button id="hideAnswerBtn" class="btn btn-ghost" type="button">Piilota vastaus</button>
+      </div>
+
+      <div class="answer-grid">
+        <article class="answer-card answer-card-wide">
+          <p class="section-label">Mikä tässä on olennaista?</p>
+          <p id="riskSummary" class="answer-copy"></p>
+        </article>
+
+        <article class="answer-card">
+          <p class="section-label">Toimi heti</p>
+          <ul id="actNowList" class="answer-list"></ul>
+        </article>
+
+        <article class="answer-card">
+          <p class="section-label">Vältä tätä</p>
+          <ul id="avoidList" class="answer-list"></ul>
+        </article>
+
+        <article class="answer-card answer-card-wide">
+          <p class="section-label">Ennaltaehkäisy</p>
+          <ul id="preventList" class="answer-list"></ul>
+        </article>
+      </div>
+
+      <p id="teacherNote" class="teacher-note"></p>
+    </section>
+  </main>
+
+  <div class="floating-actions">
+    <button
+      id="teacherGuideToggle"
+      class="teacher-guide-toggle"
+      type="button"
+      aria-haspopup="dialog"
+      aria-controls="teacherGuide"
+      aria-expanded="false"
+    >
+      <span class="menu-toggle-icon">i</span>
+      <span>Opettajan ohje</span>
+    </button>
+
+    <button
+      id="caseMenuToggle"
+      class="case-menu-toggle"
+      type="button"
+      aria-haspopup="dialog"
+      aria-controls="caseMenu"
+      aria-expanded="false"
+    >
+      <span class="menu-toggle-icon">≡</span>
+      <span>Valitse case</span>
+    </button>
+  </div>
+
+  <div id="menuScrim" class="menu-scrim" hidden></div>
+
+  <aside id="teacherGuide" class="teacher-guide" hidden aria-label="Opettajan ohje">
+    <div class="case-menu-header">
+      <div>
+        <p class="eyebrow">Opettajan ohje</p>
+        <h2>Vedä keskustelu näin</h2>
+      </div>
+
+      <button id="closeGuideBtn" class="btn btn-ghost" type="button">Sulje</button>
+    </div>
+
+    <div class="guide-grid">
+      <article class="guide-card guide-card-wide">
+        <p class="section-label">45 min tuntirunko</p>
+        <ol class="guide-list ordered">
+          <li>Jaa opiskelijat 3–4 hengen ryhmiin.</li>
+          <li>Arvo tai valitse case.</li>
+          <li>Anna 5 min keskustelua ilman mallivastausta.</li>
+          <li>Pyydä ryhmää kirjaamaan uhka, 3 ensimmäistä toimenpidettä, vältettävä virhe ja ennaltaehkäisykeino.</li>
+          <li>Avaa mallivastaus ja vertailkaa ratkaisuja.</li>
+          <li>Pitäkää lopuksi lyhyt yhteinen purku.</li>
+        </ol>
+      </article>
+
+      <article class="guide-card">
+        <p class="section-label">Kysy purussa</p>
+        <ul class="guide-list">
+          <li>Mistä tunnistitte uhan?</li>
+          <li>Mikä oli tärkein ensimmäinen toimenpide?</li>
+          <li>Mitä tässä ei pidä tehdä?</li>
+          <li>Kenelle tilanteesta ilmoitetaan?</li>
+        </ul>
+      </article>
+
+      <article class="guide-card">
+        <p class="section-label">Arvioinnissa</p>
+        <ul class="guide-list">
+          <li>Tunnistaako opiskelija uhkan oikein?</li>
+          <li>Osaako hän nimetä turvalliset ensitoimet?</li>
+          <li>Tunnistaako hän vaarallisen virheratkaisun?</li>
+          <li>Osaako hän ehdottaa ennaltaehkäisyä?</li>
+        </ul>
+      </article>
+    </div>
+  </aside>
+
+  <aside id="caseMenu" class="case-menu" hidden aria-label="Case-valikko">
+    <div class="case-menu-header">
+      <div>
+        <p class="eyebrow">Case-valikko</p>
+        <h2>Näytä haluttu tilanne</h2>
+      </div>
+
+      <button id="closeMenuBtn" class="btn btn-ghost" type="button">Sulje</button>
+    </div>
+
+    <p class="case-menu-copy">Kun valitset uuden casen, ajastin alkaa alusta.</p>
+
+    <div id="caseMenuList" class="case-menu-list"></div>
+  </aside>
+
+  <script src="script.js"></script>
+</body>
+</html>

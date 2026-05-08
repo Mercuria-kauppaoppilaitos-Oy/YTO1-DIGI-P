@@ -4,11 +4,8 @@ Tervetuloa kurssille Toiminta digitaalisessa ympäristössä!
 
 Tässä aloitusosiossa tutustut kurssiin: sen tavoitteisiin, rakenteeseen ja arviointiin. Täältä löydät myös tukipalvelut koko kurssin ajaksi.
 
-Aloita katsomalla tervetuloa-video, jossa käydään läpi kurssin rakenne ja etenemistapa. Tutustu sen jälkeen tavoitteisiin ja arviointikriteereihin. Täytä myös osaamisen kartoituskysely — se auttaa opettajaa tutustumaan lähtötasoosi eikä vaikuta arvosanaasi.
+Aloita katsomalla tervetuloa-video, jossa käydään läpi kurssin rakenne ja etenemistapa. Tutustu sen jälkeen tavoitteisiin ja arviointikriteereihin. 
 
-Tämä osio ei sisällä arvioitavia tehtäviä.
-
-**Arvioitu aika:** noin 30–60 minuuttia
 
 ---
 

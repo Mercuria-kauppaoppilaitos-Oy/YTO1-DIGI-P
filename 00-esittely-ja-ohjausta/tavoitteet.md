@@ -8,7 +8,8 @@ Opiskelija tietää kurssin osaamistavoitteet selkokielisinä ja ymmärtää, mi
 
 ## Sisältö
 Osaamistavoitteet (VVTD26, OPH-7840-2025) selkokielellä:
-
+Osaamistavoitteet:
+Digitaalisten laitteiden ja sovellusten valinta sekä vastuullinen käyttö
 1. Suojaat henkilökohtaisia tietojasi ja yksityisyyttäsi
 2. Tunnistat kyber- ja tietoturvauhkia
 3. Osaat toimia oikein kyber- ja tietoturvauhkatilanteissa

@@ -62,6 +62,8 @@ Materiaalit-kansion tiedostot (tietosuoja-ja-yksityisyys.md, kyberturvallisuus-u
 
 Interaktiivinen tietoturvaharjoitus -idea (Taisto-harjoitusten tapaan) on dokumentoitu tiedostossa materiaalit/Interaktiivinen tietoturvaharjoitus.md.
 
+Lisäksi osioon on tehty erillinen **Kyberturvan casekeskustelu** -HTML-sivu opettajavetoista ryhmä- ja luokkakeskustelua varten. Se ei ole pisteytettävä harjoitus vaan tuntityöskentelyn keskustelutyökalu: sivu arpoo casen, näyttää ohjaavat kysymykset ja avaa turvallisen toimintamallin vasta ajastimen jälkeen.
+
 ### Tehtävätiedostot
 
 - Lähiopetuksen tehtävät: tehtavat-lahiopetus/ (3 tiedostoa)
