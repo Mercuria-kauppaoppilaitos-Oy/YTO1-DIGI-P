@@ -9,10 +9,9 @@
 > **Kirjan rakenne (eKampus-kirjan luvut ja aliluvut)**
 >
 > 1. Tiedostonhallinta
->    - 1.1 Miksi tiedostonhallinta on tärkeää?
->    - 1.2 Kansiorakenteet
->    - 1.3 Tiedostojen nimeämiskäytännöt
->    - 1.4 Tiedostomuodot
+>    - 1.1 Tiedostonhallinnan perusteet ja kansiorakenteet
+>    - 1.2 Tiedostojen nimeämiskäytännöt
+>    - 1.3 Tiedostomuodot
 > 2. Pilvipalvelut ja tiedostojen jakaminen
 >    - 2.1 OneDrive — peruskäyttö
 >    - 2.2 Tiedostojen ja kansioiden jakaminen
@@ -37,8 +36,7 @@
 *Tässä luvussa syvennytään digitaalisen työn perusvalmiuksiin: oman tietokonetyöskentelyn hallintaan ja loogiseen organisointiin. Johdonmukainen tiedostonhallinta säästää aikaa, vähentää virheitä ja on ehdoton edellytys sujuvalle tiimityölle liike-elämässä. Opit luomaan selkeitä kansiorakenteita, nimeämään tiedostot ammattimaisesti sekä ymmärtämään eri tiedostomuotojen käyttötarkoitukset.*
 
 **Luvun sisältö:**
-- Miksi tiedostonhallinta on tärkeää?
-- Kansiorakenteet
+- Tiedostonhallinnan perusteet ja kansiorakenteet
 - Tiedostojen nimeämiskäytännöt
 - Tiedostomuodot
 
@@ -58,7 +56,7 @@ Digitaalisessa työssä ei riitä, että osaa käyttää sovelluksia. Pitää os
 
 ---
 
-### 1.1 Miksi tiedostonhallinta on tärkeää?
+### 1.1 Tiedostonhallinnan perusteet ja kansiorakenteet
 
 Tiedostonhallinta tarkoittaa tapaa, jolla tallennat, nimeät ja järjestät digitaaliset tiedostosi. Se saattaa tuntua arkiselta asialta, mutta käytännössä huono tiedostonhallinta aiheuttaa merkittäviä ongelmia niin opiskelussa kuin työelämässäkin.
 
@@ -70,7 +68,9 @@ Tiedostonhallinta tarkoittaa tapaa, jolla tallennat, nimeät ja järjestät digi
 - Muille lähetetään väärä tai vanhentunut versio
 - Tietokoneen vaihtuessa tiedostot eivät siirry mukana, koska ne on tallennettu paikallisesti ilman varmuuskopiointia
 
-Nämä tilanteet ovat erittäin yleisiä — ja täysin vältettävissä, kun tiedostonhallinnasta tekee tavan.
+Nämä tilanteet ovat erittäin yleisiä — niiltä voi välttyä, kun tiedostonhallinnasta tulee rutiini.
+
+<br>
 
 **Tiedostonhallinta työelämässä**
 
@@ -78,11 +78,13 @@ Liiketoiminnan arjessa käsitellään jatkuvasti tarjouksia, sopimuksia, raportt
 
 Hyvä tiedostonhallinta ei vaadi erityistä teknistä osaamista. Se vaatii johdonmukaisia tapoja, joita noudatetaan joka kerta.
 
----
+<br>
 
-### 1.2 Kansiorakenteet
+**Kansiorakenteet**
 
 Kansiorakenne on tapa järjestää tiedostot hierarkkisesti — kuten fyysisen arkistokaapin kansiomappi, mutta digitaalisessa muodossa.
+
+<br>
 
 **Hyvän kansiorakenteen periaatteet**
 
@@ -91,6 +93,8 @@ Kansiorakenne on tapa järjestää tiedostot hierarkkisesti — kuten fyysisen a
 3. **Johdonmukaisuus** — Käytä samaa logiikkaa joka paikassa
 
 > 🖼️ **[TÄHÄN KUVA: Windowsin Resurssienhallinta tai Macin Finder, jossa näkyy havainnollistava kansiorakenne ja "Uusi kansio" -painike korostettuna]**
+
+<br>
 
 **Esimerkki: opiskelijan kansiorakenne**
 
@@ -104,6 +108,8 @@ OneDrive
     ├── Muut-kurssit
     └── Itsenäinen-suorittaminen
 ```
+
+<br>
 
 **Esimerkki: yrityksen kansiorakenne**
 
@@ -123,17 +129,22 @@ Yritys Oy – Jaettu asiakirjahakemisto
     └── Henkilöstö
 ```
 
+<br>
+
 **Käytännön vinkit**
 
-- Luo kansiorakenne ennen kuin alat tallentaa tiedostoja — rakenteen muuttaminen jälkikäteen on työläämpää
-- Vältä "Sekalaista"- tai "Muuta"-kansioita: ne täyttyvät nopeasti ja muuttuvat kaaokseksi
-- Kun projekti päättyy, siirrä sen kansio arkistoon (esim. `_Arkisto`-kansioon) — alkuun lisätty alaviiva pitää sen aakkosissa alimpana
+- Luo kansiorakenne ennen kuin alat tallentaa tiedostoja — rakenteen muuttaminen jälkikäteen on työläämpää.
+- Vältä "Sekalaista"- tai "Muuta"-kansioita: ne täyttyvät nopeasti ja muuttuvat kaaokseksi.
+- Pidä työtila siistinä siirtämällä päättyneet projektit erilliseen arkistokansioon. Nimeämällä kansion esimerkiksi `Z_Arkisto` tai `Ö_Arkisto`, se putoaa aakkosjärjestyksessä kätevästi listan hännille pois aktiivisten töiden tieltä.
+- Voit ohjailla kansioiden järjestystä myös toiseen suuntaan: lisäämällä nimen alkuun numeron tai erikoismerkin (esim. `01_Tärkeät` tai `_Työn alla`), saat tärkeimmät kansiot pysymään aina ylimpänä.
 
 ---
 
-### 1.3 Tiedostojen nimeämiskäytännöt
+### 1.2 Tiedostojen nimeämiskäytännöt
 
 Tiedoston nimi on sen tärkein hakutunniste. Hyvä nimi kertoo heti, mitä tiedosto sisältää, kenelle se on tarkoitettu ja milloin se on tehty — ilman, että tiedostoa tarvitsee avata.
+
+<br>
 
 **Selkeän nimen elementit**
 
@@ -147,17 +158,23 @@ Tiedoston nimi on sen tärkein hakutunniste. Hyvä nimi kertoo heti, mitä tiedo
 **Hyvä nimi:** `2026-04-15_myyntiraportti_v2.xlsx`  
 **Huono nimi:** `Raportti uusin TÄMÄ.xlsx`
 
+<br>
+
 **Miksi päivämäärä muodossa VVVV-KK-PP?**
 
 Kun päivämäärä kirjoitetaan vuosi edellä, tiedostot järjestyvät automaattisesti aikajärjestykseen aakkosjärjestystä käytettäessä. Muoto `15.4.2026` tai `15-04-2026` ei toimi yhtä luotettavasti.
 
-**Merkit, joita EI käytetä tiedostonimissä**
+<br>
 
-Vältä seuraavia merkkejä, sillä ne voivat aiheuttaa ongelmia erityisesti verkkoyhteyksien ja eri käyttöjärjestelmien välillä:
+**Erikoismerkit, välilyönnit ja ääkköset**
 
-- Välilyönnit (käytä sen sijaan yhdysviivaa `-` tai alaviivaa `_`)
-- Ä, Ö, Å (erityisesti tiedostoissa, jotka siirtyvät eri järjestelmiin)
-- Erikoismerkit: `/ \ : * ? " < > |`
+Nykyaikaiset tietokoneet ja pilvipalvelut ymmärtävät välilyöntejä ja ääkkösiä (ä, ö, å) yleensä täysin ongelmitta. Niiden käytössä on kuitenkin hyvä noudattaa harkintaa:
+
+- **Ääkköset ja välilyönnit:** Vältä näitä, jos tiedosto ladataan verkkosivulle, siirretään toiseen järjestelmään tai lähetetään sähköpostin liitteenä organisaation ulkopuolelle (erityisesti kansainvälisille vastaanottajille), sillä ne voivat toisinaan rikkoutua. Välilyönnin voi korvata yhdysviivalla (`-`) tai alaviivalla (`_`).
+- **Emojit:** Vaikka emojit teknisesti usein toimivat tiedostonimissä, ne eivät kuulu ammattimaiseen työkäyttöön.
+- **Kielletyt merkit:** Käyttöjärjestelmät estävät automaattisesti seuraavien erikoismerkkien käytön: `/ \ : * ? " < > |`
+
+<br>
 
 **Versionhallinta nimeämisellä**
 
@@ -166,17 +183,22 @@ Kun tiedostosta syntyy useita versioita, merkitse versio nimeen:
 
 Näin vältyt tilanteelta, jossa on useita tiedostoja nimillä "tarjous lopullinen", "tarjous LOPULLINEN2" tai "tarjous TÄMÄ ON SE".
 
+<br>
+
 **Tietoturvavaroitus: Tuntemattomat tiedostot**
 
 Ole varovainen avatessasi sähköpostiliitteitä tai netistä ladattuja tiedostoja. Erityisen riskialttiita tai haitallisia voivat olla:
-- `.exe`, `.bat`, `.cmd` ja `.scr` (Suoritettavia ohjelmia tai skriptejä, jotka voivat käynnistää viruksen)
+- `.exe`, `.bat`, `.cmd` ja `.scr` (Windowsin suoritettavia ohjelmia tai skriptejä)
+- `.sh` ja `.command` (Macin ja Linuxin suoritettavia skriptejä)
 - `.xlsm` tai `.docm` (Makroja sisältävät Office-tiedostot. Salli makrot vain täysin luotettavista lähteistä)
 
 ---
 
-### 1.4 Tiedostomuodot
+### 1.3 Tiedostomuodot
 
 Tiedostomuoto määrittää, miten tiedoston sisältö on tallennettu. Tiedostomuodon tunnistaa tiedostopäätteestä — nimessä pisteen jälkeen tulevasta osasta.
+
+<br>
 
 **Yleisimmät tiedostomuodot liiketoiminnassa**
 
@@ -190,6 +212,8 @@ Tiedostomuoto määrittää, miten tiedoston sisältö on tallennettu. Tiedostom
 | `.mp4` | Videotoistin | Videot |
 | `.zip` | Pakkausohjelma | Useamman tiedoston pakkaaminen yhdeksi |
 
+<br>
+
 **Muita yleisiä tiedostomuotoja, joihin saatat törmätä:**
 
 | Pääte | Mitä nämä ovat? | Millä aukeaa? |
@@ -199,6 +223,8 @@ Tiedostomuoto määrittää, miten tiedoston sisältö on tallennettu. Tiedostom
 | `.psd` | Kuvankäsittelyn työtiedosto | Adobe Photoshop |
 | `.heic` / `.mov` | Applen laitteiden (esim. iPhone) kuva/video | Kuvat- tai videotoistimet |
 | `.odt` / `.ods` | Avoimen lähdekoodin asiakirja/taulukko | LibreOffice, OpenOffice (aukeaa myös Word/Excel) |
+
+<br>
 
 **Milloin käyttää PDF:ää?**
 
@@ -224,7 +250,7 @@ Pidä alkuperäinen `.docx` tai `.xlsx` tallessa muokkaamista varten — PDF ei 
 
 ### 2.1 OneDrive — peruskäyttö
 
-OneDrive on Microsoftin pilvipalvelu, joka on osa Microsoft 365 -pakettia. Se toimii sekä verkkoselaimen kautta (onedrive.com) että tietokoneelle asennettavana ohjelmana, joka synkronoi tiedostot automaattisesti. 
+OneDrive on Microsoftin pilvipalvelu, joka on osa Microsoft 365 -pakettia. Se toimii sekä verkkoselaimen kautta (onedrive.com tai microsoft365.com kautta) että tietokoneelle asennettavana ohjelmana, joka synkronoi tiedostot automaattisesti. 
 
 > 💡 **Huomio:** Liike-elämässä on laajalti käytössä myös toinen suuri pilvipalvelu: **Google Workspace (Google Drive)**. Se toimii täysin samalla periaatteella kuin OneDrive (sisältäen omat ohjelmansa Docs, Sheets ja Slides). Jos opit käyttämään OneDrivea, osaat käyttää myös Google Drivea.
 
@@ -237,7 +263,7 @@ OneDrive on Microsoftin pilvipalvelu, joka on osa Microsoft 365 -pakettia. Se to
 
 **OneDriven peruskäyttö**
 
-1. **Kirjautuminen:** Käytä oppilaitoksen Microsoft 365 -tunnuksia (etunimi.sukunimi@mercuria.fi)
+1. **Kirjautuminen:** Käytä oppilaitoksen Microsoft 365 -tunnuksia (etunimi.sukunimi@student.mercuria.fi)
 2. **Tiedoston tallentaminen:** Tallenna Word, Excel ja PowerPoint -tiedostot suoraan OneDriveen (Tiedosto → Tallenna → OneDrive)
 3. **Synkronointi:** Kun OneDrive-ohjelma on asennettu tietokoneelle, OneDrive-kansio näkyy Resurssienhallinnassa normaalina kansiona. Muutokset synkronoituvat automaattisesti pilveen.
 
@@ -263,14 +289,14 @@ OneDrivessa voit jakaa tiedostoja ja kansioita muille joko linkin kautta tai kut
 1. Napsauta tiedostoa tai kansiota OneDrivessa hiiren oikealla painikkeella
 2. Valitse **Jaa** tai **Kopioi linkki**
 3. Valitse käyttöoikeus:
-   - **Katselu:** vastaanottaja voi lukea tiedoston, mutta ei muokata
-   - **Muokkaus:** vastaanottaja voi muokata tiedostoa
+   - **Voi tarkastella:** vastaanottaja voi lukea tiedoston, mutta ei muokata
+   - **Voi muokata:** vastaanottaja voi muokata tiedostoa
 
 **Käyttöoikeustasot**
 
 | Oikeus | Käyttötilanne |
 |---|---|
-| Katselu | Jaat valmiin raportin tai esityksen |
+| Tarkastelu / Katselu | Jaat valmiin raportin tai esityksen |
 | Muokkaus | Teette ryhmätyötä tai kolleega täydentää tiedostoa |
 
 **Jakaminen tietylle henkilölle**
@@ -279,7 +305,10 @@ Jos haluat jakaa vain tietylle henkilölle, kirjoita heidän sähköpostiosoitte
 
 **Jaon peruminen**
 
-- Avaa tiedoston tai kansion tiedot → Hallitse käyttöoikeuksia → Poista käyttäjä tai poista linkki käytöstä
+- Avaa tiedoston tai kansion tiedot 
+→ Käyttöoikeuksien hallinta (tai sovelluksessa Jaa-napista: Hallinnoi käyttöoikeutta...)
+→ Poista käyttäjä tai poista linkki käytöstä
+
 
 **Tietoturva jakamisessa**
 
@@ -300,7 +329,7 @@ Yhteismuokkaus (co-authoring) tarkoittaa, että kaksi tai useampi henkilö voi m
 2. Tiedosto on jaettu muille muokkausoikeudella
 3. Kaikki avaavat tiedoston — muutokset näkyvät reaaliajassa kaikille
 
-Jokaisen käyttäjän muutokset näkyvät eri värillä, ja näet kursorin liikeet reaaliajassa. Word, Excel ja PowerPoint tukevat kaikki yhteismuokkausta.
+Jokaisen käyttäjän muutokset näkyvät "livenä", ja näet kursorin liikeet reaaliajassa. Word, Excel ja PowerPoint tukevat kaikki yhteismuokkausta.
 
 **Versiohistoria**
 
@@ -310,7 +339,7 @@ OneDrive tallentaa automaattisesti kaikki versiot. Jos joku tekee vahingossa muu
 2. Napsauta tiedoston nimeä → **Versiohistoria**
 3. Valitse aiempi versio ja palauta se
 
-Versiohistoria säästää tilanteessa, jossa "joku vahingossa poisti tärkeän osan" — se on käytännöllinen turvaverkko.
+Versiohistoria säästää tilanteessa, jossa "joku vahingossa poisti tärkeän osan".
 
 **Yhteismuokkauksen hyvät käytännöt**
 
@@ -318,10 +347,9 @@ Versiohistoria säästää tilanteessa, jossa "joku vahingossa poisti tärkeän 
 - Käyttäkää kommentointiominaisuutta, kun haluatte kommentoida toisen tekemisiä muokkaamatta suoraan tekstiä
 - Sulkekaa tiedosto, kun ette enää muokkaa sitä — näin muut näkevät tilanteen oikein
 
-> 📚 **Lisätietoja — OneDrive ja Microsoft 365**
+> 📚 **Lisätietoja**
 >
 > - [OneDrive-ohjeet](https://support.microsoft.com/fi-fi/onedrive) — Microsoftin virallinen OneDrive-tukisivusto (suomeksi)
-> - [Microsoft 365 -koulutus](https://support.microsoft.com/fi-fi/training) — Ilmaiset videokoulutukset kaikille Microsoft 365 -sovelluksille
 
 ---
 

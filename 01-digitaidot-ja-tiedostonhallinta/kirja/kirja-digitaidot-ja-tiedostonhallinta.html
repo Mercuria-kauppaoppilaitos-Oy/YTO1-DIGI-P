@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>Kirja&colon; Digitaidot ja tiedostonhallinta</title>
+            <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only],
+.vscode-high-contrast:not(.vscode-high-contrast-light) img[src$=\#gh-light-mode-only],
+.vscode-high-contrast-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css">
+<link href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+<style>
+:root {
+  --color-note: #0969da;
+  --color-tip: #1a7f37;
+  --color-warning: #9a6700;
+  --color-severe: #bc4c00;
+  --color-caution: #d1242f;
+  --color-important: #8250df;
+}
+
+</style>
+<style>
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-note: #2f81f7;
+    --color-tip: #3fb950;
+    --color-warning: #d29922;
+    --color-severe: #db6d28;
+    --color-caution: #f85149;
+    --color-important: #a371f7;
+  }
+}
+
+</style>
+<style>
+.markdown-alert {
+  padding: 0.5rem 1rem;
+  margin-bottom: 16px;
+  color: inherit;
+  border-left: .25em solid #888;
+}
+
+.markdown-alert>:first-child {
+  margin-top: 0
+}
+
+.markdown-alert>:last-child {
+  margin-bottom: 0
+}
+
+.markdown-alert .markdown-alert-title {
+  display: flex;
+  font-weight: 500;
+  align-items: center;
+  line-height: 1
+}
+
+.markdown-alert .markdown-alert-title .octicon {
+  margin-right: 0.5rem;
+  display: inline-block;
+  overflow: visible !important;
+  vertical-align: text-bottom;
+  fill: currentColor;
+}
+
+.markdown-alert.markdown-alert-note {
+  border-left-color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-note .markdown-alert-title {
+  color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-important {
+  border-left-color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-important .markdown-alert-title {
+  color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-warning {
+  border-left-color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-warning .markdown-alert-title {
+  color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-tip {
+  border-left-color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-tip .markdown-alert-title {
+  color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-caution {
+  border-left-color: var(--color-caution);
+}
+
+.markdown-alert.markdown-alert-caution .markdown-alert-title {
+  color: var(--color-caution);
+}
+
+</style>
+        
+        </head>
+        <body class="vscode-body vscode-light">
+            <h1 id="kirja-digitaidot-ja-tiedostonhallinta">Kirja: Digitaidot ja tiedostonhallinta</h1>
+<p><strong>eKampus-kirja-aktiviteetti — Osio 1</strong><br>
+<strong>Kurssi:</strong> YTO1-DIGI-P — Toiminta digitaalisessa ympäristössä<br>
+<strong>Osaamistavoitteet:</strong> 5, 6, 7, 9, 10</p>
+<hr>
+<blockquote>
+<p><strong>Kirjan rakenne (eKampus-kirjan luvut ja aliluvut)</strong></p>
+<ol>
+<li>Tiedostonhallinta
+<ul>
+<li>1.1 Tiedostonhallinnan perusteet ja kansiorakenteet</li>
+<li>1.2 Tiedostojen nimeämiskäytännöt</li>
+<li>1.3 Tiedostomuodot</li>
+</ul>
+</li>
+<li>Pilvipalvelut ja tiedostojen jakaminen
+<ul>
+<li>2.1 OneDrive — peruskäyttö</li>
+<li>2.2 Tiedostojen ja kansioiden jakaminen</li>
+<li>2.3 Yhteismuokkaus</li>
+</ul>
+</li>
+<li>Excel — taulukkolaskenta
+<ul>
+<li>3.1 Excel-perusteet</li>
+<li>3.2 Kaavat ja funktiot</li>
+<li>3.3 Kaaviot</li>
+</ul>
+</li>
+<li>Word — tekstinkäsittely
+<ul>
+<li>4.1 Word-perusteet</li>
+<li>4.2 Asiakirjan rakenne ja muotoilu</li>
+<li>4.3 Taulukot ja kuvat</li>
+</ul>
+</li>
+<li>PowerPoint — esitysgrafiikka
+<ul>
+<li>5.1 PowerPoint-perusteet</li>
+<li>5.2 Visuaalinen suunnittelu</li>
+<li>5.3 Esittäminen</li>
+</ul>
+</li>
+</ol>
+</blockquote>
+<hr>
+<h2 id="luku-1--tiedostonhallinta">Luku 1 — Tiedostonhallinta</h2>
+<p><em>Tässä luvussa syvennytään digitaalisen työn perusvalmiuksiin: oman tietokonetyöskentelyn hallintaan ja loogiseen organisointiin. Johdonmukainen tiedostonhallinta säästää aikaa, vähentää virheitä ja on ehdoton edellytys sujuvalle tiimityölle liike-elämässä. Opit luomaan selkeitä kansiorakenteita, nimeämään tiedostot ammattimaisesti sekä ymmärtämään eri tiedostomuotojen käyttötarkoitukset.</em></p>
+<p><strong>Luvun sisältö:</strong></p>
+<ul>
+<li>Tiedostonhallinnan perusteet ja kansiorakenteet</li>
+<li>Tiedostojen nimeämiskäytännöt</li>
+<li>Tiedostomuodot</li>
+</ul>
+<blockquote>
+<p>💡 <strong>Kirjan käyttö eKampuksella:</strong> Seuraavalle sivulle pääset sivun reunassa olevasta nuolesta. Kirjan sisällysluettelo avautuu ruudun oikeaan reunaan. Saat sen näkyviin tai piiloon <strong>Näytä/piilota lohkovalikko</strong> -painikkeesta <span style="background-color: rgb(0 111 186 / .8); padding: 0 8px 0 8px;"><img src="https://ekampus.mercuria.fi/theme/image.php/snap/theme/1778200683/blocksdrawers" alt="Näytä/piilota lohkovalikko" style="height: 1.1em; vertical-align: text-bottom; filter: brightness(0) invert(1); background-color: rgb(0 111 186 / .8);"></span>.</p>
+</blockquote>
+<br>
+<p><strong>Työelämätaito: oikean laitteen ja sovelluksen valinta</strong></p>
+<p>Digitaalisessa työssä ei riitä, että osaa käyttää sovelluksia. Pitää osata myös valita tilanteeseen sopiva laite ja työkalu.</p>
+<ul>
+<li><strong>Puhelin</strong> sopii nopeaan viestintään, tunnistautumiseen, kuvaamiseen ja lyhyisiin tarkistuksiin.</li>
+<li><strong>Tietokone</strong> sopii pitkiin teksteihin, taulukoihin, esityksiin ja monivaiheiseen työskentelyyn.</li>
+<li><strong>Word</strong> sopii asiakirjoihin, <strong>Excel</strong> laskentaan ja tietojen käsittelyyn, <strong>PowerPoint</strong> esittämiseen ja <strong>PDF</strong> valmiin materiaalin jakamiseen.</li>
+<li><strong>Pilvipalvelu</strong> on paras valinta silloin, kun tiedostoa käytetään usealla laitteella tai yhdessä muiden kanssa.</li>
+<li>Valinnassa kannattaa huomioida myös <strong>tietoturva</strong>, <strong>yhteensopivuus</strong>, <strong>helppokäyttöisyys</strong> ja se, tarvitseeko tiedostoa muokata yksin vai yhdessä.</li>
+</ul>
+<hr>
+<h3 id="11-tiedostonhallinnan-perusteet-ja-kansiorakenteet">1.1 Tiedostonhallinnan perusteet ja kansiorakenteet</h3>
+<p>Tiedostonhallinta tarkoittaa tapaa, jolla tallennat, nimeät ja järjestät digitaaliset tiedostosi. Se saattaa tuntua arkiselta asialta, mutta käytännössä huono tiedostonhallinta aiheuttaa merkittäviä ongelmia niin opiskelussa kuin työelämässäkin.</p>
+<p><strong>Mitä tapahtuu, kun tiedostonhallinta ei toimi?</strong></p>
+<ul>
+<li>Tiedostot katoavat tai ne löytyvät vasta pitkän etsinnän jälkeen</li>
+<li>Samasta tiedostosta on useita versioita, ja on epäselvää, mikä on viimeisin</li>
+<li>Työtä tehdään vahingossa tuplakappaleen päälle</li>
+<li>Muille lähetetään väärä tai vanhentunut versio</li>
+<li>Tietokoneen vaihtuessa tiedostot eivät siirry mukana, koska ne on tallennettu paikallisesti ilman varmuuskopiointia</li>
+</ul>
+<p>Nämä tilanteet ovat erittäin yleisiä — niiltä voi välttyä, kun tiedostonhallinnasta tulee rutiini.</p>
+<br>
+<p><strong>Tiedostonhallinta työelämässä</strong></p>
+<p>Liiketoiminnan arjessa käsitellään jatkuvasti tarjouksia, sopimuksia, raportteja, budjetteja ja asiakastietoja. Kun nämä ovat järjestyksessä, työ sujuu. Epäjärjestyksessä pienikin asia — esimerkiksi oikean version löytäminen ennen palaveria — voi viedä aikaa ja aiheuttaa hämmennystä.</p>
+<p>Hyvä tiedostonhallinta ei vaadi erityistä teknistä osaamista. Se vaatii johdonmukaisia tapoja, joita noudatetaan joka kerta.</p>
+<br>
+<p><strong>Kansiorakenteet</strong></p>
+<p>Kansiorakenne on tapa järjestää tiedostot hierarkkisesti — kuten fyysisen arkistokaapin kansiomappi, mutta digitaalisessa muodossa.</p>
+<br>
+<p><strong>Hyvän kansiorakenteen periaatteet</strong></p>
+<ol>
+<li><strong>Looginen jako</strong> — Jaa kansiot aiheen, projektin tai ajankohdan mukaan</li>
+<li><strong>Ei liian syvää rakennetta</strong> — 3–4 tasoa on yleensä riittävä; syvempi rakenne hankaloittaa navigointia</li>
+<li><strong>Johdonmukaisuus</strong> — Käytä samaa logiikkaa joka paikassa</li>
+</ol>
+<blockquote>
+<p>🖼️ <strong>[TÄHÄN KUVA: Windowsin Resurssienhallinta tai Macin Finder, jossa näkyy havainnollistava kansiorakenne ja &quot;Uusi kansio&quot; -painike korostettuna]</strong></p>
+</blockquote>
+<br>
+<p><strong>Esimerkki: opiskelijan kansiorakenne</strong></p>
+<pre><code>OneDrive
+└── Mercuria
+    ├── YTO1-DIGI-P
+    │   ├── Harjoitukset
+    │   ├── Palautukset
+    │   └── Materiaalit
+    ├── Muut-kurssit
+    └── Itsenäinen-suorittaminen
+</code></pre>
+<br>
+<p><strong>Esimerkki: yrityksen kansiorakenne</strong></p>
+<pre><code>Yritys Oy – Jaettu asiakirjahakemisto
+├── Asiakkaat
+│   ├── Asiakas-A
+│   └── Asiakas-B
+├── Projektit
+│   ├── 2026-Kampanja-kesä
+│   └── 2026-Verkkosivuuudistus
+├── Talous
+│   ├── Budjetit
+│   └── Laskut
+└── Hallinto
+    ├── Sopimukset
+    └── Henkilöstö
+</code></pre>
+<br>
+<p><strong>Käytännön vinkit</strong></p>
+<ul>
+<li>Luo kansiorakenne ennen kuin alat tallentaa tiedostoja — rakenteen muuttaminen jälkikäteen on työläämpää.</li>
+<li>Vältä &quot;Sekalaista&quot;- tai &quot;Muuta&quot;-kansioita: ne täyttyvät nopeasti ja muuttuvat kaaokseksi.</li>
+<li>Pidä työtila siistinä siirtämällä päättyneet projektit erilliseen arkistokansioon. Nimeämällä kansion esimerkiksi <code>Z_Arkisto</code> tai <code>Ö_Arkisto</code>, se putoaa aakkosjärjestyksessä kätevästi listan hännille pois aktiivisten töiden tieltä.</li>
+<li>Voit ohjailla kansioiden järjestystä myös toiseen suuntaan: lisäämällä nimen alkuun numeron tai erikoismerkin (esim. <code>01_Tärkeät</code> tai <code>_Työn alla</code>), saat tärkeimmät kansiot pysymään aina ylimpänä.</li>
+</ul>
+<hr>
+<h3 id="12-tiedostojen-nimeämiskäytännöt">1.2 Tiedostojen nimeämiskäytännöt</h3>
+<p>Tiedoston nimi on sen tärkein hakutunniste. Hyvä nimi kertoo heti, mitä tiedosto sisältää, kenelle se on tarkoitettu ja milloin se on tehty — ilman, että tiedostoa tarvitsee avata.</p>
+<br>
+<p><strong>Selkeän nimen elementit</strong></p>
+<table>
+<thead>
+<tr>
+<th>Elementti</th>
+<th>Esimerkki</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Projekti tai aihe</td>
+<td><code>myyntiraportti</code></td>
+</tr>
+<tr>
+<td>Päivämäärä (VVVV-KK-PP)</td>
+<td><code>2026-04-15</code></td>
+</tr>
+<tr>
+<td>Versio (tarvittaessa)</td>
+<td><code>v2</code></td>
+</tr>
+<tr>
+<td>Tekijä (tarvittaessa)</td>
+<td><code>lehtinen</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Hyvä nimi:</strong> <code>2026-04-15_myyntiraportti_v2.xlsx</code><br>
+<strong>Huono nimi:</strong> <code>Raportti uusin TÄMÄ.xlsx</code></p>
+<br>
+<p><strong>Miksi päivämäärä muodossa VVVV-KK-PP?</strong></p>
+<p>Kun päivämäärä kirjoitetaan vuosi edellä, tiedostot järjestyvät automaattisesti aikajärjestykseen aakkosjärjestystä käytettäessä. Muoto <code>15.4.2026</code> tai <code>15-04-2026</code> ei toimi yhtä luotettavasti.</p>
+<br>
+<p><strong>Erikoismerkit, välilyönnit ja ääkköset</strong></p>
+<p>Nykyaikaiset tietokoneet ja pilvipalvelut ymmärtävät välilyöntejä ja ääkkösiä (ä, ö, å) yleensä täysin ongelmitta. Niiden käytössä on kuitenkin hyvä noudattaa harkintaa:</p>
+<ul>
+<li><strong>Ääkköset ja välilyönnit:</strong> Vältä näitä, jos tiedosto ladataan verkkosivulle, siirretään toiseen järjestelmään tai lähetetään sähköpostin liitteenä organisaation ulkopuolelle (erityisesti kansainvälisille vastaanottajille), sillä ne voivat toisinaan rikkoutua. Välilyönnin voi korvata yhdysviivalla (<code>-</code>) tai alaviivalla (<code>_</code>).</li>
+<li><strong>Emojit:</strong> Vaikka emojit teknisesti usein toimivat tiedostonimissä, ne eivät kuulu ammattimaiseen työkäyttöön.</li>
+<li><strong>Kielletyt merkit:</strong> Käyttöjärjestelmät estävät automaattisesti seuraavien erikoismerkkien käytön: <code>/ \ : * ? &quot; &lt; &gt; |</code></li>
+</ul>
+<br>
+<p><strong>Versionhallinta nimeämisellä</strong></p>
+<p>Kun tiedostosta syntyy useita versioita, merkitse versio nimeen:</p>
+<ul>
+<li><code>tarjous_v1.docx</code> → <code>tarjous_v2.docx</code> → <code>tarjous_v3_hyväksytty.docx</code></li>
+</ul>
+<p>Näin vältyt tilanteelta, jossa on useita tiedostoja nimillä &quot;tarjous lopullinen&quot;, &quot;tarjous LOPULLINEN2&quot; tai &quot;tarjous TÄMÄ ON SE&quot;.</p>
+<br>
+<p><strong>Tietoturvavaroitus: Tuntemattomat tiedostot</strong></p>
+<p>Ole varovainen avatessasi sähköpostiliitteitä tai netistä ladattuja tiedostoja. Erityisen riskialttiita tai haitallisia voivat olla:</p>
+<ul>
+<li><code>.exe</code>, <code>.bat</code>, <code>.cmd</code> ja <code>.scr</code> (Windowsin suoritettavia ohjelmia tai skriptejä)</li>
+<li><code>.sh</code> ja <code>.command</code> (Macin ja Linuxin suoritettavia skriptejä)</li>
+<li><code>.xlsm</code> tai <code>.docm</code> (Makroja sisältävät Office-tiedostot. Salli makrot vain täysin luotettavista lähteistä)</li>
+</ul>
+<hr>
+<h3 id="13-tiedostomuodot">1.3 Tiedostomuodot</h3>
+<p>Tiedostomuoto määrittää, miten tiedoston sisältö on tallennettu. Tiedostomuodon tunnistaa tiedostopäätteestä — nimessä pisteen jälkeen tulevasta osasta.</p>
+<br>
+<p><strong>Yleisimmät tiedostomuodot liiketoiminnassa</strong></p>
+<table>
+<thead>
+<tr>
+<th>Pääte</th>
+<th>Ohjelma</th>
+<th>Käyttötarkoitus</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.docx</code></td>
+<td>Microsoft Word</td>
+<td>Tekstiasiakirjat, raportit, muistiot</td>
+</tr>
+<tr>
+<td><code>.xlsx</code></td>
+<td>Microsoft Excel</td>
+<td>Taulukot, budjetit, laskelmat</td>
+</tr>
+<tr>
+<td><code>.pptx</code></td>
+<td>Microsoft PowerPoint</td>
+<td>Diaesitykset</td>
+</tr>
+<tr>
+<td><code>.pdf</code></td>
+<td>Acrobat Reader / selain</td>
+<td>Jakelu, lomakkeet, viralliset asiakirjat</td>
+</tr>
+<tr>
+<td><code>.jpg</code> / <code>.png</code></td>
+<td>Kuvankäsittely, selain</td>
+<td>Valokuvat ja grafiikat</td>
+</tr>
+<tr>
+<td><code>.mp4</code></td>
+<td>Videotoistin</td>
+<td>Videot</td>
+</tr>
+<tr>
+<td><code>.zip</code></td>
+<td>Pakkausohjelma</td>
+<td>Useamman tiedoston pakkaaminen yhdeksi</td>
+</tr>
+</tbody>
+</table>
+<br>
+<p><strong>Muita yleisiä tiedostomuotoja, joihin saatat törmätä:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Pääte</th>
+<th>Mitä nämä ovat?</th>
+<th>Millä aukeaa?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.txt</code></td>
+<td>Puhdas tekstitiedosto ilman muotoiluja</td>
+<td>Muistio (Notepad), Word</td>
+</tr>
+<tr>
+<td><code>.html</code></td>
+<td>Verkkosivun rakennetiedosto</td>
+<td>Verkkoselain (Chrome, Edge)</td>
+</tr>
+<tr>
+<td><code>.psd</code></td>
+<td>Kuvankäsittelyn työtiedosto</td>
+<td>Adobe Photoshop</td>
+</tr>
+<tr>
+<td><code>.heic</code> / <code>.mov</code></td>
+<td>Applen laitteiden (esim. iPhone) kuva/video</td>
+<td>Kuvat- tai videotoistimet</td>
+</tr>
+<tr>
+<td><code>.odt</code> / <code>.ods</code></td>
+<td>Avoimen lähdekoodin asiakirja/taulukko</td>
+<td>LibreOffice, OpenOffice (aukeaa myös Word/Excel)</td>
+</tr>
+</tbody>
+</table>
+<br>
+<p><strong>Milloin käyttää PDF:ää?</strong></p>
+<p>PDF (Portable Document Format) on tarkoitettu asiakirjoihin, joita et halua muokattavan ja jotka haluat näyttävän samalta kaikilla laitteilla ja käyttöjärjestelmillä. Käytä PDF:ää, kun:</p>
+<ul>
+<li>Lähetät asiakirjan ulkopuoliselle henkilölle tai viranomaiselle</li>
+<li>Palautat valmiin tehtävän</li>
+<li>Haluat varmistaa, että asettelu pysyy samana eri tietokoneilla</li>
+</ul>
+<p>Pidä alkuperäinen <code>.docx</code> tai <code>.xlsx</code> tallessa muokkaamista varten — PDF ei yleensä ole helposti muokattavissa.</p>
+<hr>
+<h2 id="luku-2--pilvipalvelut-ja-tiedostojen-jakaminen">Luku 2 — Pilvipalvelut ja tiedostojen jakaminen</h2>
+<p><em>Nykyaikainen työ ja opiskelu tapahtuvat verkossa. Tässä luvussa opit Microsoftin pilvipalveluiden, kuten OneDriven, luotettavan käytön perustaidot. Opit tallentamaan tiedostosi turvallisesti siten, että ne ovat saatavilla laitteesta riippumatta. Lisäksi harjoittelet liike-elämässä välttämätöntä kykyä jakaa asiakirjoja oikeilla käyttöoikeuksilla ja muokata tiedostoja saumattomasti yhdessä muiden kanssa.</em></p>
+<p><strong>Luvun sisältö:</strong></p>
+<ul>
+<li>OneDrive — peruskäyttö</li>
+<li>Tiedostojen ja kansioiden jakaminen</li>
+<li>Yhteismuokkaus</li>
+</ul>
+<hr>
+<h3 id="21-onedrive--peruskäyttö">2.1 OneDrive — peruskäyttö</h3>
+<p>OneDrive on Microsoftin pilvipalvelu, joka on osa Microsoft 365 -pakettia. Se toimii sekä verkkoselaimen kautta (<a href="http://onedrive.com">onedrive.com</a>) että tietokoneelle asennettavana ohjelmana, joka synkronoi tiedostot automaattisesti.</p>
+<blockquote>
+<p>💡 <strong>Huomio:</strong> Liike-elämässä on laajalti käytössä myös toinen suuri pilvipalvelu: <strong>Google Workspace (Google Drive)</strong>. Se toimii täysin samalla periaatteella kuin OneDrive (sisältäen omat ohjelmansa Docs, Sheets ja Slides). Jos opit käyttämään OneDrivea, osaat käyttää myös Google Drivea.</p>
+</blockquote>
+<p><strong>Miksi pilvipalvelu on hyödyllinen?</strong></p>
+<ul>
+<li><strong>Saatavuus:</strong> Tiedostot ovat käytettävissä millä tahansa laitteella — koulun koneelta, kotikoneelta tai puhelimelta</li>
+<li><strong>Varmuuskopio:</strong> Tiedostot eivät häviä, vaikka tietokone hajoaisi tai katoaisi</li>
+<li><strong>Jakaminen:</strong> Tiedostoja voi jakaa helposti muille ilman sähköpostin liitetiedostoja</li>
+<li><strong>Yhteistyö:</strong> Useampi henkilö voi muokata samaa tiedostoa samanaikaisesti</li>
+</ul>
+<p><strong>OneDriven peruskäyttö</strong></p>
+<ol>
+<li><strong>Kirjautuminen:</strong> Käytä oppilaitoksen Microsoft 365 -tunnuksia (<a href="mailto:etunimi.sukunimi@mercuria.fi">etunimi.sukunimi@mercuria.fi</a>)</li>
+<li><strong>Tiedoston tallentaminen:</strong> Tallenna Word, Excel ja PowerPoint -tiedostot suoraan OneDriveen (Tiedosto → Tallenna → OneDrive)</li>
+<li><strong>Synkronointi:</strong> Kun OneDrive-ohjelma on asennettu tietokoneelle, OneDrive-kansio näkyy Resurssienhallinnassa normaalina kansiona. Muutokset synkronoituvat automaattisesti pilveen.</li>
+</ol>
+<p><strong>Paikallinen tallennus vs. pilvi</strong></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Paikallinen (C-asema)</th>
+<th>OneDrive (pilvi)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Saatavuus</td>
+<td>Vain sillä koneella</td>
+<td>Kaikilla laitteilla</td>
+</tr>
+<tr>
+<td>Varmuuskopio</td>
+<td>Ei automaattista</td>
+<td>Automaattinen</td>
+</tr>
+<tr>
+<td>Jakaminen</td>
+<td>Ei suoraa jakamista</td>
+<td>Helppo jakaa</td>
+</tr>
+<tr>
+<td>Tallennustila</td>
+<td>Riippuu koneesta</td>
+<td>1 TB (Microsoft 365)</td>
+</tr>
+</tbody>
+</table>
+<p>Koulun oppilaskoneilta tallennetut tiedostot voivat kadota, jos tallennuspaikkana on paikallinen asema eikä OneDrive. Tallenna tärkeät tiedostot aina OneDriveen.</p>
+<hr>
+<h3 id="22-tiedostojen-ja-kansioiden-jakaminen">2.2 Tiedostojen ja kansioiden jakaminen</h3>
+<p>OneDrivessa voit jakaa tiedostoja ja kansioita muille joko linkin kautta tai kutsumalla heidät suoraan.</p>
+<p><strong>Jakolinkin luominen</strong></p>
+<ol>
+<li>Napsauta tiedostoa tai kansiota OneDrivessa hiiren oikealla painikkeella</li>
+<li>Valitse <strong>Jaa</strong> tai <strong>Kopioi linkki</strong></li>
+<li>Valitse käyttöoikeus:
+<ul>
+<li><strong>Katselu:</strong> vastaanottaja voi lukea tiedoston, mutta ei muokata</li>
+<li><strong>Muokkaus:</strong> vastaanottaja voi muokata tiedostoa</li>
+</ul>
+</li>
+</ol>
+<p><strong>Käyttöoikeustasot</strong></p>
+<table>
+<thead>
+<tr>
+<th>Oikeus</th>
+<th>Käyttötilanne</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Katselu</td>
+<td>Jaat valmiin raportin tai esityksen</td>
+</tr>
+<tr>
+<td>Muokkaus</td>
+<td>Teette ryhmätyötä tai kolleega täydentää tiedostoa</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Jakaminen tietylle henkilölle</strong></p>
+<p>Jos haluat jakaa vain tietylle henkilölle, kirjoita heidän sähköpostiosoitteensa jakoikkunaan. Tämä on turvallisempaa kuin avoin linkki, koska vain kyseinen henkilö pääsee tiedostoon.</p>
+<p><strong>Jaon peruminen</strong></p>
+<ul>
+<li>Avaa tiedoston tai kansion tiedot → Hallitse käyttöoikeuksia → Poista käyttäjä tai poista linkki käytöstä</li>
+</ul>
+<p><strong>Tietoturva jakamisessa</strong></p>
+<p>Ennen jakamista mieti:</p>
+<ul>
+<li>Tarvitseeko vastaanottaja muokkausoikeuden vai riittääkö katseluoikeus?</li>
+<li>Onko tiedostossa arkaluonteisia tietoja (esim. henkilötietoja tai yrityksen luottamuksellisia tietoja)?</li>
+<li>Avoin &quot;kaikille linkin saaneille&quot; -jako sopii vain täysin julkiselle materiaalille</li>
+</ul>
+<hr>
+<h3 id="23-yhteismuokkaus">2.3 Yhteismuokkaus</h3>
+<p>Yhteismuokkaus (co-authoring) tarkoittaa, että kaksi tai useampi henkilö voi muokata samaa tiedostoa samanaikaisesti reaaliajassa. Tämä on yksi pilvipalveluiden suurimmista eduista ryhmätyössä.</p>
+<p><strong>Miten yhteismuokkaus toimii?</strong></p>
+<ol>
+<li>Tiedosto on tallennettu OneDriveen</li>
+<li>Tiedosto on jaettu muille muokkausoikeudella</li>
+<li>Kaikki avaavat tiedoston — muutokset näkyvät reaaliajassa kaikille</li>
+</ol>
+<p>Jokaisen käyttäjän muutokset näkyvät eri värillä, ja näet kursorin liikeet reaaliajassa. Word, Excel ja PowerPoint tukevat kaikki yhteismuokkausta.</p>
+<p><strong>Versiohistoria</strong></p>
+<p>OneDrive tallentaa automaattisesti kaikki versiot. Jos joku tekee vahingossa muutoksen, jonka haluaa peruuttaa:</p>
+<ol>
+<li>Avaa tiedosto OneDrivessa verkkoselaimen kautta</li>
+<li>Napsauta tiedoston nimeä → <strong>Versiohistoria</strong></li>
+<li>Valitse aiempi versio ja palauta se</li>
+</ol>
+<p>Versiohistoria säästää tilanteessa, jossa &quot;joku vahingossa poisti tärkeän osan&quot; — se on käytännöllinen turvaverkko.</p>
+<p><strong>Yhteismuokkauksen hyvät käytännöt</strong></p>
+<ul>
+<li>Sopikaa etukäteen, kuka muokkaa mitäkin osiota — näin vältytään päällekkäiseltä työltä</li>
+<li>Käyttäkää kommentointiominaisuutta, kun haluatte kommentoida toisen tekemisiä muokkaamatta suoraan tekstiä</li>
+<li>Sulkekaa tiedosto, kun ette enää muokkaa sitä — näin muut näkevät tilanteen oikein</li>
+</ul>
+<blockquote>
+<p>📚 <strong>Lisätietoja — OneDrive ja Microsoft 365</strong></p>
+<ul>
+<li><a href="https://support.microsoft.com/fi-fi/onedrive">OneDrive-ohjeet</a> — Microsoftin virallinen OneDrive-tukisivusto (suomeksi)</li>
+<li><a href="https://support.microsoft.com/fi-fi/training">Microsoft 365 -koulutus</a> — Ilmaiset videokoulutukset kaikille Microsoft 365 -sovelluksille</li>
+</ul>
+</blockquote>
+<hr>
+<h2 id="luku-3--excel--taulukkolaskenta">Luku 3 — Excel — taulukkolaskenta</h2>
+<p><em>Taulukkolaskentaohjelmistot, erityisesti Excel, kuuluvat jokaisen asiantuntijan perustyökaluihin toimialasta riippumatta. Tässä luvussa rakennat vahvan perustan Excelin käytölle: tunnistat taulukoiden logiikan, osaat muotoilla ja käsitellä tietoa sekä hyödyntää kaavoja ja funktioita (kuten SUMMA ja JOS) rutiinien automatisoinnissa. Opit myös havainnollistamaan dataa ammattimaisilla kaavioilla.</em></p>
+<p><strong>Luvun sisältö:</strong></p>
+<ul>
+<li>Excel-perusteet</li>
+<li>Kaavat ja funktiot</li>
+<li>Kaaviot</li>
+</ul>
+<hr>
+<h3 id="31-excel-perusteet">3.1 Excel-perusteet</h3>
+<p>Excel on Microsoftin taulukkolaskentaohjelma. Se on yksi eniten käytetyistä ohjelmista liiketoiminnassa — budjeteista ja myyntiraporteista henkilöstöhallintaan ja asiakaslistoihin.</p>
+<blockquote>
+<p>💡 <strong>Vinkki — ohje suoraan ohjelmasta:</strong> Paina <kbd>F1</kbd> missä tahansa kohdassa Exceliä (tai muuta Office-ohjelmaa) avataksesi Microsoftin virallisen ohjesivuston. Ohje on aina ajantasainen ohjelman version mukaan ja saatavilla myös suomeksi.</p>
+</blockquote>
+<p><strong>Excelin rakenne</strong></p>
+<p>Excel-tiedosto on <strong>työkirja</strong> (workbook), joka sisältää yhden tai useamman <strong>taulukon</strong> (sheet). Taulukko koostuu <strong>soluista</strong>, jotka järjestyvät <strong>riveihin</strong> (numerot 1, 2, 3…) ja <strong>sarakkeisiin</strong> (kirjaimet A, B, C…).</p>
+<blockquote>
+<p>🖼️ <strong>[TÄHÄN KUVA: Excelin käyttöliittymä, jossa korostettuna &quot;Työkirja&quot;, taulukkovälilehdet (alhaalla), solu (esim. B3), rivi ja sarake]</strong></p>
+</blockquote>
+<p>Solun osoite muodostuu sarakekirjaimesta ja rivinumerosta: esimerkiksi <strong>B3</strong> tarkoittaa sarakkeen B, rivin 3 solua.</p>
+<p><strong>Tietojen syöttäminen</strong></p>
+<ul>
+<li>Klikkaa solua ja kirjoita</li>
+<li>Siirry seuraavaan soluun <kbd>Enter</kbd>-näppäimellä (alas) tai <kbd>Tab</kbd>-näppäimellä (oikealle)</li>
+<li>Voit muokata solun sisältöä kaksoisklikkaamalla tai <kbd>F2</kbd>-näppäimellä</li>
+</ul>
+<p><strong>Solujen muotoilu</strong></p>
+<p>Muotoilu ei vaikuta laskutoimituksiin — se vaikuttaa ainoastaan siihen, miten luku näytetään:</p>
+<table>
+<thead>
+<tr>
+<th>Muotoilu</th>
+<th>Esimerkki</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Numero</td>
+<td>1500,00</td>
+</tr>
+<tr>
+<td>Valuutta</td>
+<td>1 500,00 €</td>
+</tr>
+<tr>
+<td>Prosentti</td>
+<td>15 %</td>
+</tr>
+<tr>
+<td>Päivämäärä</td>
+<td>15.4.2026</td>
+</tr>
+</tbody>
+</table>
+<p>Muotoile solut: valitse solut → hiiren oikea tai <strong>Aloitus</strong>-välilehti → <strong>Lukumuoto</strong>.</p>
+<p><strong>Sarakkeen leveyden säätäminen</strong></p>
+<p>Jos solussa näkyy <code>#####</code>, sarake on liian kapea. Kaksoisnapsauta sarakkeen otsikon oikeaa reunaa — sarake levenee automaattisesti sisällön mukaan.</p>
+<hr>
+<h3 id="32-kaavat-ja-funktiot">3.2 Kaavat ja funktiot</h3>
+<p>Kaavojen avulla Excel tekee laskutoimitukset automaattisesti. Tämä on Excelin tärkein ominaisuus: muuta yhtä lukua, ja kaikki siihen viittaavat laskelmat päivittyvät välittömästi.</p>
+<p><strong>Kaavan rakenne</strong></p>
+<p>Jokainen kaava alkaa yhtäläisyysmerkillä <code>=</code>. Ilman sitä Excel käsittelee syötetyn tekstin tavallisena tekstinä.</p>
+<pre><code>=B3+B4        → Laskee solujen B3 ja B4 summan
+=B3*1,24      → Kertoo solun B3 arvon luvulla 1,24 (esim. ALV-laskenta)
+=B7-B8        → Vähentää solun B8 solusta B7
+</code></pre>
+<p><strong>Soluviittaukset</strong></p>
+<p>Kaavassa viitataan soluihin niiden osoitteella. Tämä on tärkeää: älä kirjoita lukua suoraan kaavaan, vaan viittaa soluun.</p>
+<ul>
+<li><strong>Suhteellinen viittaus</strong> (esim. <code>B3</code>): Kun kopioit kaavan, viittaus siirtyy suhteessa uuteen paikkaan</li>
+<li><strong>Absoluuttinen viittaus</strong> (esim. <code>$B$3</code>): Viittaus pysyy kiinteänä, vaikka kaavan kopioi muualle. Käytä <code>$</code>-merkkiä arvoon, joka ei saa muuttua (esim. ALV-prosentti). Esimerkissä <code>$</code>-merkki B:n edessä lukitsee viittauksen sarakkeeseen B, ja toinen <code>$</code>-merkki riville 3. Voidaan lukita myös pelkkä sarake tai rivi (<code>$B3</code> tai <code>B$3</code>).</li>
+</ul>
+<blockquote>
+<p>💡 <strong>Tiesitkö?</strong></p>
+<ul>
+<li><kbd>Ctrl</kbd> + <kbd>T</kbd> muotoilee alueen fiksuksi Excel-taulukoksi, jolloin kaavojen ja muotoilujen kopiointi automatisoituu ja suodattaminen helpottuu.</li>
+<li><strong>Täyttökahva:</strong> Voit kopioida kaavoja tai luoda sarjoja vetämällä solun oikeassa alareunassa olevasta pienestä neliöstä (<em>täyttökahvasta</em>) hiirellä. Nopea asiantuntijavinkki: <kbd>Ctrl</kbd> + <kbd>D</kbd> kopioi suoraan yläpuolella olevan solun asiasisällön ja muotoilut alaspäin.</li>
+<li><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>V</kbd>: Liitä teksti puhtaana tekstinä, niin kohdesolun jo valmiina olleet muotoilut säilyvät.</li>
+<li><strong>Pivot-taulukot:</strong> Kun perustaidot ovat hallussa ja käsittelet isompia tietomääriä, ota haltuun <a href="https://support.microsoft.com/fi-fi/office/luo-pivot-taulukko-taulukon-tietojen-analysoimista-varten-a9a84538-bfe9-40a9-a8e9-f99134456576">Pivot-taulukot</a> – ne ovat paras työkalu nopeaan analysointiin ja raportointiin ilman monimutkaisia kaavoja.</li>
+</ul>
+</blockquote>
+<blockquote>
+<p>🖼️ <strong>[TÄHÄN KUVA / ANIMAATIO: Lyhyt GIF-animaatio tai selkeä kuva, jossa näytetään täyttökahvan (solun oikea alareuna) käyttö sarjan tai kaavan vetämiseen alaspäin]</strong></p>
+</blockquote>
+<p><strong>Tärkeimmät funktiot</strong></p>
+<table>
+<thead>
+<tr>
+<th>Funktio</th>
+<th>Käyttötarkoitus</th>
+<th>Esimerkki</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SUMMA</code></td>
+<td>Lukujen yhteenlasku</td>
+<td><code>=SUMMA(B3:B10)</code></td>
+</tr>
+<tr>
+<td><code>KESKIARVO</code></td>
+<td>Keskiarvon laskeminen</td>
+<td><code>=KESKIARVO(B3:B10)</code></td>
+</tr>
+<tr>
+<td><code>MIN</code></td>
+<td>Pienin arvo</td>
+<td><code>=MIN(B3:B10)</code></td>
+</tr>
+<tr>
+<td><code>MAX</code></td>
+<td>Suurin arvo</td>
+<td><code>=MAX(B3:B10)</code></td>
+</tr>
+<tr>
+<td><code>LASKE</code></td>
+<td>Kuinka monta lukua alueella</td>
+<td><code>=LASKE(B3:B10)</code></td>
+</tr>
+<tr>
+<td><code>JOS</code></td>
+<td>Ehdon mukainen arvo</td>
+<td><code>=JOS(B3&gt;100;&quot;Yli 100&quot;;&quot;Alle 100&quot;)</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Alueen merkitseminen</strong></p>
+<p><code>B3:B10</code> tarkoittaa soluja B3, B4, B5, B6, B7, B8, B9 ja B10 — kaksoispiste luetaan &quot;B3:sta B10:een&quot;.</p>
+<p><strong>JOS-funktio</strong></p>
+<p>JOS-funktio on erittäin hyödyllinen, kun haluat Excelin tekevän erilaisen ratkaisun riippuen jostakin ehdosta:</p>
+<pre><code>=JOS(B3&gt;=5000;&quot;Budjetissa&quot;;&quot;Ylittää budjetin&quot;)
+</code></pre>
+<p>Tässä: jos solun B3 arvo on 5 000 tai enemmän, solu näyttää &quot;Budjetissa&quot; — muuten &quot;Ylittää budjetin&quot;.</p>
+<hr>
+<h3 id="33-kaaviot">3.3 Kaaviot</h3>
+<p>Kaavio havainnollistaa numeroita visuaalisesti. Hyvin tehty kaavio kertoo saman asian kuin taulukko täynnä lukuja — mutta paljon nopeammin.</p>
+<p><strong>Kaavion luominen</strong></p>
+<ol>
+<li>Valitse tiedot, joista haluat tehdä kaavion (sisällytä myös otsikkorivit ja -sarakkeet)</li>
+<li>Siirry <strong>Lisää</strong>-välilehdelle → <strong>Kaaviot</strong></li>
+<li>Valitse kaaviotyyppi</li>
+</ol>
+<p><strong>Milloin mitäkin kaaviotyyppiä?</strong></p>
+<table>
+<thead>
+<tr>
+<th>Kaaviotyyppi</th>
+<th>Käyttötilanne</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Pylväskaavio</strong></td>
+<td>Vertailee arvoja eri kategorioiden välillä (esim. myynti kuukausittain)</td>
+</tr>
+<tr>
+<td><strong>Viivakaavio</strong></td>
+<td>Näyttää muutoksen ajan kuluessa (esim. myynnin kehitys vuoden aikana)</td>
+</tr>
+<tr>
+<td><strong>Ympyräkaavio</strong></td>
+<td>Näyttää osien suhteet kokonaisuuteen (esim. kuluerien osuudet)</td>
+</tr>
+<tr>
+<td><strong>Palkkikaavio</strong></td>
+<td>Kuten pylväskaavio, mutta vaakasuuntainen — toimii hyvin pitkillä nimillä</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Kaavion muotoilu</strong></p>
+<ul>
+<li><strong>Otsikko:</strong> Lisää aina kuvaava otsikko — kaavion pitäisi toimia myös ilman ympäröivää tekstiä</li>
+<li><strong>Akselimerkinnät:</strong> Varmista, että akseleilla on selkeät otsikot (esim. &quot;€&quot; tai &quot;kpl&quot;)</li>
+<li><strong>Selite:</strong> Tarkista, että selite kertoo selkeästi, mitä kukin väri tai viiva tarkoittaa</li>
+<li><strong>Yksinkertaisuus:</strong> Vältä turhia efektejä ja 3D-kaavioita — ne vaikeuttavat usein lukemista</li>
+</ul>
+<p><strong>Kaavion siirtäminen PowerPointiin</strong></p>
+<p>Excelin kaavion saa siirrettyä PowerPointiin:</p>
+<ul>
+<li>Kopioi kaavio Excelistä → Liitä PowerPointiin</li>
+<li>Valitse liittämisvaihtoehdoksi <strong>&quot;Säilytä lähteen muotoilu ja linkitä tiedot&quot;</strong>, jos haluat, että kaavio päivittyy automaattisesti Excel-tiedoston muuttuessa</li>
+</ul>
+<blockquote>
+<p>📚 <strong>Lisätietoja — Excel</strong></p>
+<ul>
+<li><a href="https://support.microsoft.com/fi-fi/excel">Excelin ohjeet ja oppaat</a> — Microsoftin virallinen Excel-tukisivusto (suomeksi)</li>
+<li><a href="https://support.microsoft.com/fi-fi/office/excel-video-training-9bc05390-e94c-46af-a5b3-d7c22f6990bb">Excel-videokoulutus</a> — Ilmaiset opetusvideot aloittelijoista edistyneille</li>
+<li><a href="https://support.microsoft.com/fi-fi/office/excel-functions-alphabetical-b3944572-255d-4efb-bb96-c6d90033e188">Excel-funktioiden hakemisto</a> — Kaikkien funktioiden selitykset aakkosjärjestyksessä</li>
+</ul>
+</blockquote>
+<hr>
+<h2 id="luku-4--word--tekstinkäsittely">Luku 4 — Word — tekstinkäsittely</h2>
+<p><em>Ammattimainen tekstiasiakirja herättää luottamusta. Tässä luvussa opit asettamaan asiakirjan kerralla kuntoon hyödyntämällä Wordin sisäänrakennettuja tyylejä ja loogista rakenteellisuutta manuaalisen näpräämisen sijaan. Opit tekemään asiateksteistäsi, kuten raporteista ja muistioista, rakenteellisesti virheettömiä, visuaalisesti yhtenäisiä sekä saavutettavuuden vaatimukset täyttäviä.</em></p>
+<p><strong>Luvun sisältö:</strong></p>
+<ul>
+<li>Word-perusteet</li>
+<li>Asiakirjan rakenne ja muotoilu</li>
+<li>Taulukot ja kuvat</li>
+</ul>
+<hr>
+<h3 id="41-word-perusteet">4.1 Word-perusteet</h3>
+<p>Word on Microsoftin tekstinkäsittelyohjelma. Sitä käytetään liiketoiminnassa esimerkiksi raporttien, muistioiden, sopimusten, tarjousten ja kirjeiden kirjoittamiseen.</p>
+<blockquote>
+<p>💡 <strong>Vinkki — ohje suoraan ohjelmasta:</strong> Paina <strong>F1</strong> avataksesi Wordin virallisen ohjesivuston. Ohje päivittyy automaattisesti ohjelman version mukaan ja on saatavilla suomeksi.</p>
+</blockquote>
+<p><strong>Tekstin perustoiminnot</strong></p>
+<table>
+<thead>
+<tr>
+<th>Toiminto</th>
+<th>Näppäinyhdistelmä</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Kopioi</td>
+<td><kbd>Ctrl</kbd> + <kbd>C</kbd></td>
+</tr>
+<tr>
+<td>Leikkaa</td>
+<td><kbd>Ctrl</kbd> + <kbd>X</kbd></td>
+</tr>
+<tr>
+<td>Liitä</td>
+<td><kbd>Ctrl</kbd> + <kbd>V</kbd></td>
+</tr>
+<tr>
+<td>Liitä ilman muotoiluja</td>
+<td><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>V</kbd></td>
+</tr>
+<tr>
+<td>Kumoa</td>
+<td><kbd>Ctrl</kbd> + <kbd>Z</kbd></td>
+</tr>
+<tr>
+<td>Tee uudelleen</td>
+<td><kbd>Ctrl</kbd> + <kbd>Y</kbd></td>
+</tr>
+<tr>
+<td>Tallenna</td>
+<td><kbd>Ctrl</kbd> + <kbd>S</kbd></td>
+</tr>
+<tr>
+<td>Tulosta</td>
+<td><kbd>Ctrl</kbd> + <kbd>P</kbd></td>
+</tr>
+<tr>
+<td>Valitse kaikki</td>
+<td><kbd>Ctrl</kbd> + <kbd>A</kbd></td>
+</tr>
+<tr>
+<td>Lihavointi</td>
+<td><kbd>Ctrl</kbd> + <kbd>B</kbd></td>
+</tr>
+<tr>
+<td>Kursiivi</td>
+<td><kbd>Ctrl</kbd> + <kbd>I</kbd></td>
+</tr>
+<tr>
+<td>Alleviivaus</td>
+<td><kbd>Ctrl</kbd> + <kbd>U</kbd></td>
+</tr>
+<tr>
+<td><strong>Ohje</strong></td>
+<td><kbd>F1</kbd></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>💡 <strong>Tiesitkö?</strong> Yllä olevat leikkaa/kopioi/liitä ja tallennuksen pikanäppäimet toimivat lähes universaalisti myös kaikissa muissakin Windows-sovelluksissa. Pikanäppäinten oppiminen on sen arvoista — ne nopeuttavat työskentelyä merkittävästi, kun niistä tulee automaattinen tapa.</p>
+</blockquote>
+<p><strong>Asiakirjan metatiedot</strong></p>
+<p>On hyvä ymmärtää, että asiakirjoihin tallentuu ns. <em>metatietoja</em> (asiakirjan ominaisuuksia), kuten tekijän nimi, otsikko ja päivämäärät. Vastaanottaja voi nähdä nämä. Esimerkiksi Wordissa pääset muokkaamaan niitä <strong>Tiedosto</strong> → <strong>Tiedot</strong> -näkymän oikeasta reunasta. On ammattimaista, että palautettavan tai jaettavan tiedoston ominaisuuksissa näkyy asiallinen otsikko ja oikeat tekijätiedot.</p>
+<p><strong>Tekstin muotoilu</strong></p>
+<p>Usein tekstiä muotoillaan suoraan <strong>Aloitus</strong>-välilehdeltä:</p>
+<ul>
+<li><strong>Fontti ja koko:</strong> Käytä selkeää fonttia (esim. Calibri, Arial tai Times New Roman). Leipätekstin koko on tyypillisesti 11–12 pt.</li>
+<li><strong>Lihavointi, kursiivi, alleviivaus:</strong> Käytä harkiten — kaiken korostaminen tarkoittaa, ettei mikään erotu.</li>
+<li><strong>Kappalemuotoilu:</strong> Tasaus, sisennys, rivinväli.</li>
+</ul>
+<p><em>Kuitenkin,</em> pidemmän päälle paras tapa hallita asiakirjan ulkoasua on käyttää <strong>Tyylejä</strong> (lue lisää luvusta 4.2). Suorat muotoilut (kuten tekstin värin muuttaminen napista) kannattaa jättää vain pieniin korostuksiin yksittäisissä kohdissa.</p>
+<p><strong>Tärkeä periaate: älä käytä välilyöntejä tai Enter-näppäintä muotoiluun</strong></p>
+<p>Yksi yleisimmistä virheistä on muotoilla asiakirja lisäämällä ylimääräisiä rivinvaihtoja tai välilyöntejä. Tämä johtaa ongelmiin, kun tekstiä muokataan myöhemmin.</p>
+<ul>
+<li><strong>Kappaleen sisennys:</strong> Käytä kappalemuotoilua, ei välilyöntejä</li>
+<li><strong>Tyhjä tila kappaleiden välissä:</strong> Käytä kappalemuotoilun &quot;Välistys ennen/jälkeen&quot; -asetusta, ei ylimääräisiä Enter-painalluksia</li>
+<li><strong>Erilaiset Enterin käyttötarkoitukset:</strong>
+<ul>
+<li><kbd>Enter</kbd>: Luo uuden kappaleen. Siihen tulee automaattisesti tyylien asetusten mukainen väli.</li>
+<li><kbd>Shift</kbd> + <kbd>Enter</kbd>: Luo rivinvaihdon <em>saman kappaleen sisälle</em>, eli uutta kappaleväliä ei tule.</li>
+<li><kbd>Ctrl</kbd> + <kbd>Enter</kbd>: Tekee pakotetun <em>sivunvaihdon</em>. Tätä pitää käyttää aina, kun haluat varmistaa, että tietty asia (kuten uusi pääotsikko) alkaa täysin uudelta sivulta.</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="42-asiakirjan-rakenne-ja-muotoilu">4.2 Asiakirjan rakenne ja muotoilu</h3>
+<p>Ammattimainen asiakirja ei ole vain muotoiltua tekstiä — sillä on selkeä rakenne, joka helpottaa lukemista ja navigointia.</p>
+<p><strong>Tyylit — tehokkain muotoilutyökalu</strong></p>
+<p>Wordissa <strong>tyylit</strong> (Styles) ovat valmiiksi määriteltyjä muotoiluja. Tärkeimmät:</p>
+<ul>
+<li><strong>Normaali</strong> — Asiakirjan perusteksti. (Suositus: Muokkaa tätä tyyliä jos haluat vaihtaa koko asiakirjan fonttia tai riviväliä, sen sijaan että maalaat kaiken tekstin ja käytät pikamuotoilua).</li>
+<li><strong>Otsikko 1</strong> — Pääotsikko (luku 1, luku 2…)</li>
+<li><strong>Otsikko 2</strong> — Alaotsikko (1.1, 1.2…)</li>
+<li><strong>Otsikko 3</strong> — Taso 3 (1.1.1…)</li>
+</ul>
+<p>Miksi tyylit ovat tärkeitä?</p>
+<ul>
+<li><strong>Yhtenäisyys:</strong> Kaikki otsikot näyttävät samanlaisilta ilman manuaalista muotoilua. Jos tarvitset samanlaisen erikoismuotoilun asiakirjassa useaan paikkaan, voit luoda myös omia tyylejä.</li>
+<li><strong>Sisällysluettelo:</strong> Word luo automaattisen sisällysluettelon tyylejä käyttäen</li>
+<li><strong>Päivittäminen:</strong> Muuta yhden tyylin muotoilua, ja muutos päivittyy kaikkiin saman tyylin kappaleisiin</li>
+</ul>
+<p><strong>Sivuasetukset</strong></p>
+<p><strong>Asettelu</strong>-välilehdellä:</p>
+<ul>
+<li><strong>Marginaalit:</strong> Oletusmarginaalit (2,5 cm) sopivat useimpiin asiakirjoihin</li>
+<li><strong>Suunta:</strong> Pysty (muistiot, raportit) tai vaaka (laajat taulukot, esitykset)</li>
+<li><strong>Sivukoko:</strong> A4 on standardi</li>
+</ul>
+<p><strong>Ylä- ja alatunnisteet</strong></p>
+<p>Ylätunnisteessa on tyypillisesti asiakirjan nimi tai organisaation nimi. Alatunnisteessa ovat sivunumerot.</p>
+<p>Lisää sivunumerot: <strong>Lisää</strong> → <strong>Sivunumero</strong></p>
+<p><strong>Sisällysluettelo</strong></p>
+<p>Kun olet käyttänyt Otsikko-tyylejä, voit luoda automaattisen sisällysluettelon:</p>
+<ol>
+<li>Aseta kursori haluamaasi kohtaan (yleensä asiakirjan alkuun, kansilehden jälkeen)</li>
+<li><strong>Viittaukset</strong> → <strong>Sisällysluettelo</strong> → Valitse tyyli</li>
+</ol>
+<p>Kun muokkaat asiakirjaa, päivitä sisällysluettelo: napsauta sitä → <strong>Päivitä kenttä</strong>.</p>
+<p><strong>Käytännön esimerkki: selkeä palaverimuistio Wordissa</strong></p>
+<p>Kuvittele, että sinun pitää laatia lyhyt muistio tiimipalaverista. Selkeä rakenne voisi olla tällainen:</p>
+<pre><code class="language-text">Otsikko 1: Viikkopalaverin muistio 12.9.2026
+
+Normaali: Paikalla olivat Aino Laine, Omar Virtanen ja Salla Niemi.
+
+Otsikko 2: Sovitut asiat
+- somekampanjan luonnos valmiiksi perjantaihin mennessä
+- asiakastapaaminen siirrettiin ensi viikolle
+
+Otsikko 2: Toimenpiteet
+1. Omar tekee luonnoksen
+2. Aino tarkistaa budjetin
+3. Salla lähettää muistion tiimille
+</code></pre>
+<p>Tässä esimerkissä tärkeintä ei ole pitkä sisältö vaan se, että <strong>otsikot tehdään tyyleillä</strong>, leipäteksti kirjoitetaan <strong>Normaali</strong>-tyylillä ja asiat erotellaan selkeästi luetteloiksi. Samalla asiakirja pysyy siistinä myös silloin, kun sitä muokataan myöhemmin.</p>
+<hr>
+<h3 id="43-taulukot-ja-kuvat">4.3 Taulukot ja kuvat</h3>
+<p><strong>Taulukon lisääminen</strong></p>
+<p>Taulukko järjestää tietoja riveihin ja sarakkeisiin selkeästi.</p>
+<ol>
+<li><strong>Lisää</strong> → <strong>Taulukko</strong> → Valitse koko</li>
+<li>Syötä tiedot soluihin — Tab-näppäin siirtyy seuraavaan soluun</li>
+<li>Muotoile taulukko: valitse taulukko → <strong>Taulukon rakenne</strong> → Valitse tyyli</li>
+</ol>
+<p><strong>Taulukon muotoilun periaatteet</strong></p>
+<ul>
+<li>Otsikkorivi: lihavoitu ja erottuva tausta</li>
+<li>Rivinvuorottelu: vaihtuvat taustavärit helpottavat lukemista</li>
+<li>Teksti vasemmalle tasattuna, luvut oikealle tasattuna</li>
+</ul>
+<p><strong>Kuvan lisääminen</strong></p>
+<ol>
+<li><strong>Lisää</strong> → <strong>Kuvat</strong> → Valitse tiedosto tai käytä Bing-kuvahakua</li>
+<li>Klikkaa kuvaa ja valitse tekstin rivittämistyyli:
+<ul>
+<li><strong>Neliömäinen</strong> tai <strong>Tiukka</strong> — Teksti ympäröi kuvaa</li>
+<li><strong>Edessä tekstiä</strong> / <strong>Takana tekstiä</strong> — Kuva menee tekstin päälle tai alle</li>
+<li><strong>Rivissä tekstin kanssa</strong> (oletus) — Kuva käyttäytyy kuten merkki</li>
+</ul>
+</li>
+</ol>
+<p>Jos asiakirja jaetaan muille, lisää kuvalle myös <strong>vaihtoehtoinen teksti</strong> (alt text). Se auttaa esimerkiksi ruudunlukijaa käyttävää lukijaa ymmärtämään, mitä kuvassa on.</p>
+<p><strong>Kuvan tekijänoikeudet</strong></p>
+<p>Muista: kaikki verkosta löytyvät kuvat eivät ole vapaasti käytettävissä. Käytä tekijänoikeusvapaita kuvia (Unsplash, Pixabay, Pexels) tai ilmoita kuvan lähde.</p>
+<blockquote>
+<p>📚 <strong>Lisätietoja — Word</strong></p>
+<ul>
+<li><a href="https://support.microsoft.com/fi-fi/word">Wordin ohjeet ja oppaat</a> — Microsoftin virallinen Word-tukisivusto (suomeksi)</li>
+<li><a href="https://support.microsoft.com/fi-fi/office/word-for-windows-training-7bcd85e6-2c3d-4c3c-a2a5-5ed8847eae73">Word-videokoulutus</a> — Ilmaiset opetusvideot aloittelijoista edistyneille</li>
+</ul>
+</blockquote>
+<hr>
+<h2 id="luku-5--powerpoint--esitysgrafiikka">Luku 5 — PowerPoint — esitysgrafiikka</h2>
+<p><em>Vaikuttava diaesitys ei ole vain tekstin kopioimista valkokankaalle, vaan visuaalinen tuki viestillesi. Tässä luvussa opit luomaan tyylikkäitä ja selkeitä esityksiä hyödyntäen toimivia teemoja, asetteluja ja oikeaa visuaalista hierarkiaa. Lisäksi käsitellään itse esitystilanteessa tarvittavia teknisiä perusvalmiuksia, kuten esittäjän näkymän hyödyntämistä.</em></p>
+<p><strong>Luvun sisältö:</strong></p>
+<ul>
+<li>PowerPoint-perusteet</li>
+<li>Visuaalinen suunnittelu</li>
+<li>Esittäminen</li>
+</ul>
+<hr>
+<h3 id="51-powerpoint-perusteet">5.1 PowerPoint-perusteet</h3>
+<p>PowerPoint on Microsoftin esitysgrafiikkaohjelma. Sitä käytetään tiedon esittämiseen visuaalisesti — kokouksissa, koulutuksissa, myyntitilanteissa ja konferensseissa.</p>
+<blockquote>
+<p>💡 <strong>Vinkki — ohje suoraan ohjelmasta:</strong> Paina <strong>F1</strong> avataksesi PowerPointin virallisen ohjesivuston. Ohje päivittyy automaattisesti ohjelman version mukaan ja on saatavilla suomeksi.</p>
+</blockquote>
+<p><strong>PowerPointin perusnäkymä</strong></p>
+<ul>
+<li><strong>Diapaneeli</strong> (vasen reuna): Näyttää kaikki diat pienoiskuvina — järjestä dioja vetämällä</li>
+<li><strong>Dianäkymä</strong> (keskellä): Dian muokkausnäkymä</li>
+<li><strong>Muistiinpanot</strong> (alalaitassa): Esittäjän muistiinpanot, joita yleisö ei näe</li>
+</ul>
+<p><strong>Dian lisääminen ja poistaminen</strong></p>
+<ul>
+<li>Lisää dia: <strong>Aloitus</strong> → <strong>Uusi dia</strong> tai napsauta diapaneelia hiiren oikealla → <strong>Uusi dia</strong></li>
+<li>Poista dia: Valitse dia → <kbd>Delete</kbd>-näppäin</li>
+<li>Järjestä dioja: Vedä diapaneelissa haluamaasi järjestykseen</li>
+</ul>
+<blockquote>
+<p>🖼️ <strong>[TÄHÄN KUVA: PowerPointin näkymästä (Aloitus-välilehti), jossa korostettuna diapaneeli ja muistiinpanot-alue painike/laatikko]</strong></p>
+</blockquote>
+<p><strong>Teemat ja asettelut</strong></p>
+<p>Teema määrittää diojen visuaalisen ulkoasun: värimaailman, fontit ja taustakuvat.</p>
+<ul>
+<li><strong>Rakenne</strong>-välilehdellä voit valita valmiin teeman</li>
+<li>Asettelu (layout) määrittää dian rakenteen: otsikkodia, otsikko + sisältö, tyhjä dia jne.</li>
+</ul>
+<blockquote>
+<p>💡 <strong>Työelämätaito: Dian perustyylit (Slide Master)</strong>
+Organisaatioissa on lähes aina virallinen graafisen ohjeiston mukainen PowerPoint-pohja teemoineen ja asetteluineen. <strong>Käytä aina valmiita diojen asetteluja</strong> oman suoran muotoilun sijaan, jotta esityksen ulkoasu pysyy yhtenäisenä ja varmana. Jos pohjaa tarvitsee muuttaa merkittävästi (esimerkiksi siirtää logo toiseen kulmaan kaikille sivuille), se tehdään ammattimaisesti <strong>Näytä</strong> → <strong>Dian perustyyli</strong> -näkymän kautta. Näin muutos heijastuu kerralla kaikkiin oikeisiin dioihin ilman manuaalista säätämistä jokaisella dialla erikseen. Yhtenäisyys luo ammattilaisen vaikutelman! Samoin muista asiakirjan <strong>metatiedot</strong>: voit muuttaa tiedoston virallisen otsikon kohdasta Tiedosto → Tiedot.</p>
+</blockquote>
+<hr>
+<h3 id="52-visuaalinen-suunnittelu">5.2 Visuaalinen suunnittelu</h3>
+<p>Hyvä diaesitys ei ole tekstin kopiointi ruudulle — se on visuaalinen tuki puhutulle esitykselle.</p>
+<p><strong>&quot;Vähemmän on enemmän&quot; — tekstin määrä</strong></p>
+<p>Yleisin virhe diaesityksissä on liikaa tekstiä. Muista:</p>
+<ul>
+<li>Dia tukee puhumaasi — se ei ole kalvo, joka luetaan ääneen</li>
+<li>Maksimi: 5–6 luetteloriviä per dia, korkeintaan 6–7 sanaa per rivi</li>
+<li>Suosi avainsanoja ja lyhyitä lauseita — ei kokonaisia kappaleita</li>
+</ul>
+<p><strong>Visuaalinen hierarkia</strong></p>
+<p>Katse ohjautuu automaattisesti suurimpaan ja tummimpaan elementtiin. Hyödynnä tätä:</p>
+<ul>
+<li>Otsikko on suurin ja selkein</li>
+<li>Tärkein tieto on visuaalisesti korostettu</li>
+<li>Vähemmän tärkeä sisältö on pienempää tai vaaleampaa</li>
+</ul>
+<p><strong>Kuvat ja grafiikat</strong></p>
+<ul>
+<li>Käytä laadukkaita kuvia — epätarkat tai pikselöityneet kuvat näyttävät epäammattimaiselta</li>
+<li>Kuva voi korvata tekstin: yksi havainnollinen kuva kertoo enemmän kuin luettelomerkkilista</li>
+<li>SmartArt on hyvä prosessien, hierarkioiden ja suhteiden esittämiseen</li>
+<li>Jos esitys jaetaan luettavaksi esimerkiksi eKampuksessa tai PDF:nä, lisää kuville tarvittaessa vaihtoehtoinen teksti.</li>
+</ul>
+<p><strong>Värit ja fontit</strong></p>
+<ul>
+<li>Käytä enintään 2–3 väriä esityksessä</li>
+<li>Kontrasti on tärkeää: tumma teksti vaalealla taustalla tai päinvastoin</li>
+<li>Käytä enintään 2 fonttia: yksi otsikoille, yksi leipätekstille</li>
+<li>Fonttikoko: otsikoille vähintään 28–32 pt, tekstille vähintään 18–20 pt</li>
+</ul>
+<p><strong>Animaatiot — käytä harkiten</strong></p>
+<p>Animaatiot voivat olla hyödyllisiä, kun haluat paljastaa sisällön vaiheistettuna. Useimmiten kuitenkin:</p>
+<ul>
+<li>Yksinkertaiset &quot;Häivytä sisään&quot; tai &quot;Ilmesty&quot; -animaatiot riittävät</li>
+<li>Vältä vilkkaita tai ärsyttäviä animaatioita — ne vievät huomion asiasta</li>
+<li>Siirtymät diojen välillä: yksinkertainen <strong>Häivytä</strong> tai ei siirtymää lainkaan on paras valinta</li>
+</ul>
+<p><strong>Käytännön esimerkki: kolmen dian työelämäesitys</strong></p>
+<p>Jos sinun pitäisi tehdä lyhyt esitys esimerkiksi kesätyöhakua tai yritysvierailua varten, toimiva rakenne voisi olla tällainen:</p>
+<pre><code class="language-text">Dia 1: Kesätyöhakuni 2026
+- nimi
+- haettava tehtävä
+- yksi vahva osaaminen
+
+Dia 2: Miksi sopisin tehtävään?
+- asiakaspalvelukokemus
+- täsmällisyys ja yhteistyötaidot
+- valmius oppia uutta
+
+Dia 3: Kiitos
+- yhteystiedot
+- mahdolliset kysymykset
+</code></pre>
+<p>Hyvä perussääntö on, että yhdellä dialla on <strong>yksi selkeä ajatus</strong>. Jos huomaat kirjoittavasi kokonaisen kappaleen, sisältö kannattaa yleensä tiivistää avainsanoiksi tai jakaa kahdelle dialle.</p>
+<hr>
+<h3 id="53-esittäminen">5.3 Esittäminen</h3>
+<p>Hyvä diaesitys on vain puolet asiasta — toinen puoli on esittäminen.</p>
+<p><strong>Ennen esitystä</strong></p>
+<ul>
+<li>Harjoittele ääneen — kerro, mitä aiot sanoa kunkin dian kohdalla</li>
+<li>Tarkista tekniikka etukäteen: toimiiko projektori, onko tiedosto oikeassa paikassa?</li>
+<li>Tallenna esitys myös PDF-muotoon varmuuden vuoksi — PDF avautuu ilman PowerPointia</li>
+</ul>
+<p><strong>Esittäjän näkymä (Presenter View)</strong></p>
+<p>Esittäjän näkymässä näet samaan aikaan:</p>
+<ul>
+<li>Nykyisen dian</li>
+<li>Seuraavan dian</li>
+<li>Omat muistiinpanosi</li>
+<li>Kuluneen ajan</li>
+</ul>
+<p>Ota esittäjän näkymä käyttöön: <strong>Diaesitys</strong> → <strong>Esittäjän näkymä</strong> tai <kbd>Alt</kbd> + <kbd>F5</kbd>.</p>
+<blockquote>
+<p>🖼️ <strong>[TÄHÄN KUVA/SCREENSHOT: PowerPointin esittäjän näkymästä, jotta lukija tietää miltä se näyttää]</strong></p>
+</blockquote>
+<p><strong>Esityksen nauhoittaminen</strong></p>
+<p>Jos esitys täytyy palauttaa nauhoitettuna (esim. etäopiskelu):</p>
+<ol>
+<li><strong>Diaesitys</strong> → <strong>Nauhoita diaesitys</strong></li>
+<li>Nauhoita ääni ja/tai video dioittain</li>
+<li>Tallenna tiedosto tai vie se videona (<strong>Tiedosto</strong> → <strong>Vie</strong> → <strong>Luo video</strong>)</li>
+</ol>
+<p><strong>Hyvän esittäjän periaatteet</strong></p>
+<ul>
+<li>Puhu yleisölle, älä kuvaruudulle tai projektoriin</li>
+<li>Käytä dioja muistilistana — älä lue niitä sanasta sanaan</li>
+<li>Pidä sopiva tahti: älä kiiruhda, mutta älä myöskään pitkittele</li>
+<li>Valmistaudu kysymyksiin — hyvä esittäjä osaa vastata spontaanistikin</li>
+</ul>
+<blockquote>
+<p>📚 <strong>Lisätietoja — PowerPoint</strong></p>
+<ul>
+<li><a href="https://support.microsoft.com/fi-fi/powerpoint">PowerPointin ohjeet ja oppaat</a> — Microsoftin virallinen PowerPoint-tukisivusto (suomeksi)</li>
+<li><a href="https://support.microsoft.com/fi-fi/office/powerpoint-for-windows-training-40e8c930-cb0b-40d8-82c4-bd53d3398787">PowerPoint-videokoulutus</a> — Ilmaiset opetusvideot aloittelijoista edistyneille</li>
+</ul>
+</blockquote>
+<p><em>Kirjan loppu — Osio 1: Digitaidot ja tiedostonhallinta</em></p>
+<hr>
+<blockquote>
+<p><strong>Tekijänoikeus:</strong> Mercuria-kauppaoppilaitos Oy<br>
+<strong>Versio:</strong> 1.0 (2026)<br>
+<strong>Lisenssi:</strong> CC BY-NC-SA 4.0 — Vapaasti käytettävissä oppilaitoskäyttöön</p>
+</blockquote>
+
+            <script async src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script>
+            
+        </body>
+        </html>
