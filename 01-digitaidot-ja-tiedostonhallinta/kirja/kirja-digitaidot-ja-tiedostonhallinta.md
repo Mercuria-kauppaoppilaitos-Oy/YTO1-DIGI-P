@@ -1,12 +1,12 @@
 # Kirja: Digitaidot ja tiedostonhallinta
 
-**Moodle-kirja-aktiviteetti — Osio 1**  
+**eKampus-kirja-aktiviteetti — Osio 1**  
 **Kurssi:** YTO1-DIGI-P — Toiminta digitaalisessa ympäristössä  
 **Osaamistavoitteet:** 5, 6, 7, 9, 10
 
 ---
 
-> **Kirjan rakenne (Moodle-luvut ja aliluvut)**
+> **Kirjan rakenne (eKampus-kirjan luvut ja aliluvut)**
 >
 > 1. Tiedostonhallinta
 >    - 1.1 Miksi tiedostonhallinta on tärkeää?
@@ -34,7 +34,27 @@
 
 ## Luku 1 — Tiedostonhallinta
 
-*Tässä luvussa opit järjestämään tiedostosi ja kansiosi niin, että löydät etsimäsi aina helposti — nyt ja tulevaisuudessa.*
+*Tässä luvussa syvennytään digitaalisen työn perusvalmiuksiin: oman tietokonetyöskentelyn hallintaan ja loogiseen organisointiin. Johdonmukainen tiedostonhallinta säästää aikaa, vähentää virheitä ja on ehdoton edellytys sujuvalle tiimityölle liike-elämässä. Opit luomaan selkeitä kansiorakenteita, nimeämään tiedostot ammattimaisesti sekä ymmärtämään eri tiedostomuotojen käyttötarkoitukset.*
+
+**Luvun sisältö:**
+- Miksi tiedostonhallinta on tärkeää?
+- Kansiorakenteet
+- Tiedostojen nimeämiskäytännöt
+- Tiedostomuodot
+
+> 💡 **Kirjan käyttö eKampuksella:** Seuraavalle sivulle pääset sivun reunassa olevasta nuolesta. Kirjan sisällysluettelo avautuu ruudun oikeaan reunaan. Saat sen näkyviin tai piiloon **Näytä/piilota lohkovalikko** -painikkeesta <span style="background-color: rgb(0 111 186 / .8); padding: 0 8px 0 8px;"><img src="https://ekampus.mercuria.fi/theme/image.php/snap/theme/1778200683/blocksdrawers" alt="Näytä/piilota lohkovalikko" style="height: 1.1em; vertical-align: text-bottom; filter: brightness(0) invert(1); background-color: rgb(0 111 186 / .8);"></span>.
+
+<br>
+
+**Työelämätaito: oikean laitteen ja sovelluksen valinta**
+
+Digitaalisessa työssä ei riitä, että osaa käyttää sovelluksia. Pitää osata myös valita tilanteeseen sopiva laite ja työkalu.
+
+- **Puhelin** sopii nopeaan viestintään, tunnistautumiseen, kuvaamiseen ja lyhyisiin tarkistuksiin.
+- **Tietokone** sopii pitkiin teksteihin, taulukoihin, esityksiin ja monivaiheiseen työskentelyyn.
+- **Word** sopii asiakirjoihin, **Excel** laskentaan ja tietojen käsittelyyn, **PowerPoint** esittämiseen ja **PDF** valmiin materiaalin jakamiseen.
+- **Pilvipalvelu** on paras valinta silloin, kun tiedostoa käytetään usealla laitteella tai yhdessä muiden kanssa.
+- Valinnassa kannattaa huomioida myös **tietoturva**, **yhteensopivuus**, **helppokäyttöisyys** ja se, tarvitseeko tiedostoa muokata yksin vai yhdessä.
 
 ---
 
@@ -191,18 +211,14 @@ Pidä alkuperäinen `.docx` tai `.xlsx` tallessa muokkaamista varten — PDF ei 
 
 ---
 
-> **Harjoittele:** Ennen kuin siirryt tehtäviin, tee tiedostonhallintaharjoitukset eKampuksella. Harjoitukset löytyvät osion etusivulta.
->
-> - Harjoitus 1: Etsi tiedosto kansiorakenteesta
-> - Harjoitus 2: Järjestä ja nimeä tiedostoja
-> - Harjoitus 3: Paikallinen tallentaminen ja pilvi — erot käytännössä
-> - Harjoitus 4: Tiedostomuodot tuntemaan
-
----
-
 ## Luku 2 — Pilvipalvelut ja tiedostojen jakaminen
 
-*Tässä luvussa opit käyttämään OneDrivea tiedostojen tallentamiseen ja jakamiseen sekä muokkaamaan tiedostoja yhdessä muiden kanssa.*
+*Nykyaikainen työ ja opiskelu tapahtuvat verkossa. Tässä luvussa opit Microsoftin pilvipalveluiden, kuten OneDriven, luotettavan käytön perustaidot. Opit tallentamaan tiedostosi turvallisesti siten, että ne ovat saatavilla laitteesta riippumatta. Lisäksi harjoittelet liike-elämässä välttämätöntä kykyä jakaa asiakirjoja oikeilla käyttöoikeuksilla ja muokata tiedostoja saumattomasti yhdessä muiden kanssa.*
+
+**Luvun sisältö:**
+- OneDrive — peruskäyttö
+- Tiedostojen ja kansioiden jakaminen
+- Yhteismuokkaus
 
 ---
 
@@ -311,7 +327,12 @@ Versiohistoria säästää tilanteessa, jossa "joku vahingossa poisti tärkeän 
 
 ## Luku 3 — Excel — taulukkolaskenta
 
-*Tässä luvussa opit Excelin perusteet: taulukoiden luomisen ja muotoilun, kaavojen ja funktioiden käytön sekä kaavioiden tekemisen.*
+*Taulukkolaskentaohjelmistot, erityisesti Excel, kuuluvat jokaisen asiantuntijan perustyökaluihin toimialasta riippumatta. Tässä luvussa rakennat vahvan perustan Excelin käytölle: tunnistat taulukoiden logiikan, osaat muotoilla ja käsitellä tietoa sekä hyödyntää kaavoja ja funktioita (kuten SUMMA ja JOS) rutiinien automatisoinnissa. Opit myös havainnollistamaan dataa ammattimaisilla kaavioilla.*
+
+**Luvun sisältö:**
+- Excel-perusteet
+- Kaavat ja funktiot
+- Kaaviot
 
 ---
 
@@ -325,9 +346,9 @@ Excel on Microsoftin taulukkolaskentaohjelma. Se on yksi eniten käytetyistä oh
 
 Excel-tiedosto on **työkirja** (workbook), joka sisältää yhden tai useamman **taulukon** (sheet). Taulukko koostuu **soluista**, jotka järjestyvät **riveihin** (numerot 1, 2, 3…) ja **sarakkeisiin** (kirjaimet A, B, C…).
 
-> 🖼️ **[TÄHÄN KUVA: Excelin käyttöliittymä, jossa korostettuna "Työkirja", työtahdet (alhaalla), solu (esim. B3), rivi ja sarake]**
+> 🖼️ **[TÄHÄN KUVA: Excelin käyttöliittymä, jossa korostettuna "Työkirja", taulukkovälilehdet (alhaalla), solu (esim. B3), rivi ja sarake]**
 
-Solun osoite muodostuu sarakekirjaimesta ja rvinumerosta: esimerkiksi **B3** tarkoittaa sarakkeen B, rivin 3 solua.
+Solun osoite muodostuu sarakekirjaimesta ja rivinumerosta: esimerkiksi **B3** tarkoittaa sarakkeen B, rivin 3 solua.
 
 **Tietojen syöttäminen**
 
@@ -450,18 +471,14 @@ Excelin kaavion saa siirrettyä PowerPointiin:
 
 ---
 
-> **Harjoittele:** Ennen kuin siirryt tehtäviin, tee taulukkolaskentaharjoitukset eKampuksella. Harjoitukset löytyvät osion etusivulta.
->
-> - Harjoitus 1: Peruslaskutoimitukset soluissa
-> - Harjoitus 2: Summa- ja keskiarvo-funktiot
-> - Harjoitus 3: Täyttökahva ja sarjojen luominen
-> - Harjoitus 4: Absoluuttinen viittaus kaavassa
-
----
-
 ## Luku 4 — Word — tekstinkäsittely
 
-*Tässä luvussa opit tuottamaan ammattimaisia asiakirjoja Wordilla: muotoilemaan tekstiä, rakentamaan asiakirjan oikein ja lisäämään taulukoita ja kuvia.*
+*Ammattimainen tekstiasiakirja herättää luottamusta. Tässä luvussa opit asettamaan asiakirjan kerralla kuntoon hyödyntämällä Wordin sisäänrakennettuja tyylejä ja loogista rakenteellisuutta manuaalisen näpräämisen sijaan. Opit tekemään asiateksteistäsi, kuten raporteista ja muistioista, rakenteellisesti virheettömiä, visuaalisesti yhtenäisiä sekä saavutettavuuden vaatimukset täyttäviä.*
+
+**Luvun sisältö:**
+- Word-perusteet
+- Asiakirjan rakenne ja muotoilu
+- Taulukot ja kuvat
 
 ---
 
@@ -555,6 +572,27 @@ Kun olet käyttänyt Otsikko-tyylejä, voit luoda automaattisen sisällysluettel
 
 Kun muokkaat asiakirjaa, päivitä sisällysluettelo: napsauta sitä → **Päivitä kenttä**.
 
+**Käytännön esimerkki: selkeä palaverimuistio Wordissa**
+
+Kuvittele, että sinun pitää laatia lyhyt muistio tiimipalaverista. Selkeä rakenne voisi olla tällainen:
+
+```text
+Otsikko 1: Viikkopalaverin muistio 12.9.2026
+
+Normaali: Paikalla olivat Aino Laine, Omar Virtanen ja Salla Niemi.
+
+Otsikko 2: Sovitut asiat
+- somekampanjan luonnos valmiiksi perjantaihin mennessä
+- asiakastapaaminen siirrettiin ensi viikolle
+
+Otsikko 2: Toimenpiteet
+1. Omar tekee luonnoksen
+2. Aino tarkistaa budjetin
+3. Salla lähettää muistion tiimille
+```
+
+Tässä esimerkissä tärkeintä ei ole pitkä sisältö vaan se, että **otsikot tehdään tyyleillä**, leipäteksti kirjoitetaan **Normaali**-tyylillä ja asiat erotellaan selkeästi luetteloiksi. Samalla asiakirja pysyy siistinä myös silloin, kun sitä muokataan myöhemmin.
+
 ---
 
 ### 4.3 Taulukot ja kuvat
@@ -580,6 +618,8 @@ Taulukko järjestää tietoja riveihin ja sarakkeisiin selkeästi.
    - **Edessä tekstiä** / **Takana tekstiä** — Kuva menee tekstin päälle tai alle
    - **Rivissä tekstin kanssa** (oletus) — Kuva käyttäytyy kuten merkki
 
+Jos asiakirja jaetaan muille, lisää kuvalle myös **vaihtoehtoinen teksti** (alt text). Se auttaa esimerkiksi ruudunlukijaa käyttävää lukijaa ymmärtämään, mitä kuvassa on.
+
 **Kuvan tekijänoikeudet**
 
 Muista: kaikki verkosta löytyvät kuvat eivät ole vapaasti käytettävissä. Käytä tekijänoikeusvapaita kuvia (Unsplash, Pixabay, Pexels) tai ilmoita kuvan lähde.
@@ -591,19 +631,14 @@ Muista: kaikki verkosta löytyvät kuvat eivät ole vapaasti käytettävissä. K
 
 ---
 
-> **Harjoittele:** Ennen kuin siirryt tehtäviin, tee tekstinkäsittelyharjoitukset eKampuksella. Harjoitukset löytyvät osion etusivulta.
->
-> - Harjoitus 1: Tekstin muotoilu — lihavointi, kursiivi, alleviivaus
-> - Harjoitus 2: Tyylit ja otsikkorakenne
-> - Harjoitus 3: Pikanäppäimet tehokäyttöön
-> - Harjoitus 4: Sarkaimen asettaminen ja tekstin tasaukset
-> - Harjoitus 5: Erikoismerkit ja symbolit
-
----
-
 ## Luku 5 — PowerPoint — esitysgrafiikka
 
-*Tässä luvussa opit tekemään selkeän ja ammattimaisen diaesityksen PowerPointilla sekä esittämään sen yleisölle.*
+*Vaikuttava diaesitys ei ole vain tekstin kopioimista valkokankaalle, vaan visuaalinen tuki viestillesi. Tässä luvussa opit luomaan tyylikkäitä ja selkeitä esityksiä hyödyntäen toimivia teemoja, asetteluja ja oikeaa visuaalista hierarkiaa. Lisäksi käsitellään itse esitystilanteessa tarvittavia teknisiä perusvalmiuksia, kuten esittäjän näkymän hyödyntämistä.*
+
+**Luvun sisältö:**
+- PowerPoint-perusteet
+- Visuaalinen suunnittelu
+- Esittäminen
 
 ---
 
@@ -662,6 +697,7 @@ Katse ohjautuu automaattisesti suurimpaan ja tummimpaan elementtiin. Hyödynnä 
 - Käytä laadukkaita kuvia — epätarkat tai pikselöityneet kuvat näyttävät epäammattimaiselta
 - Kuva voi korvata tekstin: yksi havainnollinen kuva kertoo enemmän kuin luettelomerkkilista
 - SmartArt on hyvä prosessien, hierarkioiden ja suhteiden esittämiseen
+- Jos esitys jaetaan luettavaksi esimerkiksi eKampuksessa tai PDF:nä, lisää kuville tarvittaessa vaihtoehtoinen teksti.
 
 **Värit ja fontit**
 
@@ -676,6 +712,28 @@ Animaatiot voivat olla hyödyllisiä, kun haluat paljastaa sisällön vaiheistet
 - Yksinkertaiset "Häivytä sisään" tai "Ilmesty" -animaatiot riittävät
 - Vältä vilkkaita tai ärsyttäviä animaatioita — ne vievät huomion asiasta
 - Siirtymät diojen välillä: yksinkertainen **Häivytä** tai ei siirtymää lainkaan on paras valinta
+
+**Käytännön esimerkki: kolmen dian työelämäesitys**
+
+Jos sinun pitäisi tehdä lyhyt esitys esimerkiksi kesätyöhakua tai yritysvierailua varten, toimiva rakenne voisi olla tällainen:
+
+```text
+Dia 1: Kesätyöhakuni 2026
+- nimi
+- haettava tehtävä
+- yksi vahva osaaminen
+
+Dia 2: Miksi sopisin tehtävään?
+- asiakaspalvelukokemus
+- täsmällisyys ja yhteistyötaidot
+- valmius oppia uutta
+
+Dia 3: Kiitos
+- yhteystiedot
+- mahdolliset kysymykset
+```
+
+Hyvä perussääntö on, että yhdellä dialla on **yksi selkeä ajatus**. Jos huomaat kirjoittavasi kokonaisen kappaleen, sisältö kannattaa yleensä tiivistää avainsanoiksi tai jakaa kahdelle dialle.
 
 ---
 
@@ -721,15 +779,6 @@ Jos esitys täytyy palauttaa nauhoitettuna (esim. etäopiskelu):
 > - [PowerPointin ohjeet ja oppaat](https://support.microsoft.com/fi-fi/powerpoint) — Microsoftin virallinen PowerPoint-tukisivusto (suomeksi)
 > - [PowerPoint-videokoulutus](https://support.microsoft.com/fi-fi/office/powerpoint-for-windows-training-40e8c930-cb0b-40d8-82c4-bd53d3398787) — Ilmaiset opetusvideot aloittelijoista edistyneille
 
----
-
-> **Harjoittele:** Ennen kuin siirryt tehtäviin, tee esitysgrafiikkaharjoitukset eKampuksella. Harjoitukset löytyvät osion etusivulta.
->
-> - Harjoitus 1: Diarakenteen suunnittelu
-> - Harjoitus 2: Korjaa esityksen virheet
-
----
-
 *Kirjan loppu — Osio 1: Digitaidot ja tiedostonhallinta*
 
 ---
@@ -737,3 +786,4 @@ Jos esitys täytyy palauttaa nauhoitettuna (esim. etäopiskelu):
 > **Tekijänoikeus:** Mercuria-kauppaoppilaitos Oy  
 > **Versio:** 1.0 (2026)  
 > **Lisenssi:** CC BY-NC-SA 4.0 — Vapaasti käytettävissä oppilaitoskäyttöön
+

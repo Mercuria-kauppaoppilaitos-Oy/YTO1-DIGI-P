@@ -1,12 +1,12 @@
 # Kirja: Tiedonhaku, tekoäly ja tekijänoikeudet
 
-**Moodle-kirja-aktiviteetti — Osio 2**  
+**eKampus-kirja-aktiviteetti — Osio 2**  
 **Kurssi:** YTO1-DIGI-P — Toiminta digitaalisessa ympäristössä  
 **Osaamistavoitteet:** 4, 8, 11
 
 ---
 
-> **Kirjan rakenne (Moodle-luvut ja aliluvut)**
+> **Kirjan rakenne (eKampus-kirjan luvut ja aliluvut)**
 >
 > 1. Tiedonhaku verkossa
 >    - 1.1 Hakukoneiden tehokas käyttö
@@ -29,7 +29,15 @@
 
 ## Luku 1 — Tiedonhaku verkossa
 
-*Tässä luvussa opit hakemaan tietoa tehokkaasti ja arvioimaan löytämäsi tiedon luotettavuutta — tärkeimmän digitaalisen perustaidon.*
+*Informaatiotulvan keskellä oikean ja luotettavan tiedon löytäminen on yksi tärkeimmistä työelämätaidoista. Tässä luvussa syvennyt tiedonhaun työkaluihin, hakukoneiden tehokkaaseen käyttöön ja lähdekritiikkiin. Opit varmistamaan tietolähteiden luotettavuuden esimerkiksi yritystietoa hakiessasi sekä erottamaan merkityksellisen tiedon disinformaatiosta ja valeuutisista.*
+
+**Luvun sisältö:**
+- Hakukoneiden tehokas käyttö
+- Eri tietolähteet ja niiden luotettavuus
+- Lähdekritiikki
+- Disinformaatio ja valeuutiset
+
+> 💡 **Kirjan käyttö eKampuksessa:** Seuraavalle sivulle pääset sivun reunassa olevasta nuolesta. Kirjan sisällysluettelo avautuu ruudun oikeaan reunaan. Saat sen näkyviin tai piiloon **Näytä/piilota lohkovalikko** -painikkeesta <img src="https://ekampus.mercuria.fi/theme/image.php/snap/theme/1778200683/blocksdrawers" alt="Näytä/piilota lohkovalikko" style="height: 1.1em; vertical-align: text-bottom;">.
 
 ---
 
@@ -69,6 +77,10 @@ Ensimmäiset hakutulokset eivät aina ole luotettavimpia tai parhaita — ne voi
 - **URL:** Virallinen organisaatio (esim. `vero.fi`, `oph.fi`) on yleensä luotettavampi kuin tuntematon sivusto
 - **Otsikko ja kuvaus:** Arvioi jo hakutulosnäkymässä, onko lähde relevantti
 
+> 🖼️ **[TÄHÄN KUVA: hakukoneen tulossivu, jossa korostettuna mainosmerkintä, URL-osoite, otsikko ja tuloksen kuvausteksti]**
+>
+> 🧩 **[TÄHÄN INTERAKTIIVINEN ESIMERKKI: opiskelija kokeilee eri hakuoperaattoreita ja näkee, miten hakutulokset muuttuvat]**
+
 ---
 
 ### 1.2 Eri tietolähteet ja niiden luotettavuus
@@ -94,6 +106,8 @@ Liiketoiminnan tiedonhaussa tärkeimpiä lähteitä ovat:
 - **Finlex (finlex.fi):** Suomen lainsäädäntö
 - **Business Finland:** Viennin ja innovaatioiden tieto
 - **Toimialaraportit:** Eri toimialojen analyysit (esim. ELY-keskukset)
+
+> 🖼️ **[TÄHÄN KUVA / KAAVIO: lähteiden luotettavuuspyramidi, jossa viralliset lähteet ylimpänä ja satunnaiset some-lähteet alimpana]**
 
 ---
 
@@ -131,6 +145,10 @@ Löydät verkkosivun, joka väittää, että jokin tuote parantaa stressiä "kli
 - Missä "kliininen tutkimus" on julkaistu? Löytyykö se tiedejulkaisusta?
 - Löytyykö sama väite muualta? Vai vain tältä myyjältä?
 
+> 💼 **[TÄHÄN CASE-ESIMERKKI: kaksi lyhyttä verkkolähdettä samasta aiheesta, joista opiskelija vertailee kumpi on luotettavampi ja miksi]**
+>
+> 🧩 **[TÄHÄN INTERAKTIIVINEN ESIMERKKI: merkitse lähteestä kohdat, jotka lisäävät tai heikentävät luotettavuutta]**
+
 ---
 
 ### 1.4 Disinformaatio ja valeuutiset
@@ -149,7 +167,7 @@ Valeuutisille on usein tunnusomaisia piirteitä:
 
 **Faktantarkistus**
 
-Epäiletkösi uutisen tai väitteen paikkansapitävyyttä? Tarkista:
+Epäiletkö uutisen tai väitteen paikkansapitävyyttä? Tarkista:
 - **Faktabaari (yle.fi/faktabaari):** Suomalainen faktantarkistuspalvelu
 - **Snopes.com:** Kansainvälinen faktantarkistuspalvelu
 - **AFP Fact Check:** Faktantarkistus
@@ -162,6 +180,10 @@ Tekoäly mahdollistaa nykyisin vakuuttavan näköisten väärennösten tuottamis
 - **Kuvamanipulaatio:** Kuva on otettu eri tilanteesta tai sen sisältöä on muutettu
 
 Kuvien alkuperän voit tarkistaa **käänteisellä kuvahaulla**: vie kuva Google Kuviin tai TinEye-palveluun.
+
+> 🖼️ **[TÄHÄN KUVA: esimerkki epäilyttävästä some-julkaisusta tai kuvasta, jonka alkuperä voidaan tarkistaa käänteisellä kuvahaulla]**
+>
+> 🧩 **[TÄHÄN INTERAKTIIVINEN ESIMERKKI: opiskelija vertaa alkuperäistä kuvaa ja muokattua kuvaa tai tekee ohjatun käänteisen kuvahaun]**
 
 **Tekoäly ja disinformaatio**
 
@@ -179,7 +201,14 @@ Generatiivinen tekoäly tekee disinformaation tuottamisesta entistä helpompaa j
 
 ## Luku 2 — Generatiivinen tekoäly
 
-*Tässä luvussa tutustut generatiiviseen tekoälyyn: mitä se on, miten sitä käytetään, mitä hyötyä siitä on — ja mitkä ovat sen riskit.*
+*Tekoäly muuttaa vauhdilla tapaamme työskennellä ja tuottaa sisältöä. Tässä luvussa perehdyt generatiiviseen tekoälyyn (esim. Copilot, ChatGPT) paitsi ilmiönä, myös tehokkaana arjen työkaluapulaisena. Opit rakentamaan hyviä kehotteita (prompteja) ja ymmärtämään kielimallien toimintalogiikkaa. Yhtä lailla opit tunnistamaan teknologian rajat, harhat sekä tietoturvariskit, jotta osaat käyttää tekoälyä asiantuntijatehtävissä turvallisesti ja vastuullisesti.*
+
+**Luvun sisältö:**
+- Mitä tekoäly on?
+- Tekoälytyökalut
+- Tekoälyn hyödyntäminen
+- Riskit ja rajoitukset
+- Vastuullinen käyttö
 
 ---
 
@@ -207,6 +236,10 @@ Tämä tarkoittaa, että kielimalli:
 - Voi olla varma väärästä vastauksesta — se ei tunnista omaa tietämättömyyttään
 
 Tämä on tärkeä ymmärtää tekoälyä käytettäessä.
+
+**Käytännön esimerkki:** Jos kirjoitat kehotteen "Suomen pääkaupunki on...", malli ennustaa seuraavaksi todennäköisesti sanan **Helsinki**, koska se on nähnyt tämän sanayhteyden usein koulutusaineistossaan. Sama periaate toimii myös paljon pidemmissä vastauksissa — siksi vastaus voi kuulostaa sujuvalta, vaikka se olisi osittain väärä.
+
+> 🖼️ **[TÄHÄN KAAVIO: Prompti → kielimalli → vastaus, jossa korostetaan että malli ennustaa seuraavaa sanaa tai sanajaksoa]**
 
 ---
 
@@ -275,6 +308,13 @@ Tekoälyn vastauksen laatu riippuu pitkälti siitä, miten pyyntö muotoillaan. 
 
 Verrattuna epämääräiseen pyyntöön "kirjoita jotain Instagramista" tämä tuottaa huomattavasti hyödyllisemmän vastauksen.
 
+**Käytännön esimerkki: heikko ja parempi prompti**
+
+- **Heikko prompti:** "Kerro asiakaspalvelusta."
+- **Parempi prompti:** "Toimi myymäläpäällikkönä. Kirjoita kolme käytännön vinkkiä hyvään asiakaspalveluun päivittäistavarakaupassa. Vastaa selkeänä luettelona."
+
+> 🧩 **[TÄHÄN INTERAKTIIVINEN ESIMERKKI: opiskelija muokkaa epätarkan promptin paremmaksi ja näkee, miten vastaus muuttuu]**
+
 ---
 
 ### 2.4 Riskit ja rajoitukset
@@ -288,9 +328,13 @@ Kielimallit voivat tuottaa täysin väärää tietoa varman kuuloisesti. Tätä 
 - Antaa väärää tietoa lainsäädännöstä tai faktoista
 - Sekoittaa kaksi eri henkilöä tai tapahtumaa toisiinsa
 
+**Käytännön esimerkki:** Jos pyydät tekoälyä listaamaan lähteet esitelmään, se voi antaa aidon näköisiä artikkeleita ja verkkosivuja, joita ei todellisuudessa ole olemassa. Siksi lähdelista pitää aina tarkistaa itse.
+
 **Tiedon ajantasaisuus**
 
 Kielimalleilla on tiedoissaan katkokohta (cutoff date) — ne eivät tiedä sen jälkeen tapahtuneista asioista. Kysy siis aina tarvittaessa: "Onko tietosi tästä aiheesta ajantasainen?"
+
+**Selvennys:** *Katkokohta* tarkoittaa käytännössä sitä ajankohtaa, johon asti mallia on koulutettu. Jos kysyt aivan uusista uutisista, lakimuutoksista tai hinnoista, malli ei välttämättä tiedä niitä oikein.
 
 **Yksityisyys ja tietoturva**
 
@@ -299,9 +343,11 @@ Mitä syötät tekoälylle, saattaa päätyä koulutusaineistoon tai tallentua p
 - Luottamuksellisia yritystietoja (sopimusehdot, hinnoittelu, liikesalaisuudet)
 - Salasanoja tai tunnuksia
 
-**Bias (ennakkoluulot)**
+**Vinoumat ja ennakkoluulot (bias)**
 
 Tekoäly on koulutettu ihmisten tuottamalla tekstillä, joka sisältää ennakkoluuloja. Tekoäly voi siksi tuottaa sisältöä, joka heijastaa stereotypioita tai on yksipuolista.
+
+**Käytännön esimerkki:** Jos pyydät tekoälyä kuvailemaan "tyypillistä johtajaa" tai "tyypillistä hoitajaa", vastaus voi vahingossa toistaa vanhoja sukupuoli- tai kulttuuristereotypioita. Siksi vastauksia pitää lukea kriittisesti myös silloin, kun ne kuulostavat sujuvilta.
 
 **Tekoälyriippuvuus**
 
@@ -345,7 +391,13 @@ Monissa yrityksissä on laadittu ohjeet tekoälyn käytölle. Tutustu oman työn
 
 ## Luku 3 — Tekijänoikeudet
 
-*Tässä luvussa opit tekijänoikeuden perusteet ja sen, miten voit käyttää muiden tekemiä materiaaleja laillisesti ja vastuullisesti.*
+*Kun hyödynnät verkosta löytyvää tai tekoälyn generoimaa materiaalia työtehtävissäsi ja esityksissäsi, sinun on ehdottoman tärkeää ymmärtää tekijänoikeuksien perusteet. Tässä luvussa opit, miten voit luvallisesti käyttää ja jakaa kuvia, tekstiä ja taulukoita. Opit CC-lisenssien merkityksen sekä kuinka viittaat asiallisesti lähteisiisi kunnioittaen alkuperäistä tekijää.*
+
+**Luvun sisältö:**
+- Tekijänoikeuden perusteet
+- Creative Commons -lisenssit
+- Kuvien ja muun materiaalin käyttö
+- Lähdeviittaukset
 
 ---
 
@@ -371,7 +423,7 @@ Tekijänoikeus ei vaadi rekisteröintiä — se syntyy, kun teos luodaan. Vaikka
 
 **Tekijänoikeuden kesto**
 
-Suomessa tekijänoikeus on voimassa tekijän eliniän ja 70 vuotta hänen kuolemastaan. Vanhat teokset, joiden suoja-aika on päättynyt, ovat **vapaassa käytössä** (public domain).
+Suomessa tekijänoikeus on voimassa tekijän eliniän ja 70 vuotta hänen kuolemastaan. Vanhat teokset, joiden suoja-aika on päättynyt, ovat **tekijänoikeudesta vapaita** (public domain).
 
 **Mitä et voi tehdä ilman lupaa?**
 
@@ -394,6 +446,17 @@ Creative Commons (CC) on järjestelmä, jonka avulla tekijä voi antaa tarkasti 
 | 💰 | NC | Ei kaupalliseen käyttöön (Non-Commercial) |
 | = | ND | Ei muokkausta (No Derivatives) |
 | ♻ | SA | Jaa samoin (Share-Alike) — muokattu versio samalla lisenssillä |
+
+**Selvennys**
+
+- **BY** = kerro, kuka on tehnyt materiaalin
+- **NC** = et saa käyttää materiaalia kaupalliseen tarkoitukseen ilman erillistä lupaa
+- **ND** = et saa muokata materiaalia ennen käyttöä
+- **SA** = jos muokkaat materiaalia, jaa uusi versio samalla lisenssillä
+
+> 🖼️ **[TÄHÄN KUVA: Creative Commons -lisenssien symbolit ja niiden merkitykset yhdellä silmäyksellä]**
+>
+> 🧩 **[TÄHÄN INTERAKTIIVINEN ESIMERKKI: yhdistä oikea CC-symboli oikeaan käyttöehtoon]**
 
 **Yleisimmät CC-lisenssit**
 
@@ -470,6 +533,8 @@ Tekijä/organisaatio (vuosi). Otsikko. Sivuston nimi. URL. [Viitattu pp.kk.vvvv]
 Esimerkki:
 > Verohallinto (2025). Arvonlisäverotus. vero.fi. https://www.vero.fi/yritykset-ja-yhteisot/tietoa-yritysverotuksesta/arvonlisaverotus/ [Viitattu 15.4.2026]
 
+> 🖼️ **[TÄHÄN KUVA: lähdeviitteen osat värein merkittynä, esimerkiksi tekijä, vuosi, otsikko, sivusto, URL ja viittauspäivä]**
+
 **Kuvan viittaus**
 
 ```
@@ -482,6 +547,8 @@ Jos olet käyttänyt tekoälyä tiedon hakemisessa tai tekstin tuottamisessa:
 ```
 ChatGPT (2026). Vastaus kysymykseen: [kysymyksen tiivistelmä]. OpenAI. [Viitattu pp.kk.vvvv]
 ```
+
+> 🧩 **[TÄHÄN INTERAKTIIVINEN ESIMERKKI: opiskelija täydentää puuttuvat osat verkkolähteen tai tekoälylähteen viitteeseen]**
 
 **Plagiointi**
 
@@ -507,3 +574,4 @@ Tekoälyn tuottama teksti on myös plagiointia, jos sitä esitetään omana tuot
 > **Tekijänoikeus:** Mercuria-kauppaoppilaitos Oy  
 > **Versio:** 1.0 (2026)  
 > **Lisenssi:** CC BY-NC-SA 4.0 — Vapaasti käytettävissä oppilaitoskäyttöön
+
