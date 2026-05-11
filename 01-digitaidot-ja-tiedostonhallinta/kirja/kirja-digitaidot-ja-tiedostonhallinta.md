@@ -70,6 +70,8 @@ Kansiorakenne on tapa järjestää tiedostot hierarkkisesti — kuten fyysisen a
 2. **Ei liian syvää rakennetta** — 3–4 tasoa on yleensä riittävä; syvempi rakenne hankaloittaa navigointia
 3. **Johdonmukaisuus** — Käytä samaa logiikkaa joka paikassa
 
+> 🖼️ **[TÄHÄN KUVA: Windowsin Resurssienhallinta tai Macin Finder, jossa näkyy havainnollistava kansiorakenne ja "Uusi kansio" -painike korostettuna]**
+
 **Esimerkki: opiskelijan kansiorakenne**
 
 ```
@@ -144,6 +146,12 @@ Kun tiedostosta syntyy useita versioita, merkitse versio nimeen:
 
 Näin vältyt tilanteelta, jossa on useita tiedostoja nimillä "tarjous lopullinen", "tarjous LOPULLINEN2" tai "tarjous TÄMÄ ON SE".
 
+**Tietoturvavaroitus: Tuntemattomat tiedostot**
+
+Ole varovainen avatessasi sähköpostiliitteitä tai netistä ladattuja tiedostoja. Erityisen riskialttiita tai haitallisia voivat olla:
+- `.exe`, `.bat`, `.cmd` ja `.scr` (Suoritettavia ohjelmia tai skriptejä, jotka voivat käynnistää viruksen)
+- `.xlsm` tai `.docm` (Makroja sisältävät Office-tiedostot. Salli makrot vain täysin luotettavista lähteistä)
+
 ---
 
 ### 1.4 Tiedostomuodot
@@ -161,6 +169,16 @@ Tiedostomuoto määrittää, miten tiedoston sisältö on tallennettu. Tiedostom
 | `.jpg` / `.png` | Kuvankäsittely, selain | Valokuvat ja grafiikat |
 | `.mp4` | Videotoistin | Videot |
 | `.zip` | Pakkausohjelma | Useamman tiedoston pakkaaminen yhdeksi |
+
+**Muita yleisiä tiedostomuotoja, joihin saatat törmätä:**
+
+| Pääte | Mitä nämä ovat? | Millä aukeaa? |
+|---|---|---|
+| `.txt` | Puhdas tekstitiedosto ilman muotoiluja | Muistio (Notepad), Word |
+| `.html` | Verkkosivun rakennetiedosto | Verkkoselain (Chrome, Edge) |
+| `.psd` | Kuvankäsittelyn työtiedosto | Adobe Photoshop |
+| `.heic` / `.mov` | Applen laitteiden (esim. iPhone) kuva/video | Kuvat- tai videotoistimet |
+| `.odt` / `.ods` | Avoimen lähdekoodin asiakirja/taulukko | LibreOffice, OpenOffice (aukeaa myös Word/Excel) |
 
 **Milloin käyttää PDF:ää?**
 
@@ -190,7 +208,9 @@ Pidä alkuperäinen `.docx` tai `.xlsx` tallessa muokkaamista varten — PDF ei 
 
 ### 2.1 OneDrive — peruskäyttö
 
-OneDrive on Microsoftin pilvipalvelu, joka on osa Microsoft 365 -pakettia. Se toimii sekä verkkoselaimen kautta (onedrive.com) että tietokoneelle asennettavana ohjelmana, joka synkronoi tiedostot automaattisesti.
+OneDrive on Microsoftin pilvipalvelu, joka on osa Microsoft 365 -pakettia. Se toimii sekä verkkoselaimen kautta (onedrive.com) että tietokoneelle asennettavana ohjelmana, joka synkronoi tiedostot automaattisesti. 
+
+> 💡 **Huomio:** Liike-elämässä on laajalti käytössä myös toinen suuri pilvipalvelu: **Google Workspace (Google Drive)**. Se toimii täysin samalla periaatteella kuin OneDrive (sisältäen omat ohjelmansa Docs, Sheets ja Slides). Jos opit käyttämään OneDrivea, osaat käyttää myös Google Drivea.
 
 **Miksi pilvipalvelu on hyödyllinen?**
 
@@ -299,19 +319,21 @@ Versiohistoria säästää tilanteessa, jossa "joku vahingossa poisti tärkeän 
 
 Excel on Microsoftin taulukkolaskentaohjelma. Se on yksi eniten käytetyistä ohjelmista liiketoiminnassa — budjeteista ja myyntiraporteista henkilöstöhallintaan ja asiakaslistoihin.
 
-> 💡 **Vinkki — ohje suoraan ohjelmasta:** Paina **F1** missä tahansa kohdassa Exceliä (tai muuta Office-ohjelmaa) avataksesi Microsoftin virallisen ohjesivuston. Ohje on aina ajantasainen ohjelman version mukaan ja saatavilla myös suomeksi.
+> 💡 **Vinkki — ohje suoraan ohjelmasta:** Paina <kbd>F1</kbd> missä tahansa kohdassa Exceliä (tai muuta Office-ohjelmaa) avataksesi Microsoftin virallisen ohjesivuston. Ohje on aina ajantasainen ohjelman version mukaan ja saatavilla myös suomeksi.
 
 **Excelin rakenne**
 
 Excel-tiedosto on **työkirja** (workbook), joka sisältää yhden tai useamman **taulukon** (sheet). Taulukko koostuu **soluista**, jotka järjestyvät **riveihin** (numerot 1, 2, 3…) ja **sarakkeisiin** (kirjaimet A, B, C…).
+
+> 🖼️ **[TÄHÄN KUVA: Excelin käyttöliittymä, jossa korostettuna "Työkirja", työtahdet (alhaalla), solu (esim. B3), rivi ja sarake]**
 
 Solun osoite muodostuu sarakekirjaimesta ja rvinumerosta: esimerkiksi **B3** tarkoittaa sarakkeen B, rivin 3 solua.
 
 **Tietojen syöttäminen**
 
 - Klikkaa solua ja kirjoita
-- Siirry seuraavaan soluun **Enter**-näppäimellä (alas) tai **Tab**-näppäimellä (oikealle)
-- Voit muokata solun sisältöä kaksoisklikkaamalla tai **F2**-näppäimellä
+- Siirry seuraavaan soluun <kbd>Enter</kbd>-näppäimellä (alas) tai <kbd>Tab</kbd>-näppäimellä (oikealle)
+- Voit muokata solun sisältöä kaksoisklikkaamalla tai <kbd>F2</kbd>-näppäimellä
 
 **Solujen muotoilu**
 
@@ -351,7 +373,15 @@ Jokainen kaava alkaa yhtäläisyysmerkillä `=`. Ilman sitä Excel käsittelee s
 Kaavassa viitataan soluihin niiden osoitteella. Tämä on tärkeää: älä kirjoita lukua suoraan kaavaan, vaan viittaa soluun.
 
 - **Suhteellinen viittaus** (esim. `B3`): Kun kopioit kaavan, viittaus siirtyy suhteessa uuteen paikkaan
-- **Absoluuttinen viittaus** (esim. `$B$3`): Viittaus pysyy kiinteänä, vaikka kaavan kopioi muualle. Käytä `$`-merkkiä arvoon, joka ei saa muuttua (esim. ALV-prosentti tai kiinteä kustannus)
+- **Absoluuttinen viittaus** (esim. `$B$3`): Viittaus pysyy kiinteänä, vaikka kaavan kopioi muualle. Käytä `$`-merkkiä arvoon, joka ei saa muuttua (esim. ALV-prosentti). Esimerkissä `$`-merkki B:n edessä lukitsee viittauksen sarakkeeseen B, ja toinen `$`-merkki riville 3. Voidaan lukita myös pelkkä sarake tai rivi (`$B3` tai `B$3`).
+
+> 💡 **Tiesitkö?**
+> - <kbd>Ctrl</kbd> + <kbd>T</kbd> muotoilee alueen fiksuksi Excel-taulukoksi, jolloin kaavojen ja muotoilujen kopiointi automatisoituu ja suodattaminen helpottuu.
+> - **Täyttökahva:** Voit kopioida kaavoja tai luoda sarjoja vetämällä solun oikeassa alareunassa olevasta pienestä neliöstä (*täyttökahvasta*) hiirellä. Nopea asiantuntijavinkki: <kbd>Ctrl</kbd> + <kbd>D</kbd> kopioi suoraan yläpuolella olevan solun asiasisällön ja muotoilut alaspäin.
+> - <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>V</kbd>: Liitä teksti puhtaana tekstinä, niin kohdesolun jo valmiina olleet muotoilut säilyvät.
+> - **Pivot-taulukot:** Kun perustaidot ovat hallussa ja käsittelet isompia tietomääriä, ota haltuun [Pivot-taulukot](https://support.microsoft.com/fi-fi/office/luo-pivot-taulukko-taulukon-tietojen-analysoimista-varten-a9a84538-bfe9-40a9-a8e9-f99134456576) – ne ovat paras työkalu nopeaan analysointiin ja raportointiin ilman monimutkaisia kaavoja.
+
+> 🖼️ **[TÄHÄN KUVA / ANIMAATIO: Lyhyt GIF-animaatio tai selkeä kuva, jossa näytetään täyttökahvan (solun oikea alareuna) käyttö sarjan tai kaavan vetämiseen alaspäin]**
 
 **Tärkeimmät funktiot**
 
@@ -445,28 +475,34 @@ Word on Microsoftin tekstinkäsittelyohjelma. Sitä käytetään liiketoiminnass
 
 | Toiminto | Näppäinyhdistelmä |
 |---|---|
-| Kopioi | Ctrl+C |
-| Leikkaa | Ctrl+X |
-| Liitä | Ctrl+V |
-| Liitä ilman muotoiluja | Ctrl+Shift+V |
-| Kumoa | Ctrl+Z |
-| Tee uudelleen | Ctrl+Y |
-| Tallenna | Ctrl+S |
-| Tulosta | Ctrl+P |
-| Valitse kaikki | Ctrl+A |
-| Lihavointi | Ctrl+B |
-| Kursiivi | Ctrl+I |
-| Alleviivaus | Ctrl+U |
-| **Ohje** | **F1** |
+| Kopioi | <kbd>Ctrl</kbd> + <kbd>C</kbd> |
+| Leikkaa | <kbd>Ctrl</kbd> + <kbd>X</kbd> |
+| Liitä | <kbd>Ctrl</kbd> + <kbd>V</kbd> |
+| Liitä ilman muotoiluja | <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>V</kbd> |
+| Kumoa | <kbd>Ctrl</kbd> + <kbd>Z</kbd> |
+| Tee uudelleen | <kbd>Ctrl</kbd> + <kbd>Y</kbd> |
+| Tallenna | <kbd>Ctrl</kbd> + <kbd>S</kbd> |
+| Tulosta | <kbd>Ctrl</kbd> + <kbd>P</kbd> |
+| Valitse kaikki | <kbd>Ctrl</kbd> + <kbd>A</kbd> |
+| Lihavointi | <kbd>Ctrl</kbd> + <kbd>B</kbd> |
+| Kursiivi | <kbd>Ctrl</kbd> + <kbd>I</kbd> |
+| Alleviivaus | <kbd>Ctrl</kbd> + <kbd>U</kbd> |
+| **Ohje** | <kbd>F1</kbd> |
 
-Pikanäppäinten oppiminen on sen arvoista — ne nopeuttavat työskentelyä merkittävästi, kun niistä tulee automaattinen tapa.
+> 💡 **Tiesitkö?** Yllä olevat leikkaa/kopioi/liitä ja tallennuksen pikanäppäimet toimivat lähes universaalisti myös kaikissa muissakin Windows-sovelluksissa. Pikanäppäinten oppiminen on sen arvoista — ne nopeuttavat työskentelyä merkittävästi, kun niistä tulee automaattinen tapa.
+
+**Asiakirjan metatiedot**
+
+On hyvä ymmärtää, että asiakirjoihin tallentuu ns. *metatietoja* (asiakirjan ominaisuuksia), kuten tekijän nimi, otsikko ja päivämäärät. Vastaanottaja voi nähdä nämä. Esimerkiksi Wordissa pääset muokkaamaan niitä **Tiedosto** → **Tiedot** -näkymän oikeasta reunasta. On ammattimaista, että palautettavan tai jaettavan tiedoston ominaisuuksissa näkyy asiallinen otsikko ja oikeat tekijätiedot.
 
 **Tekstin muotoilu**
 
-Muotoile tekstiä **Aloitus**-välilehdellä:
+Usein tekstiä muotoillaan suoraan **Aloitus**-välilehdeltä:
 - **Fontti ja koko:** Käytä selkeää fonttia (esim. Calibri, Arial tai Times New Roman). Leipätekstin koko on tyypillisesti 11–12 pt.
-- **Lihavointi, kursiivi, alleviivaus:** Käytä harkiten — kaiken korostaminen tarkoittaa, ettei mikään erotu
-- **Kappalemuotoilu:** Tasaus, sisennys, rivinväli
+- **Lihavointi, kursiivi, alleviivaus:** Käytä harkiten — kaiken korostaminen tarkoittaa, ettei mikään erotu.
+- **Kappalemuotoilu:** Tasaus, sisennys, rivinväli.
+
+*Kuitenkin,* pidemmän päälle paras tapa hallita asiakirjan ulkoasua on käyttää **Tyylejä** (lue lisää luvusta 4.2). Suorat muotoilut (kuten tekstin värin muuttaminen napista) kannattaa jättää vain pieniin korostuksiin yksittäisissä kohdissa.
 
 **Tärkeä periaate: älä käytä välilyöntejä tai Enter-näppäintä muotoiluun**
 
@@ -474,7 +510,10 @@ Yksi yleisimmistä virheistä on muotoilla asiakirja lisäämällä ylimääräi
 
 - **Kappaleen sisennys:** Käytä kappalemuotoilua, ei välilyöntejä
 - **Tyhjä tila kappaleiden välissä:** Käytä kappalemuotoilun "Välistys ennen/jälkeen" -asetusta, ei ylimääräisiä Enter-painalluksia
-- **Sivunvaihto:** Käytä **Ctrl+Enter** (lisää sivunvaihdon), älä ylimääräisiä Enter-painalluksia
+- **Erilaiset Enterin käyttötarkoitukset:**
+  - <kbd>Enter</kbd>: Luo uuden kappaleen. Siihen tulee automaattisesti tyylien asetusten mukainen väli.
+  - <kbd>Shift</kbd> + <kbd>Enter</kbd>: Luo rivinvaihdon *saman kappaleen sisälle*, eli uutta kappaleväliä ei tule.
+  - <kbd>Ctrl</kbd> + <kbd>Enter</kbd>: Tekee pakotetun *sivunvaihdon*. Tätä pitää käyttää aina, kun haluat varmistaa, että tietty asia (kuten uusi pääotsikko) alkaa täysin uudelta sivulta.
 
 ---
 
@@ -485,13 +524,13 @@ Ammattimainen asiakirja ei ole vain muotoiltua tekstiä — sillä on selkeä ra
 **Tyylit — tehokkain muotoilutyökalu**
 
 Wordissa **tyylit** (Styles) ovat valmiiksi määriteltyjä muotoiluja. Tärkeimmät:
-- **Normaali** — Asiakirjan perusteksti
+- **Normaali** — Asiakirjan perusteksti. (Suositus: Muokkaa tätä tyyliä jos haluat vaihtaa koko asiakirjan fonttia tai riviväliä, sen sijaan että maalaat kaiken tekstin ja käytät pikamuotoilua).
 - **Otsikko 1** — Pääotsikko (luku 1, luku 2…)
 - **Otsikko 2** — Alaotsikko (1.1, 1.2…)
 - **Otsikko 3** — Taso 3 (1.1.1…)
 
 Miksi tyylit ovat tärkeitä?
-- **Yhtenäisyys:** Kaikki otsikot näyttävät samanlaisilta ilman manuaalista muotoilua
+- **Yhtenäisyys:** Kaikki otsikot näyttävät samanlaisilta ilman manuaalista muotoilua. Jos tarvitset samanlaisen erikoismuotoilun asiakirjassa useaan paikkaan, voit luoda myös omia tyylejä.
 - **Sisällysluettelo:** Word luo automaattisen sisällysluettelon tyylejä käyttäen
 - **Päivittäminen:** Muuta yhden tyylin muotoilua, ja muutos päivittyy kaikkiin saman tyylin kappaleisiin
 
@@ -583,8 +622,10 @@ PowerPoint on Microsoftin esitysgrafiikkaohjelma. Sitä käytetään tiedon esit
 **Dian lisääminen ja poistaminen**
 
 - Lisää dia: **Aloitus** → **Uusi dia** tai napsauta diapaneelia hiiren oikealla → **Uusi dia**
-- Poista dia: Valitse dia → Delete-näppäin
+- Poista dia: Valitse dia → <kbd>Delete</kbd>-näppäin
 - Järjestä dioja: Vedä diapaneelissa haluamaasi järjestykseen
+
+> 🖼️ **[TÄHÄN KUVA: PowerPointin näkymästä (Aloitus-välilehti), jossa korostettuna diapaneeli ja muistiinpanot-alue painike/laatikko]**
 
 **Teemat ja asettelut**
 
@@ -593,7 +634,8 @@ Teema määrittää diojen visuaalisen ulkoasun: värimaailman, fontit ja tausta
 - **Rakenne**-välilehdellä voit valita valmiin teeman
 - Asettelu (layout) määrittää dian rakenteen: otsikkodia, otsikko + sisältö, tyhjä dia jne.
 
-Käytä oppilaitoksen tai yrityksen virallista pohjaa, jos sellainen on käytettävissä.
+> 💡 **Työelämätaito: Dian perustyylit (Slide Master)**
+> Organisaatioissa on lähes aina virallinen graafisen ohjeiston mukainen PowerPoint-pohja teemoineen ja asetteluineen. **Käytä aina valmiita diojen asetteluja** oman suoran muotoilun sijaan, jotta esityksen ulkoasu pysyy yhtenäisenä ja varmana. Jos pohjaa tarvitsee muuttaa merkittävästi (esimerkiksi siirtää logo toiseen kulmaan kaikille sivuille), se tehdään ammattimaisesti **Näytä** → **Dian perustyyli** -näkymän kautta. Näin muutos heijastuu kerralla kaikkiin oikeisiin dioihin ilman manuaalista säätämistä jokaisella dialla erikseen. Yhtenäisyys luo ammattilaisen vaikutelman! Samoin muista asiakirjan **metatiedot**: voit muuttaa tiedoston virallisen otsikon kohdasta Tiedosto → Tiedot.
 
 ---
 
@@ -655,7 +697,9 @@ Esittäjän näkymässä näet samaan aikaan:
 - Omat muistiinpanosi
 - Kuluneen ajan
 
-Ota esittäjän näkymä käyttöön: **Diaesitys** → **Esittäjän näkymä** tai **Alt+F5**.
+Ota esittäjän näkymä käyttöön: **Diaesitys** → **Esittäjän näkymä** tai <kbd>Alt</kbd> + <kbd>F5</kbd>.
+
+> 🖼️ **[TÄHÄN KUVA/SCREENSHOT: PowerPointin esittäjän näkymästä, jotta lukija tietää miltä se näyttää]**
 
 **Esityksen nauhoittaminen**
 
