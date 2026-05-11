@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Päivän kysymys</title>
+  <style>
+    /* Nollataan iframen oman rungon asetukset, vältetään turhia skrollipalkkeja ja sallitaan taustan läpinäkyvyys */
+    body {
+      margin: 0;
+      padding: 10px; /* Pieni turvaväli, jottei varjot/reunat leikkaudu iframen seinään */
+      background: transparent;
+      overflow: hidden; 
+      font-family: "Roboto",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    }
+
+    .question-spark {
+      --qs-ink: #1f2937;
+      --qs-muted: #5b6472;
+      --qs-surface: #ffffff;
+      margin: 0; /* Poistettu isot marginaalit iframen sisältä */
+      color: var(--qs-ink);
+      font-family: inherit;
+    }
+
+  .question-spark,
+  .question-spark * {
+    box-sizing: border-box;
+  }
+
+  .question-spark__layout {
+    display: flex;
+    align-items: center; /* Keskittää kuplan ja maskotin pystysuunnassa */
+    justify-content: flex-end; /* Ryhmittelee kaiken oikealle */
+    gap: 1.5rem;
+    width: auto;
+    max-width: 900px;
+    margin-left: auto; /* Työntää koko paketin niin pitkälle oikealle kuin voi */
+  }
+
+  .question-spark__bubble-area {
+    flex: 0 1 auto;
+  }
+
+  .question-spark__question {
+    margin: 0;
+    font-size: 1.05rem;
+    line-height: 1.5;
+  }
+
+  /* Kapea sarake oikealla: päivityskuvake ylhäällä, maskotti alhaalla */
+  .question-spark__mascot-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    flex: 0 0 auto;
+  }
+
+  .question-spark__refresh {
+    position: relative;
+    width: 2.2rem;
+    height: 2.2rem;
+    padding: 0;
+    border: 1px solid #e5e7eb;
+    background: #f9fafb;
+    border-radius: 50%;
+    color: #4b5563;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    transition: background 150ms ease, color 150ms ease, border-color 150ms ease;
+  }
+
+  .question-spark__refresh:hover {
+    background: #ffffff;
+    color: #0f5c9a;
+    border-color: #0f5c9a;
+  }
+
+  .question-spark__refresh:focus-visible {
+    outline: 2px solid #0f5c9a;
+    outline-offset: 3px;
+  }
+
+  .question-spark__refresh svg {
+    width: 1.25rem;
+    height: 1.25rem;
+    display: block;
+  }
+
+  .question-spark__mascot {
+    width: 5.5rem;
+  }
+
+  .question-spark__mascot svg {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  /* =========================================
+     Puhekupla: Selkeä ääriviiva (Sarjakuva)
+     ========================================= */
+  .question-spark__bubble {
+    position: relative;
+    background: #ffffff;
+    padding: 1.25rem 1.75rem;
+    border-radius: 1.5rem;
+    max-width: 36rem;
+    border: 2px solid #2d3748;
+    border-bottom-width: 4px;
+    box-shadow: 3px 6px 0 rgba(45, 55, 72, 0.1);
+  }
+  
+  /* Tumma ulompi kolmio */
+  .question-spark__bubble::before {
+    content: '';
+    position: absolute;
+    right: -16px;
+    top: 60%; /* Hieman ylemmäs (66% -> 60%) */
+    transform: translateY(-50%);
+    border-style: solid;
+    border-width: 10px 0 10px 16px; /* Kapeampi pystysuunnassa */
+    border-color: transparent transparent transparent #2d3748;
+    display: block;
+  }
+  
+  /* Valkoinen sisempi kolmio peittää osan mustasta */
+  .question-spark__bubble::after {
+    content: '';
+    position: absolute;
+    right: -13px;
+    top: 60%; /* Hieman ylemmäs (66% -> 60%) */
+    transform: translateY(-50%);
+    border-style: solid;
+    border-width: 8px 0 8px 14px; /* Kapeampi pystysuunnassa (mukailtu ulompaan nähden) */
+    border-color: transparent transparent transparent #ffffff;
+    display: block;
+  }
+
+  /* Responsiivisuus */
+  @media (max-width: 600px) {
+    .question-spark__layout {
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 1rem;
+    }
+    .question-spark__mascot-column {
+      flex-direction: row;
+      align-items: center;
+      gap: 1rem;
+    }
+    .question-spark__refresh {
+      width: 2.6rem;
+      height: 2.6rem;
+    }
+    .question-spark__mascot {
+      width: 4.5rem;
+    }
+    
+    .question-spark__bubble::after,
+    .question-spark__bubble::before {
+      display: none; /* Piilotetaan häntä mobiilissa kun asettelu muuttuu pystysuuntaiseksi */
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="question-spark" data-question-spark>
+  <div class="question-spark__layout">
+    <div class="question-spark__bubble-area">
+      <div class="question-spark__bubble">
+        <p class="question-spark__question" aria-live="polite"></p>
+      </div>
+    </div>
+    <div class="question-spark__mascot-column">
+      <button class="question-spark__refresh" type="button" aria-label="Arvo uusi kysymys">
+        <svg fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+          <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"></path>
+          <path d="M21 3v5h-5"></path>
+        </svg>
+      </button>
+      <div class="question-spark__mascot" role="img" aria-label=""></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function () {
+    var rootNodes = document.querySelectorAll("[data-question-spark]");
+    if (!rootNodes.length) {
+      return;
+    }
+
+    if (!window.QuestionSparkLabel) {
+      var bank = {
+        hyvinvointi: [
+          "Kuinka paljon käytät ruutuaikaa päivässä – ja onko se mielestäsi sopivasti?",
+          "Milloin huomaat tarvitsevasi tauon laitteista?",
+          "Miten some vaikuttaa mielialaasi?",
+          "Oletko joskus verrannut itseäsi muihin somessa – miltä se tuntui?",
+          "Miten teknologia auttaa sinua voimaan paremmin?",
+          "Mitkä sovellukset kuluttavat eniten aikaa arjessasi?",
+          "Voiko puhelimen käyttö vaikuttaa uneen? Miten?",
+          "Milloin viimeksi olit päivän ilman puhelinta?",
+          "Pitäisikö koulussa puhelimen käyttöä rajoittaa enemmän?",
+          "Miten digitaalisten laitteiden käyttö vaikuttaa ympäristöön?",
+          "Tiedätkö, mitä tarkoittaa elektroniikkajäte?",
+          "Kuinka usein vaihdat puhelinta – ja miksi?",
+          "Miten voisit käyttää teknologiaa ympäristöystävällisemmin?",
+          "Onko digipaasto hyvä idea?",
+          "Mitä tekisit, jos netti ei toimisi viikon ajan?",
+          "Minkälaisista asioista somessa tulee hyvä olo?",
+          "Missä tilanteissa haluat olla ilman puhelinta? Miksi?",
+          "Miten voit itse tehdä netistä kivan paikan kaikille?",
+          "Miten neuvoisit nuorta, joka kohtaa kiusaamista tai ahdistelua netissä?",
+          "Yksi päivä ilman älylaitteita: mitä haluaisit tehdä?",
+          "Mikä on suurin ero online- ja offline-elämän välillä?",
+          "Millaisia paineita some voi aiheuttaa ihmisille?",
+          "Voivatko nettikaverit olla yhtä tärkeitä kuin muut kaverit? Miksi?",
+          "Olisiko maailma parempi vai huonompi paikka ilman somea? Miksi?",
+          "Onko sinun helppo hallita omaa puhelimenkäyttöäsi? Miksi?",
+          "Vanhan puhelimen kierrätys tai myyminen: mitä hyötyä siitä voi olla?",
+          "Mitä hyötyjä tai haittoja voi olla netissä tehdyillä ostoksilla?",
+          "Oletko erilainen somessa ja sen ulkopuolella? Miten?",
+          "Mikä saisi sinut vähentämään ruutuaikaa? Mitä tekisit sen sijaan?",
+          "Yllättääkö, että kaksi tuntia päivässä puhelimella on kuukausi vuodessa? Miltä se tuntuu?"
+        ],
+        digitaidot: [
+          "Mitä taitoja pidät tärkeimpinä digitaidoissa?",
+          "Miten tunnistat luotettavan verkkosivun?",
+          "Mistä tiedät, onko uutinen totta?",
+          "Oletko koskaan uskonut väärään tietoon netissä?",
+          "Miten tekoäly voi auttaa opiskelussa?",
+          "Milloin teknologia helpottaa oppimista?",
+          "Mitä sovelluksia käytät opiskelussa eniten?",
+          "Pitäisikö koulussa opettaa enemmän digitaalisia taitoja?",
+          "Mitä tarkoittaa lähdekritiikki?",
+          "Oletko joskus opettanut jotakuta käyttämään laitetta tai sovellusta?",
+          "Mistä tunnistat mainoksen somessa tai netissä?",
+          "Jos saisit käyttää ensi viikolla vain kolmea sovellusta, mitkä valitsisit?",
+          "Kerro yksi sovellus, josta sinulle tulee hyvä mieli tai josta pidät.",
+          "Millaisia hyötyjä tai haittoja tekoälystä voi olla?",
+          "Miten elektroniikkaa voi kierrättää tai uudelleenkäyttää?",
+          "Millaisia vinkkejä antaisit turvalliseen netinkäyttöön?",
+          "Miten tiedät, onko netissä näkemääsi kuvaa muokattu?",
+          "Tarkista ruutuaika oman puhelimesi asetuksista.",
+          "Mitä haluaisit oppia tekemään älylaitteilla, esimerkiksi puhelimella tai tietokoneella?",
+          "Käytätkö älylaitteita eri tavalla kotona, koulussa tai töissä?",
+          "Mitä sovelluksia käytät eniten puhelimella tai tietokoneella?",
+          "Ennen kuin jaat tietoa somessa, miksi on tärkeää tarkistaa lähteet ja varmistaa tiedon luotettavuus?"
+        ],
+        pelisaannot: [
+          "Mitkä ovat hyvät käytöstavat somessa?",
+          "Oletko nähnyt nettikiusaamista? Miten siihen pitäisi puuttua?",
+          "Mitä tekisit, jos joku kirjoittaa sinusta ilkeitä kommentteja?",
+          "Saako toisesta ottaa kuvan ja jakaa sen ilman lupaa?",
+          "Mikä ero on mielipiteellä ja loukkaamisella verkossa?",
+          "Voiko anonyymius tehdä ihmisistä ilkeämpiä?",
+          "Miten keskustelu netissä eroaa kasvokkain keskustelusta?",
+          "Mitä tarkoittaa “vastuu omista sanoista verkossa”?",
+          "Voiko somekeskustelussa ymmärtää väärin helpommin?",
+          "Millaisia sääntöjä ryhmäkeskustelussa pitäisi olla?",
+          "Mitä pitäisi miettiä, kun jakaa kuvia tai videoita itsestään netissä?",
+          "Kuinka monta tuntia päivässä on hyvä aika käyttää puhelinta ja muita älylaitteita?",
+          "Miten voit olla reilu muita kohtaan netissä?",
+          "Asteikolla 1-10, kuinka turvalliseksi tunnet itsesi netissä? Miksi?",
+          "Mitä mieltä olet siitä, että puhelinten käyttöä rajoitetaan kouluissa?",
+          "Mitä mieltä olet siitä, että aikuiset seuraavat lastensa somekanavia?",
+          "Mitä aikuisten pitäisi miettiä, kun he julkaisevat kuvia lapsistaan somessa?",
+          "Jos sinulle tai jollekin lähipiirissäsi sattuisi netissä jotain ikävää, kenen kanssa puhuisit mieluiten?",
+          "Mitä mieltä olet ruutuaikaa koskevista säännöistä?",
+          "Mitä pitäisi miettiä, kun jakaa kuvia tai videoita muista netissä?"
+        ],
+        tietoturva: [
+          "Miten teet vahvan salasanan?",
+          "Käytätkö samaa salasanaa useassa paikassa – miksi / miksi et?",
+          "Mitä tekisit, jos epäilet tilisi hakkeroidun?",
+          "Mitä tietoja ei kannata tai saa koskaan jakaa netissä? Miksi?",
+          "Tiedätkö, mitä tarkoittaa kaksivaiheinen tunnistautuminen?",
+          "Oletko koskaan saanut huijausviestin?",
+          "Miten tunnistat huijausviestin?",
+          "Mitä riskejä julkiseen wifiin liittyy?",
+          "Mitä tekisit, jos saat tuntemattomalta linkin?",
+          "Pitäisikö kaikilla olla perustiedot tietoturvasta?",
+          "Keksi kolme mahdollisimman huonoa salasanaa. Kerro muille, miksi ne ovat huonoja.",
+          "Miten varmistat ennen lataamista, että sovellus on turvallinen?",
+          "Miksi puhelimen ja tietokoneen päivittäminen on tärkeää?",
+          "Mistä tiedät, onko nettisivu turvallinen?",
+          "Tiedätkö, miksi julkinen wifi-verkko voi olla tietoturvariski?",
+          "Onko sinua ikinä yritetty huijata netissä?",
+          "Hyväksytkö vai hylkäätkö nettisivujen evästeet? Miksi?",
+          "Tiedätkö, mitä tietoja eri sovellukset keräävät sinusta?",
+          "Mitkä ovat yleisiä tapoja, joilla ihmisiä huijataan netissä?",
+          "Kumpi on sinulle tärkeämpi: yksityisyys vai helppokäyttöisyys? Miksi?"
+        ]
+      };
+
+      var themes = {
+        hyvinvointi: {
+          label: "Digihyvinvointi",
+          icon: "heart"
+        },
+        digitaidot: {
+          label: "Digitaidot",
+          icon: "gear"
+        },
+        pelisaannot: {
+          label: "Pelisäännöt",
+          icon: "rules"
+        },
+        tietoturva: {
+          label: "Tietoturva",
+          icon: "lock"
+        }
+      };
+
+      function renderMascot(themeKey, iconIdPrefix) {
+        var gradientId = iconIdPrefix + "-" + themes[themeKey].icon;
+
+        if (themeKey === "hyvinvointi") {
+          return (
+            '<svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg" focusable="false" role="img">' +
+            '<defs>' +
+            '<linearGradient id="' + gradientId + '" x1="0%" y1="0%" x2="100%" y2="100%">' +
+            '<stop offset="0%" stop-color="#ff6b6b"/>' +
+            '<stop offset="100%" stop-color="#c9184a"/>' +
+            '</linearGradient>' +
+            '</defs>' +
+            '<path d="M48 84 C20 60, 8 44, 8 30 C8 18, 18 10, 30 10 C38 10, 44 14, 48 20 C52 14, 58 10, 66 10 C78 10, 88 18, 88 30 C88 44, 76 60, 48 84 Z" fill="url(#' + gradientId + ')"/>' +
+            '</svg>'
+          );
+        }
+
+        if (themeKey === "digitaidot") {
+          return (
+            '<svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg" focusable="false" role="img">' +
+            '<defs>' +
+            '<linearGradient id="' + gradientId + '" x1="0%" y1="0%" x2="100%" y2="100%">' +
+            '<stop offset="0%" stop-color="#d9d9d9"/>' +
+            '<stop offset="100%" stop-color="#6b6b6b"/>' +
+            '</linearGradient>' +
+            '</defs>' +
+            '<g fill="url(#' + gradientId + ')">' +
+            '<path d="M48 10 L56 20 L68 18 L72 30 L84 36 L78 48 L84 60 L72 66 L68 78 L56 76 L48 86 L40 76 L28 78 L24 66 L12 60 L18 48 L12 36 L24 30 L28 18 L40 20 Z"/>' +
+            '<circle cx="48" cy="48" r="10" fill="#ffffff"/>' +
+            '</g>' +
+            '</svg>'
+          );
+        }
+
+        if (themeKey === "pelisaannot") {
+          return (
+            '<svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg" focusable="false" role="img">' +
+            '<defs>' +
+            '<linearGradient id="' + gradientId + '" x1="0" y1="0" x2="1" y2="1">' +
+            '<stop offset="0" stop-color="#b0b7ff"/>' +
+            '<stop offset="1" stop-color="#5c63d6"/>' +
+            '</linearGradient>' +
+            '</defs>' +
+            '<rect x="16" y="16" width="64" height="48" rx="10" fill="url(#' + gradientId + ')"/>' +
+            '<circle cx="28" cy="30" r="5" fill="#fff"/>' +
+            '<rect x="36" y="26" width="28" height="8" rx="4" fill="#fff"/>' +
+            '<rect x="24" y="40" width="48" height="6" rx="3" fill="#fff" opacity="0.8"/>' +
+            '<rect x="24" y="50" width="32" height="6" rx="3" fill="#fff" opacity="0.6"/>' +
+            '<path fill="url(#' + gradientId + ')" stroke="#fff" stroke-width="3" stroke-linejoin="round" d="M26 84 v-18 h-8 l14-16 l14 16 h-8 v18 z"/>' +
+            '<path fill="url(#' + gradientId + ')" stroke="#fff" stroke-width="3" stroke-linejoin="round" d="M70 52 v18 h8 l-14 16 l-14-16 h8 v-18 z"/>' +
+            '</svg>'
+          );
+        }
+
+        return (
+          '<svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg" focusable="false" role="img">' +
+          '<defs>' +
+          '<linearGradient id="' + gradientId + '" x1="0%" y1="0%" x2="100%" y2="100%">' +
+          '<stop offset="0%" stop-color="#d9d9d9"/>' +
+          '<stop offset="100%" stop-color="#6b6b6b"/>' +
+          '</linearGradient>' +
+          '</defs>' +
+          '<rect x="20" y="40" width="56" height="40" rx="10" fill="url(#' + gradientId + ')"/>' +
+          '<path d="M30 40 v-8 a18 18 0 1 1 36 0 v8 h-8 v-8 a10 10 0 1 0 -20 0 v8 z" fill="url(#' + gradientId + ')"/>' +
+          '<circle cx="48" cy="60" r="5" fill="#ffffff"/>' +
+          '</svg>'
+        );
+      }
+
+      function getAllQuestions(bank) {
+        return Object.keys(bank).reduce(function (all, key) {
+          return all.concat(
+            bank[key].map(function (question) {
+              return { theme: key, question: question };
+            })
+          );
+        }, []);
+      }
+
+      function pickRandom(items, previousQuestion) {
+        if (!items.length) {
+          return null;
+        }
+
+        if (items.length === 1) {
+          return items[0];
+        }
+
+        var next = items[Math.floor(Math.random() * items.length)];
+        while (previousQuestion && next.question === previousQuestion) {
+          next = items[Math.floor(Math.random() * items.length)];
+        }
+        return next;
+      }
+
+      window.QuestionSparkLabel = {
+        bank: bank,
+        themes: themes,
+        getAllQuestions: getAllQuestions,
+        pickRandom: pickRandom,
+        renderMascot: renderMascot
+      };
+    }
+
+    Array.prototype.forEach.call(rootNodes, function (rootNode) {
+      if (rootNode.dataset.questionSparkReady === "true") {
+        return;
+      }
+
+      rootNode.dataset.questionSparkReady = "true";
+
+      var api = window.QuestionSparkLabel;
+      var questionEl = rootNode.querySelector(".question-spark__question");
+      var refreshEl = rootNode.querySelector(".question-spark__refresh");
+      var mascotEl = rootNode.querySelector(".question-spark__mascot");
+      var iconIdPrefix = "qs-icon-" + Math.random().toString(36).slice(2, 10);
+      var previousQuestion = "";
+
+      function updateCard() {
+        var pool = api.getAllQuestions(api.bank);
+        var selected = api.pickRandom(pool, previousQuestion);
+
+        if (!selected) {
+          questionEl.textContent = "Kysymyksiä ei löytynyt.";
+          refreshEl.hidden = true;
+          return;
+        }
+
+        var theme = api.themes[selected.theme];
+        previousQuestion = selected.question;
+        questionEl.textContent = selected.question;
+        mascotEl.innerHTML = api.renderMascot(selected.theme, iconIdPrefix);
+        mascotEl.setAttribute("aria-label", theme.label);
+      }
+
+      refreshEl.addEventListener("click", updateCard);
+      updateCard(); // Ensimmäinen lataus heti
+    });
+  })();
+</script>
+</body>
+</html>

@@ -448,6 +448,7 @@ Word on Microsoftin tekstinkäsittelyohjelma. Sitä käytetään liiketoiminnass
 | Kopioi | Ctrl+C |
 | Leikkaa | Ctrl+X |
 | Liitä | Ctrl+V |
+| Liitä ilman muotoiluja | Ctrl+Shift+V |
 | Kumoa | Ctrl+Z |
 | Tee uudelleen | Ctrl+Y |
 | Tallenna | Ctrl+S |

@@ -1,0 +1,109 @@
+<!-- Sydän -->
+<svg width="96" height="96" viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="heartGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff6b6b"/>
+      <stop offset="100%" stop-color="#c9184a"/>
+    </linearGradient>
+  </defs>
+  <path 
+    d="M48 84 
+       C20 60, 8 44, 8 30 
+       C8 18, 18 10, 30 10 
+       C38 10, 44 14, 48 20 
+       C52 14, 58 10, 66 10 
+       C78 10, 88 18, 88 30 
+       C88 44, 76 60, 48 84 Z"
+    fill="url(#heartGradient)"/>
+</svg>
+
+<!-- Ratas -->
+<svg width="96" height="96" viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="gearGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#d9d9d9"/>
+      <stop offset="100%" stop-color="#6b6b6b"/>
+    </linearGradient>
+  </defs>
+  <g fill="url(#gearGradient)">
+    <!-- Ulkoiset “hampaat” -->
+    <path d="M48 10
+             L56 20 L68 18 L72 30 L84 36 L78 48
+             L84 60 L72 66 L68 78 L56 76 L48 86
+             L40 76 L28 78 L24 66 L12 60 L18 48
+             L12 36 L24 30 L28 18 L40 20 Z"/>
+    <!-- Keskireikä -->
+    <circle cx="48" cy="48" r="10" fill="#ffffff"/>
+  </g>
+</svg>
+
+
+<!-- Pelisäännöt -->
+<svg width="96" height="96" viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#b0b7ff"/>
+      <stop offset="1" stop-color="#5c63d6"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Kortti -->
+  <rect x="16" y="16" width="64" height="48" rx="10" fill="url(#g)"/>
+
+  <!-- Profiili + teksti -->
+  <circle cx="28" cy="30" r="5" fill="#fff"/>
+  <rect x="36" y="26" width="28" height="8" rx="4" fill="#fff"/>
+  <rect x="24" y="40" width="48" height="6" rx="3" fill="#fff" opacity=".8"/>
+  <rect x="24" y="50" width="32" height="6" rx="3" fill="#fff" opacity=".6"/>
+
+  <!-- ↑ leveämpi nuoli -->
+  <path fill="url(#g)" stroke="#fff" stroke-width="3" stroke-linejoin="round"
+        d="M26 84
+           v-18
+           h-8
+           l14-16
+           l14 16
+           h-8
+           v18 z"/>
+
+  <!-- ↓ leveämpi nuoli -->
+  <path fill="url(#g)" stroke="#fff" stroke-width="3" stroke-linejoin="round"
+        d="M70 52
+           v18
+           h8
+           l-14 16
+           l-14-16
+           h8
+           v-18 z"/>
+</svg>
+
+
+
+
+<!-- Lukko -->
+<svg width="96" height="96" viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="lockGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#d9d9d9"/>
+      <stop offset="100%" stop-color="#6b6b6b"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Lukon runko -->
+  <rect x="20" y="40" width="56" height="40" rx="10" fill="url(#lockGradient)"/>
+  
+  <!-- Kaari -->
+  <path d="M30 40 v-8 a18 18 0 1 1 36 0 v8 h-8 v-8 a10 10 0 1 0 -20 0 v8 z"
+        fill="url(#lockGradient)"/>
+  
+  <!-- Avaimenreikä -->
+  <circle cx="48" cy="60" r="5" fill="#ffffff"/>
+</svg>
+
+
+
+<!-- Refresh -->
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://w3.org">
+  <path d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C14.5 3 16.7355 4.01513 18.3333 5.66667" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M19 2V6H15" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
