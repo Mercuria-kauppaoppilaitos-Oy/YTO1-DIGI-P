@@ -23,4 +23,5 @@ Ryhmät saavat yhden arjen tai yhteiskunnan digiteeman, esimerkiksi uni ja palau
 
 
 # ONGELMAT JA IDEAT:
+- idea: onedrive jääkö tehtävät, jossa opiskelija jakaa tiedoston (luku oikeus kaikille, ei kirjautumista, tarkasta jakotyyppi onedrivestä). Opiskelija liittää linkin tehtävään. js scripti tarkastaa, että jako linkki aukeaa. Seuraavana osana opiskelijan pitää poistaa jakolinkki ja klikata tehtävästä nappia (tarkasta tms.). js scripti tarkastaa, ettei linkki enää toimi. Tehtävä merkitään suoritetuksi, kun molemmat kohdat onnistuvat.
 
