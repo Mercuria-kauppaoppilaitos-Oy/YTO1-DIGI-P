@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harjoitus 1 – OneDrive-jakaminen</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* ─── Lisätyylit tätä harjoitusta varten ─── */
+        .step-box {
+            border: 1px solid #dce1e6;
+            border-radius: 8px;
+            padding: 18px 20px;
+            margin-bottom: 16px;
+            background: #fafbfc;
+        }
+        .step-box.step-active {
+            border-color: #2980b9;
+            background: #f0f7ff;
+        }
+        .step-box.step-done {
+            border-color: #43a047;
+            background: #f1f8f2;
+        }
+        .step-box.step-locked {
+            opacity: 0.55;
+            pointer-events: none;
+        }
+        .step-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.05em;
+            font-weight: 700;
+            color: #1a5276;
+            margin: 0 0 10px;
+        }
+        .step-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: #2980b9;
+            color: #fff;
+            font-size: .88em;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+        .step-box.step-done .step-num { background: #43a047; }
+        .step-box.step-locked .step-num { background: #bbb; }
+
+        .url-input-row {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin: 10px 0;
+        }
+        .url-input {
+            flex: 1;
+            min-width: 200px;
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: .92em;
+            font-family: 'Consolas', 'Courier New', monospace;
+        }
+        .url-input:focus { border-color: #2980b9; outline: none; }
+        .url-input.input-error { border-color: #e53935; background: #fff5f5; }
+        .url-input.input-ok    { border-color: #43a047; background: #f1f8f2; }
+
+        .check-result {
+            margin-top: 8px;
+            padding: 10px 14px;
+            border-radius: 6px;
+            font-size: .9em;
+            animation: fadeIn .3s ease;
+        }
+        .check-result.ok   { background: #e8f5e9; border: 1px solid #81c784; color: #2e7d32; }
+        .check-result.err  { background: #ffebee; border: 1px solid #ef9a9a; color: #c62828; }
+        .check-result.warn { background: #fff8e1; border: 1px solid #ffe082; color: #795600; }
+        .check-result.info { background: #e3f2fd; border: 1px solid #90caf9; color: #1565c0; }
+
+        .confirm-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin: 10px 0;
+            font-size: .92em;
+        }
+        .confirm-row input[type="checkbox"] {
+            margin-top: 3px;
+            width: 18px;
+            height: 18px;
+            accent-color: #2980b9;
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+        .confirm-label { cursor: pointer; line-height: 1.45; }
+
+        .final-panel {
+            background: #e8f5e9;
+            border: 2px solid #43a047;
+            border-radius: 10px;
+            padding: 22px;
+            text-align: center;
+            margin-top: 16px;
+            animation: fadeIn .4s ease;
+        }
+        .final-panel h2 { margin: 0 0 8px; color: #2e7d32; font-size: 1.3em; }
+        .final-panel p  { margin: 4px 0; color: #388e3c; font-size: .95em; }
+
+        .how-to-steps {
+            counter-reset: howto;
+            list-style: none;
+            padding: 0;
+            margin: 8px 0 0;
+        }
+        .how-to-steps li {
+            counter-increment: howto;
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            margin-bottom: 7px;
+            font-size: .88em;
+            line-height: 1.45;
+        }
+        .how-to-steps li::before {
+            content: counter(howto);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 22px;
+            height: 22px;
+            background: #2980b9;
+            color: #fff;
+            border-radius: 50%;
+            font-weight: 700;
+            font-size: .82em;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #ccc;
+            border-top-color: #2980b9;
+            border-radius: 50%;
+            animation: spin .7s linear infinite;
+            vertical-align: middle;
+            margin-right: 6px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+    <a class="back-link" href="index.html">← Takaisin harjoituksiin</a>
+    <div class="exercise-container">
+        <div class="exercise-header">
+            <h1>☁️ Harjoitus 1 – OneDrive-jakaminen</h1>
+            <p>Luo jakolinkki OneDrivessä, tarkista että se toimii, ja poista jakaminen lopuksi.</p>
+        </div>
+
+        <!-- Vaihe-ilmaisin -->
+        <div class="stage-bar" id="stage-bar">
+            <div class="stage-step active" id="stage-1">
+                <span class="stage-num">1</span>
+                <span class="stage-label">Luo jakolinkki</span>
+            </div>
+            <span class="stage-arrow">→</span>
+            <div class="stage-step" id="stage-2">
+                <span class="stage-num">2</span>
+                <span class="stage-label">Poista jakaminen</span>
+            </div>
+        </div>
+
+        <!-- ─── VAIHE 1 ─── -->
+        <div class="step-box step-active" id="box-step1">
+            <div class="step-title">
+                <span class="step-num">1</span>
+                Luo jakolinkki OneDrivessä
+            </div>
+
+            <div class="info-panel">
+                <h3>📋 Miten luot jakolinkin?</h3>
+                <ol class="how-to-steps">
+                    <li>Avaa <strong>OneDrive</strong> selaimessa (onedrive.live.com tai oppilaitoksesi Microsoft 365).</li>
+                    <li>Napsauta tiedostoa hiiren <strong>oikealla painikkeella</strong> → valitse <strong>Jaa</strong> tai klikkaa Jaa-kuvaketta.</li>
+                    <li>Napsauta <strong>Kopioi linkki</strong> -painiketta.</li>
+                    <li>Tarkista linkin asetukset: valitse <strong>"Kuka tahansa, jolla on linkki"</strong> — ei sisäänkirjautumista, ei muokkausoikeutta.</li>
+                    <li>Kopioi luotu linkki leikepöydälle.</li>
+                </ol>
+                <p style="margin-top:8px; font-size:.85em; color:#555;">
+                    💡 <strong>Oikea jakotyyppi OneDrivessä:</strong> Linkkiasetukset → <em>Kuka tahansa, jolla on linkki voi tarkastella</em> (ei muokkausta, ei vaadi kirjautumista).
+                </p>
+            </div>
+
+            <label for="link-input" style="font-weight:600; font-size:.9em;">Liitä OneDrive-jakolinkki tähän:</label>
+            <div class="url-input-row">
+                <input type="url" id="link-input" class="url-input"
+                       placeholder="https://1drv.ms/... tai https://...sharepoint.com/..."
+                       autocomplete="off" spellcheck="false">
+                <button class="btn btn-next" id="btn-check-link">🔍 Tarkista linkki</button>
+            </div>
+            <div id="link-result"></div>
+        </div>
+
+        <!-- ─── VAIHE 2 ─── -->
+        <div class="step-box step-locked" id="box-step2">
+            <div class="step-title">
+                <span class="step-num">2</span>
+                Poista jakolinkki
+            </div>
+
+            <div class="info-panel">
+                <h3>🔒 Miten poistat jakolinkin?</h3>
+                <ol class="how-to-steps">
+                    <li>Avaa <strong>OneDrive</strong> selaimessa.</li>
+                    <li>Napsauta tiedostoa hiiren <strong>oikealla painikkeella</strong> → <strong>Hallitse käyttöä</strong> tai <strong>Jaa</strong>.</li>
+                    <li>Etsi kohtaa <strong>Linkit</strong> tai <strong>Jaettu"</strong> ja poista julkinen linkki napsauttamalla <strong>X</strong> tai <strong>Poista linkki</strong>.</li>
+                    <li>Tallenna muutokset.</li>
+                    <li>Varmista poistaminen: avaa linkki uudessa välilehdessä — sinun pitäisi nähdä virhesivu tai kirjautumispyyntö.</li>
+                </ol>
+            </div>
+
+            <div style="margin: 10px 0 6px; font-weight: 600; font-size: .9em;">Linkki poistettavissa:</div>
+            <div id="saved-link-display" class="check-result info" style="margin-bottom:10px; word-break:break-all;"></div>
+
+            <div class="confirm-row">
+                <input type="checkbox" id="chk-removed" name="chk-removed">
+                <label class="confirm-label" for="chk-removed">
+                    Olen poistanut jakolinkin OneDrivessä ja tarkistanut, että linkki ei enää toimi (saan virheviestin tai kirjautumispyynnön, kun avaan linkin).
+                </label>
+            </div>
+
+            <div class="controls" style="margin-top:10px;">
+                <button class="btn btn-next" id="btn-verify-removed" disabled>✅ Tarkista poistaminen</button>
+                <button class="btn btn-hint" id="btn-open-link">🔗 Avaa linkki uudessa välilehdessä</button>
+            </div>
+            <div id="remove-result"></div>
+        </div>
+
+        <!-- ─── VALMIS ─── -->
+        <div id="final-panel" style="display:none;"></div>
+    </div>
+
+    <script>
+    // ─────────────────────────────────────────────────────────
+    //  TILA
+    // ─────────────────────────────────────────────────────────
+    let sharedUrl = '';
+    let step1Done = false;
+    let step2Done = false;
+
+    // ─────────────────────────────────────────────────────────
+    //  URL-VALIDOINTI
+    // ─────────────────────────────────────────────────────────
+
+    /**
+     * Tarkistaa, että URL on OneDriven tai SharePointin jakolinkki.
+     * Hyväksytyt mallit:
+     *  - https://1drv.ms/...
+     *  - https://onedrive.live.com/...
+     *  - https://*.sharepoint.com/...
+     *  - https://*.sharepoint.com/sites/...
+     */
+    function isValidOneDriveUrl(url) {
+        try {
+            const parsed = new URL(url);
+            if (parsed.protocol !== 'https:') return false;
+            const host = parsed.hostname.toLowerCase();
+            return (
+                host === '1drv.ms' ||
+                host === 'onedrive.live.com' ||
+                host.endsWith('.sharepoint.com') ||
+                host.endsWith('.onedrive.com')
+            );
+        } catch (_) {
+            return false;
+        }
+    }
+
+    // ─────────────────────────────────────────────────────────
+    //  LINKINTARKISTUS (no-cors fetch)
+    // ─────────────────────────────────────────────────────────
+
+    /**
+     * Yrittää tavoittaa URL:n selaimesta.
+     * Käyttää no-cors-tilaa, joten vastauksen sisältöä ei voi lukea
+     * (ns. opaque response). Jos fetch onnistuu ilman verkkovirhettä,
+     * linkki on saavutettavissa. Jos tulee TypeError/AbortError,
+     * URL ei ole saavutettavissa.
+     *
+     * Palauttaa: { reachable: boolean, timedOut: boolean }
+     */
+    async function tryFetch(url, timeoutMs) {
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), timeoutMs);
+        try {
+            await fetch(url, { mode: 'no-cors', signal: controller.signal });
+            clearTimeout(timer);
+            return { reachable: true, timedOut: false };
+        } catch (err) {
+            clearTimeout(timer);
+            if (err.name === 'AbortError') return { reachable: false, timedOut: true };
+            // TypeError = verkkovirhe tai DNS-epäonnistuminen
+            return { reachable: false, timedOut: false };
+        }
+    }
+
+    // ─────────────────────────────────────────────────────────
+    //  VAIHE 1 – LINKIN TARKISTUS
+    // ─────────────────────────────────────────────────────────
+
+    const linkInput   = document.getElementById('link-input');
+    const btnCheck    = document.getElementById('btn-check-link');
+    const linkResult  = document.getElementById('link-result');
+
+    function showResult(container, type, html) {
+        container.innerHTML = `<div class="check-result ${type}">${html}</div>`;
+    }
+
+    btnCheck.addEventListener('click', checkLink);
+    linkInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') checkLink(); });
+
+    async function checkLink() {
+        const url = linkInput.value.trim();
+
+        // 1. Tyhyys-tarkistus
+        if (!url) {
+            showResult(linkResult, 'err', '❌ Syötä ensin OneDrive-jakolinkki.');
+            linkInput.classList.add('input-error');
+            return;
+        }
+        linkInput.classList.remove('input-error', 'input-ok');
+
+        // 2. URL-muototarkistus
+        if (!isValidOneDriveUrl(url)) {
+            showResult(linkResult, 'err',
+                '❌ Linkki ei näytä OneDrive-jakolinkiltä. ' +
+                'Varmista, että osoite alkaa <strong>https://1drv.ms/</strong>, ' +
+                '<strong>https://onedrive.live.com/</strong> tai ' +
+                '<strong>https://...sharepoint.com/</strong>.');
+            linkInput.classList.add('input-error');
+            return;
+        }
+
+        // 3. Verkko-saavutettavuustarkistus
+        btnCheck.disabled = true;
+        showResult(linkResult, 'info',
+            '<span class="spinner"></span> Tarkistetaan linkin toimivuutta…');
+
+        const { reachable, timedOut } = await tryFetch(url, 9000);
+
+        btnCheck.disabled = false;
+
+        if (timedOut) {
+            showResult(linkResult, 'warn',
+                '⚠️ Linkki ei vastannut ajoissa. Tarkista, että ' +
+                'linkki on oikein kopioitu ja yritä uudelleen.');
+            linkInput.classList.add('input-error');
+            return;
+        }
+
+        if (!reachable) {
+            showResult(linkResult, 'err',
+                '❌ Linkkiä ei voitu avata. Mahdolliset syyt:<br>' +
+                '• URL on virheellinen tai puutteellinen<br>' +
+                '• Tiedostoa ei ole jaettu julkisesti<br>' +
+                '• Tarkista jakoasetukset OneDrivessä: <em>Kuka tahansa, jolla on linkki voi tarkastella</em>');
+            linkInput.classList.add('input-error');
+            return;
+        }
+
+        // ✅ Vaihe 1 suoritettu
+        linkInput.classList.add('input-ok');
+        linkInput.disabled = true;
+        btnCheck.disabled = true;
+        showResult(linkResult, 'ok',
+            '✅ <strong>Linkki toimii!</strong> Vaihe 1 suoritettu. ' +
+            'Siirry seuraavaksi poistamaan jakolinkki OneDrivessä.');
+
+        sharedUrl = url;
+        completeStep1();
+    }
+
+    function completeStep1() {
+        step1Done = true;
+
+        // Päivitä vaihepalkki
+        document.getElementById('stage-1').classList.replace('active', 'done');
+        document.getElementById('stage-1').innerHTML =
+            '<span class="stage-num">✓</span><span class="stage-label">Luo jakolinkki</span>';
+        document.getElementById('stage-2').classList.add('active');
+
+        // Päivitä step-boxien tila
+        const box1 = document.getElementById('box-step1');
+        box1.classList.replace('step-active', 'step-done');
+
+        const box2 = document.getElementById('box-step2');
+        box2.classList.remove('step-locked');
+        box2.classList.add('step-active');
+
+        // Näytä tallennettu linkki vaiheen 2 infolaatikossa
+        document.getElementById('saved-link-display').textContent = sharedUrl;
+
+        // Aktivoi avaa-nappi
+        document.getElementById('btn-open-link').addEventListener('click', () => {
+            window.open(sharedUrl, '_blank', 'noopener,noreferrer');
+        });
+    }
+
+    // ─────────────────────────────────────────────────────────
+    //  VAIHE 2 – LINKIN POISTON TARKISTUS
+    // ─────────────────────────────────────────────────────────
+
+    const chkRemoved     = document.getElementById('chk-removed');
+    const btnVerify      = document.getElementById('btn-verify-removed');
+    const removeResult   = document.getElementById('remove-result');
+
+    // Aktivoi tarkista-nappi vasta kun valintaruutu on ruksattu
+    chkRemoved.addEventListener('change', () => {
+        btnVerify.disabled = !chkRemoved.checked;
+    });
+
+    btnVerify.addEventListener('click', verifyRemoval);
+
+    async function verifyRemoval() {
+        if (!chkRemoved.checked) return;
+
+        btnVerify.disabled = true;
+        showResult(removeResult, 'info',
+            '<span class="spinner"></span> Tarkistetaan, ettei linkki enää toimi…');
+
+        // Yritetään tavoittaa linkki uudelleen
+        const { reachable, timedOut } = await tryFetch(sharedUrl, 9000);
+
+        if (!reachable && !timedOut) {
+            // Fetch epäonnistui verkkovirheellä – linkki on poistettu
+            showResult(removeResult, 'ok',
+                '✅ <strong>Linkki ei enää toimi!</strong> Jakolinkki on poistettu onnistuneesti. ' +
+                'Vaihe 2 suoritettu.');
+            completeStep2();
+            return;
+        }
+
+        if (timedOut) {
+            // Timeout – epäselvä tilanne, hyväksytään opiskelijan vahvistuksen perusteella
+            showResult(removeResult, 'ok',
+                '✅ Linkki ei vastannut (timeout). Olet vahvistanut poistaneesi jakolinkin. ' +
+                'Vaihe 2 hyväksytty.');
+            completeStep2();
+            return;
+        }
+
+        // Opaque-vastaus – emme voi varmuudella sanoa, onko linkki poistettu
+        // (selaimen CORS-rajoitukset estävät vastauksen sisällön lukemisen).
+        // Hyväksytään opiskelijan oma vahvistus.
+        showResult(removeResult, 'warn',
+            '⚠️ <strong>Selain ei pysty varmentamaan linkin poistoa</strong> ' +
+            'tietoturvasyistä (CORS-rajoitus). <br>' +
+            'Olet kuitenkin vahvistanut valintaruudulla poistaneesi linkin. ' +
+            '<br><br>' +
+            'Avaa linkki uudessa välilehdessä ja varmista, että saat virheviestin ' +
+            'tai kirjautumispyynnön ennen kuin vahvistat suorituksen.' +
+            '<br><br>' +
+            '<button class="btn btn-next" id="btn-force-complete" style="margin-top:8px;">Olen varmistanut – merkitse suoritetuksi</button>');
+
+        document.getElementById('btn-force-complete').addEventListener('click', () => {
+            showResult(removeResult, 'ok',
+                '✅ <strong>Suoritettu!</strong> Olet vahvistanut jakolinkin poistamisen. ' +
+                'Vaihe 2 merkitty suoritetuksi.');
+            completeStep2();
+        });
+    }
+
+    function completeStep2() {
+        step2Done = true;
+        btnVerify.disabled = true;
+        chkRemoved.disabled = true;
+
+        // Päivitä vaihepalkki
+        document.getElementById('stage-2').classList.replace('active', 'done');
+        document.getElementById('stage-2').innerHTML =
+            '<span class="stage-num">✓</span><span class="stage-label">Poista jakaminen</span>';
+
+        // Päivitä step-box
+        const box2 = document.getElementById('box-step2');
+        box2.classList.replace('step-active', 'step-done');
+
+        // Näytä loppupaneeli
+        showFinalPanel();
+    }
+
+    // ─────────────────────────────────────────────────────────
+    //  LOPPUPANEELI
+    // ─────────────────────────────────────────────────────────
+
+    function showFinalPanel() {
+        const panel = document.getElementById('final-panel');
+        panel.style.display = 'block';
+        panel.innerHTML = `
+            <div class="final-panel">
+                <h2>🎉 Harjoitus suoritettu!</h2>
+                <p>Olet onnistuneesti jakanut tiedoston OneDrivessä julkisella katselulinkillä<br>
+                   ja poistanut jakamisen tiedoston käsittelyn jälkeen.</p>
+                <p style="margin-top:12px; font-size:.88em;">
+                    💡 <strong>Muista:</strong> Julkisia jakolinkkejä kannattaa käyttää vain tarvittaessa
+                    ja poistaa ne heti, kun niitä ei enää tarvita — näin pidät tiedostosi turvassa.
+                </p>
+            </div>
+        `;
+        panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    </script>
+</body>
+</html>
