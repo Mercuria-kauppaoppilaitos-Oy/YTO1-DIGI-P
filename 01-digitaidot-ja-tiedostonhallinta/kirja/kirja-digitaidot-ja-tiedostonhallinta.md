@@ -362,6 +362,7 @@ Versiohistoria säästää tilanteessa, jossa "joku vahingossa poisti tärkeän 
 - Kaavat ja funktiot
 - Kaaviot
 
+ >[Excel ohje ja koulutus](https://support.microsoft.com/fi-fi/excel) - Mcrosoftin virallinen Excel-tukisivusto (suomeksi)
 ---
 
 ### 3.1 Excel-perusteet
@@ -382,6 +383,8 @@ Solun osoite muodostuu sarakekirjaimesta ja rivinumerosta: esimerkiksi **B3** ta
 
 - Klikkaa solua ja kirjoita
 - Siirry seuraavaan soluun <kbd>Enter</kbd>-näppäimellä (alas) tai <kbd>Tab</kbd>-näppäimellä (oikealle)
+ (Voit siirtyä ylös painamalla Shift + Enter ja vasemmalle painamalla Shift + Tab)
+- Voit liikkua myös nuolinäppäimillä, jos aktiivinen valintasi on solussa, eikä kaavarivillä
 - Voit muokata solun sisältöä kaksoisklikkaamalla tai <kbd>F2</kbd>-näppäimellä
 
 **Solujen muotoilu**
@@ -416,12 +419,14 @@ Jokainen kaava alkaa yhtäläisyysmerkillä `=`. Ilman sitä Excel käsittelee s
 =B3*1,24      → Kertoo solun B3 arvon luvulla 1,24 (esim. ALV-laskenta)
 =B7-B8        → Vähentää solun B8 solusta B7
 ```
+> 💡Vinkki - Kokeile Excelissä!
+> Jos haluat syöttää numeron tekstinä, esim. 040123456 tai +35840123456 voit aloittaa '-merkillä (yksittäinen heittomerkki, näppäimistössä Enterin vieressä). Tällöin Excel säilyttää etunollan tai muun erikoismuotoilun. Sama toimii myös muissa syötteissä, jotka Excel saattaa muotoilla automaattisesti "väärin", esim. 2/3, jonka Excel muotoilee oletuksena päivämääräksi.
 
 **Soluviittaukset**
 
 Kaavassa viitataan soluihin niiden osoitteella. Tämä on tärkeää: älä kirjoita lukua suoraan kaavaan, vaan viittaa soluun.
 
-- **Suhteellinen viittaus** (esim. `B3`): Kun kopioit kaavan, viittaus siirtyy suhteessa uuteen paikkaan
+- **Suhteellinen viittaus** (esim. `B3`): Kun kopioit kaavan, viittaus siirtyy suhteessa uuteen paikkaan. Excel ymmärtää viittauksen esim. "yksi ruutu ylös ja kolme ruutua vasemmalle".
 - **Absoluuttinen viittaus** (esim. `$B$3`): Viittaus pysyy kiinteänä, vaikka kaavan kopioi muualle. Käytä `$`-merkkiä arvoon, joka ei saa muuttua (esim. ALV-prosentti). Esimerkissä `$`-merkki B:n edessä lukitsee viittauksen sarakkeeseen B, ja toinen `$`-merkki riville 3. Voidaan lukita myös pelkkä sarake tai rivi (`$B3` tai `B$3`).
 
 > 💡 **Tiesitkö?**
@@ -431,6 +436,7 @@ Kaavassa viitataan soluihin niiden osoitteella. Tämä on tärkeää: älä kirj
 > - **Pivot-taulukot:** Kun perustaidot ovat hallussa ja käsittelet isompia tietomääriä, ota haltuun [Pivot-taulukot](https://support.microsoft.com/fi-fi/office/luo-pivot-taulukko-taulukon-tietojen-analysoimista-varten-a9a84538-bfe9-40a9-a8e9-f99134456576) – ne ovat paras työkalu nopeaan analysointiin ja raportointiin ilman monimutkaisia kaavoja.
 
 > 🖼️ **[TÄHÄN KUVA / ANIMAATIO: Lyhyt GIF-animaatio tai selkeä kuva, jossa näytetään täyttökahvan (solun oikea alareuna) käyttö sarjan tai kaavan vetämiseen alaspäin]**
+> Täyttökahva täyttää aina yhteensuuntaan kerrallaan (esim. alas, tai oikealle). Täyttökahva osaa myös täyttää sarjoja annetuista 1-3 solun tiedoista, esim. kuukaudet, päivämäärät, viikonpäivät, samalla arvolla kasvavat lukujonot... Kokeile itse!
 
 **Tärkeimmät funktiot**
 
@@ -439,7 +445,7 @@ Kaavassa viitataan soluihin niiden osoitteella. Tämä on tärkeää: älä kirj
 | `SUMMA` | Lukujen yhteenlasku | `=SUMMA(B3:B10)` |
 | `KESKIARVO` | Keskiarvon laskeminen | `=KESKIARVO(B3:B10)` |
 | `MIN` | Pienin arvo | `=MIN(B3:B10)` |
-| `MAX` | Suurin arvo | `=MAX(B3:B10)` |
+| `MAKS` | Suurin arvo | `=MAKS(B3:B10)` |
 | `LASKE` | Kuinka monta lukua alueella | `=LASKE(B3:B10)` |
 | `JOS` | Ehdon mukainen arvo | `=JOS(B3>100;"Yli 100";"Alle 100")` |
 
