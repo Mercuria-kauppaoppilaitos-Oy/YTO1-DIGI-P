@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<manifest identifier="tiedostomuodot-scorm-test"
+<manifest identifier="tiedostonhallinta-scorm"
           version="1.0"
           xmlns="http://www.imsproject.org/xsd/imscp_rootv1p1p2"
           xmlns:adlcp="http://www.adlnet.org/xsd/adlcp_rootv1p2"
@@ -14,20 +14,98 @@
 
     <organizations default="org1">
         <organization identifier="org1">
-            <title>Tiedostomuodot – SCORM-testi</title>
+            <title>Tiedostonhallintaharjoitukset</title>
             <item identifier="item1" identifierref="res1" isvisible="true">
-                <title>Harjoitus 4 – Tiedostomuodot</title>
+                <title>Harjoitus 1 - Etsi tiedosto</title>
+                <adlcp:masteryscore>50</adlcp:masteryscore>
+            </item>
+            <item identifier="item2" identifierref="res2" isvisible="true">
+                <title>Harjoitus 2 - Jarjesta ja nimea tiedostot</title>
+                <adlcp:masteryscore>50</adlcp:masteryscore>
+            </item>
+            <item identifier="item3a" identifierref="res3a" isvisible="true">
+                <title>Harjoitus 3A - Paikallinen vai pilvi</title>
+                <adlcp:masteryscore>50</adlcp:masteryscore>
+            </item>
+            <item identifier="item3b" identifierref="res3b" isvisible="true">
+                <title>Harjoitus 3B - Tiedostopolut</title>
+                <adlcp:masteryscore>50</adlcp:masteryscore>
+            </item>
+            <item identifier="item4a" identifierref="res4a" isvisible="true">
+                <title>Harjoitus 4A - Tiedostomuotojen lajittelu</title>
+                <adlcp:masteryscore>50</adlcp:masteryscore>
+            </item>
+            <item identifier="item4b" identifierref="res4b" isvisible="true">
+                <title>Harjoitus 4B - Tiedostomuotojen tietovisa</title>
                 <adlcp:masteryscore>50</adlcp:masteryscore>
             </item>
         </organization>
     </organizations>
 
     <resources>
+        <resource identifier="res-index"
+                  type="webcontent"
+                  adlcp:scormtype="asset"
+                  href="index.html">
+            <file href="index.html"/>
+            <file href="styles.css"/>
+        </resource>
+
         <resource identifier="res1"
                   type="webcontent"
                   adlcp:scormtype="sco"
-                  href="harjoitus-4-tiedostomuodot.html">
-            <file href="harjoitus-4-tiedostomuodot.html"/>
+                  href="harjoitus-1-etsi-tiedosto.html">
+            <file href="harjoitus-1-etsi-tiedosto.html"/>
+            <file href="file-engine.js"/>
+            <file href="scorm-wrapper.js"/>
+            <file href="styles.css"/>
+        </resource>
+
+        <resource identifier="res2"
+                  type="webcontent"
+                  adlcp:scormtype="sco"
+                  href="harjoitus-2-jarjesta-ja-nimea.html">
+            <file href="harjoitus-2-jarjesta-ja-nimea.html"/>
+            <file href="file-engine.js"/>
+            <file href="scorm-wrapper.js"/>
+            <file href="styles.css"/>
+        </resource>
+
+        <resource identifier="res3a"
+                  type="webcontent"
+                  adlcp:scormtype="sco"
+                  href="harjoitus-3a-paikallinen-vs-pilvi.html">
+            <file href="harjoitus-3a-paikallinen-vs-pilvi.html"/>
+            <file href="file-engine.js"/>
+            <file href="scorm-wrapper.js"/>
+            <file href="styles.css"/>
+        </resource>
+
+        <resource identifier="res3b"
+                  type="webcontent"
+                  adlcp:scormtype="sco"
+                  href="harjoitus-3b-tiedostopolut.html">
+            <file href="harjoitus-3b-tiedostopolut.html"/>
+            <file href="file-engine.js"/>
+            <file href="scorm-wrapper.js"/>
+            <file href="styles.css"/>
+        </resource>
+
+        <resource identifier="res4a"
+                  type="webcontent"
+                  adlcp:scormtype="sco"
+                  href="harjoitus-4a-tiedostomuodot-lajittelu.html">
+            <file href="harjoitus-4a-tiedostomuodot-lajittelu.html"/>
+            <file href="file-engine.js"/>
+            <file href="scorm-wrapper.js"/>
+            <file href="styles.css"/>
+        </resource>
+
+        <resource identifier="res4b"
+                  type="webcontent"
+                  adlcp:scormtype="sco"
+                  href="harjoitus-4b-tiedostomuodot-tietovisa.html">
+            <file href="harjoitus-4b-tiedostomuodot-tietovisa.html"/>
             <file href="file-engine.js"/>
             <file href="scorm-wrapper.js"/>
             <file href="styles.css"/>

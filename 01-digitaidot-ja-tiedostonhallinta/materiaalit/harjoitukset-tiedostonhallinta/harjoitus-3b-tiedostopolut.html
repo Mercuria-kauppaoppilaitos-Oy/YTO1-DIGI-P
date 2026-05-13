@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harjoitus 3B - Tiedostopolut</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="exercise-container">
+        <div class="exercise-header">
+            <h1>🛣️ Harjoitus 3B - Tiedostopolut</h1>
+            <p>Kirjoita tiedoston koko polku annetun kansiorakenteen perusteella.</p>
+        </div>
+        <div id="path-exercise"></div>
+    </div>
+
+    <script src="scorm-wrapper.js"></script>
+    <script src="file-engine.js"></script>
+    <script>
+    SCORM.init();
+
+    const nextExerciseUrl = 'harjoitus-4a-tiedostomuodot-lajittelu.html';
+    const pathDiv = document.getElementById('path-exercise');
+    let currentQ = 0;
+    let pathScore = 0;
+    let pathMistakes = 0;
+
+    const pathQuestions = [
+        {
+            tree: '💻 C:\\ → 📁 Koulu → 📁 Matematiikka → 📄 kotitehtävä.docx',
+            answer: 'C:\\Koulu\\Matematiikka\\kotitehtävä.docx',
+            hint: 'Yhdistä kansiot kenoviivalla: C:\\Koulu\\...'
+        },
+        {
+            tree: '☁️ OneDrive → 📁 Projektit → 📁 Ryhmätyö → 📄 raportti.pdf',
+            answer: 'OneDrive\\Projektit\\Ryhmätyö\\raportti.pdf',
+            hint: 'Pilvipolku alkaa "OneDrive\\"...'
+        },
+        {
+            tree: '💻 C:\\ → 📁 Käyttäjät → 📁 Opiskelija → 📁 Kuvat → 📄 loma.jpg',
+            answer: 'C:\\Käyttäjät\\Opiskelija\\Kuvat\\loma.jpg',
+            hint: 'Koko polku juuresta tiedostoon.'
+        }
+    ];
+
+    function normalizePathStr(p) {
+        return p.trim().replace(/\//g, '\\').replace(/\\+/g, '\\').replace(/\\$/, '').toLowerCase();
+    }
+
+    function renderPathExercise() {
+        if (currentQ >= pathQuestions.length) {
+            const raw = Math.max(0, pathQuestions.length - pathMistakes);
+            const score = Math.round(raw / pathQuestions.length * 100);
+            SCORM.setScore(score, 100, 0);
+
+            pathDiv.innerHTML = `
+                <div class="success-message">
+                    🎉 <strong>Harjoitus 3B valmis.</strong> Sait tiedostopolut oikein ${pathScore}/${pathQuestions.length}.
+                    <p class="score-note">Tämän harjoituksen pisteet: <strong>${score}%</strong>.</p>
+                    <div class="controls completion-actions">
+                        <button class="btn btn-next" id="exercise-3b-next" type="button">Siirry harjoitukseen 4A →</button>
+                    </div>
+                </div>`;
+
+            const successMsg = pathDiv.querySelector('.success-message');
+            scrollInDocument(successMsg, 24);
+
+            document.getElementById('exercise-3b-next').addEventListener('click', () => {
+                const nextButton = document.getElementById('exercise-3b-next');
+                const scoreNote = pathDiv.querySelector('.score-note');
+                nextButton.disabled = true;
+                nextButton.textContent = 'Tallennetaan...';
+
+                const usingLms = SCORM.advance(nextExerciseUrl);
+                if (usingLms && scoreNote) {
+                    scoreNote.innerHTML = 'Suoritus tallennettu. Oppimisympäristö avaa seuraavan harjoituksen automaattisesti.';
+                }
+            }, { once: true });
+            return;
+        }
+
+        const q = pathQuestions[currentQ];
+        pathDiv.innerHTML = `
+            <div class="info-panel">
+                <h3>Tiedostopolut (${currentQ + 1}/${pathQuestions.length})</h3>
+                <p>Kirjoita tiedoston <strong>koko polku</strong> alla näkyvän kansiorakenteen perusteella.</p>
+            </div>
+            <div class="task-panel">
+                <span class="task-label">Rakenne: </span>
+                <span class="task-text" style="font-family: Consolas, monospace;">${q.tree}</span>
+            </div>
+            <div style="display: flex; gap: 8px; margin: 10px 0; flex-wrap: wrap;">
+                <input type="text" id="path-input" class="folder-input" style="flex:1; min-width: 220px; font-family: Consolas, monospace;" placeholder="Kirjoita tiedostopolku tähän...">
+                <button class="btn btn-next" id="path-check">Tarkista</button>
+            </div>
+            <div id="path-feedback"></div>
+            <div class="controls">
+                <button class="btn btn-hint" id="path-hint-btn">💡 Vihje</button>
+            </div>
+        `;
+
+        const inputEl = document.getElementById('path-input');
+        document.getElementById('path-check').addEventListener('click', checkPath);
+        inputEl.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') checkPath();
+        });
+        try {
+            inputEl.focus({ preventScroll: true });
+        } catch (e) {
+            inputEl.focus();
+        }
+
+        document.getElementById('path-hint-btn').addEventListener('click', () => {
+            const fb = document.getElementById('path-feedback');
+            fb.innerHTML = `<div class="hint-box">💡 ${q.hint}</div>`;
+        });
+    }
+
+    function checkPath() {
+        const input = document.getElementById('path-input').value;
+        const q = pathQuestions[currentQ];
+        const fb = document.getElementById('path-feedback');
+
+        if (normalizePathStr(input) === normalizePathStr(q.answer)) {
+            pathScore++;
+            fb.innerHTML = `<div class="hint-box" style="background:#e8f5e9; border-color:#81c784; color:#2e7d32;">✅ Oikein! <strong>${q.answer}</strong></div>`;
+            scrollInDocument(fb, 24);
+            currentQ++;
+            setTimeout(renderPathExercise, 1200);
+        } else {
+            pathMistakes++;
+            fb.innerHTML = `<div class="hint-box" style="background:#ffebee; border-color:#ef9a9a; color:#c62828;">❌ Ei aivan. Tarkista polku ja yritä uudelleen.</div>`;
+            scrollInDocument(fb, 24);
+            const inputEl = document.getElementById('path-input');
+            try {
+                inputEl.focus({ preventScroll: true });
+            } catch (e) {
+                inputEl.focus();
+            }
+        }
+    }
+
+    renderPathExercise();
+    </script>
+</body>
+</html>

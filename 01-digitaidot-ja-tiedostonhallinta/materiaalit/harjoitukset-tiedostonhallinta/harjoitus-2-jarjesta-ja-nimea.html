@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <a class="back-link" href="index.html">← Takaisin harjoituksiin</a>
     <div class="exercise-container">
         <div class="exercise-header">
             <h1>📁 Harjoitus 2 – Järjestä ja nimeä tiedostot</h1>
@@ -16,8 +15,13 @@
         <div id="exercise"></div>
     </div>
 
+    <script src="scorm-wrapper.js"></script>
     <script src="file-engine.js"></script>
     <script>
+    SCORM.init();
+
+    const nextExerciseUrl = 'harjoitus-3a-paikallinen-vs-pilvi.html';
+
     const exercise = new FileExplorerExercise({
         containerId: 'exercise',
         infoPanel: {
@@ -106,7 +110,38 @@
                     'vero.pdf'
                 ]
             }
-        ]
+        ],
+        successMessage: `
+            🎉 <strong>Hienoa!</strong> Kaikki tiedostot on nimetty ja järjestetty oikein!
+            <p class="score-note" id="exercise-2-score"></p>
+            <div class="controls completion-actions">
+                <button class="btn btn-next" id="exercise-2-next" type="button">Siirry harjoitukseen 3A →</button>
+            </div>
+        `,
+        onComplete: function(summary) {
+            const penalty = summary.renameMistakes * 6 + summary.moveMistakes * 4;
+            const score = Math.max(50, 100 - penalty);
+
+            SCORM.setScore(score, 100, 0);
+
+            const scoreNote = document.getElementById('exercise-2-score');
+            if (scoreNote) {
+                scoreNote.innerHTML = `Tämän harjoituksen pisteet: <strong>${score}%</strong>.`;
+            }
+
+            const nextButton = document.getElementById('exercise-2-next');
+            if (nextButton) {
+                nextButton.addEventListener('click', () => {
+                    nextButton.disabled = true;
+                    nextButton.textContent = 'Tallennetaan...';
+
+                    const usingLms = SCORM.advance(nextExerciseUrl);
+                    if (usingLms && scoreNote) {
+                        scoreNote.innerHTML = 'Suoritus tallennettu. Oppimisympäristö avaa seuraavan harjoituksen automaattisesti.';
+                    }
+                }, { once: true });
+            }
+        }
     });
 
     exercise.init();

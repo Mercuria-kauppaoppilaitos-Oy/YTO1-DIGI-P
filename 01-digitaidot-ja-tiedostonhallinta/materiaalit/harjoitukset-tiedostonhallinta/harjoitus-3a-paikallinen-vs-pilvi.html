@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harjoitus 3A - Paikallinen vai pilvi?</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="exercise-container">
+        <div class="exercise-header">
+            <h1>☁️ Harjoitus 3A - Paikallinen vai pilvi?</h1>
+            <p>Lajittele tiedostot oikeaan tallennuspaikkaan.</p>
+        </div>
+        <div id="exercise-part-a"></div>
+    </div>
+
+    <script src="scorm-wrapper.js"></script>
+    <script src="file-engine.js"></script>
+    <script>
+    SCORM.init();
+
+    const nextExerciseUrl = 'harjoitus-3b-tiedostopolut.html';
+
+    const partA = new DragSortExercise({
+        containerId: 'exercise-part-a',
+        infoPanel: {
+            title: 'Paikallinen tallennus vs. pilvi',
+            plain: true,
+            content: `
+                <ul>
+                    <li><strong>Paikallinen tallennus</strong> (C:-asema): tiedosto on vain tällä tietokoneella.</li>
+                    <li><strong>Pilvitallennus</strong> (OneDrive): tiedosto synkronoituu automaattisesti eri laitteille.</li>
+                    <li><strong>Vinkki:</strong> tärkeät koulutyöt kannattaa säilyttää pilvessä.</li>
+                </ul>
+            `
+        },
+        instruction: 'Raahaa (tai klikkaa ja valitse kohde) jokainen tiedosto oikeaan tallennuspaikkaan.',
+        targets: [
+            { id: 'local', label: 'Paikallinen (C:-asema)', icon: '💻' },
+            { id: 'cloud', label: 'Pilvi (OneDrive)', icon: '☁️' }
+        ],
+        items: [
+            { id: 'a1', text: 'Ryhmätyö, jota 3 henkilöä muokkaa', icon: '📝', correctTarget: 'cloud' },
+            { id: 'a2', text: 'Valokuvia jotka haluat jakaa perheelle', icon: '🖼️', correctTarget: 'cloud' },
+            { id: 'a3', text: 'Iso peliohjelma (40 GB)', icon: '🎮', correctTarget: 'local' },
+            { id: 'a4', text: 'Koulutyö jota työstät kotona ja koulussa', icon: '📚', correctTarget: 'cloud' },
+            { id: 'a5', text: 'Väliaikainen ladattu asennustiedosto', icon: '⬇️', correctTarget: 'local' },
+            { id: 'a6', text: 'Ansioluettelo (CV) jota päivität harvoin', icon: '📋', correctTarget: 'cloud' },
+            { id: 'a7', text: 'Keskeneräinen videoprojekti (10 GB)', icon: '🎬', correctTarget: 'local' },
+            { id: 'a8', text: 'Tärkeä raportti josta haluat varmuuskopion', icon: '📕', correctTarget: 'cloud' }
+        ],
+        successMessage: `
+            ✅ <strong>Harjoitus 3A valmis.</strong>
+            <p class="score-note" id="exercise-3a-score"></p>
+            <div class="controls completion-actions">
+                <button class="btn btn-next" id="exercise-3a-next" type="button">Siirry harjoitukseen 3B →</button>
+            </div>
+        `,
+        onComplete: function(results) {
+            const raw = Math.max(0, partA.totalItems - results.wrongAttempts);
+            const score = Math.round(raw / partA.totalItems * 100);
+            SCORM.setScore(score, 100, 0);
+
+            const scoreNote = document.getElementById('exercise-3a-score');
+            if (scoreNote) {
+                scoreNote.innerHTML = `Tämän harjoituksen pisteet: <strong>${score}%</strong>.`;
+            }
+
+            const nextButton = document.getElementById('exercise-3a-next');
+            if (nextButton) {
+                nextButton.addEventListener('click', () => {
+                    nextButton.disabled = true;
+                    nextButton.textContent = 'Tallennetaan...';
+                    const usingLms = SCORM.advance(nextExerciseUrl);
+                    if (usingLms && scoreNote) {
+                        scoreNote.innerHTML = 'Suoritus tallennettu. Oppimisympäristö avaa seuraavan harjoituksen automaattisesti.';
+                    }
+                }, { once: true });
+            }
+        }
+    });
+
+    partA.init();
+    </script>
+</body>
+</html>

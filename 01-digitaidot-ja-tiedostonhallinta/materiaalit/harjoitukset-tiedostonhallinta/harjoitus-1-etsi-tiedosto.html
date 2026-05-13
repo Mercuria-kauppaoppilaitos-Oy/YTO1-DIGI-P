@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <a class="back-link" href="index.html">← Takaisin harjoituksiin</a>
     <div class="exercise-container">
         <div class="exercise-header">
             <h1>📁 Harjoitus 1 – Etsi tiedosto</h1>
@@ -16,8 +15,14 @@
         <div id="exercise"></div>
     </div>
 
+    <script src="scorm-wrapper.js"></script>
     <script src="file-engine.js"></script>
     <script>
+    SCORM.init();
+
+    const nextExerciseUrl = 'harjoitus-2-jarjesta-ja-nimea.html';
+    let scoReported = false;
+
     // ────────────────────────────────────────────────
     // KIERROS A: Sekava kansiorakenne
     // ────────────────────────────────────────────────
@@ -123,6 +128,9 @@
                     nextBtn.style.marginTop = '16px';
                     nextBtn.addEventListener('click', startRoundB);
                     document.getElementById('round-a').appendChild(nextBtn);
+                    
+                    // Scrollaa vain SCORM-dokumentin sisällä
+                    scrollInDocument(nextBtn, 24);
                 }, 800);
             }
         });
@@ -184,11 +192,42 @@
                 <li><strong>Kuvaavat tiedostonimet</strong> (esim. <code>2026-01-15_kotitehtava_matikka.docx</code>) kertovat heti mitä tiedosto sisältää</li>
                 <li><strong>"Uusi kansio"</strong> tai <strong>"teht.docx"</strong> ei kerro mitään — nimeä kansiot ja tiedostot aina selkeästi!</li>
             </ul>
-            <p><a href="harjoitus-2-jarjesta-ja-nimea.html" style="color: #2980b9; font-weight: 600;">→ Kokeile seuraavaksi järjestämisharjoitusta</a></p>
         `;
 
         container.appendChild(panel);
         container.appendChild(lesson);
+
+        const score = 100;
+        if (!scoReported) {
+            SCORM.setScore(score, 100, 0);
+            scoReported = true;
+        }
+
+        const nextPanel = document.createElement('div');
+        nextPanel.className = 'success-message';
+        nextPanel.innerHTML = `
+            🎯 <strong>Harjoitus 1 valmis.</strong>
+            <p class="score-note">Saat tästä harjoituksesta täydet pisteet: <strong>${score}%</strong>.</p>
+            <div class="controls completion-actions">
+                <button class="btn btn-next" id="exercise-1-next" type="button">Siirry harjoitukseen 2 →</button>
+            </div>
+        `;
+        container.appendChild(nextPanel);
+        
+        // Scrollaa vain SCORM-dokumentin sisällä
+        scrollInDocument(nextPanel, 24);
+
+        document.getElementById('exercise-1-next').addEventListener('click', () => {
+            const nextButton = document.getElementById('exercise-1-next');
+            const scoreNote = nextPanel.querySelector('.score-note');
+            nextButton.disabled = true;
+            nextButton.textContent = 'Tallennetaan...';
+
+            const usingLms = SCORM.advance(nextExerciseUrl);
+            if (usingLms && scoreNote) {
+                scoreNote.innerHTML = 'Suoritus tallennettu. Oppimisympäristö avaa seuraavan harjoituksen automaattisesti.';
+            }
+        }, { once: true });
     }
 
     // Käynnistä kierros A

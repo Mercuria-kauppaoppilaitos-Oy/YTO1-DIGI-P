@@ -7,20 +7,34 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <a class="back-link" href="index.html">← Takaisin harjoituksiin</a>
     <div class="exercise-container">
         <div class="exercise-header">
             <h1>📂 Harjoitus 4 – Tiedostomuodot</h1>
-            <p>Raahaa tiedostot oikeaan ryhmään tiedostopäätteen perusteella.</p>
+            <p>Harjoitus jakautuu kahteen osaan: Osa A lajittelee tiedostomuodot, Osa B on tietovisa.</p>
         </div>
         <div id="exercise-formats"></div>
-        <div id="quiz-section" style="margin-top: 24px;"></div>
+        <div id="quiz-section" style="margin-top: 24px; display: none;"></div>
     </div>
 
     <script src="scorm-wrapper.js"></script>
     <script src="file-engine.js"></script>
     <script>
     SCORM.init();
+    const quizDiv = document.getElementById('quiz-section');
+    let qIndex = 0;
+    let quizScore = 0;
+    let quizStarted = false;
+    let partAResults = null;
+    let scoReported = false;
+
+    function startQuiz() {
+        if (quizStarted) return;
+        quizStarted = true;
+        quizDiv.style.display = 'block';
+        scrollInDocument(quizDiv, 18);
+        renderQuiz();
+    }
+
     // ────────────────────────────────────────────────
     // OSA A: Raahaa tiedostomuoto oikeaan kategoriaan
     // ────────────────────────────────────────────────
@@ -29,6 +43,7 @@
         containerId: 'exercise-formats',
         infoPanel: {
             title: 'Yleisimmät tiedostomuodot',
+            plain: true,
             content: `
                 <ul>
                     <li><strong>📝 Tekstidokumentit:</strong> .docx (Word), .pdf (Adobe), .txt (tekstitiedosto), .odt (LibreOffice)</li>
@@ -66,7 +81,16 @@
             { id: 'f14', text: 'seminaari.odp',        icon: '📄', correctTarget: 'slides' },
             { id: 'f15', text: 'kirjanpito.ods',       icon: '📄', correctTarget: 'sheet' },
             { id: 'f16', text: 'haastattelu.wav',      icon: '📄', correctTarget: 'media' }
-        ]
+        ],
+        successMessage: `
+            ✅ <strong>Osa A valmis.</strong>
+            <p class="score-note">Seuraavaksi vastaat tiedostomuotojen tietovisaan harjoituksen toisessa osassa.</p>
+        `,
+        onComplete: function(results) {
+            partAResults = results;
+            // Auto-siirry quizziin
+            setTimeout(startQuiz, 1500);
+        }
     });
 
     partA.init();
@@ -108,27 +132,34 @@
         }
     ];
 
-    let qIndex = 0;
-    let quizScore = 0;
-    const quizDiv = document.getElementById('quiz-section');
-
     function renderQuiz() {
+        if (!quizStarted) return;
+
         if (qIndex >= quizData.length) {
-            // Laske kokonaispisteet: raahausosa (16 kpl) + tietovisa (6 kpl) = max 22
-            const dragScore = partA.completedCount || 0;
+            const dragScore = Math.max(0, partA.totalItems - (partAResults ? partAResults.wrongAttempts : 0));
             const totalRaw = dragScore + quizScore;
-            const totalMax = 16 + quizData.length;
+            const totalMax = partA.totalItems + quizData.length;
             const pct = Math.round(totalRaw / totalMax * 100);
-            SCORM.setScore(pct, 100, 0);
-            SCORM.setStatus(pct >= 50 ? 'completed' : 'incomplete');
-            SCORM.finish();
+
+            if (!scoReported) {
+                SCORM.setScore(pct, 100, 0);
+                scoReported = true;
+            }
 
             quizDiv.innerHTML = `
                 <div class="success-message">
-                    🎉 <strong>Tietovisa suoritettu!</strong> Sait ${quizScore}/${quizData.length} oikein.
-                    <br>Kokonaispisteet: <strong>${pct}%</strong> (raahaus ${dragScore}/16 + visa ${quizScore}/${quizData.length})
-                    <br><small>Voit palata <a href="index.html" style="color: #2e7d32;">harjoitusvalikkoon</a>.</small>
+                    🎉 <strong>Harjoitus 4 valmis.</strong> Sait tietovisasta ${quizScore}/${quizData.length} oikein.
+                    <p class="score-note">Tämän harjoituksen pisteet: <strong>${pct}%</strong> (lajittelu ${dragScore}/${partA.totalItems} + visa ${quizScore}/${quizData.length}).</p>
                 </div>`;
+            
+            const successMsg = quizDiv.querySelector('.success-message');
+            scrollInDocument(successMsg, 24);
+            
+            // Auto-complete: harjoitus valmis heti ilman nappaa
+            // Poistu aktiviteetista painamalla "Poistu aktiviteetista" nappia SCORM playerin sivulla
+            setTimeout(() => {
+                SCORM.advance('index.html');
+            }, 2500);
             return;
         }
 
@@ -173,12 +204,13 @@
             fb.innerHTML = `<div class="hint-box" style="background:#ffebee; border-color:#ef9a9a; color:#c62828;">
                 ❌ Oikea vastaus: <strong>${q.options[q.correct]}</strong></div>`;
         }
+        
+        scrollInDocument(fb, 24);
 
         qIndex++;
         setTimeout(renderQuiz, 1800);
     }
 
-    renderQuiz();
     </script>
     <style>
         .quiz-options {

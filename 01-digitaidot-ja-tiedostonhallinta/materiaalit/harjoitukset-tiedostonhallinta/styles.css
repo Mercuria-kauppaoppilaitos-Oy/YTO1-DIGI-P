@@ -53,6 +53,18 @@ body {
     font-size: .92em;
 }
 
+.info-panel--plain {
+    background: white;
+    border-left: none;
+    border-bottom: 1px solid #eee;
+    padding: 14px 0;
+    margin-bottom: 14px;
+}
+
+.info-panel--plain h3 {
+    color: #333;
+}
+
 /* ─── Tehtäväpalkki ───────────────────────────────────── */
 
 .task-panel {
@@ -377,11 +389,13 @@ body {
 
 .controls { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
 .btn {
+    display: inline-block;
     padding: 8px 16px;
     border: none;
     border-radius: 6px;
     font-size: .9em;
     cursor: pointer;
+    text-decoration: none;
     transition: background .2s, transform .1s;
 }
 .btn:hover { transform: translateY(-1px); }
@@ -410,6 +424,16 @@ body {
     animation: fadeIn .4s ease;
 }
 
+.completion-actions {
+    justify-content: center;
+    margin-top: 12px;
+}
+
+.score-note {
+    margin: 10px 0 0;
+    font-size: .95em;
+}
+
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(-8px); }
     to   { opacity: 1; transform: translateY(0); }
@@ -417,29 +441,46 @@ body {
 
 /* ─── Aloitussivu (index) ──────────────────────────────── */
 
+.intro-copy {
+    margin: 0 0 18px;
+    font-size: .96em;
+    line-height: 1.7;
+    color: #444;
+}
+
+.intro-copy p {
+    margin: 0;
+}
+
 .exercise-list { list-style: none; padding: 0; }
 .exercise-list li { margin-bottom: 12px; }
-.exercise-list a {
+.exercise-card {
     display: block;
     padding: 16px 20px;
     background: #f8f9fa;
     border: 1px solid #ddd;
     border-left: 4px solid #2980b9;
     border-radius: 6px;
-    text-decoration: none;
     color: #1a5276;
+}
+
+.exercise-title {
+    display: block;
     font-weight: 600;
-    transition: background .2s, box-shadow .2s;
 }
-.exercise-list a:hover {
-    background: #eaf2f8;
-    box-shadow: 0 2px 8px rgba(0,0,0,.08);
-}
+
 .exercise-list .exercise-desc {
+    display: block;
     font-weight: 400;
     color: #666;
     font-size: .85em;
     margin-top: 4px;
+}
+
+.btn:disabled {
+    opacity: .75;
+    cursor: default;
+    transform: none;
 }
 
 .back-link {

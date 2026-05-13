@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harjoitus 4B - Tiedostomuotojen tietovisa</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="exercise-container">
+        <div class="exercise-header">
+            <h1>🧠 Harjoitus 4B - Tiedostomuotojen tietovisa</h1>
+            <p>Vastaa monivalintakysymyksiin tiedostomuodoista.</p>
+        </div>
+        <div id="quiz-section"></div>
+    </div>
+
+    <script src="scorm-wrapper.js"></script>
+    <script src="file-engine.js"></script>
+    <script>
+    SCORM.init();
+
+    const quizDiv = document.getElementById('quiz-section');
+    let qIndex = 0;
+    let quizScore = 0;
+
+    const quizData = [
+        {
+            question: 'Millä ohjelmalla avaat .xlsx-tiedoston?',
+            options: ['Microsoft Word', 'Microsoft Excel', 'Microsoft PowerPoint', 'Adobe Reader'],
+            correct: 1
+        },
+        {
+            question: 'Mikä tiedostopääte on PDF-dokumentilla?',
+            options: ['.docx', '.pdf', '.txt', '.pptx'],
+            correct: 1
+        },
+        {
+            question: 'Mikä näistä on kuvaformaatti?',
+            options: ['.mp3', '.docx', '.png', '.zip'],
+            correct: 2
+        },
+        {
+            question: 'Mitä .zip-tiedosto sisältää?',
+            options: ['Äänitiedoston', 'Yhden kuvan', 'Pakattuja tiedostoja', 'Esityksen'],
+            correct: 2
+        },
+        {
+            question: 'Kumpi on parempi lähettää sähköpostilla: .docx vai .pdf?',
+            options: ['.docx, koska sitä voi muokata', '.pdf, koska se näyttää samalta kaikilla laitteilla'],
+            correct: 1
+        },
+        {
+            question: 'Mikä tiedostopääte liittyy PowerPoint-esitykseen?',
+            options: ['.docx', '.xlsx', '.pptx', '.txt'],
+            correct: 2
+        }
+    ];
+
+    function renderQuiz() {
+        if (qIndex >= quizData.length) {
+            const score = Math.round(quizScore / quizData.length * 100);
+            SCORM.setScore(score, 100, 0);
+
+            quizDiv.innerHTML = `
+                <div class="success-message">
+                    🎉 <strong>Harjoitus 4B valmis.</strong> Sait tietovisasta ${quizScore}/${quizData.length} oikein.
+                    <p class="score-note">Tämän harjoituksen pisteet: <strong>${score}%</strong>.</p>
+                    <p class="score-note">Tämä on SCORM-kokonaisuuden viimeinen harjoitus.</p>
+                    <div class="controls completion-actions">
+                        <button class="btn btn-next" id="exercise-4b-finish" type="button">Tallenna suoritus ja päätä harjoitus</button>
+                    </div>
+                </div>`;
+
+            const successMsg = quizDiv.querySelector('.success-message');
+            scrollInDocument(successMsg, 24);
+
+            document.getElementById('exercise-4b-finish').addEventListener('click', () => {
+                const finishButton = document.getElementById('exercise-4b-finish');
+                const scoreNote = quizDiv.querySelector('.score-note');
+                finishButton.disabled = true;
+                finishButton.textContent = 'Tallennetaan...';
+
+                const usingLms = SCORM.advance();
+                if (usingLms && scoreNote) {
+                    scoreNote.innerHTML = 'Suoritus tallennettu. Voit poistua aktiviteetista SCORM-soittimen painikkeella.';
+                }
+            }, { once: true });
+            return;
+        }
+
+        const q = quizData[qIndex];
+        const optionsHtml = q.options.map((opt, i) => `<button class="quiz-option" data-index="${i}">${opt}</button>`).join('');
+
+        quizDiv.innerHTML = `
+            <div class="info-panel">
+                <h3>Tietovisa (${qIndex + 1}/${quizData.length})</h3>
+            </div>
+            <div class="task-panel">
+                <span class="task-label">Kysymys:</span>
+                <span class="task-text">${q.question}</span>
+            </div>
+            <div class="quiz-options">${optionsHtml}</div>
+            <div id="quiz-feedback"></div>
+        `;
+
+        quizDiv.querySelectorAll('.quiz-option').forEach(btn => {
+            btn.addEventListener('click', () => handleQuizAnswer(parseInt(btn.dataset.index, 10)));
+        });
+    }
+
+    function handleQuizAnswer(selectedIndex) {
+        const q = quizData[qIndex];
+        const fb = document.getElementById('quiz-feedback');
+        const buttons = quizDiv.querySelectorAll('.quiz-option');
+
+        buttons.forEach(b => {
+            b.disabled = true;
+            const idx = parseInt(b.dataset.index, 10);
+            if (idx === q.correct) b.classList.add('correct');
+            if (idx === selectedIndex && idx !== q.correct) b.classList.add('wrong');
+        });
+
+        if (selectedIndex === q.correct) {
+            quizScore++;
+            fb.innerHTML = '<div class="hint-box" style="background:#e8f5e9; border-color:#81c784; color:#2e7d32;">✅ Oikein!</div>';
+        } else {
+            fb.innerHTML = `<div class="hint-box" style="background:#ffebee; border-color:#ef9a9a; color:#c62828;">❌ Oikea vastaus: <strong>${q.options[q.correct]}</strong></div>`;
+        }
+
+        scrollInDocument(fb, 24);
+        qIndex++;
+        setTimeout(renderQuiz, 1500);
+    }
+
+    renderQuiz();
+    </script>
+    <style>
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin: 12px 0;
+            padding-bottom: 24px;
+        }
+        .quiz-option {
+            padding: 12px 16px;
+            border: 2px solid #bbdefb;
+            border-radius: 8px;
+            background: #e3f2fd;
+            color: #1a1a1a;
+            font-size: 1rem;
+            cursor: pointer;
+            text-align: left;
+            transition: border-color 0.2s, background 0.2s;
+        }
+        .quiz-option:hover:not(:disabled) {
+            border-color: #2980b9;
+            background: #bbdefb;
+        }
+        .quiz-option:disabled {
+            cursor: default;
+            opacity: 0.85;
+        }
+        .quiz-option.correct {
+            border-color: #81c784;
+            background: #e8f5e9;
+        }
+        .quiz-option.wrong {
+            border-color: #ef9a9a;
+            background: #ffebee;
+        }
+        #quiz-feedback {
+            margin-top: 4px;
+        }
+        #quiz-feedback .hint-box {
+            font-size: 1.06rem;
+            line-height: 1.45;
+            padding: 12px 14px;
+        }
+    </style>
+</body>
+</html>

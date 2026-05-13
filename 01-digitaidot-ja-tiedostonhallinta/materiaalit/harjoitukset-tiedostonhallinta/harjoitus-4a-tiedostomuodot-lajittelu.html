@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harjoitus 4A - Tiedostomuotojen lajittelu</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="exercise-container">
+        <div class="exercise-header">
+            <h1>📂 Harjoitus 4A - Tiedostomuotojen lajittelu</h1>
+            <p>Lajittele tiedostot oikeaan ryhmään tiedostopäätteen perusteella.</p>
+        </div>
+        <div id="exercise-formats"></div>
+    </div>
+
+    <script src="scorm-wrapper.js"></script>
+    <script src="file-engine.js"></script>
+    <script>
+    SCORM.init();
+
+    const nextExerciseUrl = 'harjoitus-4b-tiedostomuodot-tietovisa.html';
+
+    const partA = new DragSortExercise({
+        containerId: 'exercise-formats',
+        infoPanel: {
+            title: 'Yleisimmät tiedostomuodot',
+            plain: true,
+            content: `
+                <ul>
+                    <li><strong>Tekstidokumentit:</strong> .docx, .pdf, .txt, .odt</li>
+                    <li><strong>Taulukot:</strong> .xlsx, .csv, .ods</li>
+                    <li><strong>Esitykset:</strong> .pptx, .odp</li>
+                    <li><strong>Kuvat:</strong> .jpg, .png, .gif, .svg, .webp</li>
+                    <li><strong>Media:</strong> .mp3, .mp4, .wav, .avi, .mkv</li>
+                    <li><strong>Pakatut:</strong> .zip, .rar, .7z</li>
+                </ul>
+            `
+        },
+        instruction: 'Raahaa jokainen tiedosto oikeaan kategoriaan tiedostopäätteen perusteella.',
+        targets: [
+            { id: 'text',   label: 'Tekstidokumentit', icon: '📝' },
+            { id: 'sheet',  label: 'Taulukot',         icon: '📊' },
+            { id: 'slides', label: 'Esitykset',        icon: '📽️' },
+            { id: 'image',  label: 'Kuvat',            icon: '🖼️' },
+            { id: 'media',  label: 'Ääni / Video',     icon: '🎵' },
+            { id: 'zip',    label: 'Pakatut',          icon: '📦' }
+        ],
+        items: [
+            { id: 'f1',  text: 'raportti.docx',   icon: '📄', correctTarget: 'text' },
+            { id: 'f2',  text: 'budjetti.xlsx',   icon: '📄', correctTarget: 'sheet' },
+            { id: 'f3',  text: 'esitys.pptx',     icon: '📄', correctTarget: 'slides' },
+            { id: 'f4',  text: 'kuva.jpg',        icon: '📄', correctTarget: 'image' },
+            { id: 'f5',  text: 'laulu.mp3',       icon: '📄', correctTarget: 'media' },
+            { id: 'f6',  text: 'arkisto.zip',     icon: '📄', correctTarget: 'zip' },
+            { id: 'f7',  text: 'ohje.pdf',        icon: '📄', correctTarget: 'text' },
+            { id: 'f8',  text: 'data.csv',        icon: '📄', correctTarget: 'sheet' },
+            { id: 'f9',  text: 'logo.png',        icon: '📄', correctTarget: 'image' },
+            { id: 'f10', text: 'video.mp4',       icon: '📄', correctTarget: 'media' },
+            { id: 'f11', text: 'pakkaus.rar',     icon: '📄', correctTarget: 'zip' },
+            { id: 'f12', text: 'muistio.txt',     icon: '📄', correctTarget: 'text' },
+            { id: 'f13', text: 'animaatio.gif',   icon: '📄', correctTarget: 'image' },
+            { id: 'f14', text: 'seminaari.odp',   icon: '📄', correctTarget: 'slides' },
+            { id: 'f15', text: 'kirjanpito.ods',  icon: '📄', correctTarget: 'sheet' },
+            { id: 'f16', text: 'haastattelu.wav', icon: '📄', correctTarget: 'media' }
+        ],
+        successMessage: `
+            ✅ <strong>Harjoitus 4A valmis.</strong>
+            <p class="score-note" id="exercise-4a-score"></p>
+            <div class="controls completion-actions">
+                <button class="btn btn-next" id="exercise-4a-next" type="button">Siirry harjoitukseen 4B →</button>
+            </div>
+        `,
+        onComplete: function(results) {
+            const raw = Math.max(0, partA.totalItems - results.wrongAttempts);
+            const score = Math.round(raw / partA.totalItems * 100);
+            SCORM.setScore(score, 100, 0);
+
+            const scoreNote = document.getElementById('exercise-4a-score');
+            if (scoreNote) {
+                scoreNote.innerHTML = `Tämän harjoituksen pisteet: <strong>${score}%</strong>.`;
+            }
+
+            const nextButton = document.getElementById('exercise-4a-next');
+            if (nextButton) {
+                nextButton.addEventListener('click', () => {
+                    nextButton.disabled = true;
+                    nextButton.textContent = 'Tallennetaan...';
+                    const usingLms = SCORM.advance(nextExerciseUrl);
+                    if (usingLms && scoreNote) {
+                        scoreNote.innerHTML = 'Suoritus tallennettu. Oppimisympäristö avaa seuraavan harjoituksen automaattisesti.';
+                    }
+                }, { once: true });
+            }
+        }
+    });
+
+    partA.init();
+    </script>
+</body>
+</html>

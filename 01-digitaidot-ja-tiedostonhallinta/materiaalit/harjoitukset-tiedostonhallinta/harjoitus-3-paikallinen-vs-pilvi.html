@@ -7,18 +7,37 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <a class="back-link" href="index.html">← Takaisin harjoituksiin</a>
     <div class="exercise-container">
         <div class="exercise-header">
             <h1>☁️ Harjoitus 3 – Paikallinen vai pilvi?</h1>
-            <p>Raahaa tiedostot oikeaan tallennuspaikkaan. Osa A: tallennus. Osa B: tiedostopolut.</p>
+               <p>Harjoitus jakautuu kahteen osaan: Osa A käsittelee tallennuspaikkoja, Osa B harjoittelee tiedostopolkuja.</p>
         </div>
         <div id="exercise-part-a"></div>
-        <div id="path-exercise" style="margin-top: 24px;"></div>
+        <div id="path-exercise" style="margin-top: 24px; display: none;"></div>
     </div>
 
+    <script src="scorm-wrapper.js"></script>
     <script src="file-engine.js"></script>
     <script>
+    SCORM.init();
+
+    const nextExerciseUrl = 'harjoitus-4-tiedostomuodot.html';
+    const pathDiv = document.getElementById('path-exercise');
+    let currentQ = 0;
+    let pathScore = 0;
+    let pathMistakes = 0;
+    let pathExerciseStarted = false;
+    let partAResults = null;
+    let scoReported = false;
+
+    function startPathExercise() {
+        if (pathExerciseStarted) return;
+        pathExerciseStarted = true;
+        pathDiv.style.display = 'block';
+        scrollInDocument(pathDiv, 18);
+        renderPathExercise();
+    }
+
     // ────────────────────────────────────────────────
     // OSA A: Raahaa paikalliseen tai pilveen
     // ────────────────────────────────────────────────
@@ -27,6 +46,7 @@
         containerId: 'exercise-part-a',
         infoPanel: {
             title: 'Paikallinen tallennus vs. pilvi',
+            plain: true,
             content: `
                 <ul>
                     <li><strong>💻 Paikallinen tallennus</strong> (C:-asema) — tiedosto on vain tällä tietokoneella. Hyvä salaisten tai suurten tiedostojen tilapäiseen säilytykseen.</li>
@@ -49,7 +69,16 @@
             { id: 'a6', text: 'Ansioluettelo (CV) jota päivität harvoin', icon: '📋', correctTarget: 'cloud' },
             { id: 'a7', text: 'Keskeneräinen videoprojekti (10 GB)', icon: '🎬', correctTarget: 'local' },
             { id: 'a8', text: 'Tärkeä raportti josta haluat varmuuskopion', icon: '📕', correctTarget: 'cloud' }
-        ]
+        ],
+        successMessage: `
+            ✅ <strong>Osa A valmis.</strong>
+            <p class="score-note">Seuraavaksi harjoittelet tiedostopolkuja harjoituksen toisessa osassa.</p>
+        `,
+        onComplete: function(results) {
+            partAResults = results;
+            // Auto-siirry osaan B
+            setTimeout(startPathExercise, 1500);
+        }
     });
 
     partA.init();
@@ -57,8 +86,6 @@
     // ────────────────────────────────────────────────
     // OSA B: Tiedostopolkuharjoitus
     // ────────────────────────────────────────────────
-
-    const pathDiv = document.getElementById('path-exercise');
 
     const pathQuestions = [
         {
@@ -78,16 +105,44 @@
         }
     ];
 
-    let currentQ = 0;
-    let pathScore = 0;
-
     function renderPathExercise() {
+        if (!pathExerciseStarted) return;
+
         if (currentQ >= pathQuestions.length) {
+            const dragRaw = Math.max(0, partA.totalItems - (partAResults ? partAResults.wrongAttempts : 0));
+            const pathRaw = Math.max(0, pathQuestions.length - pathMistakes);
+            const totalRaw = dragRaw + pathRaw;
+            const totalMax = partA.totalItems + pathQuestions.length;
+            const pct = Math.round(totalRaw / totalMax * 100);
+
+            if (!scoReported) {
+                SCORM.setScore(pct, 100, 0);
+                scoReported = true;
+            }
+
             pathDiv.innerHTML = `
                 <div class="success-message">
-                    🎉 <strong>Tiedostopolut hallussa!</strong> Sait ${pathScore}/${pathQuestions.length} oikein.
-                    <br><small><a href="harjoitus-4-tiedostomuodot.html" style="color: #2e7d32;">→ Siirry tiedostomuotoharjoitukseen</a></small>
+                    🎉 <strong>Harjoitus 3 valmis.</strong> Sait tiedostopolut oikein ${pathScore}/${pathQuestions.length}.
+                    <p class="score-note">Tämän harjoituksen pisteet: <strong>${pct}%</strong>.</p>
+                    <div class="controls completion-actions">
+                        <button class="btn btn-next" id="exercise-3-next" type="button">Siirry harjoitukseen 4 →</button>
+                    </div>
                 </div>`;
+            
+            const successMsg = pathDiv.querySelector('.success-message');
+            scrollInDocument(successMsg, 24);
+
+            document.getElementById('exercise-3-next').addEventListener('click', () => {
+                const nextButton = document.getElementById('exercise-3-next');
+                const scoreNote = pathDiv.querySelector('.score-note');
+                nextButton.disabled = true;
+                nextButton.textContent = 'Tallennetaan...';
+
+                const usingLms = SCORM.advance(nextExerciseUrl);
+                if (usingLms && scoreNote) {
+                    scoreNote.innerHTML = 'Suoritus tallennettu. Oppimisympäristö avaa seuraavan harjoituksen automaattisesti.';
+                }
+            }, { once: true });
             return;
         }
 
@@ -102,8 +157,8 @@
                 <span class="task-text" style="font-family: Consolas, monospace;">${q.tree}</span>
             </div>
             <div style="display: flex; gap: 8px; margin: 10px 0; flex-wrap: wrap;">
-                <input type="text" id="path-input" class="folder-input" style="flex:1; min-width: 200px; font-family: Consolas, monospace;"
-                       placeholder="Kirjoita tiedostopolku tähän...">
+                  <input type="text" id="path-input" class="folder-input" style="flex:1; min-width: 200px; font-family: Consolas, monospace;"
+                      placeholder="Kirjoita tiedostopolku tähän...">
                 <button class="btn btn-next" id="path-check">Tarkista</button>
             </div>
             <div id="path-feedback"></div>
@@ -116,6 +171,14 @@
         document.getElementById('path-input').addEventListener('keydown', (e) => {
             if (e.key === 'Enter') checkPath();
         });
+        const inputEl = document.getElementById('path-input');
+        if (inputEl) {
+            try {
+                inputEl.focus({ preventScroll: true });
+            } catch (e) {
+                inputEl.focus();
+            }
+        }
         document.getElementById('path-hint-btn').addEventListener('click', () => {
             const fb = document.getElementById('path-feedback');
             fb.innerHTML = `<div class="hint-box">💡 ${q.hint}</div>`;
@@ -135,16 +198,24 @@
             pathScore++;
             fb.innerHTML = `<div class="hint-box" style="background:#e8f5e9; border-color:#81c784; color:#2e7d32;">
                 ✅ Oikein! <strong>${q.answer}</strong></div>`;
+            scrollInDocument(fb, 24);
             currentQ++;
             setTimeout(renderPathExercise, 1500);
         } else {
+            pathMistakes++;
             fb.innerHTML = `<div class="hint-box" style="background:#ffebee; border-color:#ef9a9a; color:#c62828;">
                 ❌ Ei aivan. Tarkista polku ja yritä uudelleen.</div>`;
-            document.getElementById('path-input').focus();
+            scrollInDocument(fb, 24);
+            const inputEl = document.getElementById('path-input');
+            if (inputEl) {
+                try {
+                    inputEl.focus({ preventScroll: true });
+                } catch (e) {
+                    inputEl.focus();
+                }
+            }
         }
     }
-
-    renderPathExercise();
     </script>
 </body>
 </html>

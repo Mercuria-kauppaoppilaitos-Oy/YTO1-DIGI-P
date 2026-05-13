@@ -35,6 +35,12 @@ function folderIcon(open) {
     return open ? '📂' : '📁';
 }
 
+function scrollInDocument(el, offset = 12) {
+    if (!el) return;
+    const top = Math.max(0, window.scrollY + el.getBoundingClientRect().top - offset);
+    window.scrollTo({ top, behavior: 'smooth' });
+}
+
 // ============================================================
 // FILETREEEXERCISE — Kansiopuun navigointi + tiedoston etsintä
 // ============================================================
@@ -90,7 +96,7 @@ class FileTreeExercise {
 
     _buildInfoPanel() {
         const p = document.createElement('div');
-        p.className = 'info-panel';
+        p.className = this.infoPanel.plain ? 'info-panel info-panel--plain' : 'info-panel';
         if (this.infoPanel.title) {
             const h = document.createElement('h3');
             h.textContent = this.infoPanel.title;
@@ -620,6 +626,8 @@ class DragSortExercise {
      * @param {Array}  config.targets      — [{id, label, icon}]
      * @param {string} config.instruction
      * @param {Object} [config.infoPanel]
+     * @param {string} [config.successMessage]
+     * @param {Function} [config.onComplete]
      * @param {Array}  [config.tasks]      — jos halutaan tehtäväkerrallaan-malli
      */
     constructor(config) {
@@ -628,6 +636,8 @@ class DragSortExercise {
         this.targets = config.targets || [];
         this.instruction = config.instruction;
         this.infoPanel = config.infoPanel || null;
+        this.successMessage = config.successMessage || null;
+        this.onComplete = config.onComplete || null;
         this.tasks = config.tasks || null;
         this.currentTaskIndex = 0;
         this.container = null;
@@ -644,6 +654,8 @@ class DragSortExercise {
         this.container.innerHTML = '';
         this.placed = {};
         this.completedCount = 0;
+        this.wrongAttempts = 0;
+        this._completedReported = false;
         this.items = JSON.parse(JSON.stringify(this._initialItems));
 
         if (this.infoPanel) this._buildInfoPanel();
@@ -782,6 +794,7 @@ class DragSortExercise {
         chip.textContent = (item.icon || '') + ' ' + item.text;
 
         if (!correct) {
+            this.wrongAttempts++;
             // Väärä: palauta hetken päästä
             dropZone.appendChild(chip);
             setTimeout(() => {
@@ -812,8 +825,20 @@ class DragSortExercise {
         this.taskPanel.classList.add('task-done');
         const msg = document.createElement('div');
         msg.className = 'success-message';
-        msg.innerHTML = '🎉 <strong>Hienoa!</strong> Kaikki kohdat sijoitettu oikein!';
+        msg.innerHTML = this.successMessage || '🎉 <strong>Hienoa!</strong> Kaikki kohdat sijoitettu oikein!';
         this.container.appendChild(msg);
+        
+        // Scrollaa vain SCORM-dokumentin sisällä (ei parent-sivua)
+        scrollInDocument(msg, 24);
+
+        if (this.onComplete && !this._completedReported) {
+            this._completedReported = true;
+            this.onComplete({
+                correct: this.completedCount,
+                total: this.totalItems,
+                wrongAttempts: this.wrongAttempts
+            });
+        }
     }
 
     _buildControls() {
@@ -855,6 +880,8 @@ class FileExplorerExercise {
      * @param {Object}  config
      * @param {string}  config.containerId
      * @param {Object}  [config.infoPanel]        — {title, content}
+     * @param {string}  [config.successMessage]
+     * @param {Function} [config.onComplete]
      * @param {Array}   config.files              — [{name, correctName, correctFolder, renameOptions:[opt,opt,opt,opt]}]
      *                                               renameOptions[0] = correctName (sekoitetaan näytettäessä)
      * @param {Array}   config.requiredFolders    — ['Talous','Talous/Kuitit', …]
@@ -862,6 +889,8 @@ class FileExplorerExercise {
     constructor(config) {
         this.containerId = config.containerId;
         this.infoPanel = config.infoPanel || null;
+        this.successMessage = config.successMessage || null;
+        this.onComplete = config.onComplete || null;
         this.filesConfig = config.files || [];
         this.requiredFolders = config.requiredFolders || [];
         this._initial = JSON.parse(JSON.stringify(this.filesConfig));
@@ -884,6 +913,9 @@ class FileExplorerExercise {
         this.folders = new Set();
         this.stage = 1;
         this._selectedFileIdx = null;
+        this.renameMistakes = 0;
+        this.moveMistakes = 0;
+        this._completedReported = false;
 
         if (this.infoPanel) this._buildInfoPanel();
         this._buildStageBar();
@@ -1202,6 +1234,7 @@ class FileExplorerExercise {
                         this._checkRenamesDone();
                     }, 600);
                 } else {
+                    this.renameMistakes++;
                     btn.classList.add('wrong');
                     setTimeout(() => btn.classList.remove('wrong'), 800);
                 }
@@ -1309,6 +1342,7 @@ class FileExplorerExercise {
             this._updateProgress();
             if (this.files.every(f => f.movedTo)) this._showSuccess();
         } else {
+            this.moveMistakes++;
             // Väärä kansio → vilkkuu punaisena
             const el = this.folderTreeEl.querySelector(`[data-folder="${folderPath}"]`);
             if (el) {
@@ -1341,8 +1375,20 @@ class FileExplorerExercise {
         if (this.container.querySelector('.success-message')) return;
         const msg = document.createElement('div');
         msg.className = 'success-message';
-        msg.innerHTML = '🎉 <strong>Hienoa!</strong> Kaikki tiedostot on nimetty ja järjestetty oikein!<br><small><a href="harjoitus-3-paikallinen-vs-pilvi.html" style="color:#2e7d32">→ Siirry seuraavaan harjoitukseen</a></small>';
+        msg.innerHTML = this.successMessage || '🎉 <strong>Hienoa!</strong> Kaikki tiedostot on nimetty ja järjestetty oikein!';
         this.container.appendChild(msg);
+        
+        // Scrollaa vain SCORM-dokumentin sisällä (ei parent-sivua)
+        scrollInDocument(msg, 24);
+
+        if (this.onComplete && !this._completedReported) {
+            this._completedReported = true;
+            this.onComplete({
+                totalFiles: this.files.length,
+                renameMistakes: this.renameMistakes,
+                moveMistakes: this.moveMistakes
+            });
+        }
     }
 
     // ── Painikkeet ──────────────────────────────────────
