@@ -33,6 +33,12 @@ function formatNumber(value) {
     return value.toFixed(2).replace('.', ',');
 }
 
+function scrollInDocument(el, offset = 12) {
+    if (!el) return;
+    const top = Math.max(0, window.scrollY + el.getBoundingClientRect().top - offset);
+    window.scrollTo({ top, behavior: 'smooth' });
+}
+
 // ============================================================
 // KAAVAMOOTTORI (FormulaEngine)
 // ============================================================
@@ -297,6 +303,10 @@ class SpreadsheetExercise {
         this.cellFormulas = {};
         this.filledCells = new Set();
         this.fillSourceCells = new Set();
+        this.selectedCells = new Set();
+        this.dragState = null; // Vetämisen tila
+        this.scormCompletionHandled = false;
+        this.scormButtonBound = false;
     }
 
     init() {
@@ -356,7 +366,7 @@ class SpreadsheetExercise {
             fillInstr.className = 'fill-instruction';
             fillInstr.id = 'fill-instruction';
             fillInstr.style.display = 'none';
-            fillInstr.innerHTML = 'Klikkaa <span class="fill-handle-icon">■</span> täyttökahvaa solun oikeassa alakulmassa kopioidaksesi kaavan alas.';
+            fillInstr.innerHTML = 'Vedä <span class="fill-handle-icon">■</span> täyttökahvaa solun oikeasta alakulmasta kopioidaksesi kaavan alas.';
             container.appendChild(fillInstr);
         }
 
@@ -390,7 +400,11 @@ class SpreadsheetExercise {
         successDiv.className = 'success-message';
         successDiv.id = 'success-message';
         successDiv.style.display = 'none';
-        successDiv.innerHTML = '🎉 <strong>Hienoa!</strong> Kaikki kaavat ovat oikein!';
+        successDiv.innerHTML = `
+            🎉 <strong>Hienoa!</strong> Kaikki kaavat ovat oikein!
+            <p class="score-note" id="score-note"></p>
+            <div class="controls completion-actions" id="completion-actions"></div>
+        `;
         container.appendChild(successDiv);
     }
 
@@ -514,14 +528,26 @@ class SpreadsheetExercise {
             const handle = document.createElement('div');
             handle.className = 'fill-handle';
             handle.title = 'Kopioi kaava alas';
-            handle.addEventListener('click', (e) => {
+            handle.addEventListener('mousedown', (e) => {
+                e.preventDefault();
                 e.stopPropagation();
-                this._doFillDown();
+                this._startDrag(e, cellId);
             });
             td.appendChild(handle);
         }
 
         this.cellInputs[cellId] = input;
+
+        // Lisätään mousemove ja mouseup dokumenttiin (vain kerran)
+        if (!window._spreadsheetDragInitialized) {
+            document.addEventListener('mousemove', (e) => {
+                if (this.dragState) this._updateDrag(e);
+            });
+            document.addEventListener('mouseup', (e) => {
+                if (this.dragState) this._endDrag(e);
+            });
+            window._spreadsheetDragInitialized = true;
+        }
     }
 
     // --- Interaktiot ---
@@ -725,9 +751,245 @@ class SpreadsheetExercise {
         if (successDiv) {
             successDiv.style.display = (done >= total && total > 0) ? 'block' : 'none';
         }
+
+        this._reportScormProgress(done, total, pct);
+
+        if (done >= total && total > 0) {
+            this._ensureCompletionAction(pct);
+        }
+    }
+
+    _reportScormProgress(done, total, pct) {
+        if (typeof window.SCORM === 'undefined' || !window.SCORM) return;
+
+        window.SCORM.setScore(pct, 100, 0);
+
+        // Pidetään status keskeneräisenä, kunnes opiskelija valitsee "siirry eteenpäin".
+        if (done < total) {
+            window.SCORM.setStatus('incomplete');
+        }
+    }
+
+    _ensureCompletionAction(pct) {
+        if (this.scormCompletionHandled) return;
+
+        const actions = document.getElementById('completion-actions');
+        const scoreNote = document.getElementById('score-note');
+        if (!actions || !scoreNote) return;
+
+        scoreNote.innerHTML = `Saat tästä harjoituksesta pisteet: <strong>${pct}%</strong>.`;
+
+        if (!this.scormButtonBound) {
+            const nextBtn = document.createElement('button');
+            nextBtn.className = 'btn btn-next';
+            nextBtn.type = 'button';
+            nextBtn.id = 'exercise-complete-next';
+            nextBtn.textContent = this.config.nextExerciseUrl
+                ? 'Siirry seuraavaan harjoitukseen →'
+                : 'Merkitse harjoitus valmiiksi';
+
+            nextBtn.addEventListener('click', () => {
+                nextBtn.disabled = true;
+                nextBtn.textContent = 'Tallennetaan...';
+
+                if (typeof window.SCORM === 'undefined' || !window.SCORM) {
+                    scoreNote.textContent = 'SCORM-yhteyttä ei löytynyt. Suoritusta ei voitu tallentaa.';
+                    return;
+                }
+
+                const usingLms = window.SCORM.advance(this.config.nextExerciseUrl);
+                if (usingLms) {
+                    this.scormCompletionHandled = true;
+                    scoreNote.textContent = this.config.nextExerciseUrl
+                        ? 'Suoritus tallennettu. Oppimisympäristö avaa seuraavan harjoituksen automaattisesti.'
+                        : 'Suoritus tallennettu oppimisympäristöön valmiiksi.';
+                } else {
+                    nextBtn.disabled = false;
+                    nextBtn.textContent = this.config.nextExerciseUrl
+                        ? 'Siirry seuraavaan harjoitukseen →'
+                        : 'Merkitse harjoitus valmiiksi';
+                    scoreNote.textContent = 'Tallennus epäonnistui: SCORM-yhteyttä ei löytynyt.';
+                }
+            });
+
+            actions.innerHTML = '';
+            actions.appendChild(nextBtn);
+            
+            // Scrollaa palautelaatikkoon kun tehtävä on valmis
+            scrollInDocument(actions, 24);
+            
+            this.scormButtonBound = true;
+        }
     }
 
     // --- Täyttökahva ---
+
+    _startDrag(event, sourceId) {
+        const parsed = FormulaEngine.parseCellId(sourceId);
+        if (!parsed) return;
+
+        this.dragState = {
+            sourceId,
+            sourceRow: parsed.row,
+            sourceCol: parsed.col,
+            currentIndex: parsed.row,
+            handle: event.currentTarget
+        };
+
+        if (this.dragState.handle) {
+            this.dragState.handle.style.opacity = '0.5';
+        }
+
+        document.body.classList.add('fill-dragging');
+        this._updateDragHighlight();
+    }
+
+    _updateDrag(event) {
+        if (!this.dragState) return;
+
+        event.preventDefault();
+
+        const hovered = document.elementFromPoint(event.clientX, event.clientY);
+        if (!hovered) return;
+
+        const td = hovered.closest('td.cell');
+        if (!td || !td.dataset.cellId) return;
+
+        const parsed = FormulaEngine.parseCellId(td.dataset.cellId);
+        if (!parsed) return;
+        if (parsed.col !== this.dragState.sourceCol) return;
+
+        const nextIndex = Math.max(this.dragState.sourceRow, parsed.row);
+        if (nextIndex === this.dragState.currentIndex) return;
+
+        this.dragState.currentIndex = nextIndex;
+        this._updateDragHighlight();
+    }
+
+    _updateDragHighlight() {
+        if (!this.dragState) return;
+
+        for (const cellId of this.selectedCells) {
+            const td = this.cellElements[cellId];
+            if (td) td.classList.remove('drag-target');
+        }
+        this.selectedCells.clear();
+
+        const startRow = Math.min(this.dragState.sourceRow, this.dragState.currentIndex);
+        const endRow = Math.max(this.dragState.sourceRow, this.dragState.currentIndex);
+
+        for (let row = startRow; row <= endRow; row++) {
+            if (row === this.dragState.sourceRow) continue;
+            const cellId = this.dragState.sourceCol + row;
+            const td = this.cellElements[cellId];
+            if (!td) continue;
+            td.classList.add('drag-target');
+            this.selectedCells.add(cellId);
+        }
+    }
+
+    _endDrag(event) {
+        if (!this.dragState) return;
+        if (event) event.preventDefault();
+
+        if (this.dragState.handle) {
+            this.dragState.handle.style.opacity = '1';
+        }
+
+        for (const cellId of this.selectedCells) {
+            const td = this.cellElements[cellId];
+            if (td) td.classList.remove('drag-target');
+        }
+        this.selectedCells.clear();
+        document.body.classList.remove('fill-dragging');
+
+        if (this.dragState.currentIndex !== this.dragState.sourceRow) {
+            this._doFillDownRange(
+                this.dragState.sourceId,
+                this.dragState.sourceRow,
+                this.dragState.currentIndex
+            );
+        }
+
+        this.dragState = null;
+    }
+
+    _doFillDownRange(sourceId, startRow, endRow) {
+        if (!this.config.fillGroups) return;
+
+        const group = this.config.fillGroups.find(g => g.source === sourceId);
+        if (!group) return;
+
+        const sourceFormula = this.cellFormulas[sourceId];
+        if (!sourceFormula) return;
+
+        const sourceRow = FormulaEngine.parseCellId(sourceId).row;
+        const rangeStart = Math.min(startRow, endRow);
+        const rangeEnd = Math.max(startRow, endRow);
+
+        for (const targetId of group.targets) {
+            const targetParsed = FormulaEngine.parseCellId(targetId);
+            if (!targetParsed) continue;
+            if (targetParsed.row < rangeStart || targetParsed.row > rangeEnd) continue;
+
+            const rowDelta = targetParsed.row - sourceRow;
+            const adjustedFormula = FormulaEngine.adjustFormula(sourceFormula, rowDelta, 0);
+            const result = this.engine.evaluate(adjustedFormula);
+
+            this.cellFormulas[targetId] = adjustedFormula;
+            this.engine.updateCellComputed(targetId, (typeof result === 'number') ? result : 0);
+
+            // Päivitä UI
+            const td = this.cellElements[targetId];
+            td.className = 'cell fill-target-cell filled';
+
+            td.innerHTML = '';
+            const formulaSpan = document.createElement('div');
+            formulaSpan.className = 'fill-formula-display';
+            formulaSpan.textContent = adjustedFormula;
+
+            const valueSpan = document.createElement('div');
+            valueSpan.className = 'fill-value-display';
+            valueSpan.textContent = formatNumber(result);
+
+            const statusSpan = document.createElement('span');
+            statusSpan.className = 'cell-status';
+
+            td.appendChild(formulaSpan);
+            td.appendChild(valueSpan);
+            td.appendChild(statusSpan);
+
+            // Validointi
+            const cellDef = this.config.cells[targetId];
+            let correct = true;
+
+            if (cellDef && typeof cellDef.expectedValue === 'number') {
+                correct = isClose(result, cellDef.expectedValue);
+            }
+
+            // Tarkista absoluuttisten viittausten säilyminen
+            if (correct && cellDef && cellDef.formulaPattern) {
+                const pattern = new RegExp(cellDef.formulaPattern, 'i');
+                correct = pattern.test(adjustedFormula);
+            }
+
+            if (correct) {
+                td.classList.add('correct');
+                statusSpan.textContent = '✓';
+                this.completedCells.add(targetId);
+            } else {
+                td.classList.add('incorrect');
+                statusSpan.textContent = '✗';
+            }
+
+            this.filledCells.add(targetId);
+        }
+
+        this._updateProgress();
+
+        // Kahvan pitää olla käytettävissä uudestaan (osittainen täyttö / kaavan korjaus).
+        this._checkFillReady();
+    }
 
     _checkFillReady() {
         if (!this.config.fillGroups) return;
@@ -906,6 +1168,8 @@ class SpreadsheetExercise {
         this.completedCells.clear();
         this.cellFormulas = {};
         this.filledCells.clear();
+        this.scormCompletionHandled = false;
+        this.scormButtonBound = false;
 
         for (const [id, def] of Object.entries(this.config.cells)) {
             if (def.type === 'editable') {
@@ -938,6 +1202,11 @@ class SpreadsheetExercise {
         const fillInstr = document.getElementById('fill-instruction');
         if (fillInstr) fillInstr.style.display = 'none';
         this._setFeedback('');
+
+        const scoreNote = document.getElementById('score-note');
+        if (scoreNote) scoreNote.textContent = '';
+        const actions = document.getElementById('completion-actions');
+        if (actions) actions.innerHTML = '';
 
         this._updateProgress();
     }

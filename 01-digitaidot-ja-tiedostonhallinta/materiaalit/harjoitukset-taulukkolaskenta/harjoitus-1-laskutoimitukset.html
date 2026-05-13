@@ -8,7 +8,6 @@
 </head>
 <body>
     <div class="exercise-container">
-        <a href="index.html" class="back-link">← Takaisin harjoitusvalikkoon</a>
         <div class="exercise-header">
             <h1>Harjoitus 1: Laskutoimitukset ja soluviittaukset</h1>
             <p>Laske tuotteiden yhteishinta kertomalla määrä yksikköhinnalla.</p>
@@ -16,9 +15,12 @@
         <div id="exercise" class="exercise-content"></div>
     </div>
 
+    <script src="scorm-wrapper.js"></script>
     <script src="spreadsheet-engine.js"></script>
     <script>
     document.addEventListener('DOMContentLoaded', () => {
+        SCORM.init();
+
         // Satunnaiset arvot jokaiselle suorituskerralle
         const tuotteet = ['Kynä', 'Vihko', 'Kumi', 'Viivain', 'Teroitin'];
         const maarat = tuotteet.map(() => randomInt(10, 100));
@@ -49,6 +51,7 @@
 
         const exercise = new SpreadsheetExercise({
             containerId: 'exercise',
+            nextExerciseUrl: 'harjoitus-2-summa-funktiot.html',
             cols: ['A', 'B', 'C', 'D'],
             rowCount: tuotteet.length + 1,
             cells: cells,

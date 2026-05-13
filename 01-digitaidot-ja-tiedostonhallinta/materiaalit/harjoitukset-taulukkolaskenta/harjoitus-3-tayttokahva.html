@@ -8,7 +8,6 @@
 </head>
 <body>
     <div class="exercise-container">
-        <a href="index.html" class="back-link">← Takaisin harjoitusvalikkoon</a>
         <div class="exercise-header">
             <h1>Harjoitus 3: Täyttökahva – kaavan kopioiminen</h1>
             <p>Kirjoita kaava yhteen soluun ja kopioi se automaattisesti muihin riveihin.</p>
@@ -16,9 +15,12 @@
         <div id="exercise" class="exercise-content"></div>
     </div>
 
+    <script src="scorm-wrapper.js"></script>
     <script src="spreadsheet-engine.js"></script>
     <script>
     document.addEventListener('DOMContentLoaded', () => {
+        SCORM.init();
+
         const tuotteet = ['Tuote A', 'Tuote B', 'Tuote C', 'Tuote D', 'Tuote E'];
         const tammi = tuotteet.map(() => randomInt(500, 3000));
         const helmi = tuotteet.map(() => randomInt(500, 3000));
@@ -46,7 +48,7 @@
             placeholder: '=B2+C2'
         };
 
-        // Loput rivit: täytetään automaattisesti fill-painikkeella
+        // Loput rivit: täytetään automaattisesti täyttökahvaa vetämällä
         const fillTargets = [];
         for (let i = 1; i < tuotteet.length; i++) {
             const r = i + 2;
@@ -60,6 +62,7 @@
 
         const exercise = new SpreadsheetExercise({
             containerId: 'exercise',
+            nextExerciseUrl: 'harjoitus-4-absoluuttinen-viittaus.html',
             cols: ['A', 'B', 'C', 'D'],
             rowCount: tuotteet.length + 1,
             cells: cells,
@@ -71,7 +74,7 @@
                 <ol>
                     <li>Kirjoita soluun <strong>D2</strong> kaava <code>=B2+C2</code> (tammikuu + helmikuu)</li>
                     <li>Paina Enter – jos kaava on oikein, ✓-merkki ilmestyy</li>
-                    <li>Klikkaa <strong>"⬇ Kopioi kaava alas"</strong> -painiketta</li>
+                    <li>Vedä solun <strong>D2</strong> oikeassa alakulmassa olevaa <strong>täyttökahvaa</strong> alas viimeiseen riviin</li>
                     <li>Huomaa, miten soluviittaukset muuttuvat automaattisesti jokaiselle riville!</li>
                 </ol>
                 <strong>Opittava asia:</strong> Kun kaava kopioidaan alaspäin, soluviittaukset

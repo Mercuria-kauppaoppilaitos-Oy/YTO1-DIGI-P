@@ -8,7 +8,6 @@
 </head>
 <body>
     <div class="exercise-container">
-        <a href="index.html" class="back-link">← Takaisin harjoitusvalikkoon</a>
         <div class="exercise-header">
             <h1>Harjoitus 2: SUMMA ja muut perusfunktiot</h1>
             <p>Laske kuukausittaisten myyntilukujen yhteenveto funktioilla.</p>
@@ -16,9 +15,12 @@
         <div id="exercise" class="exercise-content"></div>
     </div>
 
+    <script src="scorm-wrapper.js"></script>
     <script src="spreadsheet-engine.js"></script>
     <script>
     document.addEventListener('DOMContentLoaded', () => {
+        SCORM.init();
+
         const kuukaudet = ['Tammikuu', 'Helmikuu', 'Maaliskuu', 'Huhtikuu', 'Toukokuu', 'Kesäkuu'];
         const myynnit = kuukaudet.map(() => randomInt(1500, 8000));
 
@@ -86,6 +88,7 @@
 
         const exercise = new SpreadsheetExercise({
             containerId: 'exercise',
+            nextExerciseUrl: 'harjoitus-3-tayttokahva.html',
             cols: ['A', 'B'],
             rowCount: maxRow,
             cells: cells,

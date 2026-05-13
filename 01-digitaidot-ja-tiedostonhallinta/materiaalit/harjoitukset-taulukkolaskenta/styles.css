@@ -393,6 +393,25 @@ body {
     background: #eee;
 }
 
+.btn-next {
+    background: #2e7d32;
+    color: #fff;
+}
+
+.btn-next:hover {
+    background: #256928;
+}
+
+.completion-actions {
+    justify-content: center;
+    margin-top: 8px;
+}
+
+.score-note {
+    margin: 8px 0 0;
+    font-size: 0.9em;
+}
+
 .btn-fill {
     background: #e8eaf6;
     color: #3949ab;
@@ -500,16 +519,9 @@ body {
     margin-top: 4px;
 }
 
-.back-link {
-    display: inline-block;
-    margin-bottom: 12px;
-    color: #2980b9;
-    text-decoration: none;
-    font-size: 0.9em;
-}
-
-.back-link:hover {
-    text-decoration: underline;
+.exercise-list a.active {
+    border-left-color: #2e7d32;
+    background: #eef7ef;
 }
 
 /* --- Responsiivisuus --- */
@@ -553,6 +565,18 @@ body {
 .fill-handle:hover {
     background: #2e7d32;
     transform: scale(1.3);
+}
+
+body.fill-dragging,
+body.fill-dragging * {
+    user-select: none;
+    cursor: crosshair !important;
+}
+
+.cell.drag-target {
+    background: #f1f8e9 !important;
+    border: 2px solid #43a047 !important;
+    box-shadow: inset 0 0 0 1px #2e7d32;
 }
 
 @keyframes pulse-handle {

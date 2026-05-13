@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest identifier="taulukkolaskenta-scorm"
+          version="1.0"
+          xmlns="http://www.imsproject.org/xsd/imscp_rootv1p1p2"
+          xmlns:adlcp="http://www.adlnet.org/xsd/adlcp_rootv1p2"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://www.imsproject.org/xsd/imscp_rootv1p1p2 imscp_rootv1p1p2.xsd
+                              http://www.adlnet.org/xsd/adlcp_rootv1p2 adlcp_rootv1p2.xsd">
+
+    <metadata>
+        <schema>ADL SCORM</schema>
+        <schemaversion>1.2</schemaversion>
+    </metadata>
+
+    <organizations default="org1">
+        <organization identifier="org1">
+            <title>Taulukkolaskentaharjoitukset</title>
+            <item identifier="item1" identifierref="res1" isvisible="true">
+                <title>Harjoitus 1 - Laskutoimitukset ja soluviittaukset</title>
+                <adlcp:masteryscore>50</adlcp:masteryscore>
+            </item>
+            <item identifier="item2" identifierref="res2" isvisible="true">
+                <title>Harjoitus 2 - SUMMA ja perusfunktiot</title>
+                <adlcp:masteryscore>50</adlcp:masteryscore>
+            </item>
+            <item identifier="item3" identifierref="res3" isvisible="true">
+                <title>Harjoitus 3 - Tayttokahva</title>
+                <adlcp:masteryscore>50</adlcp:masteryscore>
+            </item>
+            <item identifier="item4" identifierref="res4" isvisible="true">
+                <title>Harjoitus 4 - Absoluuttinen viittaus</title>
+                <adlcp:masteryscore>50</adlcp:masteryscore>
+            </item>
+        </organization>
+    </organizations>
+
+    <resources>
+        <resource identifier="res-index"
+                  type="webcontent"
+                  adlcp:scormtype="asset"
+                  href="index.html">
+            <file href="index.html"/>
+            <file href="styles.css"/>
+        </resource>
+
+        <resource identifier="res1"
+                  type="webcontent"
+                  adlcp:scormtype="sco"
+                  href="harjoitus-1-laskutoimitukset.html">
+            <file href="harjoitus-1-laskutoimitukset.html"/>
+            <file href="spreadsheet-engine.js"/>
+            <file href="scorm-wrapper.js"/>
+            <file href="styles.css"/>
+        </resource>
+
+        <resource identifier="res2"
+                  type="webcontent"
+                  adlcp:scormtype="sco"
+                  href="harjoitus-2-summa-funktiot.html">
+            <file href="harjoitus-2-summa-funktiot.html"/>
+            <file href="spreadsheet-engine.js"/>
+            <file href="scorm-wrapper.js"/>
+            <file href="styles.css"/>
+        </resource>
+
+        <resource identifier="res3"
+                  type="webcontent"
+                  adlcp:scormtype="sco"
+                  href="harjoitus-3-tayttokahva.html">
+            <file href="harjoitus-3-tayttokahva.html"/>
+            <file href="spreadsheet-engine.js"/>
+            <file href="scorm-wrapper.js"/>
+            <file href="styles.css"/>
+        </resource>
+
+        <resource identifier="res4"
+                  type="webcontent"
+                  adlcp:scormtype="sco"
+                  href="harjoitus-4-absoluuttinen-viittaus.html">
+            <file href="harjoitus-4-absoluuttinen-viittaus.html"/>
+            <file href="spreadsheet-engine.js"/>
+            <file href="scorm-wrapper.js"/>
+            <file href="styles.css"/>
+        </resource>
+    </resources>
+
+</manifest>
