@@ -93,10 +93,15 @@
             rowCount: maxRow,
             cells: cells,
             instructions: `
-                <strong>Tehtävä:</strong> Laske myyntilukujen yhteenveto käyttäen funktioita.<br>
-                Käytä suomenkielisiä funktioita: 
-                <code>SUMMA</code>, <code>KESKIARVO</code>, <code>MIN</code>, <code>MAKS</code>.<br>
-                <strong>Esimerkki:</strong> <code>=SUMMA(B2:B${dataEnd})</code> laskee solualueen summan.
+                <strong>Mitä opitaan:</strong> Funktiot säästävät aikaa ja vähentävät virheitä. Niillä voit laskea summia, keskiarvoja, etsiä pienimpiä ja suurimpia arvoja yhdellä komennolla.<br><br>
+                <strong>Ohje:</strong>
+                <ol>
+                    <li>Kirjoita soluun <strong>B${sumRow}</strong> kaava <code>=SUMMA(B2:B${dataEnd})</code> yhteissummaa varten</li>
+                    <li>Kirjoita soluun <strong>B${avgRow}</strong> kaava <code>=KESKIARVO(B2:B${dataEnd})</code></li>
+                    <li>Kirjoita soluun <strong>B${minRow}</strong> kaava <code>=MIN(B2:B${dataEnd})</code> (pienin arvo)</li>
+                    <li>Kirjoita soluun <strong>B${maxRow}</strong> kaava <code>=MAKS(B2:B${dataEnd})</code> (suurin arvo)</li>
+                    <li>Paina Enter jokaisen kaavan jälkeen</li>
+                </ol>
             `
         });
 

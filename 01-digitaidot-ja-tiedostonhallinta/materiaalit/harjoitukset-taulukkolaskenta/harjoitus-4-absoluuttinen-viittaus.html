@@ -102,16 +102,18 @@
                 { source: 'D4', targets: fillTargetsD }
             ],
             instructions: `
-                <strong>Tehtävä:</strong> Laske tuotteiden ALV ja bruttohinta käyttäen <strong>absoluuttista viittausta</strong>.<br>
+                <strong>Mitä opitaan:</strong> Kun samaa vakiota (esim. ALV-prosentti tai valuuttakurssi) käytetään useissa laskuissa, voit lukita viittauksen $-merkillä. Näin kaava kopioituu oikein, eivätkä soluviittaukset "luisu" vahingossa vääriin soluihin.<br><br>
+                <strong>Tausta:</strong> ALV-prosentti on solussa B1. Jokaiselle tuotteelle pitää laskea ALV käyttämällä sitä samaa prosenttia. Ilman lukitusta kaava muuttuisi kopioitaessa: ensimmäisellä rivillä B1, toisella B2 (tyhjä!), kolmannella B3 (tyhjä!) – kaikki laskelmat menevät pieleen.<br><br>
+                <strong>Ohje:</strong>
                 <ol>
-                    <li>ALV-prosentti on solussa <strong>B1</strong> (${alvPros} %)</li>
-                    <li>Kirjoita soluun <strong>C4</strong> kaava: <code>=B4*$B$1/100</code><br>
-                        <em>$B$1 = lukittu viittaus ALV-prosenttiin – se ei muutu kopioitaessa!</em></li>
-                    <li>Kirjoita soluun <strong>D4</strong> kaava: <code>=B4+C4</code></li>
-                    <li>Vedä ensin solun <strong>C4</strong> täyttökahvaa alas viimeiseen tuoteriviin, ja vedä sen jälkeen solun <strong>D4</strong> täyttökahvaa alas</li>
+                    <li>Kirjoita soluun <strong>C4</strong> kaava: <code>=B4*$B$1/100</code>
+                        <br>($B$1 lukitsee viittauksen soluun B1 – se pysyy samana kopioitaessa, mutta B4 muuttuu B5:ksi, B6:ksi jne.)</li>
+                    <li>Paina Enter – oikein kirjoitetusta kaavasta ilmestyy ✓ merkki</li>
+
+                    <li>Kirjoita soluun <strong>D4</strong> kaava: <code>=B4+C4</code> (nettohinta + ALV = bruttohinta)</li>
+                    <li>Vedä solun C4 täyttökahvaa alas riviin C7 – ALV lasketaan kaikille tuotteille</li>
+                    <li>Vedä solun D4 täyttökahvaa alas riviin D7</li>
                 </ol>
-                <strong>Miksi $-merkki?</strong> Ilman lukitusta =B4*B1/100 muuttuisi kopioitaessa
-                muotoon =B5*B2/100 – ja B2 on tyhjä! $B$1 säilyttää viittauksen oikeaan soluun.
             `
         });
 
