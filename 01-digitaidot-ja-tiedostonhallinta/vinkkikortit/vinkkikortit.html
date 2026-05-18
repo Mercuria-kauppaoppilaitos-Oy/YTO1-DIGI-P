@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<!-- 
+  VINKKIKORTIT KURSSISIVULLE TAI OPPITUNNILLE
+-->
+<html lang="fi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Päivän vinkki</title>
+  <style>
+    /* Nollataan iframen oman rungon asetukset, vältetään turhia skrollipalkkeja ja sallitaan taustan läpinäkyvyys */
+    body {
+      margin: 0;
+      padding: 10px; /* Pieni turvaväli, jottei varjot/reunat leikkaudu iframen seinään */
+      background: transparent;
+      overflow: hidden; 
+      font-family: "Roboto",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    }
+
+    .question-spark {
+      --qs-ink: #1f2937;
+      --qs-muted: #5b6472;
+      --qs-surface: #ffffff;
+      margin: 0; /* Poistettu isot marginaalit iframen sisältä */
+      color: var(--qs-ink);
+      font-family: inherit;
+    }
+
+  .question-spark,
+  .question-spark * {
+    box-sizing: border-box;
+  }
+
+  .question-spark__layout {
+    display: flex;
+    align-items: center; /* Keskittää kuplan ja maskotin pystysuunnassa */
+    justify-content: flex-end; /* Ryhmittelee kaiken oikealle */
+    gap: 1.5rem;
+    width: auto;
+    max-width: 900px;
+    margin-left: auto; /* Työntää koko paketin niin pitkälle oikealle kuin voi */
+  }
+
+  .question-spark__bubble-area {
+    flex: 0 1 auto;
+  }
+
+  .question-spark__question {
+    margin: 0;
+    font-size: 1.05rem;
+    line-height: 1.5;
+  }
+
+  /* Kapea sarake oikealla: päivityskuvake ylhäällä, maskotti alhaalla */
+  .question-spark__mascot-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    flex: 0 0 auto;
+  }
+
+  .question-spark__refresh {
+    position: relative;
+    width: 2.2rem;
+    height: 2.2rem;
+    padding: 0;
+    border: 1px solid #e5e7eb;
+    background: #f9fafb;
+    border-radius: 50%;
+    color: #4b5563;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    transition: background 150ms ease, color 150ms ease, border-color 150ms ease;
+  }
+
+  .question-spark__refresh:hover {
+    background: #ffffff;
+    color: #0f5c9a;
+    border-color: #0f5c9a;
+  }
+
+  .question-spark__refresh:focus-visible {
+    outline: 2px solid #0f5c9a;
+    outline-offset: 3px;
+  }
+
+  .question-spark__refresh svg {
+    width: 1.25rem;
+    height: 1.25rem;
+    display: block;
+  }
+
+  .question-spark__mascot {
+    width: 5.5rem;
+  }
+
+  .question-spark__mascot svg {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  /* =========================================
+     Puhekupla: Selkeä ääriviiva (Sarjakuva)
+     ========================================= */
+  .question-spark__bubble {
+    position: relative;
+    background: #ffffff;
+    padding: 1.25rem 1.75rem;
+    border-radius: 1.5rem;
+    max-width: 36rem;
+    border: 2px solid #2d3748;
+    border-bottom-width: 4px;
+    box-shadow: 3px 6px 0 rgba(45, 55, 72, 0.1);
+  }
+  
+  /* Tumma ulompi kolmio */
+  .question-spark__bubble::before {
+    content: '';
+    position: absolute;
+    right: -16px;
+    top: 60%; /* Hieman ylemmäs (66% -> 60%) */
+    transform: translateY(-50%);
+    border-style: solid;
+    border-width: 10px 0 10px 16px; /* Kapeampi pystysuunnassa */
+    border-color: transparent transparent transparent #2d3748;
+    display: block;
+  }
+  
+  /* Valkoinen sisempi kolmio peittää osan mustasta */
+  .question-spark__bubble::after {
+    content: '';
+    position: absolute;
+    right: -13px;
+    top: 60%; /* Hieman ylemmäs (66% -> 60%) */
+    transform: translateY(-50%);
+    border-style: solid;
+    border-width: 8px 0 8px 14px; /* Kapeampi pystysuunnassa (mukailtu ulompaan nähden) */
+    border-color: transparent transparent transparent #ffffff;
+    display: block;
+  }
+
+  /* Responsiivisuus */
+  @media (max-width: 600px) {
+    .question-spark__layout {
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 1rem;
+    }
+    .question-spark__mascot-column {
+      flex-direction: row;
+      align-items: center;
+      gap: 1rem;
+    }
+    .question-spark__refresh {
+      width: 2.6rem;
+      height: 2.6rem;
+    }
+    .question-spark__mascot {
+      width: 4.5rem;
+    }
+    
+    .question-spark__bubble::after,
+    .question-spark__bubble::before {
+      display: none; /* Piilotetaan häntä mobiilissa kun asettelu muuttuu pystysuuntaiseksi */
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="question-spark" data-question-spark>
+  <div class="question-spark__layout">
+    <div class="question-spark__bubble-area">
+      <div class="question-spark__bubble">
+        <p class="question-spark__question" aria-live="polite"></p>
+      </div>
+    </div>
+    <div class="question-spark__mascot-column">
+      <button class="question-spark__refresh" type="button" aria-label="Arvo uusi vinkki">
+        <svg fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+          <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"></path>
+          <path d="M21 3v5h-5"></path>
+        </svg>
+      </button>
+      <div class="question-spark__mascot" role="img" aria-label=""></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function () {
+    var rootNodes = document.querySelectorAll("[data-question-spark]");
+    if (!rootNodes.length) {
+      return;
+    }
+
+    if (!window.QuestionSparkLabel) {
+      var bank = {
+        tiedostot: [
+          "Nimeä tiedostot selkeästi, esim. 2026-05-raportti.xlsx.",
+          "Tallenna suoraan OneDriveen ja pidä AutoSave päällä.",
+          "Käytä selkeää kansiorakennetta, enintään 2-3 tasoa.",
+          "Lisää päivämäärä alkuun muodossa VVVV-KK-PP.",
+          "Merkitse versiot tiedostonimeen: v1, v2, hyvaksytty.",
+          "Pidä aktiiviset ja arkistoidut työt erillään.",
+          "Hae tiedosto nopeasti pikanäppäimellä Win + S.",
+          "Nimeä tiedosto uudelleen nopeasti näppäimellä F2.",
+          "Poista turhat tiedostot: Delete, pysyvästi Shift + Delete.",
+          "Tarkista tiedostopääte ennen avaamista (.exe, .bat, .cmd, .xlsm).",
+          "Käytä PDF:ää, kun lähetät valmiin version eteenpäin."
+        ],
+        tehokkuus: [
+          "Tallenna työ usein pikanäppäimellä Ctrl + S.",
+          "Kumoa ja tee uudelleen: Ctrl + Z / Ctrl + Y.",
+          "Kopioi, leikkaa ja liitä: Ctrl + C / Ctrl + X / Ctrl + V.",
+          "Valitse kaikki kerralla: Ctrl + A.",
+          "Excelissä täytä sarjoja vetämällä täyttökahvasta.",
+          "Excelissä siirry alueen reunaan Ctrl + nuolinäppäin.",
+          "Excelissä muotoile data taulukoksi: Ctrl + T.",
+          "Excelissä lukitse vakioarvo kaavassa: $B$3.",
+          "Wordissa käytä otsikkotyylejä: Ctrl + Alt + 1 / 2 / 3.",
+          "Wordissa tee uusi sivu aina Ctrl + Enterillä.",
+          "Wordissa älä muotoile välilyönneillä tai ylimääräisillä Entereillä.",
+          "PowerPointissa lisää uusi dia pikanäppäimellä Ctrl + M.",
+          "PowerPoint-esitys käyntiin näppäimellä F5.",
+          "PowerPointissa pidä yhdellä dialla yksi pääajatus.",
+          "PowerPointissa käytä enintään 2 fonttia ja 2-3 väriä."
+        ],
+        yhteistyo: [
+          "Jaa tiedosto linkillä liitetiedoston sijaan.",
+          "Lisää linkki nopeasti pikanäppäimellä Ctrl + K.",
+          "Valitse jakoon oikea taso: katselu vai muokkaus.",
+          "Jaa mieluummin nimetyille henkilöille kuin kaikille linkin saaneille.",
+          "Muokkaa samaa tiedostoa yhtä aikaa muiden kanssa.",
+          "Lisää kommentti yhteistyöhön: Ctrl + Alt + M.",
+          "Etsi sisältö nopeasti pikanäppäimellä Ctrl + F.",
+          "Tarkista ennen jakamista kenelle tiedosto näkyy.",
+          "Tarkista OneDriven versiohistoria, jos sisältö muuttuu vahingossa.",
+          "Sulje tiedosto, kun et enää muokkaa, jotta työskentely pysyy selkeänä."
+        ]
+      };
+
+      var themes = {
+        tiedostot: {
+          label: "Hallitse tiedostosi",
+          icon: "paperclip"
+        },
+        tehokkuus: {
+          label: "Tee ja muokkaa tehokkaasti",
+          icon: "lightning"
+        },
+        yhteistyo: {
+          label: "Jaa ja tee yhdessä",
+          icon: "cloud"
+        }
+      };
+
+      function renderMascot(themeKey, iconIdPrefix) {
+        var gradientId = iconIdPrefix + "-" + themes[themeKey].icon;
+
+        if (themeKey === "tiedostot") {
+          return (
+            '<svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg" focusable="false" role="img">' +
+            '<defs>' +
+            '<linearGradient id="' + gradientId + '" x1="0" y1="0" x2="1" y2="1">' +
+            '<stop offset="0%" stop-color="#BFC5CC"/>' +
+            '<stop offset="100%" stop-color="#5B636D"/>' +
+            '</linearGradient>' +
+            '</defs>' +
+            '<path d="M60 20 C48 20 40 28 40 40 V65 C40 75 47 82 57 82 C67 82 74 75 74 65 V40 C74 32 68 26 60 26 C52 26 46 32 46 40 V63 C46 68 49.5 72 55 72 C60.5 72 64 68 64 63 V42" fill="none" stroke="url(#' + gradientId + ')" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>' +
+            '</svg>'
+          );
+        }
+
+        if (themeKey === "tehokkuus") {
+          return (
+            '<svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg" focusable="false" role="img">' +
+            '<defs>' +
+            '<linearGradient id="' + gradientId + '" x1="0" y1="0" x2="1" y2="1">' +
+            '<stop offset="0%" stop-color="#FFD54F"/>' +
+            '<stop offset="100%" stop-color="#F57F17"/>' +
+            '</linearGradient>' +
+            '</defs>' +
+            '<path d="M52 12 L28 54 H46 L40 84 L68 42 H50 Z" fill="url(#' + gradientId + ')" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round"/>' +
+            '</svg>'
+          );
+        }
+
+        return (
+          '<svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg" focusable="false" role="img">' +
+          '<defs>' +
+          '<linearGradient id="' + gradientId + '" x1="0" y1="0" x2="1" y2="1">' +
+          '<stop offset="0%" stop-color="#90CAF9"/>' +
+          '<stop offset="100%" stop-color="#1565C0"/>' +
+          '</linearGradient>' +
+          '</defs>' +
+          '<path d="M35 72 H66 C75.5 72 83 64.8 83 56 C83 47.2 76.3 40.4 67.8 39.6 C65.2 30.4 57.1 24 47.5 24 C37.3 24 28.7 31.1 26.7 40.8 C18.6 42.3 13 49.2 13 57 C13 65.3 19.7 72 28 72 H35 Z" fill="url(#' + gradientId + ')" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>' +
+          '</svg>'
+        );
+      }
+
+      function getAllQuestions(bank) {
+        return Object.keys(bank).reduce(function (all, key) {
+          return all.concat(
+            bank[key].map(function (question) {
+              return { theme: key, question: question };
+            })
+          );
+        }, []);
+      }
+
+      function pickRandom(items, previousQuestion) {
+        if (!items.length) {
+          return null;
+        }
+
+        if (items.length === 1) {
+          return items[0];
+        }
+
+        var next = items[Math.floor(Math.random() * items.length)];
+        while (previousQuestion && next.question === previousQuestion) {
+          next = items[Math.floor(Math.random() * items.length)];
+        }
+        return next;
+      }
+
+      window.QuestionSparkLabel = {
+        bank: bank,
+        themes: themes,
+        getAllQuestions: getAllQuestions,
+        pickRandom: pickRandom,
+        renderMascot: renderMascot
+      };
+    }
+
+    Array.prototype.forEach.call(rootNodes, function (rootNode) {
+      if (rootNode.dataset.questionSparkReady === "true") {
+        return;
+      }
+
+      rootNode.dataset.questionSparkReady = "true";
+
+      var api = window.QuestionSparkLabel;
+      var questionEl = rootNode.querySelector(".question-spark__question");
+      var refreshEl = rootNode.querySelector(".question-spark__refresh");
+      var mascotEl = rootNode.querySelector(".question-spark__mascot");
+      var iconIdPrefix = "qs-icon-" + Math.random().toString(36).slice(2, 10);
+      var previousQuestion = "";
+
+      function updateCard() {
+        var pool = api.getAllQuestions(api.bank);
+        var selected = api.pickRandom(pool, previousQuestion);
+
+        if (!selected) {
+          questionEl.textContent = "Vinkkejä ei löytynyt.";
+          refreshEl.hidden = true;
+          return;
+        }
+
+        var theme = api.themes[selected.theme];
+        previousQuestion = selected.question;
+        questionEl.textContent = selected.question;
+        mascotEl.innerHTML = api.renderMascot(selected.theme, iconIdPrefix);
+        mascotEl.setAttribute("aria-label", theme.label);
+      }
+
+      refreshEl.addEventListener("click", updateCard);
+      updateCard(); // Ensimmäinen lataus heti
+    });
+  })();
+</script>
+</body>
+</html>
